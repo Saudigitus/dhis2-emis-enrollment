@@ -1,0 +1,24 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: i18next-conv\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"POT-Creation-Date: 2023-07-13T07:19:04.656Z\n"
+"PO-Revision-Date: 2023-07-13T07:19:04.656Z\n"
+
+msgid "Column"
+msgstr "Column"
+
+msgid "Select columns"
+msgstr "Select columns"
+
+msgid "Columns to show in the table"
+msgstr "Columns to show in the table"
+
+msgid "Save"
+msgstr "Save"
+
+msgid "No data to display"
+msgstr "No data to display"

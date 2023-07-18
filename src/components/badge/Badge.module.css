@@ -1,0 +1,16 @@
+@import "../../assets/style/font.css";
+
+.BadgeContainer {
+    display: flex;
+    padding: 2px 8px;
+    justify-content: center;
+    align-items: flex-end;
+    border-radius: 24px;
+    background: #FF5F5F;
+    font-family: var(--primary-font-family);
+    color: #FFF;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}

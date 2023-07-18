@@ -1,0 +1,25 @@
+.SimpleSearchContainer {
+    background: rgb(255, 255, 255);
+    box-shadow: rgba(33, 41, 52, 0.06) 0px 1px 2px, rgba(33, 41, 52, 0.1) 0px 1px 3px !important;
+    min-width: 395px;
+    min-height: 400px;
+    max-height: 80vh;
+    border: 1px solid #C4C4C4;
+    box-shadow: 0px 0px 2px 0px #C4C4C4 inset;
+    border-radius: 4px;
+}
+
+.SimpleSearcInputContainer {
+    height: 42px;
+    width: 100%;
+    padding: 10px 8px;
+    margin-bottom: 2px;
+}
+
+.ChildrenContentContainer {
+    padding: 10px 8px;
+    width: 100%;
+    min-height: 357px;
+    max-height: calc(80vh - 50px);
+    overflow-y: auto;
+}

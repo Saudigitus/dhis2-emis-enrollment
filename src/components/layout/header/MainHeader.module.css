@@ -1,0 +1,78 @@
+@import "../../../assets/style/colors.css";
+
+.MainHeaderContainer {
+    height: auto;
+    width: 100%;
+    background-color: var(--secondary-colort);
+    border-bottom: 1px solid #D0CCCC;
+    display: flex;
+    align-items: center;
+}
+
+.MainHeaderContainer .jsx-3163060161 {
+    height: 100%;
+}
+
+.HeaderItemContainer {
+    background: none !important;
+    border-radius: 0 !important;
+    font-family: Roboto !important;
+    display: flex !important;
+    align-items: center !important;
+    min-height: 51px !important;
+    font-style: normal !important;
+    -webkit-box-align: center;
+    padding: 7px 8px 7px 12px;
+    font-size: 14px;
+    border: none !important;
+    box-shadow: rgb(213, 221, 229) 0px 0px 0px 1px !important;
+}
+
+.HeaderItemContainer svg {
+    margin-left: 0 !important;
+}
+
+.HeaderItemContainer h5 {
+    color: var(--grey-grey-600, #6E7A8A) !important;
+    font-weight: 400 !important;
+    margin: 0 !important;
+    font-size: 14px !important;
+}
+
+.HeaderItemContainer span {
+    color: black !important;
+    font-weight: 450;
+    margin-right: 12px !important;
+}
+
+.AcademicYear {
+    color: var(--grey-grey-600, #6E7A8A);
+    font-family: Roboto;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 20px;
+    margin-left: auto;
+    padding: 12px;
+    display: flex;
+    height: 100%;
+    align-items: center;
+}
+
+.AcademicYear img {
+    margin-left: 10px;
+    cursor: pointer;
+}
+
+.AcademicYear h5 {
+    margin-bottom: 0 !important;
+}
+
+.AcademicYear span {
+    color: #FF2002;
+    font-family: Roboto;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 20px;
+}

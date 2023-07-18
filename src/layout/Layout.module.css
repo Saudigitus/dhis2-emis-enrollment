@@ -1,0 +1,24 @@
+@import "../assets/style/colors.css";
+
+.LayoutContainer {
+    width: 100vw;
+    height: inherit;
+    display: flex;
+    flex-grow: 1;
+    background-color: var(--primary-color);
+}
+
+.HeadBarLayoutContainer {
+    width: 100vw;
+    height: inherit;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--primary-color);
+}
+
+.MainContentContainer {
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+    padding: 10px;
+}

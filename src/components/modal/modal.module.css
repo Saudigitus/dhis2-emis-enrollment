@@ -1,0 +1,19 @@
+.modalContainer{
+    min-width: 1000px !important;
+}
+
+.subTitle {
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 23px;
+    color: rgba(33, 41, 52, 0.9);
+}
+
+.formSection{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    margin: 10px 0;
+}

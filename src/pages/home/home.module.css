@@ -1,0 +1,9 @@
+.containerCards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, 200px);
+    align-items: center;
+    gap: 17px;
+    flex: auto;
+    box-sizing: border-box !important;
+    margin: 20px 0px;
+}

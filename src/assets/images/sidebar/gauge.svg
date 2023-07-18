@@ -1,0 +1,13 @@
+<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="visualization/gauge" clip-path="url(#clip0_399_5272)">
+<g id="Group">
+<path id="Vector" d="M10 5.25C15.2467 5.25 19.5 9.50329 19.5 14.75H18.3125C18.3125 10.1591 14.5909 6.4375 10 6.4375C5.40913 6.4375 1.6875 10.1591 1.6875 14.75H0.5L0.504521 14.4541C0.660855 9.34431 4.85229 5.25 10 5.25Z" fill="#4A5768"/>
+<path id="Vector_2" d="M10 7.625V11.1875C8.03249 11.1875 6.4375 12.7825 6.4375 14.75H2.875C2.875 10.815 6.06497 7.625 10 7.625Z" fill="#4A5768"/>
+</g>
+</g>
+<defs>
+<clipPath id="clip0_399_5272">
+<rect width="19" height="19" fill="white" transform="translate(0.5 0.5)"/>
+</clipPath>
+</defs>
+</svg>

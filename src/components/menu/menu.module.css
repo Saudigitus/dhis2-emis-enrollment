@@ -1,0 +1,4 @@
+.menuItem:hover{
+    color: inherit !important;
+    text-decoration: none !important;
+}

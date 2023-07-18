@@ -1,0 +1,21 @@
+.subTitle {
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 23px;
+    color: rgba(33, 41, 52, 0.9);
+}
+
+.title {
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 100%;
+    letter-spacing: 0.15px;
+    color: rgba(0, 0, 0, 0.87);
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+}

@@ -1,0 +1,7 @@
+.d-flex {
+    display: flex;
+}
+
+.flex-grow {
+    flex-grow: 1;
+}
