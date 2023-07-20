@@ -7,7 +7,7 @@ function TableComponent() {
 
   useEffect(() => {
     add("ou", "ouId");
-    add("program", "programId");
+    add("program", "ur1Edk5Oe2n");
     add("academicYear", "2023");
     add("grade", "12");
     add("class", "12");
