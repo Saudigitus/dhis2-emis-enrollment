@@ -26,7 +26,7 @@ export default function MenuFilters({ anchorEl, setAnchorEl, addSearchableHeader
                 anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
                 transformOrigin={{ vertical: 'top', horizontal: 'center' }}
             >
-                {options.map((option, i) =>
+                {options?.map((option, i) =>
                     <MenuItem key={i} onClick={(e) => { addSearchableHeaders(option); setAnchorEl(null) }}>{option.header}</MenuItem>
                 )}
             </Menu>
