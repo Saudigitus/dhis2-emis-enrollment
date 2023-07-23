@@ -11,7 +11,7 @@ interface ContentFilterProps {
 type FiltersValuesProps = Record<string, any | { endDate: string } | { startDate: string }>;
 
 function ContentFilter(props: ContentFilterProps) {
-    const { headers } = props;
+    const { headers = [] } = props;
     // const [filters, setFilters] = useState<FiltersValuesProps>({})
     const [filtersValues, setfiltersValues] = useState<FiltersValuesProps>({})
     const [localFilters, setlocalFilters] = useState<CustomAttributeProps[]>([])
@@ -85,7 +85,7 @@ function ContentFilter(props: ContentFilterProps) {
                 ))
             }
             <div style={{ marginTop: 0 }}>
-                {headers.filter(x => !localFilters.includes(x)).length > 0 &&
+                {headers?.filter(x => !localFilters.includes(x)).length > 0 &&
                     <Button style={{
                         color: "rgb(33, 41, 52)",
                         fontSize: 14,
@@ -102,7 +102,7 @@ function ContentFilter(props: ContentFilterProps) {
                 <MenuFilters
                     anchorEl={anchorEl}
                     setAnchorEl={setAnchorEl}
-                    options={headers.filter(x => !localFilters.includes(x))}
+                    options={headers?.filter(x => !localFilters.includes(x))}
                     addSearchableHeaders={addSearchableHeaders}
                 />
             </div>

@@ -7,6 +7,7 @@ import { Paper } from '@material-ui/core';
 import WithBorder from '../../template/WithBorder';
 import WithPadding from '../../template/WithPadding';
 import WorkingLits from '../components/filters/workingList/WorkingLits';
+import { useHeader } from '../../../hooks/tableHeader/useHeader';
 
 const usetStyles = makeStyles({
     tableContainer: {
@@ -14,41 +15,10 @@ const usetStyles = makeStyles({
     }
 });
 
-const headers = [
-    {
-        id: 'StudentNationalID',
-        header: 'Student National ID',
-        optionSets: []
-    },
-    {
-        id: 'ClassOrder',
-        header: 'Class Order',
-        optionSets: []
-    },
-    {
-        id: 'Firstname',
-        header: 'First name',
-        optionSets: []
-    },
-    {
-        id: 'Surname',
-        header: 'Surname',
-        optionSets: []
-    },
-    {
-        id: 'Dateofbirth',
-        header: 'Date of birth',
-        optionSets: []
-    },
-    {
-        id: 'EnrolmentStatus',
-        header: 'Enrolment Status',
-        optionSets: []
-    }
-]
-
 function Table() {
     const classes = usetStyles()
+    const { columns } = useHeader()
+
     return (
         <Paper>
             <WorkingLits />
@@ -65,10 +35,10 @@ function Table() {
                                     createSortHandler={() => { }}
                                     order='asc'
                                     orderBy='desc'
-                                    rowsHeader={headers}
+                                    rowsHeader={columns}
                                 />
                                 <RenderRows
-                                    headerData={headers}
+                                    headerData={columns}
                                     rowsData={[
                                         { StudentNationalID: "2023000234-01", ClassOrder: "01", Firstname: "Abayomi Baageshree ", Surname: "Baageshree", Dateofbirth: "2023-03-01", EnrolmentStatus: "Active" },
                                         { StudentNationalID: "2023000234-01", ClassOrder: "01", Firstname: "Abayomi Baageshree ", Surname: "Baageshree", Dateofbirth: "2023-03-01", EnrolmentStatus: "Active" },
@@ -106,21 +76,20 @@ function Table() {
                                         { StudentNationalID: "2023000234-01", ClassOrder: "01", Firstname: "Abayomi Baageshree ", Surname: "Baageshree", Dateofbirth: "2023-03-01", EnrolmentStatus: "Active" },
                                         { StudentNationalID: "2023000234-01", ClassOrder: "01", Firstname: "Abayomi Baageshree ", Surname: "Baageshree", Dateofbirth: "2023-03-01", EnrolmentStatus: "Active" },
                                         { StudentNationalID: "2023000234-01", ClassOrder: "01", Firstname: "Abayomi Baageshree ", Surname: "Baageshree", Dateofbirth: "2023-03-01", EnrolmentStatus: "Active" },
-
                                     ]}
                                 />
                             </>
                         </TableComponent>
-                        <Pagination
-                            loading={false}
-                            page={1}
-                            rowsPerPage={10}
-                            onRowsPerPageChange={() => { }}
-                            onPageChange={() => { }}
-                            totalPerPage={10}
-                            totalPages={10}
-                        />
                     </div>
+                    <Pagination
+                        loading={false}
+                        page={1}
+                        rowsPerPage={10}
+                        onRowsPerPageChange={() => { }}
+                        onPageChange={() => { }}
+                        totalPerPage={10}
+                        totalPages={10}
+                    />
                 </WithBorder>
             </WithPadding>
         </Paper>

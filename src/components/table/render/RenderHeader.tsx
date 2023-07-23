@@ -1,18 +1,12 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { RowTable, SortLabel } from '../components'
 import classNames from 'classnames';
 import { makeStyles, createStyles, type Theme } from '@material-ui/core/styles';
-import { type OptionSet } from '../../../types/generated';
 import HeaderCell from '../components/head/HeaderCell';
-
-interface rowsHeaderProps {
-    id: string
-    header: string
-    optionSets?: OptionSet[]
-}
+import { type CustomAttributeProps } from '../../../types/table/attributeColumns';
 
 interface renderHeaderProps {
-    rowsHeader: rowsHeaderProps[]
+    rowsHeader: CustomAttributeProps[]
     orderBy: string
     order: "asc" | "desc"
     // TODO resolve this bug.👇
@@ -56,37 +50,31 @@ const useStyles = makeStyles((theme: Theme) =>
 function RenderHeader(props: renderHeaderProps): React.ReactElement {
     const { rowsHeader, order, orderBy, createSortHandler } = props
     const classes = useStyles()
-    // const columnHeaderInstances = []
 
-    // function setColumnWidth(columnInstance: string, index: any) {
-    //     if (columnInstance.length > 0) {
-    //         columnHeaderInstances[index] = columnInstance;
-    //     }
-    // }
-
-    const headerCells = rowsHeader?.map((column, index) => (
-        <HeaderCell
-            // innerRef={(instance: any) => { setColumnWidth(instance, index); }}
-            key={column.id}
-            className={classNames(classes.cell, classes.headerCell)}
-        >
-            {/* TODO: the sortLabel must be optional 👇 */}
-            <SortLabel
-                active={orderBy === column.id}
-                direction={orderBy === column.id ? order : 'asc'}
-                createSortHandler={createSortHandler(column.id)}
+    const headerCells = useMemo(() => {
+        return rowsHeader?.filter(x => x.visible)?.map((column, index) => (
+            <HeaderCell
+                key={column.id}
+                className={classNames(classes.cell, classes.headerCell)}
             >
-                {column.header}
-                {orderBy === column.id
-                    ? (
-                        <span className={classes.visuallyHidden}>
-                            {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
-                        </span>
-                    )
-                    : null}
-            </SortLabel>
-        </HeaderCell>
-    ))
+                {/* TODO: the sortLabel must be optional 👇 */}
+                <SortLabel
+                    active={orderBy === column.id}
+                    direction={orderBy === column.id ? order : 'asc'}
+                    createSortHandler={createSortHandler(column.id)}
+                >
+                    {column.header}
+                    {orderBy === column.id
+                        ? (
+                            <span className={classes.visuallyHidden}>
+                                {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
+                            </span>
+                        )
+                        : null}
+                </SortLabel>
+            </HeaderCell>
+        ))
+    }, [rowsHeader]);
 
     return (
         <thead>
