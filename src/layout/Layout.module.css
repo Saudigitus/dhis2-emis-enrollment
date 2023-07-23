@@ -4,7 +4,10 @@
     width: 100vw;
     height: inherit;
     display: flex;
-    flex-grow: 1;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: stretch;
+    overflow: hidden;
     background-color: var(--primary-color);
 }
 
@@ -13,12 +16,19 @@
     height: inherit;
     display: flex;
     flex-direction: column;
-    background-color: var(--primary-color);
+    background-color: inherit;
 }
 
 .MainContentContainer {
-    width: 100%;
-    height: 100%;
+    flex: 1;
     overflow-y: auto;
     padding: 10px;
+}
+
+.FullLayoutContainer {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    overflow: hidden;
+    background-color: inherit;
 }
