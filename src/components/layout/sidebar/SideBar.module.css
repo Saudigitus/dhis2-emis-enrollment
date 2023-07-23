@@ -4,10 +4,10 @@
 .SideBarContainer {
     height: 100%;
     overflow-y: auto;
-    width: 370px;
+    flex: 0 0 370px;
     background-color: var(--secondary-colort);
     padding: 20px 15px;
-    transition: width 0.3s ease-in-out;
+    transition: flex 0.3s ease-in-out;
     overflow-x: hidden;
     border-right: 1px solid #e6e4e4;
 }
@@ -40,8 +40,8 @@
     border-right: 1px solid #e6e4e4;
     height: 100%;
     overflow-y: auto;
-    transition: width 0.3s ease-in-out;
-    width: 90px;
+    flex: 0 0 90px;
+    transition: flex 0.3s;
     background-color: var(--secondary-colort);
     padding: 20px 15px;
     overflow-x: hidden;
@@ -164,4 +164,11 @@
 .SideBarItemListContainer {
     overflow-x: hidden;
     padding-left: 0 !important;
+}
+
+
+@media screen and (max-width: 768px) {
+    .SideBarContainer {
+        flex: 0 0 100%;
+    }
 }

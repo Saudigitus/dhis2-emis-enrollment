@@ -6,7 +6,7 @@
     background-color: var(--secondary-colort);
     border-bottom: 1px solid #D0CCCC;
     display: flex;
-    align-items: center;
+    flex-wrap: wrap;
 }
 
 .MainHeaderContainer .jsx-3163060161 {
@@ -34,14 +34,12 @@
 
 .HeaderItemContainer h5 {
     color: var(--grey-grey-600, #6E7A8A) !important;
-    font-weight: 400 !important;
     margin: 0 !important;
     font-size: 14px !important;
 }
 
 .HeaderItemContainer span {
     color: black !important;
-    font-weight: 450;
     margin-right: 12px !important;
 }
 
@@ -55,7 +53,6 @@
     margin-left: auto;
     padding: 12px;
     display: flex;
-    height: 100%;
     align-items: center;
 }
 

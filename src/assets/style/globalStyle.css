@@ -9,3 +9,8 @@ ul li .jsx-2002348738:hover {
     color: inherit !important;
     text-decoration: none !important;
 }
+
+body {
+    margin: 0;
+    padding: 0;
+}
