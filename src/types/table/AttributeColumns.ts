@@ -9,13 +9,13 @@ export interface CustomAttributeProps {
     id: string
     displayName: string
     header: string
-    required: string | boolean
+    required: boolean
     name: string
     labelName: string
     valueType: typeof Attribute.valueType
     disabled: boolean
     visible: boolean
-    options?: { optionSet: [OptionSetProps] }
+    options?: { optionSet: any }
     pattern?: string
     searchable?: boolean
     error?: boolean
