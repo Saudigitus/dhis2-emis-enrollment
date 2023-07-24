@@ -19,6 +19,8 @@ function Table() {
     const classes = usetStyles()
     const { columns } = useHeader()
 
+console.log(columns);
+
     return (
         <Paper>
             <WorkingLits />
