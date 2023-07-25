@@ -3,6 +3,7 @@ import { useSetRecoilState } from "recoil";
 import { TableDataState } from "../../schema/tableData";
 import { useState } from "react";
 import { useDataEngine } from "@dhis2/app-runtime";
+import { formatResponseRows } from "../../utils/table/rows/formatResponseRows";
 
 interface GetDataProps {
     page: number
@@ -29,10 +30,11 @@ interface TeiQueryProps {
     pageSize: number
     ouMode: string
     trackedEntity: string
+    orgUnit: string
 }
 
 const EVENT_QUERY = ({ ouMode, page, pageSize, program, order, programStage, filter, orgUnit }: EventQueryProps) => ({
-    reults: {
+    results: {
         resource: "tracker/events",
         params: {
             order,
@@ -48,7 +50,7 @@ const EVENT_QUERY = ({ ouMode, page, pageSize, program, order, programStage, fil
     }
 })
 
-const TEI_QUERY = ({ ouMode, pageSize, program, trackedEntity }: TeiQueryProps) => ({
+const TEI_QUERY = ({ ouMode, pageSize, program, trackedEntity, orgUnit }: TeiQueryProps) => ({
     results: {
         resource: "tracker/trackedEntities",
         params: {
@@ -56,39 +58,73 @@ const TEI_QUERY = ({ ouMode, pageSize, program, trackedEntity }: TeiQueryProps) 
             ouMode,
             pageSize,
             trackedEntity,
+            orgUnit,
             fields: "trackedEntity,createdAt,orgUnit,attributes[attribute,value],enrollments[enrollment,status,orgUnit,enrolledAt]"
         }
     }
 })
 
+interface dataValuesProps {
+    dataElement: string
+    value: string
+}
+
+interface attributesProps {
+    attribute: string
+    value: string
+}
+
+interface EventQueryResults {
+    results: {
+        instances: [{
+            trackedEntity: string
+            dataValues: dataValuesProps[]
+        }]
+    }
+}
+
+interface TeiQueryResults {
+    results: {
+        instances: [{
+            trackedEntity: string
+            attributes: attributesProps[]
+        }]
+    }
+}
+
 export function useTableData() {
     const engine = useDataEngine();
-    const setTableDataState = useSetRecoilState(TableDataState);
+    // const setTableDataState = useSetRecoilState(TableDataState);
     const [loading, setLoading] = useState<boolean>(false)
     const [tableData, setTableData] = useState<TableDataProps[]>([])
 
-    // const teiQueryResults = useDataQuery(TEI_QUERY({
-    //     ouMode: "ACCESSIBLE",
-    //     pageSize: 10,
-    //     program: "",
-    //     trackedEntity: ""
-    // }));
-
     async function getData() {
-        const eventsResults = await engine.query(EVENT_QUERY({
+        setLoading(true)
+        const eventsResults: EventQueryResults = await engine.query(EVENT_QUERY({
             ouMode: "SELECTED",
             page: 1,
             pageSize: 10,
-            program: "wQaiD2V27Dp",
+            program: "IpHINAT79UW",
             order: "createdAt:desc",
-            programStage: "Ni2qsy2WJn4",
+            programStage: "A03MvHHogjR",
             filter: "",
-            orgUnit: "Shc3qNhrPAz"
+            orgUnit: "DiszpKrYNg8"
         }))
 
-        console.log(eventsResults);
+        const teiResults: TeiQueryResults = await engine.query(TEI_QUERY({
+            ouMode: "SELECTED",
+            pageSize: 10,
+            program: "IpHINAT79UW",
+            orgUnit: "DiszpKrYNg8",
+            trackedEntity: eventsResults?.results?.instances.map((x: { trackedEntity: string }) => x.trackedEntity).toString().replaceAll(",", ";")
+        }));
 
-        setLoading(true)
+        setTableData(formatResponseRows({
+            eventsInstances: eventsResults?.results?.instances,
+            teiInstances: teiResults?.results?.instances
+        }));
+
+        setLoading(false)
     }
 
     return {

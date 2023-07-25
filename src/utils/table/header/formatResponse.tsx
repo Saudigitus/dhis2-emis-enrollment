@@ -5,7 +5,7 @@ import { useMemo } from "react";
 export function formatResponse(data: ProgramConfig): CustomAttributeProps[] {
     const headerResponse = useMemo(() => {
         //TODO: Remove this when the API is fixed and solve this bug 👇
-        const originalData = ((data?.programStages?.find(programStge => programStge.id === "Ni2qsy2WJn4")) ?? {} as ProgramConfig["programStages"][0])
+        const originalData = ((data?.programStages?.find(programStge => programStge.id === "A03MvHHogjR")) ?? {} as ProgramConfig["programStages"][0])
 
         return data?.programTrackedEntityAttributes?.map((item) => {
             return {
