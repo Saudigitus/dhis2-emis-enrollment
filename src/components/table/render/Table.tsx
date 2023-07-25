@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { HeaderFilters, Pagination, TableComponent } from '../components'
 import RenderHeader from './RenderHeader'
 import RenderRows from './RenderRows'
@@ -8,6 +8,7 @@ import WithBorder from '../../template/WithBorder';
 import WithPadding from '../../template/WithPadding';
 import WorkingLits from '../components/filters/workingList/WorkingLits';
 import { useHeader } from '../../../hooks/tableHeader/useHeader';
+import { useTableData } from '../../../hooks/tableData/useTableData';
 
 const usetStyles = makeStyles({
     tableContainer: {
@@ -18,8 +19,13 @@ const usetStyles = makeStyles({
 function Table() {
     const classes = usetStyles()
     const { columns } = useHeader()
+    const { getData } = useTableData()
 
-console.log(columns);
+    useEffect(() => {
+        void getData()
+    }, [columns])
+
+    console.log(columns);
 
     return (
         <Paper>
