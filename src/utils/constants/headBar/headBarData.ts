@@ -11,13 +11,17 @@ function headBarData(): HeadBarTypes[] {
         {
             label: "Grade",
             value: "Grade 1",
-            placeholder: "Search for program"
+            placeholder: "Search for grade",
+            optionSetId: "xbVWkOuF6CW",
+            component: "menuItemContainer"
         },
         {
             label: "Class",
             value: "All",
-            placeholder: "Search for program stage"
+            placeholder: "Search for class",
+            optionSetId: "hq8YJB1Kd4K",
+            component: "menuItemContainer"
         }
     ]
 }
-export {headBarData}
+export { headBarData }

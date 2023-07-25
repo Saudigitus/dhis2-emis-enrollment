@@ -5,7 +5,7 @@ import { type HeadBarTypes } from '../../../types/headBar/HeadBarTypes'
 import { SimpleSearch } from '../../search'
 import { componentMapping } from '../../../utils/commons/componentMapping'
 
-export default function HeaderItem({ label, value, placeholder, component }: HeadBarTypes): React.ReactElement {
+export default function HeaderItem({ label, value, placeholder, component, optionSetId }: HeadBarTypes): React.ReactElement {
     const Component = (component != null) ? componentMapping[component] : null;
     return (
         <DropdownButton
@@ -13,7 +13,7 @@ export default function HeaderItem({ label, value, placeholder, component }: Hea
             component={
                 <FlyoutMenu>
                     <SimpleSearch placeholder={placeholder}>
-                        {(Component != null) && <Component />}
+                        {(Component != null) && <Component optionSetId={optionSetId} />}
                     </SimpleSearch>
                 </FlyoutMenu>
             }

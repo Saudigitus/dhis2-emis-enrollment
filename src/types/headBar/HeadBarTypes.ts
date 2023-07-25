@@ -3,5 +3,6 @@ interface HeadBarTypes {
     value: string
     placeholder: string
     component?: string
+    optionSetId?: string
 }
-export type {HeadBarTypes}
+export type { HeadBarTypes }

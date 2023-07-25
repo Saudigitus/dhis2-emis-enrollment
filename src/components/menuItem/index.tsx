@@ -1,2 +1,3 @@
 import Item from "./Item"
-export { Item }
+import MenuItemContainer from "./MenuItemContainer"
+export { Item, MenuItemContainer }
