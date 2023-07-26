@@ -10,6 +10,12 @@ import WithBorder from "./template/WithBorder";
 import ModalComponent from "./modal/Modal";
 import ModalContentComponent from "./modal/ModalContent";
 import Title from "./text/Title";
+import { Item, MenuItemContainer } from "./menuItem/index"
 import Subtitle from "./text/subtitle";
 
-export { SideBar, MainHeader, Table, DropdownButtonComponent, FlyoutMenuComponent, SimpleButtons, WithPadding, WithBorder, ModalComponent, ModalContentComponent, OrgUnitTree, SimpleSearch, Title, Subtitle }
+export {
+    SideBar, MainHeader, Table, DropdownButtonComponent,
+    FlyoutMenuComponent, SimpleButtons, WithPadding, WithBorder,
+    ModalComponent, ModalContentComponent, OrgUnitTree,
+    SimpleSearch, Title, Subtitle, Item, MenuItemContainer
+}
