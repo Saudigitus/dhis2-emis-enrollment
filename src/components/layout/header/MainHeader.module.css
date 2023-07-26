@@ -9,8 +9,8 @@
     flex-wrap: wrap;
 }
 
-.MainHeaderContainer .jsx-3163060161 {
-    height: 100%;
+.MainHeaderContainer div:has(.j2e9b216) {
+    margin-left: auto !important;
 }
 
 .HeaderItemContainer {
@@ -28,14 +28,14 @@
     box-shadow: rgb(213, 221, 229) 0px 0px 0px 1px !important;
 }
 
-.HeaderItemContainer svg {
-    margin-left: 0 !important;
-}
-
 .HeaderItemContainer h5 {
     color: var(--grey-grey-600, #6E7A8A) !important;
     margin: 0 !important;
     font-size: 14px !important;
+}
+
+.HeaderItemContainer img {
+    display: none;
 }
 
 .HeaderItemContainer span {
@@ -43,33 +43,31 @@
     margin-right: 12px !important;
 }
 
-.AcademicYear {
+.j2e9b216 {
+    box-shadow: none !important;
     color: var(--grey-grey-600, #6E7A8A);
     font-family: Roboto;
-    font-size: 20px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 20px;
-    margin-left: auto;
-    padding: 12px;
-    display: flex;
-    align-items: center;
 }
 
-.AcademicYear img {
-    margin-left: 10px;
-    cursor: pointer;
+.j2e9b216 img {
+    display: block;
 }
 
-.AcademicYear h5 {
+.j2e9b216 svg {
+    display: none;
+}
+
+.j2e9b216 h5 {
+    font-size: 20px !important;
     margin-bottom: 0 !important;
 }
 
-.AcademicYear span {
-    color: #FF2002;
+.HeaderItemContainer svg {
+    margin-left: 0 !important;
+}
+
+.j2e9b216 span {
+    color: #FF2002 !important;
     font-family: Roboto;
-    font-size: 20px;
-    font-style: normal;
     font-weight: 700;
-    line-height: 20px;
 }

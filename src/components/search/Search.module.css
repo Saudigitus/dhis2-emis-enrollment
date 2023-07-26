@@ -23,3 +23,29 @@
     max-height: calc(80vh - 50px);
     overflow-y: auto;
 }
+
+.j2e9b216 {
+    min-height: auto !important;
+    border: 2px solid var(--blue-blue-200, #C5E3FC) !important;
+    background: var(--blue-blue-050, #F5FBFF) !important;
+    min-width: 240px !important;
+}
+
+.j2e9b216 li {
+    background-color: transparent !important;
+    font-family: Roboto;
+    font-size: 24px;
+}
+
+.j2e9b216 li span {
+    text-align: end;
+    color: #2C73D6;
+}
+
+.j2e9b216 .ChildrenContentContainer {
+    min-height: auto;
+}
+
+.j2e9b216 .SimpleSearcInputContainer {
+    display: none;
+}

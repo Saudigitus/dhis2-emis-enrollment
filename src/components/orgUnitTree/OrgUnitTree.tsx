@@ -34,8 +34,7 @@ export default function OrgUnitTree(): React.ReactElement {
             roots={data?.results.organisationUnits[0].id}
             initiallyExpanded={[data?.results.organisationUnits[0].id]}
             singleSelection
-        // onChange={onChange}
-        // selected={selected}
+            onChange={() => { console.log("Ou changed") }}
         />
     )
 }
