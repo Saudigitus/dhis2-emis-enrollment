@@ -23,7 +23,7 @@ const PROGRAMQUERY = (id: string) => ({
 export function useGetProgramConfig() {
     const setProgramConfigState = useSetRecoilState(ProgramConfigState);
 
-    const { data, loading } = useDataQuery<{ results: ProgramConfig }>(PROGRAMQUERY("IpHINAT79UW"));
+    const { data, loading } = useDataQuery<{ results: ProgramConfig }>(PROGRAMQUERY("wQaiD2V27Dp"));
 
     useEffect(() => {
         setProgramConfigState(data?.results);

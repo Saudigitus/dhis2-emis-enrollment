@@ -104,18 +104,18 @@ export function useTableData() {
             ouMode: "SELECTED",
             page: 1,
             pageSize: 10,
-            program: "IpHINAT79UW",
+            program: "wQaiD2V27Dp",
             order: "createdAt:desc",
-            programStage: "A03MvHHogjR",
+            programStage: "Ni2qsy2WJn4",
             filter: "",
-            orgUnit: "DiszpKrYNg8"
+            orgUnit: "Shc3qNhrPAz"
         }))
 
         const teiResults: TeiQueryResults = await engine.query(TEI_QUERY({
             ouMode: "SELECTED",
             pageSize: 10,
-            program: "IpHINAT79UW",
-            orgUnit: "DiszpKrYNg8",
+            program: "wQaiD2V27Dp",
+            orgUnit: "Shc3qNhrPAz",
             trackedEntity: eventsResults?.results?.instances.map((x: { trackedEntity: string }) => x.trackedEntity).toString().replaceAll(",", ";")
         }));
 
