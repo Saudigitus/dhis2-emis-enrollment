@@ -1,4 +1,5 @@
 interface HeadBarTypes {
+    id: string
     label: string
     value: string
     placeholder: string
