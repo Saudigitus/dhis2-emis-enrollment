@@ -12,9 +12,9 @@ const PROGRAMQUERY = (id: string) => ({
             fields: [
                 "access",
                 "id,displayName,description,programType,version",
-                "programStages[id,displayName,autoGenerateEvent,programStageDataElements[displayInReports,compulsory,dataElement[id,displayName,valueType,optionSet[id]]]]",
                 "trackedEntityType[id,trackedEntityTypeAttributes[trackedEntityAttribute[id]]]",
-                "programTrackedEntityAttributes[mandatory,displayInList,trackedEntityAttribute[id,displayName,valueType,optionSet]]"
+                "programTrackedEntityAttributes[mandatory,displayInList,trackedEntityAttribute[id,displayName,valueType,optionSet]]",
+                "programStages[id,displayName,autoGenerateEvent,programStageDataElements[displayInReports,compulsory,dataElement[id,displayName,valueType,optionSet[id]]]]"
             ]
         }
     }
