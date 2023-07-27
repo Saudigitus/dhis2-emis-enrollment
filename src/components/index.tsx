@@ -12,10 +12,11 @@ import ModalContentComponent from "./modal/ModalContent";
 import Title from "./text/Title";
 import { Item, MenuItemContainer } from "./menuItem/index"
 import Subtitle from "./text/subtitle";
+import SwitchButtonView from "./buttons/MultipleButtons/SwitchButtonView";
 
 export {
     SideBar, MainHeader, Table, DropdownButtonComponent,
     FlyoutMenuComponent, SimpleButtons, WithPadding, WithBorder,
     ModalComponent, ModalContentComponent, OrgUnitTree,
-    SimpleSearch, Title, Subtitle, Item, MenuItemContainer
+    SimpleSearch, Title, Subtitle, Item, MenuItemContainer, SwitchButtonView
 }
