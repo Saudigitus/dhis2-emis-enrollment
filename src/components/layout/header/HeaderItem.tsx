@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import style from "./MainHeader.module.css"
 import { DropdownButton, FlyoutMenu } from "@dhis2/ui"
 import { type HeadBarTypes } from '../../../types/headBar/HeadBarTypes'
@@ -9,19 +9,24 @@ import classNames from 'classnames'
 
 export default function HeaderItem({ label, value, placeholder, component, optionSetId, id }: HeadBarTypes): React.ReactElement {
     const Component = (component != null) ? componentMapping[component] : null;
+    const [openDropDown, setOpenDropDown] = useState<boolean>(false);
+    const onToggle = () => { setOpenDropDown(!openDropDown) }
+
     return (
         <DropdownButton
+            open={openDropDown}
+            onClick={onToggle}
             className={classNames(style.HeaderItemContainer, style[id])}
             component={
-                <FlyoutMenu>
+                < FlyoutMenu >
                     <SimpleSearch id={id} placeholder={placeholder}>
-                        {(Component != null) && <Component optionSetId={optionSetId} />}
+                        {(Component != null) && <Component optionSetId={optionSetId} onToggle={onToggle} />}
                     </SimpleSearch>
-                </FlyoutMenu>
+                </FlyoutMenu >
             }
         >
             <h5>{label} <span>{value}</span></h5>
             <img src={info} />
-        </DropdownButton>
+        </DropdownButton >
     )
 }
