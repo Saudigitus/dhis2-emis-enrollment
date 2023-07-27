@@ -24,6 +24,7 @@ interface EventQueryProps {
     programStage: string
     filter: string
     orgUnit: string
+    filterAttributes: string
 }
 
 interface TeiQueryProps {
@@ -34,7 +35,7 @@ interface TeiQueryProps {
     orgUnit: string
 }
 
-const EVENT_QUERY = ({ ouMode, page, pageSize, program, order, programStage, filter, orgUnit }: EventQueryProps) => ({
+const EVENT_QUERY = ({ ouMode, page, pageSize, program, order, programStage, filter, orgUnit, filterAttributes }: EventQueryProps) => ({
     results: {
         resource: "tracker/events",
         params: {
@@ -112,6 +113,7 @@ export function useTableData() {
             order: "createdAt:desc",
             programStage: dataStoreState?.enrollment.programStage as unknown as string,
             filter: "",
+            filterAttributes: "",
             orgUnit: school
         }))
 
