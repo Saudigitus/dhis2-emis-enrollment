@@ -1,9 +1,10 @@
 
-import { useSetRecoilState } from "recoil";
-import { TableDataState } from "../../schema/tableData";
+import { useRecoilValue } from "recoil";
+import { DataStoreState } from "../../schema/dataStoreSchema";
 import { useState } from "react";
 import { useDataEngine } from "@dhis2/app-runtime";
 import { formatResponseRows } from "../../utils/table/rows/formatResponseRows";
+import { useParams } from "../commons/useQueryParams";
 
 interface GetDataProps {
     page: number
@@ -23,6 +24,7 @@ interface EventQueryProps {
     programStage: string
     filter: string
     orgUnit: string
+    filterAttributes: string
 }
 
 interface TeiQueryProps {
@@ -33,7 +35,7 @@ interface TeiQueryProps {
     orgUnit: string
 }
 
-const EVENT_QUERY = ({ ouMode, page, pageSize, program, order, programStage, filter, orgUnit }: EventQueryProps) => ({
+const EVENT_QUERY = ({ ouMode, page, pageSize, program, order, programStage, filter, orgUnit, filterAttributes }: EventQueryProps) => ({
     results: {
         resource: "tracker/events",
         params: {
@@ -94,9 +96,12 @@ interface TeiQueryResults {
 
 export function useTableData() {
     const engine = useDataEngine();
-    // const setTableDataState = useSetRecoilState(TableDataState);
+    const dataStoreState = useRecoilValue(DataStoreState);
+    const { urlParamiters } = useParams()
     const [loading, setLoading] = useState<boolean>(false)
     const [tableData, setTableData] = useState<TableDataProps[]>([])
+
+    const school = urlParamiters().school as unknown as string
 
     async function getData() {
         setLoading(true)
@@ -104,18 +109,19 @@ export function useTableData() {
             ouMode: "SELECTED",
             page: 1,
             pageSize: 10,
-            program: "wQaiD2V27Dp",
+            program: dataStoreState?.enrollment.program as unknown as string,
             order: "createdAt:desc",
-            programStage: "Ni2qsy2WJn4",
+            programStage: dataStoreState?.enrollment.programStage as unknown as string,
             filter: "",
-            orgUnit: "Shc3qNhrPAz"
+            filterAttributes: "",
+            orgUnit: school
         }))
 
         const teiResults: TeiQueryResults = await engine.query(TEI_QUERY({
             ouMode: "SELECTED",
             pageSize: 10,
-            program: "wQaiD2V27Dp",
-            orgUnit: "Shc3qNhrPAz",
+            program: dataStoreState?.enrollment.program as unknown as string,
+            orgUnit: school,
             trackedEntity: eventsResults?.results?.instances.map((x: { trackedEntity: string }) => x.trackedEntity).toString().replaceAll(",", ";")
         }));
 

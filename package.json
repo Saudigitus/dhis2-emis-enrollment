@@ -23,6 +23,7 @@
   "dependencies": {
     "@date-io/date-fns": "1.3.13",
     "@dhis2/app-runtime": "^3.9.4",
+    "@dhis2/app-service-datastore": "^1.0.0-beta.3",
     "@material-ui/core": "^4.12.4",
     "@material-ui/icons": "^4.11.3",
     "@material-ui/lab": "^4.0.0-alpha.61",
