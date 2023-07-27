@@ -12,11 +12,17 @@ const useParams = () => {
         setSearchParams(searchParams)
     }
     const useQuery = () => {
-        return React.useMemo(
-            () => new URLSearchParams(searchParams),
-            [searchParams]
-        )
+        return React.useMemo(() => new URLSearchParams(searchParams), [searchParams])
     }
-    return { add, remove, useQuery }
+
+    const urlParamiters = () => {
+        return {
+            school: useQuery().get('school'),
+            grade: useQuery().get('grade'),
+            class: useQuery().get('class'),
+            academicYear: useQuery().get('academicYear')
+        }
+    }
+    return { add, remove, useQuery, urlParamiters }
 }
 export { useParams }

@@ -9,7 +9,7 @@ function TableComponent() {
   const { loading } = useGetProgramConfig()
 
   useEffect(() => {
-    add("ou", "ouId");
+    add("school", "Shc3qNhrPAz");
     add("academicYear", "2023");
     add("grade", "12");
     add("class", "12");
