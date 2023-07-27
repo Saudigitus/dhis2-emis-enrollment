@@ -4,7 +4,10 @@ interface MenuItemTypes {
     id: string
     name: string
     code: string
+    optionSetId: string
 }
 type ComponentMapping = Record<string, React.ComponentType<any>>;
 
-export type { MenuItemTypes, ComponentMapping }
+type ParamsMapping = Record<string, string>;
+
+export type { MenuItemTypes, ComponentMapping, ParamsMapping }
