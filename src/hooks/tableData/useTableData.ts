@@ -105,6 +105,7 @@ export function useTableData() {
 
     async function getData() {
         setLoading(true)
+        
         const eventsResults: EventQueryResults = await engine.query(EVENT_QUERY({
             ouMode: "SELECTED",
             page: 1,

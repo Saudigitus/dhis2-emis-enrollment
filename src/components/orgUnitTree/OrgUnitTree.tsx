@@ -13,12 +13,13 @@ const ORG_UNIT_QUERY = {
 }
 
 export default function OrgUnitTree({ onToggle }: { onToggle: () => void }): React.ReactElement {
-    const { loading, data, error } = useDataQuery(ORG_UNIT_QUERY);
-    const [selectedOu, setSelectedOu] = useState<object>()
+    const { loading, data, error } = useDataQuery<{ results: { organisationUnits: [{ id: string, displayName: string }] } }>(ORG_UNIT_QUERY);
+    const [selectedOu, setSelectedOu] = useState<{ id: string, displayName: string, selected: any }>()
     const { add } = useParams();
 
-    const onOuChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        add("school", event?.displayName);
+    const onOuChange = (event: { id: string, displayName: string, selected: any }) => {
+        add("school", event?.id);
+        add("schoolName", event?.displayName);
         setSelectedOu(event);
         onToggle()
     }

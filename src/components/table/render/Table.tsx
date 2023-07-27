@@ -10,6 +10,7 @@ import WithPadding from '../../template/WithPadding';
 import WorkingLits from '../components/filters/workingList/WorkingLits';
 import { useHeader } from '../../../hooks/tableHeader/useHeader';
 import { useTableData } from '../../../hooks/tableData/useTableData';
+import { useParams } from '../../../hooks/commons/useQueryParams';
 
 const usetStyles = makeStyles({
     tableContainer: {
@@ -21,10 +22,14 @@ function Table() {
     const classes = usetStyles()
     const { columns } = useHeader()
     const { getData, loading, tableData } = useTableData()
+    const { useQuery, urlParamiters } = useParams()
+    const school = urlParamiters().school as unknown as string
 
     useEffect(() => {
-        void getData()
-    }, [columns])
+        if (school !== null) {
+            void getData()
+        }
+    }, [columns, useQuery()])
 
     return (
         <Paper>
