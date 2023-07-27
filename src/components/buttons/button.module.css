@@ -49,3 +49,7 @@
     font-weight: 400 !important;
     margin-left: 20px;
 }
+
+.activeMenuItem{
+    background-color: #F0F0F0 !important;
+}
