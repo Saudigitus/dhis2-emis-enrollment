@@ -18,7 +18,8 @@ export default function OrgUnitTree({ onToggle }: { onToggle: () => void }): Rea
     const { add } = useParams();
 
     const onOuChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        add("school", event?.displayName);
+        add("school", event?.id);
+        add("schoolName", event?.displayName);
         setSelectedOu(event);
         onToggle()
     }

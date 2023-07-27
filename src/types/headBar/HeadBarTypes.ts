@@ -6,4 +6,12 @@ interface HeadBarTypes {
     component?: string
     optionSetId?: string
 }
-export type { HeadBarTypes }
+
+interface SelectedOptionsTypes {
+    academicYear: string | null
+    class: string | null
+    grade: string | null
+    school: string | null
+    schoolName: string | null
+}
+export type { HeadBarTypes, SelectedOptionsTypes }
