@@ -1,26 +1,21 @@
-import React from 'react'
-import ConfigTableColumns from '../configTableColumns/ConfigTableColumns'
-import EnrollmentFilters from '../filters/enrollment/EnrollmentFilters'
+import React from "react";
+import ConfigTableColumns from "../configTableColumns/ConfigTableColumns";
+import EnrollmentFilters from "../filters/enrollment/EnrollmentFilters";
+import { useHeader } from "../../../../hooks/tableHeader/useHeader";
+import SwitchButtonView from "../../../buttons/MultipleButtons/SwitchButtonView";
 
 function HeaderFilters() {
-    return (
-        <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <EnrollmentFilters />
-            <ConfigTableColumns
-                headers={[{
-                    id: 'id',
-                    header: 'Id',
-                    optionSets: []
-                },
-                {
-                    id: 'id2',
-                    header: 'Id2',
-                    optionSets: []
-                }]}
-                updateVariables={() => { }}
-            />
-        </div>
-    )
+  const { columns } = useHeader();
+  return (
+    <div style={{ display: "flex", justifyContent: "space-between" }}>
+      <EnrollmentFilters />
+
+      <div className="d-flex align-items-center">
+        <SwitchButtonView />
+        <ConfigTableColumns headers={columns} updateVariables={() => {}} />
+      </div>
+    </div>
+  );
 }
 
-export default HeaderFilters
+export default HeaderFilters;

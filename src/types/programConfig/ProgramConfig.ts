@@ -13,9 +13,13 @@ export interface ProgramConfig {
             id: string
             programStageDataElements: [
                 {
+                    displayInReports: boolean
+                    compulsory: boolean
                     dataElement: {
                         displayName: string
                         id: string
+                        valueType: string
+                        optionSet: any
                     }
                 }
             ]
