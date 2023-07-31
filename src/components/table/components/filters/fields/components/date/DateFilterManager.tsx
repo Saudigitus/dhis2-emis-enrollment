@@ -47,7 +47,7 @@ const DateFilterManager = (props: DateFilterManagerProps) => {
                         style={{ width: 150 }}
                         label={"From"}
                         maxDate={value?.endDate}
-                        value={(value?.startDate.length > 0) ? value?.startDate : null}
+                        value={(value?.startDate?.length > 0) ? value?.startDate : null}
                         onChange={(e) => { onChange(e, id, "DATE", "start"); }}
                     />
                 </div>
@@ -60,7 +60,7 @@ const DateFilterManager = (props: DateFilterManagerProps) => {
                         style={{ width: 150 }}
                         minDate={value?.startDate}
                         label={"To"}
-                        value={((value?.endDate).length > 0) ? value?.endDate : null}
+                        value={((value?.endDate)?.length > 0) ? value?.endDate : null}
                         onChange={(e) => { onChange(e, id, "DATE", "end"); }}
                     />
                 </div>

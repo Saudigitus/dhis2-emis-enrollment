@@ -1,6 +1,7 @@
-import { Radio, spacersNum, colors } from '@dhis2/ui'
+import { Radio, spacersNum, colors, CenteredContent, CircularLoader } from '@dhis2/ui'
 import { makeStyles } from '@material-ui/core';
 import React from 'react'
+import { useGetOptionSets } from '../../../../../../../../hooks/optionSets/useGetOptionSets';
 
 const useStyle = makeStyles(() => ({
     iconDeselected: {
@@ -12,21 +13,17 @@ const useStyle = makeStyles(() => ({
     }
 }));
 
-interface OptionProps {
-    value: string
-    label: string
-}
-
 interface SingleSelectBoxesProps {
-    optionSets?: OptionProps[]
-    id?: string
-    onChange: (value: string, id?: string) => void
-    value: string
+    options: { optionSet: { id: string } }
+    value: any
+    id: string
+    onChange: (value: any, id?: string) => void
 }
 
 function SingleSelectBoxes(props: SingleSelectBoxesProps) {
-    const { optionSets, id, onChange, value = "" } = props;
+    const { options, id, onChange, value = "" } = props;
     const classes = useStyle()
+    const { data, loading } = useGetOptionSets({ optionSetId: options.optionSet.id })
 
     const handleOptionChange = (e: any) => {
         onChange(e.value, id)
@@ -35,14 +32,22 @@ function SingleSelectBoxes(props: SingleSelectBoxesProps) {
         return (value.length > 0 && value.includes(localValue));
     }
 
-    return optionSets?.map(({ value, label }, index) => (
+    if (loading) {
+        return (
+            <CenteredContent>
+                <CircularLoader small />
+            </CenteredContent>
+        )
+    }
+
+    return data?.result?.options?.map(({ code, displayName }: { code: string, displayName: string }, index: number) => (
         <Radio
             key={index}
-            checked={isChecked(value)}
-            label={label}
+            checked={isChecked(code)}
+            label={displayName}
             name={`singleSelectBoxes-${index}`}
             onChange={(e: any) => { handleOptionChange(e); }}
-            value={value}
+            value={code}
             className={classes.checkbox}
             dense
         />
