@@ -13,10 +13,11 @@ import Title from "./text/Title";
 import { Item, MenuItemContainer } from "./menuItem/index"
 import Subtitle from "./text/subtitle";
 import SwitchButtonView from "./buttons/MultipleButtons/SwitchButtonView";
+import GroupForm from "./form/GroupForm";
 
 export {
     SideBar, MainHeader, Table, DropdownButtonComponent,
     FlyoutMenuComponent, SimpleButtons, WithPadding, WithBorder,
     ModalComponent, ModalContentComponent, OrgUnitTree,
-    SimpleSearch, Title, Subtitle, Item, MenuItemContainer, SwitchButtonView
+    SimpleSearch, Title, Subtitle, Item, MenuItemContainer, SwitchButtonView, GroupForm
 }
