@@ -4,7 +4,7 @@ interface HeadBarTypes {
     value: string
     placeholder: string
     component?: string
-    optionSetId?: string
+    dataElementId?: string
 }
 
 interface SelectedOptionsTypes {

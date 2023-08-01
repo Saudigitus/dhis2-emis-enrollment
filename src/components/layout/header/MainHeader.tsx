@@ -11,7 +11,7 @@ export default function MainHeader(): React.ReactElement {
     return (
         <nav className={style.MainHeaderContainer}>
             {headBarData(selectedOptions).map(haderItem => (
-                <HeaderItem key={haderItem.id} id={haderItem.id} optionSetId={haderItem.optionSetId} component={haderItem.component} placeholder={haderItem.placeholder} label={haderItem.label} value={haderItem.value} />
+                <HeaderItem key={haderItem.id} id={haderItem.id} dataElementId={haderItem.dataElementId} component={haderItem.component} placeholder={haderItem.placeholder} label={haderItem.label} value={haderItem.value} />
             ))}
         </nav>
     )
