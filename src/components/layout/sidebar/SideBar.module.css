@@ -2,65 +2,70 @@
 @import "../../../assets/style/font.css";
 
 .SideBarContainer {
-    height: 100%;
-    overflow-y: auto;
-    flex: 0 0 370px;
-    background-color: var(--secondary-colort);
-    padding: 20px 15px;
-    transition: flex 0.3s ease-in-out;
-    overflow-x: hidden;
     border-right: 1px solid #e6e4e4;
-}
-
-.SideBarContainer::-webkit-scrollbar {
-    width: 4px;
-    /* width of the entire scrollbar */
-}
-
-.SideBarContainer::-webkit-scrollbar-thumb {
-    background-color: rgb(133, 133, 133);
-    /* color of the scroll thumb */
-    border-radius: 20px;
-    /* roundness of the scroll thumb */
-}
-
-.SideBarContainerCollapsed::-webkit-scrollbar-thumb {
-    background-color: rgb(133, 133, 133);
-    /* color of the scroll thumb */
-    border-radius: 20px;
-    /* roundness of the scroll thumb */
-}
-
-.SideBarContainerCollapsed::-webkit-scrollbar {
-    width: 4px;
-    /* width of the entire scrollbar */
+    height: 100%;
+    width: 370px !important;
+    position: relative;
+    background-color: var(--secondary-colort);
+    transition: width 0.3s ease !important;
 }
 
 .SideBarContainerCollapsed {
     border-right: 1px solid #e6e4e4;
     height: 100%;
-    overflow-y: auto;
-    flex: 0 0 90px;
-    transition: flex 0.3s;
+    max-width: 90px;
+    position: relative;
     background-color: var(--secondary-colort);
+    transition: width 0.3s ease !important;
+}
+
+.SideBarContainer::-webkit-scrollbar {
+    width: 4px;
+}
+
+.SideBarContainer::-webkit-scrollbar-thumb {
+    background-color: rgb(133, 133, 133);
+    border-radius: 20px;
+}
+
+.SideBarContainerCollapsed::-webkit-scrollbar-thumb {
+    background-color: rgb(133, 133, 133);
+    border-radius: 20px;
+}
+
+.SideBarContainerCollapsed::-webkit-scrollbar {
+    width: 4px;
+}
+
+.SideBarMenu {
+    height: 100%;
     padding: 20px 15px;
+    flex: inherit;
+    overflow-y: auto;
     overflow-x: hidden;
 }
 
-.SideBarContainerCollapsed span {
+
+.SideBarContainerCollapsed .SideBarMenu .SideBarSubItemLabel {
     display: none;
     white-space: nowrap;
 }
 
-.SideBarContainerCollapsed .SideBarItemTitle {
-    display: block;
-    opacity: 0;
+.SideBarContainerCollapsed .SideBarMenu .BadgeContainer {
+    display: none;
     white-space: nowrap;
+}
+
+.SideBarContainerCollapsed .SideBarMenu .SideBarItemTitle {
+    display: inline-block !important;
+    opacity: 0;
+    white-space: nowrap !important;
 }
 
 .SideBarContainerCollapsed .SideBarSubItemContainer {
     justify-content: center;
     min-width: 40px;
+    height: 56px !important;
 }
 
 .SideBarContainerCollapsed .SideBarSubItemContainer img {
@@ -77,10 +82,10 @@
     border-radius: 4px;
     left: 100px;
     box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px;
-    z-index: 1;
+    z-index: 2;
 }
 
-.SideBarContainer span {
+.SideBarContainer .SideBarMenu span {
     display: block;
     white-space: nowrap;
 }
@@ -111,6 +116,7 @@
     display: flex;
     position: relative;
     align-items: center;
+    height: 56px !important;
     cursor: default;
 }
 
@@ -171,4 +177,29 @@
     .SideBarContainer {
         flex: 0 0 100%;
     }
+}
+
+.ExpandCollapseSideBar {
+    position: absolute;
+    top: 52px;
+    z-index: 1;
+    right: -25px;
+    cursor: pointer;
+}
+
+.ExpandCollapseSideBar .IconContainer {
+    position: relative;
+}
+
+.ExpandCollapseSideBar .ArrowIConLeft {
+    position: absolute;
+    left: 5px;
+    top: 22px;
+}
+
+.ExpandCollapseSideBar .ArrowIConRight {
+    position: absolute;
+    left: 5px;
+    top: 22px;
+    transform: rotate(180deg);
 }

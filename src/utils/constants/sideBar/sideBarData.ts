@@ -6,7 +6,7 @@ import logOut from "../../../assets/images/sidebar/log-out.svg"
 import userGroup from "../../../assets/images/sidebar/user-group.svg"
 import { type SideBarItemProps } from "../../../types/sideBar/SideBarTypes"
 
-function sideBarData (): SideBarItemProps[] {
+function sideBarData(): SideBarItemProps[] {
     return [
         {
             title: "Students",
@@ -15,7 +15,7 @@ function sideBarData (): SideBarItemProps[] {
                     icon: listAdd,
                     label: "Enrollment",
                     showBadge: false,
-                    route: "/home"
+                    route: "/enrollment"
                 },
                 {
                     icon: glyph,
@@ -85,4 +85,4 @@ function sideBarData (): SideBarItemProps[] {
         }
     ]
 }
-export {sideBarData}
+export { sideBarData }
