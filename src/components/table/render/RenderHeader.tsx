@@ -3,7 +3,7 @@ import { RowTable, SortLabel } from '../components'
 import classNames from 'classnames';
 import { makeStyles, createStyles, type Theme } from '@material-ui/core/styles';
 import HeaderCell from '../components/head/HeaderCell';
-import { type CustomAttributeProps } from '../../../types/table/attributeColumns';
+import { type CustomAttributeProps } from '../../../types/table/AttributeColumns';
 
 interface renderHeaderProps {
     rowsHeader: CustomAttributeProps[]

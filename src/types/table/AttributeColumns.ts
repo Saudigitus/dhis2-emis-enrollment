@@ -1,8 +1,8 @@
 import { type Attribute } from '../generated/models';
 
-interface OptionSetProps {
-    value: string
-    label: string
+export enum VariablesTypes {
+    DataElement = "dataElement",
+    Attribute = "attribute"
 }
 
 export interface CustomAttributeProps {
@@ -15,10 +15,11 @@ export interface CustomAttributeProps {
     valueType: typeof Attribute.valueType
     disabled: boolean
     visible: boolean
-    options?: { optionSet: any }
+    options: { optionSet: { id: string } }
     pattern?: string
     searchable?: boolean
     error?: boolean
     content?: string
     key?: any
+    type: VariablesTypes
 }

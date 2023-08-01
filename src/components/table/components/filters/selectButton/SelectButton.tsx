@@ -92,7 +92,7 @@ function SelectButton(props: SelectButtonProps) {
                 {(filled?.length > 0)
                     ? <RenderWithAppliedFilter
                         classes={classes}
-                        disabled={disabled}
+                        disabled={false}
                         filled={filled}
                         refActiveFilterInstance={refActiveFilterInstance}
                         onClose={onClose}
@@ -103,7 +103,7 @@ function SelectButton(props: SelectButtonProps) {
                     />
                     : <RenderWithoutAppliedFilter
                         classes={classes}
-                        disabled={disabled}
+                        disabled={false}
                         openFilterSelector={openFilterSelector}
                         title={title}
                         selectorVisible={selectorVisible}

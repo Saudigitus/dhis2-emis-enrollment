@@ -5,13 +5,7 @@ import { useState } from "react";
 import { useDataEngine } from "@dhis2/app-runtime";
 import { formatResponseRows } from "../../utils/table/rows/formatResponseRows";
 import { useParams } from "../commons/useQueryParams";
-
-interface GetDataProps {
-    page: number
-    pageSize: number
-    eventFilters: any
-    teiFilters: any
-}
+import { HeaderFieldsState } from "../../schema/headersSchema";
 
 type TableDataProps = Record<string, string>;
 
@@ -22,9 +16,9 @@ interface EventQueryProps {
     program: string
     order: string
     programStage: string
-    filter: string
     orgUnit: string
-    filterAttributes: string
+    filter?: string[]
+    filterAttributes?: string[]
 }
 
 interface TeiQueryProps {
@@ -46,7 +40,8 @@ const EVENT_QUERY = ({ ouMode, page, pageSize, program, order, programStage, fil
             program,
             programStage,
             orgUnit,
-            // filter,
+            filter,
+            filterAttributes,
             fields: "*"
         }
     }
@@ -97,15 +92,16 @@ interface TeiQueryResults {
 export function useTableData() {
     const engine = useDataEngine();
     const dataStoreState = useRecoilValue(DataStoreState);
+    const headerFieldsState = useRecoilValue(HeaderFieldsState)
     const { urlParamiters } = useParams()
     const [loading, setLoading] = useState<boolean>(false)
     const [tableData, setTableData] = useState<TableDataProps[]>([])
-
     const school = urlParamiters().school as unknown as string
 
     async function getData() {
         setLoading(true)
-        
+        console.log(headerFieldsState);
+
         const eventsResults: EventQueryResults = await engine.query(EVENT_QUERY({
             ouMode: "SELECTED",
             page: 1,
@@ -113,8 +109,8 @@ export function useTableData() {
             program: dataStoreState?.enrollment.program as unknown as string,
             order: "createdAt:desc",
             programStage: dataStoreState?.enrollment.programStage as unknown as string,
-            filter: "",
-            filterAttributes: "",
+            filter: headerFieldsState?.dataElements,
+            filterAttributes: headerFieldsState?.attributes,
             orgUnit: school
         }))
 

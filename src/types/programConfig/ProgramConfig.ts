@@ -19,7 +19,7 @@ export interface ProgramConfig {
                         displayName: string
                         id: string
                         valueType: string
-                        optionSet: any
+                        optionSet: { id: string }
                     }
                 }
             ]
@@ -31,7 +31,7 @@ export interface ProgramConfig {
                 displayName: string
                 id: string
                 valueType: string
-                optionSet: any
+                optionSet: { id: string }
             }
             searchable: boolean
             displayInList: boolean
