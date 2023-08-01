@@ -9,6 +9,7 @@ import { type HeaderFieldsSchema, HeaderFieldsState } from '../../schema/headers
 export default function Item({ menuItems, dataElementId, onToggle }: { menuItems: MenuItemTypes[], dataElementId: string, onToggle: () => void }): React.ReactElement {
     const { add } = useParams();
     const [headerFields, setHeaderFields] = useRecoilState(HeaderFieldsState)
+    console.log(menuItems);
 
     const onChange = (selectedOption: { name: string, code: string }) => {
         add(paramsMapping[dataElementId], selectedOption.code);
