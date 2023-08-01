@@ -3,8 +3,8 @@ import React from "react";
 import style from './groupform.module.css';
 import WithBorder from "../template/WithBorder";
 import WithPadding from "../template/WithPadding";
-import { type CustomAttributeProps } from "../../types/table/attributeColumns";
 import GenericFields from "../genericFields/GenericFields";
+import { type CustomAttributeProps } from "../../types/table/AttributeColumns";
 
 interface FormProps {
     name: string
@@ -28,7 +28,7 @@ function GroupForm(props: FormProps) {
                                 style={{ display: "flex", padding: (x.error ?? false) ? "8px 8px 8px 12px" : "8px 8px 8px 5px", backgroundColor: (x.error === true) ? "#FBEAE5" : i % 2 === 0 ? "#ebf0f6" : "#FFFF", height: (x.error ?? false) ? 102 : "auto" }}>
                                 <div className="col-12 col-md-6 d-flex">
                                     <Label style={{ color: "rgba(0, 0, 0, 0.87)" }}>
-                                        {x.labelName} {x.required === true ? " *" : ""}
+                                        {x.labelName} {x.required ? " *" : ""}
                                     </Label>
                                 </div>
                                 <div className="col-12 col-md-6">

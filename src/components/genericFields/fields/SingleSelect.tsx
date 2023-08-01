@@ -2,18 +2,18 @@ import { TextField } from "@material-ui/core";
 import { Autocomplete } from "@material-ui/lab";
 import React from "react";
 import { useField, type FieldRenderProps } from "react-final-form";
-import { type CustomAttributeProps } from "../../../types/table/attributeColumns";
+import { type CustomAttributeProps } from "../../../types/table/AttributeColumns";
 interface AutoCompleteProps {
   disabled?: boolean
-  optionSet: CustomAttributeProps["options"]
+  options?: CustomAttributeProps["options"]
   name: string
 }
 
-const OptionSetAutocomplete = ({ optionSet, ...props }: AutoCompleteProps) => {
+const OptionSetAutocomplete = (props: AutoCompleteProps) => {
   const { input, meta }: FieldRenderProps<any, HTMLElement> = useField(props.name);
 
-  const options = (optionSet?.optionSet != null)
-    ? optionSet.optionSet.map((option) => ({
+  const options = (props?.options?.optionSet?.options != null)
+    ? props?.options.optionSet?.options.map((option: { value: string, label: string }) => ({
         value: option.value,
         label: option.label
       }))
@@ -27,7 +27,7 @@ const OptionSetAutocomplete = ({ optionSet, ...props }: AutoCompleteProps) => {
       disabled={props.disabled}
       getOptionLabel={(option) => option.label}
       getOptionSelected={(option, value) => option.value === value.value}
-      value={options.find((element) => element.value === input.value)}
+      value={options.find((element: { value: string }) => element.value === input.value)}
       renderInput={(params) => (
         <TextField
           {...params}
@@ -45,17 +45,15 @@ const OptionSetAutocomplete = ({ optionSet, ...props }: AutoCompleteProps) => {
       )}
       onChange={(_, value) => {
         input.onChange(value?.value);
-        console.log("variables", value);
       }}
     />
   );
 };
 
 function SingleSelectField(props: AutoCompleteProps) {
-  console.log("props", props);
   return (
     <div>
-      <OptionSetAutocomplete name={props.name} optionSet={props.optionSet} />
+      <OptionSetAutocomplete {...props} name={props.name}/>
     </div>
   );
 }
