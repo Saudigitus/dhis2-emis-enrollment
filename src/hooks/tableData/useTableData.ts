@@ -115,25 +115,29 @@ export function useTableData() {
             orgUnit: school
         })).catch((error) => {
             show({
-                message: `${("Could not save gateway information")}: ${error.message}`,
+                message: `${("Could not get data")}: ${error.message}`,
                 type: { critical: true }
             });
             setTimeout(hide, 5000);
         })
 
-        const teiResults: TeiQueryResults = await engine.query(TEI_QUERY({
-            ouMode: "SELECTED",
-            pageSize: 10,
-            program: dataStoreState?.enrollment.program as unknown as string,
-            orgUnit: school,
-            trackedEntity: eventsResults?.results?.instances.map((x: { trackedEntity: string }) => x.trackedEntity).toString().replaceAll(",", ";")
-        })).catch((error) => {
-            show({
-                message: `${("Could not save gateway information")}: ${error.message}`,
-                type: { critical: true }
-            });
-            setTimeout(hide, 5000);
-        })
+        const trackedEntityToFetch = eventsResults?.results?.instances.map((x: { trackedEntity: string }) => x.trackedEntity).toString().replaceAll(",", ";")
+
+        const teiResults: TeiQueryResults = trackedEntityToFetch?.length > 0
+            ? await engine.query(TEI_QUERY({
+                ouMode: "SELECTED",
+                pageSize: 10,
+                program: dataStoreState?.enrollment.program as unknown as string,
+                orgUnit: school,
+                trackedEntity: trackedEntityToFetch
+            })).catch((error) => {
+                show({
+                    message: `${("Could not get data")}: ${error.message}`,
+                    type: { critical: true }
+                });
+                setTimeout(hide, 5000);
+            })
+            : { results: { instances: [] } }
 
         setTableData(formatResponseRows({
             eventsInstances: eventsResults?.results?.instances,
