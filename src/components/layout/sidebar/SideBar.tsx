@@ -5,7 +5,7 @@ import { sideBarData } from "../../../utils/constants/sideBar/sideBarData"
 import SibeBarCollapseBtn from './SibeBarCollapseBtn';
 
 export default function SideBar(): React.ReactElement {
-    const [collapsed, setCollapsed] = useState<boolean>(false);
+    const [collapsed, setCollapsed] = useState<boolean>(true);
 
     return (
         <aside className={collapsed ? style.SideBarContainerCollapsed : style.SideBarContainer}>

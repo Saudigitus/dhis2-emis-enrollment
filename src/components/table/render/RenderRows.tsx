@@ -4,7 +4,7 @@ import classNames from 'classnames';
 import { makeStyles, type Theme, createStyles } from '@material-ui/core/styles';
 import { RowCell, RowTable } from '../components';
 import { getDisplayName } from '../../../utils/table/rows/getDisplayNameByOption';
-import { type CustomAttributeProps } from '../../../types/table/attributeColumns';
+import { type CustomAttributeProps } from '../../../types/table/AttributeColumns';
 
 interface RenderHeaderProps {
     rowsData: any[]

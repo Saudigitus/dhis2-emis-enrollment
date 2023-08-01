@@ -2,29 +2,24 @@ import React from 'react'
 import MultiSelectBoxes from '../multiSelectBoxes/MultiSelectBoxes';
 import SingleSelectBoxes from '../singleSelectBoxes/SingleSelectBoxes';
 
-interface OptionProps {
-    value: string
-    label: string
-}
-
 interface SelectBoxesProps {
     singleSelect?: boolean
-    optionSets?: OptionProps[]
-    onChange: (e: any, id?: string, type?: string, position?: string) => void
+    options: { optionSet: { id: string } }
+    onChange: (value: any, id?: string, type?: string) => void
     value: any
-    id?: string
+    id: string
     orientation?: any
 }
 
 function SelectBoxes(props: SelectBoxesProps) {
-    const { singleSelect, optionSets, onChange, id, ...passOnProps } = props;
+    const { singleSelect, onChange, ...passOnProps } = props;
 
     const SelectBoxesTypeComponent = (singleSelect ?? false) ? SingleSelectBoxes : MultiSelectBoxes;
 
     return (
         <SelectBoxesTypeComponent
             {...passOnProps}
-            value={props.value}
+            value={props?.value}
             onChange={onChange}
         />
     );

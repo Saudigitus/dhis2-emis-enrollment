@@ -2,7 +2,7 @@ import React from 'react'
 import DateFilterManager from './components/date/DateFilterManager';
 import TextFilter from './components/text/Text'
 import TrueOnly from './components/trueOnly/TrueOnly';
-import { type CustomAttributeProps } from '../../../../../types/table/attributeColumns';
+import { type CustomAttributeProps } from '../../../../../types/table/AttributeColumns';
 import { Attribute } from '../../../../../types/generated/models';
 import SelectBoxes from './components/optionSet/selectBoxes/SelectBoxes';
 
@@ -11,6 +11,8 @@ interface FilterComponentProps {
     column: CustomAttributeProps
     onChange: () => void
     value: any
+    id: string
+    options: { optionSet: { id: string } }
 }
 
 function FilterComponents(props: FilterComponentProps) {

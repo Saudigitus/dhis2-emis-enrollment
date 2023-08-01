@@ -11,6 +11,8 @@ import WorkingLits from '../components/filters/workingList/WorkingLits';
 import { useHeader } from '../../../hooks/tableHeader/useHeader';
 import { useTableData } from '../../../hooks/tableData/useTableData';
 import { useParams } from '../../../hooks/commons/useQueryParams';
+import { useRecoilValue } from 'recoil';
+import { HeaderFieldsState } from '../../../schema/headersSchema';
 
 const usetStyles = makeStyles({
     tableContainer: {
@@ -24,12 +26,13 @@ function Table() {
     const { getData, loading, tableData } = useTableData()
     const { useQuery, urlParamiters } = useParams()
     const school = urlParamiters().school as unknown as string
+    const headerFieldsState = useRecoilValue(HeaderFieldsState)
 
     useEffect(() => {
         if (school !== null) {
             void getData()
         }
-    }, [columns, useQuery()])
+    }, [columns, useQuery(), headerFieldsState])
 
     return (
         <Paper>

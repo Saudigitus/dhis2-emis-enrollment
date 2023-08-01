@@ -1,7 +1,7 @@
 import React from 'react';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
-import { type CustomAttributeProps } from '../../../../../types/table/attributeColumns';
+import { type CustomAttributeProps } from '../../../../../types/table/AttributeColumns';
 
 interface MenuFiltersProps {
     anchorEl: any
