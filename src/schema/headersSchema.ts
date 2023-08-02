@@ -6,9 +6,12 @@ export const headersFieldsSchema = z.object({
     attributes: z.array(z.any())
 })
 
-type HeaderFieldsSchema = z.infer<typeof headersFieldsSchema>
+export type HeaderFieldsSchema = z.infer<typeof headersFieldsSchema>
 
-export const HeaderFieldsState = atom<HeaderFieldsSchema | undefined>({
+export const HeaderFieldsState = atom<HeaderFieldsSchema>({
     key: "headerFieldsState-get-state",
-    default: undefined
+    default: {
+        dataElements: [],
+        attributes: []
+    }
 })

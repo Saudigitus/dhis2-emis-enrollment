@@ -23,7 +23,7 @@ type RowsProps = Record<string, string | number | boolean | any>;
 
 export function formatResponseRows({ eventsInstances, teiInstances }: formatResponseRowsProps): RowsProps[] {
     const allRows: RowsProps[] = []
-    for (const event of eventsInstances) {
+    for (const event of eventsInstances || []) {
         const teiDetails = teiInstances.find(tei => tei.trackedEntity === event.trackedEntity)
         allRows.push({ ...dataValues(event.dataValues), ...(attributes((teiDetails?.attributes) ?? [])) })
     }

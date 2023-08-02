@@ -6,6 +6,7 @@ import { useDataEngine } from "@dhis2/app-runtime";
 import { formatResponseRows } from "../../utils/table/rows/formatResponseRows";
 import { useParams } from "../commons/useQueryParams";
 import { HeaderFieldsState } from "../../schema/headersSchema";
+import useShowAlerts from "../commons/useShowAlert";
 
 type TableDataProps = Record<string, string>;
 
@@ -96,11 +97,11 @@ export function useTableData() {
     const { urlParamiters } = useParams()
     const [loading, setLoading] = useState<boolean>(false)
     const [tableData, setTableData] = useState<TableDataProps[]>([])
+    const { hide, show } = useShowAlerts()
     const school = urlParamiters().school as unknown as string
 
     async function getData() {
         setLoading(true)
-        console.log(headerFieldsState);
 
         const eventsResults: EventQueryResults = await engine.query(EVENT_QUERY({
             ouMode: "SELECTED",
@@ -112,15 +113,31 @@ export function useTableData() {
             filter: headerFieldsState?.dataElements,
             filterAttributes: headerFieldsState?.attributes,
             orgUnit: school
-        }))
+        })).catch((error) => {
+            show({
+                message: `${("Could not get data")}: ${error.message}`,
+                type: { critical: true }
+            });
+            setTimeout(hide, 5000);
+        })
 
-        const teiResults: TeiQueryResults = await engine.query(TEI_QUERY({
-            ouMode: "SELECTED",
-            pageSize: 10,
-            program: dataStoreState?.enrollment.program as unknown as string,
-            orgUnit: school,
-            trackedEntity: eventsResults?.results?.instances.map((x: { trackedEntity: string }) => x.trackedEntity).toString().replaceAll(",", ";")
-        }));
+        const trackedEntityToFetch = eventsResults?.results?.instances.map((x: { trackedEntity: string }) => x.trackedEntity).toString().replaceAll(",", ";")
+
+        const teiResults: TeiQueryResults = trackedEntityToFetch?.length > 0
+            ? await engine.query(TEI_QUERY({
+                ouMode: "SELECTED",
+                pageSize: 10,
+                program: dataStoreState?.enrollment.program as unknown as string,
+                orgUnit: school,
+                trackedEntity: trackedEntityToFetch
+            })).catch((error) => {
+                show({
+                    message: `${("Could not get data")}: ${error.message}`,
+                    type: { critical: true }
+                });
+                setTimeout(hide, 5000);
+            })
+            : { results: { instances: [] } }
 
         setTableData(formatResponseRows({
             eventsInstances: eventsResults?.results?.instances,
