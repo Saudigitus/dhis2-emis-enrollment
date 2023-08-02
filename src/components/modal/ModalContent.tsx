@@ -1,12 +1,20 @@
 import React from "react";
-import { Divider, Box, Label, InputField } from "@dhis2/ui";
+import { Divider, Box, Label, InputField, ModalActions, Button, ButtonStrip } from "@dhis2/ui";
 import WithPadding from "../template/WithPadding";
 import styles from "./modal.module.css";
 import { Col, Row } from "react-bootstrap";
 import { formFields } from "../../utils/constants/fields/fieldsAttributes";
 import Subtitle from "../text/subtitle";
+interface ContentProps {
+  setOpen: (value: boolean) => void
+}
 
-function ModalContentComponent(): React.ReactElement {
+function ModalContentComponent({ setOpen }: ContentProps): React.ReactElement {
+  const modalActions = [
+    { label: "Cancel", disabled: false, loading: false, onClick: () => { setOpen(false) } },
+    { label: "Save and add new", primary: true, disabled: false, loading: false, onClick: () => { setOpen(false) } },
+    { label: "Save and close", primary: true, disabled: false, loading: false, onClick: () => { setOpen(false) } }
+  ];
   return (
     <>
       {formFields().map((ff: any, i: number) => (
@@ -26,10 +34,23 @@ function ModalContentComponent(): React.ReactElement {
                 </Col>
               </Row>
             ))}
-            <Divider />
           </Box>
+        <Divider />
         </WithPadding>
       ))}
+
+      <ModalActions>
+        <ButtonStrip end className="mr-4">
+          {modalActions.map((action, i) => (
+            <Button
+              key={i}
+              {...action}
+            >
+              {action.loading ? "Loading..." : action.label}
+            </Button>
+          ))}
+        </ButtonStrip>
+      </ModalActions>
     </>
   );
 }

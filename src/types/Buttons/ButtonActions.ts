@@ -4,6 +4,7 @@ interface ButtonActionProps {
     destructive?: boolean
     secondary?: boolean
     disabled: boolean
+    loading?: boolean
     onClick: () => void
 
 }

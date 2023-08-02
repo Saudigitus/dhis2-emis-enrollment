@@ -4,18 +4,11 @@ import ModalComponent from '../../../modal/Modal';
 import ModalContentComponent from '../../../modal/ModalContent';
 import ImportContent from '../../../modal/ImportContent';
 import DropdownButtonComponent from '../../../buttons/DropdownButton';
-import { type ButtonActionProps } from '../../../../types/buttons/ButtonActions';
 import { type FlyoutOptionsProps } from '../../../../types/buttons/FlyoutOptions';
 
 function EnrollmentActionsButtons() {
   const [open, setOpen] = useState<boolean>(false);
   const [openImport, setOpenImport] = useState<boolean>(false);
-
-  const modalActions: ButtonActionProps[] = [
-    { label: "Save and Close", disabled: false, onClick: () => { setOpen(false) } },
-    { label: "Save and add new", primary: true, disabled: false, onClick: () => { setOpen(false) } },
-    { label: "Save and close", primary: true, disabled: false, onClick: () => { setOpen(false) } }
-  ];
 
   const enrollmentOptions: FlyoutOptionsProps[] = [
     { label: "Import students", divider: true, onClick: () => { setOpenImport(true); } },
@@ -35,8 +28,8 @@ function EnrollmentActionsButtons() {
         />
       </ButtonStrip>
 
-      {open && <ModalComponent title="Single Student Enrollment" open={open} setOpen={setOpen} actions={modalActions}><ModalContentComponent /></ModalComponent>}
-      {openImport && <ModalComponent title="Import Students" open={openImport} setOpen={setOpenImport} actions={modalActions}><ImportContent /></ModalComponent>}
+      {open && <ModalComponent title="Single Student Enrollment" open={open} setOpen={setOpen}><ModalContentComponent setOpen={setOpen} /></ModalComponent>}
+      {openImport && <ModalComponent title="Import Students" open={openImport} setOpen={setOpenImport}><ImportContent setOpen={setOpen} /></ModalComponent>}
     </div>
   )
 }
