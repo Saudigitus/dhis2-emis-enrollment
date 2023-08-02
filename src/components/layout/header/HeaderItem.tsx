@@ -7,7 +7,7 @@ import { SimpleSearch } from '../../search'
 import { componentMapping } from '../../../utils/commons/componentMapping'
 import classNames from 'classnames'
 
-export default function HeaderItem({ label, value, placeholder, component, optionSetId, id }: HeadBarTypes): React.ReactElement {
+export default function HeaderItem({ label, value, placeholder, component, dataElementId, id }: HeadBarTypes): React.ReactElement {
     const Component = (component != null) ? componentMapping[component] : null;
     const [openDropDown, setOpenDropDown] = useState<boolean>(false);
     const onToggle = () => { setOpenDropDown(!openDropDown) }
@@ -20,7 +20,7 @@ export default function HeaderItem({ label, value, placeholder, component, optio
             component={
                 < FlyoutMenu >
                     <SimpleSearch id={id} placeholder={placeholder}>
-                        {(Component != null) && <Component optionSetId={optionSetId} onToggle={onToggle} />}
+                        {(Component != null) && <Component dataElementId={dataElementId} onToggle={onToggle} />}
                     </SimpleSearch>
                 </FlyoutMenu >
             }

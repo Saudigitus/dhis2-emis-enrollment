@@ -4,8 +4,9 @@ import MenuFilters from './MenuFilters';
 import { type CustomAttributeProps } from '../../../../../types/table/AttributeColumns';
 import SelectButton from "../selectButton/SelectButton";
 import { format } from 'date-fns';
-import { useSetRecoilState } from 'recoil';
+import { useRecoilState } from 'recoil';
 import { HeaderFieldsState } from '../../../../../schema/headersSchema';
+import { convertArrayToObject } from '../../../../../utils/table/filter/formatArrayToObject';
 
 interface ContentFilterProps {
     headers: CustomAttributeProps[]
@@ -20,7 +21,7 @@ function ContentFilter(props: ContentFilterProps) {
     const [fieldsFilled, setfieldsFilled] = useState<FiltersValuesProps>({})
     const [anchorEl, setAnchorEl] = useState(null)
     const [resetValues, setresetValues] = useState("")
-    const setHeaderFieldsState = useSetRecoilState(HeaderFieldsState)
+    const [headerFieldsStateValues, setHeaderFieldsState] = useRecoilState(HeaderFieldsState)
     const attributesQuerybuilder: any[][] = [];
     const dataElementsQuerybuilder: any[][] = [];
 
@@ -43,7 +44,7 @@ function ContentFilter(props: ContentFilterProps) {
     }
 
     const onChangeFilters = (value: any, key: string, type: string, pos: string) => {
-        let cloneHeader = { ...filtersValues }
+        let cloneHeader = { ...filtersValues, ...convertArrayToObject(headerFieldsStateValues.dataElements) }
 
         if (type === 'DATE') {
             let date = cloneHeader[key] ?? {}
