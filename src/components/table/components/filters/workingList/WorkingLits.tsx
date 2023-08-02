@@ -1,21 +1,9 @@
-import React, { useState } from 'react'
+import React from 'react'
 import WithPadding from '../../../../template/WithPadding'
-import { Chip, IconUserGroup16, IconAddCircle24, Button, ButtonStrip } from "@dhis2/ui";
-import DropdownButtonComponent from '../../../../buttons/DropdownButton';
-import { enrollmentOptions } from '../../../../buttons/options';
-import ModalComponent from '../../../../modal/Modal';
-import ModalContentComponent from '../../../../modal/ModalContent';
-import { type ButtonActionProps } from '../../../../../types/buttons/ButtonActions';
+import { Chip } from "@dhis2/ui";
+import EnrollmentActionsButtons from '../../enrollmentButtons/EnrollmentActionsButtons';
 
 function WorkingLits() {
-  const [open, setOpen] = useState<boolean>(false);
-
-  const modalActions: ButtonActionProps[] = [
-    { label: "Close", disabled: false, onClick: () => { setOpen(false) } },
-    { label: "Save and add new", primary: true, disabled: false, onClick: () => { setOpen(false) } },
-    { label: "Save and close", primary: true, disabled: false, onClick: () => { setOpen(false) } }
-  ];
-
   return (
     <WithPadding>
       <div className='d-flex justify-content-between'>
@@ -31,18 +19,8 @@ function WorkingLits() {
           </Chip>
         </div>
 
-        <div>
-          <ButtonStrip>
-            <Button onClick={() => { setOpen(true); }} icon={<IconAddCircle24 />}>Enrol single student</Button>
-            <DropdownButtonComponent
-              name="Bulk enrollment"
-              icon={<IconUserGroup16 />}
-              options={enrollmentOptions}
-            />
-          </ButtonStrip>
-        </div>
+        <EnrollmentActionsButtons/>
       </div>
-      {open && <ModalComponent title="Single Student Enrollment" open={open} setOpen={setOpen} actions={modalActions}><ModalContentComponent /></ModalComponent>}
     </WithPadding>
   )
 }
