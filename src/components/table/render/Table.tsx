@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { CenteredContent, CircularLoader } from "@dhis2/ui";
 import { HeaderFilters, Pagination, TableComponent } from '../components'
 import RenderHeader from './RenderHeader'
@@ -27,12 +27,23 @@ function Table() {
     const { useQuery, urlParamiters } = useParams()
     const school = urlParamiters().school as unknown as string
     const headerFieldsState = useRecoilValue(HeaderFieldsState)
+    const [page, setpage] = useState(1)
+    const [pageSize, setpageSize] = useState(10)
 
     useEffect(() => {
         if (school !== null) {
-            void getData()
+            void getData(page, pageSize)
         }
-    }, [columns, useQuery(), headerFieldsState])
+    }, [columns, useQuery(), headerFieldsState, page, pageSize])
+
+    const onPageChange = (newPage: number) => {
+        setpage(newPage)
+    }
+
+    const onRowsPerPageChange = (event: any) => {
+        setpageSize(parseInt(event.value, 10))
+        setpage(1)
+    }
 
     return (
         <Paper>
@@ -65,13 +76,12 @@ function Table() {
                         </TableComponent>
                     </div>
                     <Pagination
-                        loading={false}
-                        page={1}
-                        rowsPerPage={10}
-                        onRowsPerPageChange={() => { }}
-                        onPageChange={() => { }}
-                        totalPerPage={10}
-                        totalPages={10}
+                        loading={loading}
+                        onPageChange={onPageChange}
+                        onRowsPerPageChange={onRowsPerPageChange}
+                        page={page}
+                        rowsPerPage={pageSize}
+                        totalPerPage={tableData?.length}
                     />
                 </WithBorder>
             </WithPadding>

@@ -11,7 +11,6 @@ interface PaginationProps {
     rowsPerPage: number
     onPageChange: (page: number) => void
     onRowsPerPageChange: (rowsPerPage: number) => void
-    totalPages: number
     loading: boolean
     totalPerPage: number
 }
@@ -37,7 +36,7 @@ function IconButtonPagination(props: IconButtonPaginationProps): React.ReactElem
             <IconButton
                 style={{ paddingRight: 15 }}
                 // corrigir este erro 👇
-                // onClick={props.onPageChange}
+                onClick={props.onPageChange}
                 disabled={props.disabled}
                 aria-label={props.ariaLabel}
             >
