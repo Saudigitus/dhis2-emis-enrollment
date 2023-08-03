@@ -15,11 +15,21 @@ export interface CustomAttributeProps {
     valueType: typeof Attribute.valueType
     disabled: boolean
     visible: boolean
-    options: { optionSet: { id: string } }
+    options: {
+        optionSet: {
+            id: string
+            options: {
+                [x: string]: any
+                value: string
+                label: string
+            }
+        }
+    }
     pattern?: string
     searchable?: boolean
     error?: boolean
     content?: string
     key?: any
+    description?: string
     type: VariablesTypes
 }

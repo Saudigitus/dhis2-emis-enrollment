@@ -1,2 +1,3 @@
 import TableComponent from "./enrollment/Table"
-export { TableComponent }
+import GenericForm from "./form/Form"
+export { TableComponent, GenericForm }
