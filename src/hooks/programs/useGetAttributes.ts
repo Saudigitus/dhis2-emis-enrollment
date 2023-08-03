@@ -15,7 +15,7 @@ function useGetAttributes({ programId }: { programId: string }) {
     const { data, loading, error } = useDataQuery<{ result: any }>(PROGRAM_ATTRIBUTES_QUERY(programId))
 
     return {
-        data: formatResponseTEI(data?.result) || [],
+        attributes: formatResponseTEI(data?.result),
         error,
         loading
     }

@@ -30,5 +30,6 @@ export interface CustomAttributeProps {
     error?: boolean
     content?: string
     key?: any
+    description?: string
     type: VariablesTypes
 }
