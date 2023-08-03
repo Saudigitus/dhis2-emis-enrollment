@@ -100,13 +100,13 @@ export function useTableData() {
     const { hide, show } = useShowAlerts()
     const school = urlParamiters().school as unknown as string
 
-    async function getData() {
+    async function getData(page: number, pageSize: number) {
         setLoading(true)
 
         const eventsResults: EventQueryResults = await engine.query(EVENT_QUERY({
             ouMode: "SELECTED",
-            page: 1,
-            pageSize: 10,
+            page,
+            pageSize,
             program: dataStoreState?.enrollment.program as unknown as string,
             order: "createdAt:desc",
             programStage: dataStoreState?.enrollment.programStage as unknown as string,
@@ -126,7 +126,7 @@ export function useTableData() {
         const teiResults: TeiQueryResults = trackedEntityToFetch?.length > 0
             ? await engine.query(TEI_QUERY({
                 ouMode: "SELECTED",
-                pageSize: 10,
+                pageSize,
                 program: dataStoreState?.enrollment.program as unknown as string,
                 orgUnit: school,
                 trackedEntity: trackedEntityToFetch
