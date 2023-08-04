@@ -4,12 +4,12 @@ import classNames from 'classnames';
 import { makeStyles, createStyles, type Theme } from '@material-ui/core/styles';
 import HeaderCell from '../components/head/HeaderCell';
 import { type CustomAttributeProps } from '../../../types/table/AttributeColumns';
-import { TableSortLabel } from '@material-ui/core';
 
 interface renderHeaderProps {
     rowsHeader: CustomAttributeProps[]
     orderBy: string
-    order: string
+    order: "asc" | "desc"
+    // TODO resolve this bug.👇
     createSortHandler: (property: string) => any
 }
 
@@ -47,16 +47,17 @@ const useStyles = makeStyles((theme: Theme) =>
     })
 );
 
-
 function RenderHeader(props: renderHeaderProps): React.ReactElement {
     const { rowsHeader, order, orderBy, createSortHandler } = props
     const classes = useStyles()
+
     const headerCells = useMemo(() => {
         return rowsHeader?.filter(x => x.visible)?.map((column, index) => (
             <HeaderCell
                 key={column.id}
                 className={classNames(classes.cell, classes.headerCell)}
             >
+                {/* TODO: the sortLabel must be optional 👇 */}
                 <SortLabel
                     active={orderBy === column.id}
                     direction={orderBy === column.id ? order : 'asc'}
@@ -73,7 +74,7 @@ function RenderHeader(props: renderHeaderProps): React.ReactElement {
                 </SortLabel>
             </HeaderCell>
         ))
-    }, [rowsHeader, order, orderBy]);
+    }, [rowsHeader]);
 
     return (
         <thead>

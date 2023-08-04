@@ -100,15 +100,15 @@ export function useTableData() {
     const { hide, show } = useShowAlerts()
     const school = urlParamiters().school as unknown as string
 
-    async function getData(page: number, pageSize: number, order: string, orderBy: string) {
+    async function getData(page: number, pageSize: number) {
         setLoading(true)
 
         const eventsResults: EventQueryResults = await engine.query(EVENT_QUERY({
             ouMode: "SELECTED",
-            order: `${orderBy}:${order}`,
             page,
             pageSize,
             program: dataStoreState?.enrollment.program as unknown as string,
+            order: "createdAt:desc",
             programStage: dataStoreState?.enrollment.programStage as unknown as string,
             filter: headerFieldsState?.dataElements,
             filterAttributes: headerFieldsState?.attributes,

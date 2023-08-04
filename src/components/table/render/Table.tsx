@@ -20,11 +20,6 @@ const usetStyles = makeStyles({
     }
 });
 
-type Order = 'asc' | 'desc';
-
-let order: Order = 'asc';
-let orderBy: string = 'createdAt';
-
 function Table() {
     const classes = usetStyles()
     const { columns } = useHeader()
@@ -34,14 +29,12 @@ function Table() {
     const headerFieldsState = useRecoilValue(HeaderFieldsState)
     const [page, setpage] = useState(1)
     const [pageSize, setpageSize] = useState(10)
-    const [Order, setOrder] = useState<Order>('asc')
-    const [OrderBy, setOrderBy] = useState<string>("createdAt")
 
     useEffect(() => {
         if (school !== null) {
-            void getData(page, pageSize, order, orderBy)
+            void getData(page, pageSize)
         }
-    }, [columns, useQuery(), headerFieldsState, page, pageSize, order, orderBy])
+    }, [columns, useQuery(), headerFieldsState, page, pageSize])
 
     const onPageChange = (newPage: number) => {
         setpage(newPage)
@@ -51,19 +44,6 @@ function Table() {
         setpageSize(parseInt(event.value, 10))
         setpage(1)
     }
-
-    const handleRequestSort = (event: any, property: any) => {
-        // TODO: Must resolve this bug
-        const isAsc = orderBy === property && order === 'asc';
-        order = (isAsc ? 'desc' : 'asc');
-        orderBy = (property);
-        setOrder(order)
-        setOrderBy(orderBy)
-    };
-
-    const createSortHandler = (property: any) => (event: any) => {
-        handleRequestSort(event, property);
-    };
 
     return (
         <Paper>
@@ -83,9 +63,9 @@ function Table() {
                         <TableComponent>
                             <>
                                 <RenderHeader
-                                    createSortHandler={createSortHandler}
-                                    order={Order}
-                                    orderBy={OrderBy}
+                                    createSortHandler={() => { }}
+                                    order='asc'
+                                    orderBy='desc'
                                     rowsHeader={columns}
                                 />
                                 <RenderRows
