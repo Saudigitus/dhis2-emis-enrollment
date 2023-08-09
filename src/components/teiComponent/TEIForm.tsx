@@ -5,27 +5,26 @@ import { Form } from "react-final-form";
 import { useGetAttributes } from "../../hooks/programs/useGetAttributes";
 
 interface TeiFormProps {
-    programId: string
+  programId: string
 }
 function TEIGenericForm(props: TeiFormProps): React.ReactElement {
-    const { programId } = props;
-    const { attributes, loading } = useGetAttributes({ programId })
-    const [values, setValues] = useState({})
+  const { programId } = props;
+  const { attributes, loading } = useGetAttributes({ programId })
+  const [values, setValues] = useState({})
 
-    function onChange(e: any): void {
-      setValues(e)
-    }
-
-    if (loading) {
-      return (
-          <CenteredContent>
-              <CircularLoader />
-          </CenteredContent>
-      )
+  function onChange(e: any): void {
+    setValues(e)
   }
 
-    console.log(values)
+  if (loading) {
     return (
+      <CenteredContent>
+        <CircularLoader />
+      </CenteredContent>
+    )
+  }
+
+  return (
     <WithPadding>
       <Form onSubmit={() => { alert(JSON.stringify(values)) }}>
         {({ values, pristine, form }) => (
