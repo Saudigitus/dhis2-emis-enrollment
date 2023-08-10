@@ -46,9 +46,9 @@ function ModalContentComponent({ setOpen }: ContentProps): React.ReactElement {
   }
 
   const modalActions = [
-    { id: "cancel", label: "Cancel", disabled: loading, onClick: () => { setClickedButton("cancel"); setOpen(false) } },
-    { id: "saveandnew", label: "Save and add new", primary: true, disabled: loading, onClick: () => { setClickedButton("saveandnew"); onSubmit() } },
-    { id: "saveandcontinue", label: "Save and close", primary: true, disabled: loading, onClick: () => { setClickedButton("saveandcontinue"); onSubmit() } }
+    { id: "cancel", type: "button", label: "Cancel", disabled: loading, onClick: () => { setClickedButton("cancel"); setOpen(false) } },
+    { id: "saveandnew", type: "submit", label: "Save and add new", primary: true, disabled: loading, onClick: () => { setClickedButton("saveandnew") } },
+    { id: "saveandcontinue", type: "submit", label: "Save and close", primary: true, disabled: loading, onClick: () => { setClickedButton("saveandcontinue") } }
   ];
 
   if (enrollmentsData.length < 1) {
@@ -71,10 +71,10 @@ function ModalContentComponent({ setOpen }: ContentProps): React.ReactElement {
 
   return (
     <WithPadding>
-      <Form initialValues={initialValues} onSubmit={() => { alert(JSON.stringify(values)) }}>
-        {({ values, pristine, form }) => {
+      <Form initialValues={initialValues} onSubmit={onSubmit}>
+        {({ handleSubmit, values, pristine, form }) => {
           formRef.current = form;
-          return <form onChange={onChange(values)}>
+          return <form onSubmit={handleSubmit} onChange={onChange(values)}>
             {
               formFields(enrollmentsData).map((field: any, index: number) => (
                 <GroupForm

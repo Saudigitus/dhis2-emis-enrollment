@@ -14,9 +14,9 @@ const OptionSetAutocomplete = (props: AutoCompleteProps) => {
 
   const options = (props?.options?.optionSet?.options != null)
     ? props?.options.optionSet?.options.map((option: { value: string, label: string }) => ({
-        value: option.value,
-        label: option.label
-      }))
+      value: option.value,
+      label: option.label
+    }))
     : [];
 
   return (
@@ -27,7 +27,7 @@ const OptionSetAutocomplete = (props: AutoCompleteProps) => {
       disabled={props.disabled}
       getOptionLabel={(option) => option.label}
       getOptionSelected={(option, value) => option.value === value.value}
-      value={options.find((element: { value: string }) => element.value === input.value)}
+      value={options.find((element: { value: string }) => element.value === input.value) ?? null}
       renderInput={(params) => (
         <TextField
           {...params}
@@ -53,7 +53,7 @@ const OptionSetAutocomplete = (props: AutoCompleteProps) => {
 function SingleSelectField(props: AutoCompleteProps) {
   return (
     <div>
-      <OptionSetAutocomplete {...props} name={props.name}/>
+      <OptionSetAutocomplete {...props} name={props.name} />
     </div>
   );
 }
