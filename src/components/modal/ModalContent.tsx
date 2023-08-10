@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { ModalActions, Button, ButtonStrip, CircularLoader } from "@dhis2/ui";
 import WithPadding from "../template/WithPadding";
 import { Form } from "react-final-form";
@@ -18,25 +18,37 @@ interface ContentProps {
 function ModalContentComponent({ setOpen }: ContentProps): React.ReactElement {
   const getProgram = useRecoilValue(ProgramConfigState);
   const { useQuery } = useParams();
+  const formRef: React.MutableRefObject<FormApi<IForm, Partial<IForm>>> = useRef(null);
   const orgUnit = useQuery().get("school");
   const orgUnitName = useQuery().get("schoolName");
   const { enrollmentsData } = useGetEnrollmentForm();
   const [values, setValues] = useState<object>({})
   const [fieldsWitValue, setFieldsWitValues] = useState<any[]>([enrollmentsData])
-  const { postTei } = usePostTei()
+  const { postTei, loading, data } = usePostTei()
+  const [clickedButton, setClickedButton] = useState<string>("");
   const [initialValues] = useState<object>({
     registerschoolstaticform: orgUnitName,
     eventdatestaticform: format(new Date(), "yyyy-MM-dd")
   })
+
+  // When Save and continue button clicked and data posted, close the modal
+  useEffect(() => {
+    if (data !== undefined && data?.status === "OK") {
+      if (clickedButton === "saveandcontinue") {
+        setOpen(false)
+      }
+      formRef.current.reset()
+    }
+  }, [data])
 
   function onSubmit() {
     void postTei({ data: teiPostBody(fieldsWitValue, (getProgram != null) ? getProgram.id : "", orgUnit ?? "", values?.eventdatestaticform ?? "") })
   }
 
   const modalActions = [
-    { label: "Cancel", disabled: false, loading: false, onClick: () => { setOpen(false) } },
-    { label: "Save and add new", primary: true, disabled: false, loading: false, onClick: () => { onSubmit() } },
-    { label: "Save and close", primary: true, disabled: false, loading: false, onClick: () => { onSubmit(); setOpen(false) } }
+    { id: "cancel", label: "Cancel", disabled: loading, onClick: () => { setClickedButton("cancel"); setOpen(false) } },
+    { id: "saveandnew", label: "Save and add new", primary: true, disabled: loading, onClick: () => { setClickedButton("saveandnew"); onSubmit() } },
+    { id: "saveandcontinue", label: "Save and close", primary: true, disabled: loading, onClick: () => { setClickedButton("saveandcontinue"); onSubmit() } }
   ];
 
   if (enrollmentsData.length < 1) {
@@ -48,6 +60,7 @@ function ModalContentComponent({ setOpen }: ContentProps): React.ReactElement {
     for (const [key, value] of Object.entries(e)) {
       for (let i = 0; i < sections.length; i++) {
         if (sections[i].find((element: any) => element.id === key) !== null && sections[i].find((element: any) => element.id === key) !== undefined) {
+          // Sending onChanging form value to variables object
           sections[i].find((element: any) => element.id === key).value = value
         }
       }
@@ -59,8 +72,9 @@ function ModalContentComponent({ setOpen }: ContentProps): React.ReactElement {
   return (
     <WithPadding>
       <Form initialValues={initialValues} onSubmit={() => { alert(JSON.stringify(values)) }}>
-        {({ values, pristine, form }) => (
-          <form onChange={onChange(values)}>
+        {({ values, pristine, form }) => {
+          formRef.current = form;
+          return <form onChange={onChange(values)}>
             {
               formFields(enrollmentsData).map((field: any, index: number) => (
                 <GroupForm
@@ -80,13 +94,13 @@ function ModalContentComponent({ setOpen }: ContentProps): React.ReactElement {
                     key={i}
                     {...action}
                   >
-                    {action.loading ? "Loading..." : action.label}
+                    {(loading && action.id === clickedButton) ? <CircularLoader small /> : action.label}
                   </Button>
                 ))}
               </ButtonStrip>
             </ModalActions>
           </form>
-        )}
+        }}
       </Form>
     </WithPadding >
   )

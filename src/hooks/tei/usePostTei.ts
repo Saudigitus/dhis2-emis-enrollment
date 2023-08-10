@@ -1,5 +1,6 @@
 import { useDataMutation } from "@dhis2/app-runtime"
 import useShowAlerts from '../commons/useShowAlert';
+import { atom, useRecoilState } from "recoil";
 
 const POST_TEI: any = {
     resource: "tracker",
@@ -10,12 +11,19 @@ const POST_TEI: any = {
     }
 }
 
+export const teiRefetch = atom({
+    key: "refetch-tei",
+    default: false
+})
+
 export default function usePostTei() {
     const { hide, show } = useShowAlerts()
+    const [refetch, setRefetch] = useRecoilState<boolean>(teiRefetch)
 
-    const [create, { loading }] = useDataMutation(POST_TEI, {
+    const [create, { loading, data }] = useDataMutation(POST_TEI, {
         onComplete: () => {
             show({ message: "Enrollment saved successfully", type: { success: true } })
+            setRefetch(!refetch)
         },
         onError: (error) => {
             show({
@@ -28,6 +36,7 @@ export default function usePostTei() {
 
     return {
         loading,
-        postTei: create
+        postTei: create,
+        data
     }
 }
