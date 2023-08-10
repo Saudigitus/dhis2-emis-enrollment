@@ -12,6 +12,7 @@ export interface CustomAttributeProps {
     required: boolean
     name: string
     programStage: string
+    value?: string
     labelName: string
     valueType: typeof Attribute.valueType
     disabled: boolean

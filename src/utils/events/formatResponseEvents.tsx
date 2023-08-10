@@ -23,7 +23,8 @@ export function formatResponseEvents(object: ProgramStageConfig) {
                 id: programStageDataElement.dataElement?.id,
                 displayName: programStageDataElement.dataElement?.displayName,
                 header: programStageDataElement.dataElement?.displayName,
-                type: VariablesTypes.Attribute
+                type: VariablesTypes.DataElement,
+                value: undefined
             });
         }
     }

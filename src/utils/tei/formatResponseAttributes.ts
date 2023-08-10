@@ -21,7 +21,9 @@ export function formatResponseTEI(attributes: ProgramConfig) {
                 id: trackedEntityAttribute?.trackedEntityAttribute?.id,
                 displayName: trackedEntityAttribute?.trackedEntityAttribute?.displayName,
                 header: trackedEntityAttribute?.trackedEntityAttribute?.displayName,
-                type: VariablesTypes.Attribute
+                type: VariablesTypes.Attribute,
+                programStage: "",
+                value: undefined
             });
         }
         return headers;

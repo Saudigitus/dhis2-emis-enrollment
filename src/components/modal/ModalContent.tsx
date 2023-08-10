@@ -1,42 +1,31 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { ModalActions, Button, ButtonStrip, CircularLoader } from "@dhis2/ui";
 import WithPadding from "../template/WithPadding";
 import { Form } from "react-final-form";
 import { formFields } from "../../utils/constants/enrollmentForm/enrollmentForm";
 import useGetEnrollmentForm from "../../hooks/form/useGetEnrollmentForm";
 import GroupForm from "../form/GroupForm";
-import { useDataMutation } from "@dhis2/app-runtime";
+import { useRecoilValue } from "recoil";
+import { ProgramConfigState } from "../../schema/programSchema";
+import { useParams } from "../../hooks/commons/useQueryParams";
+import { teiPostBody } from "../../utils/tei/formatPostBody";
+import usePostTei from "../../hooks/tei/usePostTei";
 interface ContentProps {
   setOpen: (value: boolean) => void
 }
 
-// const POST_TEI = (data: any) => {
-//   return {
-//     resource: "tracketEntityInstances",
-//     type: "create",
-//     data
-//   }
-// }
-
-// const variablesMapping = () => {
-
-// }
-
 function ModalContentComponent({ setOpen }: ContentProps): React.ReactElement {
+  const getProgram = useRecoilValue(ProgramConfigState);
+  const { useQuery } = useParams();
+  const orgUnit = useQuery().get("school");
   const { enrollmentsData } = useGetEnrollmentForm();
   const [values, setValues] = useState<object>({})
   const [fieldsWitValue, setFieldsWitValues] = useState<any[]>([enrollmentsData])
-  // const [] = useDataMutation(POST_TEI)
+  const { postTei } = usePostTei()
 
-  const onSubmit = () => {
-    // console.log(values, enrollmentsData)
+  function onSubmit() {
+    void postTei(teiPostBody(fieldsWitValue, (getProgram != null) ? getProgram.id : "", orgUnit ?? ""), "dev_admin", "Dev2023!")
   }
-
-  useEffect(() => {
-    if (enrollmentsData.length > 0) {
-      setFieldsWitValues(enrollmentsData)
-    }
-  }, [enrollmentsData])
 
   const modalActions = [
     { label: "Cancel", disabled: false, loading: false, onClick: () => { setOpen(false) } },
@@ -49,13 +38,15 @@ function ModalContentComponent({ setOpen }: ContentProps): React.ReactElement {
   }
 
   function onChange(e: any): void {
-    // const sections = fieldsWitValue;
-    // for (const [key, value] of Object.entries(e)) {
-    //   for (let i = 0; i < sections.length; i++) {
-    //     sections[i].find((element: any) => element.id === key).value = value
-    //   }
-    // }
-    // console.log(sections, "sections");
+    const sections = enrollmentsData;
+    for (const [key, value] of Object.entries(e)) {
+      for (let i = 0; i < sections.length; i++) {
+        if (sections[i].find((element: any) => element.id === key) !== null && sections[i].find((element: any) => element.id === key) !== undefined) {
+          sections[i].find((element: any) => element.id === key).value = value
+        }
+      }
+    }
+    setFieldsWitValues(sections)
     setValues(e)
   }
 
@@ -91,7 +82,7 @@ function ModalContentComponent({ setOpen }: ContentProps): React.ReactElement {
           </form>
         )}
       </Form>
-    </WithPadding>
+    </WithPadding >
   )
 }
 
