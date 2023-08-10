@@ -1,6 +1,5 @@
 import { Label } from "@dhis2/ui";
 import React from "react";
-import style from './groupform.module.css';
 import WithBorder from "../template/WithBorder";
 import WithPadding from "../template/WithPadding";
 import GenericFields from "../genericFields/GenericFields";
@@ -37,7 +36,7 @@ function GroupForm(props: FormProps) {
                                 <div className="col-12 col-md-6">
                                     <GenericFields
                                         attribute={x}
-                                        disabled={disabled}
+                                        disabled={x.disabled}
                                         valueType={x.valueType}
                                     />
                                     <span style={{ color: "#E53935", marginTop: 20 }}>

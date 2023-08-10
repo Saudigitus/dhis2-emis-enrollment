@@ -2,7 +2,7 @@ import { format } from "date-fns";
 import { type formType } from "../../types/form/initialFormTypes";
 import { reducer } from "../commons/formatDistinctValue";
 
-export const teiPostBody = (enrollmentsData: any[], programId: string, orgUnit: string) => {
+export const teiPostBody = (enrollmentsData: any[], programId: string, orgUnit: string, enrollmentDate: string) => {
     const form: formType = {
         attributes: [],
         events: []
@@ -18,13 +18,13 @@ export const teiPostBody = (enrollmentsData: any[], programId: string, orgUnit: 
         } else if (enrollmentData[0].type === "dataElement") {
             for (const [key, value] of Object.entries(reducer(enrollmentData))) {
                 form.events.push({
-                    occurredAt: format(new Date(), "yyyy-MM-dd"),
+                    occurredAt: enrollmentDate,
                     notes: [],
                     status: "ACTIVE",
                     program: programId,
                     programStage: key,
                     orgUnit,
-                    scheduledAt: format(new Date(), "yyyy-MM-dd"),
+                    scheduledAt: enrollmentDate,
                     dataValues: value
                 })
             }
@@ -37,7 +37,7 @@ export const teiPostBody = (enrollmentsData: any[], programId: string, orgUnit: 
                 enrollments: [
                     {
                         occurredAt: null,
-                        enrolledAt: format(new Date(), "yyyy-MM-dd"),
+                        enrolledAt: enrollmentDate,
                         program: programId,
                         orgUnit,
                         attributes: form.attributes,

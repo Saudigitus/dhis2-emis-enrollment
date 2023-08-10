@@ -1,48 +1,49 @@
+import { format } from "date-fns";
 import { type FormSectionProps } from "../../../types/fields/FieldsTypes";
-import { Attribute } from "../../../types/generated/models";
-import { type CustomAttributeProps } from "../../../types/table/AttributeColumns";
+import { VariablesTypes } from "../../../types/table/AttributeColumns";
 
 const staticForm = () => {
   return {
     registeringSchool: {
       required: true,
-      valueType: Attribute.valueType.TEXT as unknown as CustomAttributeProps["valueType"],
-      options: {
-        optionSet: {
-          options: [
-            {
-              code: "sd",
-              value: "2023",
-              label: "2023"
-            }
-          ],
-          id: "Uf8qxWOW81d"
-        }
-      },
-      labelName: "Registering School",
       name: "registerschoolstaticform",
-      disabled: false,
+      labelName: "Registering School",
+      valueType: "TEXT",
+      options: undefined,
+      disabled: true,
       pattern: "",
       visible: true,
       description: "Registering School",
       searchable: false,
       error: false,
+      programStage: "",
       content: "",
       id: "registerschoolstaticform",
       displayName: "Registering School",
       header: "Registering School",
-      type: ""
+      type: VariablesTypes.DataElement,
+      value: undefined
+    },
+    enrollmentDate: {
+      required: true,
+      name: "eventdatestaticform",
+      labelName: "Enrollment date",
+      valueType: "DATE",
+      options: undefined,
+      disabled: false,
+      pattern: "",
+      visible: true,
+      description: "Enrollment date",
+      searchable: false,
+      error: false,
+      programStage: "",
+      content: "",
+      id: "eventdatestaticform",
+      displayName: "Enrollment date",
+      header: "Enrollment date",
+      type: VariablesTypes.DataElement,
+      value: format(new Date(), "yyyy-MM-dd")
     }
-    // enrollmentDate: {
-    //   compulsory: true,
-    //   displayInReports: true,
-    //   dataElement: {
-    //     displayInReports: true,
-    //     valueType: "DATE",
-    //     displayName: "Enrollment Date",
-    //     id: "enrollmentdatestaticform"
-    //   }
-    // }
   }
 }
 
@@ -53,7 +54,9 @@ function formFields(enrollmentsData: any[]): FormSectionProps[] {
       section: "Enrollment Details",
       description: "Details related to the enrollment process",
       fields: [
-        ...enrollmentDetails
+        staticForm().registeringSchool,
+        ...enrollmentDetails,
+        staticForm().enrollmentDate
       ]
     },
     {

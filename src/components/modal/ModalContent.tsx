@@ -10,6 +10,7 @@ import { ProgramConfigState } from "../../schema/programSchema";
 import { useParams } from "../../hooks/commons/useQueryParams";
 import { teiPostBody } from "../../utils/tei/formatPostBody";
 import usePostTei from "../../hooks/tei/usePostTei";
+import { format } from "date-fns";
 interface ContentProps {
   setOpen: (value: boolean) => void
 }
@@ -18,13 +19,18 @@ function ModalContentComponent({ setOpen }: ContentProps): React.ReactElement {
   const getProgram = useRecoilValue(ProgramConfigState);
   const { useQuery } = useParams();
   const orgUnit = useQuery().get("school");
+  const orgUnitName = useQuery().get("schoolName");
   const { enrollmentsData } = useGetEnrollmentForm();
   const [values, setValues] = useState<object>({})
   const [fieldsWitValue, setFieldsWitValues] = useState<any[]>([enrollmentsData])
   const { postTei } = usePostTei()
+  const [initialValues] = useState<object>({
+    registerschoolstaticform: orgUnitName,
+    eventdatestaticform: format(new Date(), "yyyy-MM-dd")
+  })
 
   function onSubmit() {
-    void postTei({ data: teiPostBody(fieldsWitValue, (getProgram != null) ? getProgram.id : "", orgUnit ?? "") })
+    void postTei({ data: teiPostBody(fieldsWitValue, (getProgram != null) ? getProgram.id : "", orgUnit ?? "", values?.eventdatestaticform ?? "") })
   }
 
   const modalActions = [
@@ -52,7 +58,7 @@ function ModalContentComponent({ setOpen }: ContentProps): React.ReactElement {
 
   return (
     <WithPadding>
-      <Form onSubmit={() => { alert(JSON.stringify(values)) }}>
+      <Form initialValues={initialValues} onSubmit={() => { alert(JSON.stringify(values)) }}>
         {({ values, pristine, form }) => (
           <form onChange={onChange(values)}>
             {
