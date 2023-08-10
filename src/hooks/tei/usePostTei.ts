@@ -1,38 +1,33 @@
-import axios from 'axios';
-import { useState } from 'react'
-import { useConfig } from "@dhis2/app-runtime"
+import { useDataMutation } from "@dhis2/app-runtime"
+import useShowAlerts from '../commons/useShowAlert';
 
-// const POST_TEI = (data: any) => ({
-//     resource: "tracketEntityInstances",
-//     type: "create",
-//     data: data
-// })
-
-function requestHeaders(user: string, pass: string) {
-    return {
-        headers: {
-            Accept: "application/json",
-            Authorization: "Basic " + btoa(user + ":" + pass),
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Headers": "X-Requested-With",
-            "Access-Control-Max-Age": "60"
-        }
-    };
+const POST_TEI: any = {
+    resource: "tracker",
+    type: 'create',
+    data: ({ data }: any) => data,
+    params: {
+        async: false
+    }
 }
 
 export default function usePostTei() {
-    const [loading, setLoading] = useState<boolean>(false)
-    const { baseUrl } = useConfig()
+    const { hide, show } = useShowAlerts()
 
-    const postTei = async (data: any, user: string, password: string) => {
-        setLoading(true)
-        await axios.post(`${baseUrl}/api/trackedEntityInstances`, data, requestHeaders(user, password))
-            .then(response => {
-                console.log(response);
-            }).catch(error => { console.log(error); })
-        setLoading(false)
+    const [create, { loading }] = useDataMutation(POST_TEI, {
+        onComplete: () => {
+            show({ message: "Gateway config saved successfully", type: { success: true } })
+        },
+        onError: (error) => {
+            show({
+                message: `Could not save gateway information: ${error.message}`,
+                type: { critical: true }
+            });
+            setTimeout(hide, 5000);
+        }
+    });
+
+    return {
+        loading,
+        postTei: create
     }
-
-    return { loading, postTei }
 }

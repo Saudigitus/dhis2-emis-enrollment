@@ -57,7 +57,7 @@ const TEI_QUERY = ({ ouMode, pageSize, program, trackedEntity, orgUnit, order }:
             order,
             ouMode,
             pageSize,
-            // trackedEntity,
+            trackedEntity,
             orgUnit,
             fields: "trackedEntity,createdAt,orgUnit,attributes[attribute,value],enrollments[enrollment,status,orgUnit,enrolledAt]"
         }

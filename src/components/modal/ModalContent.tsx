@@ -24,7 +24,7 @@ function ModalContentComponent({ setOpen }: ContentProps): React.ReactElement {
   const { postTei } = usePostTei()
 
   function onSubmit() {
-    void postTei(teiPostBody(fieldsWitValue, (getProgram != null) ? getProgram.id : "", orgUnit ?? ""), "dev_admin", "Dev2023!")
+    void postTei({ data: teiPostBody(fieldsWitValue, (getProgram != null) ? getProgram.id : "", orgUnit ?? "") })
   }
 
   const modalActions = [
