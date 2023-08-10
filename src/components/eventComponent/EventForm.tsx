@@ -5,31 +5,31 @@ import { Form } from "react-final-form";
 import { useGetDataElements } from "../../hooks/events/useGetDataElements";
 
 interface EventFormProps {
-    programStageId: string
+  programStageId: string
 }
 
 function EventGenericForm(props: EventFormProps): React.ReactElement {
-    const { programStageId } = props;
-    const { dataElements, loading } = useGetDataElements({ programStageId })
-    const [values, setValues] = useState({})
+  const { programStageId } = props;
+  const { dataElements, loading } = useGetDataElements({ programStageId })
+  const [values, setValues] = useState({})
 
-    function onChange(e: any): void {
-      setValues(e)
-    }
-
-    if (loading) {
-      return (
-          <CenteredContent>
-              <CircularLoader />
-          </CenteredContent>
-      )
+  function onChange(e: any): void {
+    setValues(e)
   }
 
+  if (loading) {
     return (
+      <CenteredContent>
+        <CircularLoader />
+      </CenteredContent>
+    )
+  }
+
+  return (
     <WithPadding>
       <Form onSubmit={() => { alert(JSON.stringify(values)) }}>
         {({ values, pristine, form }) => (
-          <form onChange={onChange(values)}>
+          <form onChange={() => { onChange(values) }}>
             <GroupForm
               name={"Data Elements"}
               fields={dataElements}

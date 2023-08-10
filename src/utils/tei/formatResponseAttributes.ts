@@ -5,7 +5,7 @@ import { VariablesTypes, type CustomAttributeProps } from "../../types/table/Att
 export function formatResponseTEI(attributes: ProgramConfig) {
     const headers: CustomAttributeProps[] = [];
     if (attributes != null) {
-    for (const trackedEntityAttribute of attributes.programTrackedEntityAttributes) {
+        for (const trackedEntityAttribute of attributes.programTrackedEntityAttributes) {
             headers.push({
                 required: trackedEntityAttribute?.mandatory,
                 name: trackedEntityAttribute?.trackedEntityAttribute?.id,
@@ -26,4 +26,5 @@ export function formatResponseTEI(attributes: ProgramConfig) {
         }
         return headers;
     }
+    return []
 }

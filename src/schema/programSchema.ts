@@ -1,11 +1,12 @@
 import { atom } from "recoil"
 import { z } from "zod"
+import { type ProgramConfig } from "../types/programConfig/ProgramConfig"
 
 export const programSchema = z.object({
     displayName: z.string(),
     id: z.string(),
     description: z.string(),
-    access: z.object({}),
+    access: z.any().optional(),
     programType: z.string(),
     programStages: z.array(
         z.object({
@@ -14,9 +15,19 @@ export const programSchema = z.object({
             id: z.string(),
             programStageDataElements: z.array(
                 z.object({
+                    displayInReports: z.boolean(),
+                    compulsory: z.boolean(),
                     dataElement: z.object({
                         displayName: z.string(),
-                        id: z.string()
+                        id: z.string(),
+                        valueType: z.string(),
+                        optionSet: z.object({
+                            id: z.string(),
+                            options: z.object({
+                                value: z.string(),
+                                label: z.string()
+                            })
+                        })
                     })
                 })
             )
@@ -25,10 +36,18 @@ export const programSchema = z.object({
     programTrackedEntityAttributes: z.array(
         z.object({
             trackedEntityAttribute: z.object({
+                generated: z.boolean(),
+                pattern: z.string().optional(),
                 displayName: z.string(),
                 id: z.string(),
                 valueType: z.string(),
-                optionSet: z.any({})
+                optionSet: z.object({
+                    id: z.string(),
+                    options: z.object({
+                        value: z.string(),
+                        label: z.string()
+                    })
+                })
             }),
             searchable: z.boolean(),
             displayInList: z.boolean(),
@@ -47,9 +66,9 @@ export const programSchema = z.object({
     })
 })
 
-type ProgramSchemaConfig = z.infer<typeof programSchema>
+// type ProgramSchemaConfig = z.infer<typeof programSchema>
 
-export const ProgramConfigState = atom<ProgramSchemaConfig | undefined>({
+export const ProgramConfigState = atom<ProgramConfig>({
     key: "programConfig-get-state",
     default: undefined
 })
