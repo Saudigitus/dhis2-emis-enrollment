@@ -15,11 +15,11 @@ export default function usePostTei() {
 
     const [create, { loading }] = useDataMutation(POST_TEI, {
         onComplete: () => {
-            show({ message: "Gateway config saved successfully", type: { success: true } })
+            show({ message: "Enrollment saved successfully", type: { success: true } })
         },
         onError: (error) => {
             show({
-                message: `Could not save gateway information: ${error.message}`,
+                message: `Could not save the enrollment details: ${error.message}`,
                 type: { critical: true }
             });
             setTimeout(hide, 5000);
