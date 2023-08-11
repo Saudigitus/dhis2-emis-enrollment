@@ -11,7 +11,9 @@ interface SideBarSubItemProps {
     label: string
     showBadge: boolean
     icon: string
+    disabled: boolean
     route: string
+    appName: string
 }
 
 interface SideBarCollapseProps {

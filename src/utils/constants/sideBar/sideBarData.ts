@@ -6,7 +6,7 @@ import logOut from "../../../assets/images/sidebar/log-out.svg"
 import userGroup from "../../../assets/images/sidebar/user-group.svg"
 import { type SideBarItemProps } from "../../../types/sideBar/SideBarTypes"
 
-function sideBarData(): SideBarItemProps[] {
+function sideBarData (): SideBarItemProps[] {
     return [
         {
             title: "Students",
@@ -15,31 +15,41 @@ function sideBarData(): SideBarItemProps[] {
                     icon: listAdd,
                     label: "Enrollment",
                     showBadge: false,
+                    disabled: false,
+                    appName: "SEMIS-Enrollment",
                     route: "/enrollment"
                 },
                 {
                     icon: glyph,
                     label: "Attendance",
                     showBadge: false,
-                    route: "/home1"
+                    disabled: true,
+                    appName: "DHIS2-App-Name",
+                    route: "#"
                 },
                 {
                     icon: fileDocument,
                     label: "Performance",
                     showBadge: false,
-                    route: "/home2"
+                    disabled: true,
+                    appName: "DHIS2-App-Name",
+                    route: "#"
                 },
                 {
                     icon: gauge,
                     label: "Final result",
                     showBadge: false,
-                    route: "/home3"
+                    disabled: true,
+                    appName: "DHIS2-App-Name",
+                    route: "#"
                 },
                 {
                     icon: logOut,
                     label: "Transfer",
-                    showBadge: true,
-                    route: "/home4"
+                    showBadge: false,
+                    disabled: true,
+                    appName: "DHIS2-App-Name",
+                    route: "#"
                 }
             ]
         },
@@ -50,25 +60,33 @@ function sideBarData(): SideBarItemProps[] {
                     icon: userGroup,
                     label: "Teacher registry",
                     showBadge: false,
-                    route: "/home5"
+                    disabled: true,
+                    appName: "DHIS2-App-Name",
+                    route: "#"
                 },
                 {
                     icon: userGroup,
                     label: "Non-teacher registry",
                     showBadge: false,
-                    route: "/home6"
+                    disabled: true,
+                    appName: "DHIS2-App-Name",
+                    route: "#"
                 },
                 {
                     icon: glyph,
                     label: "Attendance",
                     showBadge: false,
-                    route: "/home7"
+                    disabled: true,
+                    appName: "DHIS2-App-Name",
+                    route: "#"
                 },
                 {
                     icon: logOut,
                     label: "Transfer",
                     showBadge: false,
-                    route: "/home8"
+                    disabled: true,
+                    appName: "DHIS2-App-Name",
+                    route: "#"
                 }
             ]
         },
@@ -79,10 +97,12 @@ function sideBarData(): SideBarItemProps[] {
                     icon: listAdd,
                     label: "School Calendar",
                     showBadge: false,
-                    route: "/home9"
+                    disabled: true,
+                    appName: "DHIS2-App-Name",
+                    route: "#"
                 }
             ]
         }
     ]
 }
-export { sideBarData }
+export {sideBarData}
