@@ -83,10 +83,13 @@ function ModalContentComponent({ setOpen }: ContentProps): React.ReactElement {
 
   return (
     <WithPadding>
-      <Form initialValues={{ ...initialValues, ...generatedVariables }} onSubmit={() => { alert(JSON.stringify(values)) }}>
-        {({ values, pristine, form }) => {
+      <Form initialValues={{ ...initialValues, ...generatedVariables }} onSubmit={onSubmit}>
+        {({ handleSubmit, values, pristine, form }) => {
           formRef.current = form;
-          return <form onSubmit={handleSubmit} onChange={onChange(values)}>
+          return <form
+            onSubmit={handleSubmit}
+            onChange={onChange(values)}
+          >
             {
               formFields(enrollmentsData).map((field: any, index: number) => (
                 <GroupForm
