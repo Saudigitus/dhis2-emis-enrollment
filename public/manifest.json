@@ -1,0 +1,60 @@
+{
+  "short_name": "SEMIS-Enrollment",
+  "name": "SEMIS-Enrollment",
+  "description": "SEMIS-Enrollment",
+  "icons": [
+    {
+      "src":"dhis2-app-icon.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src":"dhis2-app-icon.png",
+      "type": "image/png",
+      "sizes": "384x384"
+    },
+    {
+      "src":"dhis2-app-icon.png",
+      "type": "image/png",
+      "sizes": "180x180"
+    },
+    {
+      "src":"dhis2-app-icon.png",
+      "type": "image/png",
+      "sizes": "48x48"
+    },
+    {
+      "src":"dhis2-app-icon.png",
+      "sizes": "16x16",
+      "type": "image/png"
+    },
+    {
+      "src":"dhis2-app-icon.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    },
+    {
+      "src":"dhis2-app-icon.png",
+      "sizes": "48x48",
+      "type": "image/png"
+    },
+    {
+      "src":"dhis2-app-icon.png",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    },
+    {
+      "src":"dhis2-app-icon.png",
+      "sizes": "150x150",
+      "type": "image/png"
+    },
+    {
+      "src":"dhis2-app-icon.png",
+      "type": "image/svg+xml"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#ffffff",
+  "background_color": "#f4f6f8"
+}
