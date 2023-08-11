@@ -41,6 +41,7 @@ function TEIGenericForm() {
               name={"Attributes"}
               fields={attributes}
               disabled={false}
+              description={""}
             />
             <br />
             <ButtonStrip end>

@@ -1,7 +1,6 @@
 import { type SelectedOptionsTypes, type HeadBarTypes } from "../../../types/headBar/HeadBarTypes"
 
 function headBarData(selectedOptions: SelectedOptionsTypes): HeadBarTypes[] {
-    console.log(selectedOptions);
     return [
         {
             id: "c540ac7c",

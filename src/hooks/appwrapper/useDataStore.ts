@@ -6,7 +6,7 @@ import useShowAlerts from '../commons/useShowAlert';
 
 const DATASTORE_QUERY = ({
     config: {
-        resource: "dataStore/emis-apps-configuration/config",
+        resource: "dataStore/semis/values",
         params: {
             fields: "*"
         }
@@ -27,7 +27,7 @@ export function useDataStore() {
     })
 
     useEffect(() => {
-        setDataStoreState(data?.config)
+        setDataStoreState(data?.config[0])
     }, [data])
 
     return {

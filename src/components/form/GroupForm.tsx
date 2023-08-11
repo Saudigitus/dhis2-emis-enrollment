@@ -1,26 +1,28 @@
 import { Label } from "@dhis2/ui";
 import React from "react";
-import style from './groupform.module.css';
 import WithBorder from "../template/WithBorder";
 import WithPadding from "../template/WithPadding";
 import GenericFields from "../genericFields/GenericFields";
 import { type CustomAttributeProps } from "../../types/table/AttributeColumns";
+import Subtitle from "../text/subtitle";
 
 interface FormProps {
     name: string
+    description: string
     fields: CustomAttributeProps[]
     disabled: boolean
 }
 
 function GroupForm(props: FormProps) {
-    const { name, fields, disabled } = props
+    const { name, fields, disabled, description } = props
 
     return (
         <WithBorder type={"all"}>
             <WithPadding p={"16px 5px 0px 5px"}>
-                <span className={style.textTitlle}>
-                    {name}
-                </span>
+                <Subtitle label={name} />
+                <WithPadding />
+                <Label>{description}</Label>
+                <WithPadding p="0.2rem" />
                 <WithPadding p={"10px"}>
                     {fields?.filter(x => x.visible)?.map((x, i) => {
                         return (
@@ -34,7 +36,7 @@ function GroupForm(props: FormProps) {
                                 <div className="col-12 col-md-6">
                                     <GenericFields
                                         attribute={x}
-                                        disabled={disabled}
+                                        disabled={x.disabled}
                                         valueType={x.valueType}
                                     />
                                     <span style={{ color: "#E53935", marginTop: 20 }}>

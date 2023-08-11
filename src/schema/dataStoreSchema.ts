@@ -1,24 +1,38 @@
 import { atom } from "recoil"
-import { z } from "zod"
 
-const dataStoreRecord = z.record(
-    z.string(),
-    z.object({
-        program: z.string(),
-        programStage: z.string()
-    })
-)
+interface attendance {
+    absenceReason: string
+    programStage: string
+    status: string
+}
 
-export const dataStoreSchema = z.object({
-    enrollment: dataStoreRecord,
-    class: z.string(),
-    grade: z.string(),
-    academicYear: z.string()
-})
+interface programStages {
+    programStage: string
+}
 
-type DataStoreSchema = z.infer<typeof dataStoreSchema>
+interface performance {
+    programStages: programStages[]
+}
 
-export const DataStoreState = atom<DataStoreSchema | undefined>({
+interface registration {
+    academicYear: string
+    grade: string
+    programStage: string
+    section: string
+}
+
+interface dataStoreRecord {
+    attendance: attendance
+    key: string
+    lastUpdate: string
+    performance: performance
+    program: string
+    registration: registration
+    ["socio-economics"]: programStages
+
+}
+
+export const DataStoreState = atom<dataStoreRecord | null>({
     key: "dataStore-get-state",
-    default: undefined
+    default: null
 })

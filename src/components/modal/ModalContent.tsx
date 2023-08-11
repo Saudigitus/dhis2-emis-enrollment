@@ -1,58 +1,109 @@
-import React from "react";
-import { Divider, Box, Label, InputField, ModalActions, Button, ButtonStrip } from "@dhis2/ui";
+import React, { useState, useEffect, useRef } from "react";
+import { ModalActions, Button, ButtonStrip, CircularLoader } from "@dhis2/ui";
 import WithPadding from "../template/WithPadding";
-import styles from "./modal.module.css";
-import { Col, Row } from "react-bootstrap";
-import { formFields } from "../../utils/constants/fields/fieldsAttributes";
-import Subtitle from "../text/subtitle";
+import { Form } from "react-final-form";
+import { formFields } from "../../utils/constants/enrollmentForm/enrollmentForm";
+import useGetEnrollmentForm from "../../hooks/form/useGetEnrollmentForm";
+import GroupForm from "../form/GroupForm";
+import { useRecoilValue } from "recoil";
+import { ProgramConfigState } from "../../schema/programSchema";
+import { useParams } from "../../hooks/commons/useQueryParams";
+import { teiPostBody } from "../../utils/tei/formatPostBody";
+import usePostTei from "../../hooks/tei/usePostTei";
+import { format } from "date-fns";
 interface ContentProps {
   setOpen: (value: boolean) => void
 }
 
 function ModalContentComponent({ setOpen }: ContentProps): React.ReactElement {
-  const modalActions = [
-    { label: "Cancel", disabled: false, loading: false, onClick: () => { setOpen(false) } },
-    { label: "Save and add new", primary: true, disabled: false, loading: false, onClick: () => { setOpen(false) } },
-    { label: "Save and close", primary: true, disabled: false, loading: false, onClick: () => { setOpen(false) } }
-  ];
-  return (
-    <>
-      {formFields().map((ff: any, i: number) => (
-        <WithPadding key={i}>
-          <Subtitle label={ff.section}/>
-          <WithPadding />
-          <Label>{ff.description}</Label>
-          <WithPadding p="0.2rem" />
-          <Box width="100%">
-            {ff.fields.map((field: any, f: number) => (
-              <Row className={styles.formSection} key={f}>
-                <Col sm={5}>
-                  <Label>{field.label}</Label>
-                </Col>
-                <Col sm={7}>
-                  <InputField disabled={field.disabled} name={field.attribute} placeholder={field.label} />
-                </Col>
-              </Row>
-            ))}
-          </Box>
-        <Divider />
-        </WithPadding>
-      ))}
+  const getProgram = useRecoilValue(ProgramConfigState);
+  const { useQuery } = useParams();
+  const formRef: React.MutableRefObject<FormApi<IForm, Partial<IForm>>> = useRef(null);
+  const orgUnit = useQuery().get("school");
+  const orgUnitName = useQuery().get("schoolName");
+  const { enrollmentsData } = useGetEnrollmentForm();
+  const [values, setValues] = useState<object>({})
+  const [fieldsWitValue, setFieldsWitValues] = useState<any[]>([enrollmentsData])
+  const { postTei, loading, data } = usePostTei()
+  const [clickedButton, setClickedButton] = useState<string>("");
+  const [initialValues] = useState<object>({
+    registerschoolstaticform: orgUnitName,
+    eventdatestaticform: format(new Date(), "yyyy-MM-dd")
+  })
 
-      <ModalActions>
-        <ButtonStrip end className="mr-4">
-          {modalActions.map((action, i) => (
-            <Button
-              key={i}
-              {...action}
-            >
-              {action.loading ? "Loading..." : action.label}
-            </Button>
-          ))}
-        </ButtonStrip>
-      </ModalActions>
-    </>
-  );
+  // When Save and continue button clicked and data posted, close the modal
+  useEffect(() => {
+    if (data !== undefined && data?.status === "OK") {
+      if (clickedButton === "saveandcontinue") {
+        setOpen(false)
+      }
+      formRef.current.reset()
+    }
+  }, [data])
+
+  function onSubmit() {
+    void postTei({ data: teiPostBody(fieldsWitValue, (getProgram != null) ? getProgram.id : "", orgUnit ?? "", values?.eventdatestaticform ?? "") })
+  }
+
+  const modalActions = [
+    { id: "cancel", label: "Cancel", disabled: loading, onClick: () => { setClickedButton("cancel"); setOpen(false) } },
+    { id: "saveandnew", label: "Save and add new", primary: true, disabled: loading, onClick: () => { setClickedButton("saveandnew"); onSubmit() } },
+    { id: "saveandcontinue", label: "Save and close", primary: true, disabled: loading, onClick: () => { setClickedButton("saveandcontinue"); onSubmit() } }
+  ];
+
+  if (enrollmentsData.length < 1) {
+    return <CircularLoader />
+  }
+
+  function onChange(e: any): void {
+    const sections = enrollmentsData;
+    for (const [key, value] of Object.entries(e)) {
+      for (let i = 0; i < sections.length; i++) {
+        if (sections[i].find((element: any) => element.id === key) !== null && sections[i].find((element: any) => element.id === key) !== undefined) {
+          // Sending onChanging form value to variables object
+          sections[i].find((element: any) => element.id === key).value = value
+        }
+      }
+    }
+    setFieldsWitValues(sections)
+    setValues(e)
+  }
+
+  return (
+    <WithPadding>
+      <Form initialValues={initialValues} onSubmit={() => { alert(JSON.stringify(values)) }}>
+        {({ values, pristine, form }) => {
+          formRef.current = form;
+          return <form onChange={onChange(values)}>
+            {
+              formFields(enrollmentsData).map((field: any, index: number) => (
+                <GroupForm
+                  name={field.section}
+                  description={field.description}
+                  key={index}
+                  fields={field.fields}
+                  disabled={false}
+                />
+              ))
+            }
+            <br />
+            <ModalActions>
+              <ButtonStrip end className="mr-4">
+                {modalActions.map((action, i) => (
+                  <Button
+                    key={i}
+                    {...action}
+                  >
+                    {(loading && action.id === clickedButton) ? <CircularLoader small /> : action.label}
+                  </Button>
+                ))}
+              </ButtonStrip>
+            </ModalActions>
+          </form>
+        }}
+      </Form>
+    </WithPadding >
+  )
 }
 
 export default ModalContentComponent;
