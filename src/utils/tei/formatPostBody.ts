@@ -1,6 +1,6 @@
-import { format } from "date-fns";
 import { type formType } from "../../types/form/initialFormTypes";
 import { reducer } from "../commons/formatDistinctValue";
+import { performanceProgramStages } from "../constants/enrollmentForm/performanceProgramStages";
 
 export const teiPostBody = (enrollmentsData: any[], programId: string, orgUnit: string, enrollmentDate: string) => {
     const form: formType = {
@@ -30,6 +30,18 @@ export const teiPostBody = (enrollmentsData: any[], programId: string, orgUnit: 
             }
         }
     }
+
+    performanceProgramStages.forEach(performanceProgramStage => {
+        form.events.push({
+            occurredAt: enrollmentDate,
+            notes: [],
+            status: "ACTIVE",
+            program: programId,
+            programStage: performanceProgramStage,
+            orgUnit,
+            scheduledAt: enrollmentDate
+        })
+    })
 
     return {
         trackedEntities: [

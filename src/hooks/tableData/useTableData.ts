@@ -105,8 +105,10 @@ export function useTableData() {
     async function getData(page: number, pageSize: number) {
         setLoading(true)
 
+        console.log(school, "school");
+
         const eventsResults: EventQueryResults = await engine.query(EVENT_QUERY({
-            ouMode: "SELECTED",
+            ouMode: school != null ? "SELECTED" : "ACCESSIBLE",
             page,
             pageSize,
             program: dataStoreState?.program as unknown as string,
@@ -127,7 +129,7 @@ export function useTableData() {
 
         const teiResults: TeiQueryResults = trackedEntityToFetch?.length > 0
             ? await engine.query(TEI_QUERY({
-                ouMode: "SELECTED",
+                ouMode: school != null ? "SELECTED" : "ACCESSIBLE",
                 order: "created:desc",
                 pageSize,
                 program: dataStoreState?.program as unknown as string,

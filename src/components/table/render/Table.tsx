@@ -25,17 +25,14 @@ function Table() {
     const classes = usetStyles()
     const { columns } = useHeader()
     const { getData, loading, tableData } = useTableData()
-    const { useQuery, urlParamiters } = useParams()
-    const school = urlParamiters().school as unknown as string
+    const { useQuery } = useParams()
     const headerFieldsState = useRecoilValue(HeaderFieldsState)
     const [page, setpage] = useState(1)
     const [pageSize, setpageSize] = useState(10)
     const [refetch] = useRecoilState(teiRefetch)
 
     useEffect(() => {
-        if (school !== null) {
-            void getData(page, pageSize)
-        }
+        void getData(page, pageSize)
     }, [columns, useQuery(), headerFieldsState, page, pageSize, refetch])
 
     const onPageChange = (newPage: number) => {
