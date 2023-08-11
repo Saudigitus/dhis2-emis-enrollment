@@ -10,17 +10,17 @@ export default function Item({ menuItems, dataElementId, onToggle }: { menuItems
     const { add } = useParams();
     const [headerFields, setHeaderFields] = useRecoilState(HeaderFieldsState)
 
-    const onChange = (selectedOption: { name: string, code: string }) => {
-        add(paramsMapping[dataElementId], selectedOption.code);
+    const onChange = (selectedOption: { label: string, value: string }) => {
+        add(paramsMapping[dataElementId], selectedOption.value);
         let dataElements: string[][] = [...headerFields.dataElements]
         const attributes: string[][] = [...headerFields.attributes]
 
         const index = dataElements?.findIndex(x => x?.toString()?.includes(dataElementId))
 
         if (index !== -1) {
-            dataElements[index] = [`${dataElementId}:in:${selectedOption.code}`]
+            dataElements[index] = [`${dataElementId}:in:${selectedOption.value}`]
         } else {
-            dataElements = [...dataElements, [`${dataElementId}:in:${selectedOption.code}`]]
+            dataElements = [...dataElements, [`${dataElementId}:in:${selectedOption.value}`]]
         }
 
         setHeaderFields({ attributes, dataElements });
@@ -31,7 +31,7 @@ export default function Item({ menuItems, dataElementId, onToggle }: { menuItems
         <>
             {
                 menuItems?.map(menuItem => (
-                    < MenuItem onClick={() => { onChange(menuItem) }} key={menuItem.id} label={menuItem.displayName} />
+                    < MenuItem onClick={() => { onChange(menuItem) }} key={menuItem.value} label={menuItem.label} />
                 ))
             }
         </>

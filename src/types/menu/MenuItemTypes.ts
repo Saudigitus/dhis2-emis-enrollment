@@ -1,11 +1,8 @@
 interface MenuItemTypes {
-    displayName: string
+    label: string
     value: string
-    id: string
-    name: string
-    code: string
-    optionSetId: string
 }
+
 type ComponentMapping = Record<string, React.ComponentType<any>>;
 
 type ParamsMapping = Record<string, string>;

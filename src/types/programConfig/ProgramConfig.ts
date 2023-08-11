@@ -20,10 +20,10 @@ export interface ProgramConfig {
                         valueType: string
                         optionSet: {
                             id: string
-                            options: {
+                            options: [{
                                 value: string
                                 label: string
-                            }
+                            }]
                         }
                     }
                 }
@@ -38,7 +38,7 @@ export interface ProgramConfig {
                 displayName: string
                 id: string
                 valueType: string
-                optionSet: { id: string, options: { value: string, label: string } }
+                optionSet: { id: string, options: [{ value: string, label: string }] }
             }
             searchable: boolean
             displayInList: boolean

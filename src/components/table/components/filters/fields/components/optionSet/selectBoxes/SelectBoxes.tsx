@@ -4,7 +4,7 @@ import SingleSelectBoxes from '../singleSelectBoxes/SingleSelectBoxes';
 
 interface SelectBoxesProps {
     singleSelect?: boolean
-    options: { optionSet: { id: string } }
+    options: { optionSet: { options: [{ value: string, label: string }] } }
     onChange: (value: any, id?: string, type?: string) => void
     value: any
     id: string
