@@ -1,0 +1,14 @@
+{
+  "type": "app",
+  "name": "SEMIS-Enrollment",
+  "description": "SEMIS-Enrollment",
+  "version": "1.0.0",
+  "author": {
+    "name": "Hisp Mozambique (Saudigitus) & Hisp Uganda",
+    "email": "info@saudigitus.org"
+  },
+  "title": "SEMIS-Enrollment",
+  "entryPoints": {
+    "app": "index.html"
+  }
+}
