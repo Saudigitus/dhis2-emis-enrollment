@@ -5,8 +5,8 @@ import { useField, type FieldRenderProps } from "react-final-form";
 import { type CustomAttributeProps } from "../../../types/table/AttributeColumns";
 import ErrorIcon from '@material-ui/icons/Error';
 import styles from "./fields.module.css"
-import { onSubmitClicked } from "../../modal/ModalContent";
 import { useRecoilState } from "recoil";
+import { onSubmitClicked } from "../../../schema/formOnSubmitClicked";
 interface AutoCompleteProps {
   disabled?: boolean
   options?: CustomAttributeProps["options"]

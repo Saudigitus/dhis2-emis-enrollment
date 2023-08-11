@@ -5,7 +5,7 @@ import { Form } from "react-final-form";
 import { formFields } from "../../utils/constants/enrollmentForm/enrollmentForm";
 import useGetEnrollmentForm from "../../hooks/form/useGetEnrollmentForm";
 import GroupForm from "../form/GroupForm";
-import { atom, useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { ProgramConfigState } from "../../schema/programSchema";
 import { useParams } from "../../hooks/commons/useQueryParams";
 import usePostTei from "../../hooks/tei/usePostTei";
@@ -13,14 +13,10 @@ import { format } from "date-fns";
 import { useGetPatternCode } from "../../hooks/tei/useGetPatternCode";
 import { useGetAttributes } from "../../hooks/programs/useGetAttributes";
 import { teiPostBody } from "../../utils/tei/formatPostBody";
+import { onSubmitClicked } from "../../schema/formOnSubmitClicked";
 interface ContentProps {
   setOpen: (value: boolean) => void
 }
-
-export const onSubmitClicked = atom<boolean>({
-  key: "on-submit-clicked",
-  default: false
-})
 
 function ModalContentComponent({ setOpen }: ContentProps): React.ReactElement {
   const getProgram = useRecoilValue(ProgramConfigState);
