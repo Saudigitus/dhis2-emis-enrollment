@@ -1,10 +1,9 @@
-import { type Access } from "../generated"
 
 export interface ProgramConfig {
     displayName: string
     id: string
     description: string
-    access: Access
+    access?: any
     programType: string
     programStages: [
         {
@@ -19,7 +18,13 @@ export interface ProgramConfig {
                         displayName: string
                         id: string
                         valueType: string
-                        optionSet: { id: string }
+                        optionSet: {
+                            id: string
+                            options: {
+                                value: string
+                                label: string
+                            }
+                        }
                     }
                 }
             ]
@@ -29,11 +34,11 @@ export interface ProgramConfig {
         {
             trackedEntityAttribute: {
                 generated: boolean
-                pattern: string | undefined
+                pattern?: string
                 displayName: string
                 id: string
                 valueType: string
-                optionSet: { id: string, options: {value: string, label: string} }
+                optionSet: { id: string, options: { value: string, label: string } }
             }
             searchable: boolean
             displayInList: boolean

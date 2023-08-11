@@ -7,12 +7,14 @@ interface ButtonProps {
   name: string
   icon?: React.ReactNode
   options: FlyoutOptionsProps[]
+  disabled: boolean
 }
 function DropdownButtonComponent(props: ButtonProps): React.ReactElement {
-  const { name, icon, options } = props;
+  const { name, icon, options, disabled } = props;
 
   return (
     <SplitButton
+      disabled={disabled}
       icon={icon}
       component={<FlyoutMenuComponent options={options} />}
     >

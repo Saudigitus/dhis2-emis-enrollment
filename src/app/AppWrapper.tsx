@@ -7,7 +7,7 @@ interface Props {
 }
 
 export default function AppWrapper(props: Props) {
-    const { data, error, loading } = useDataStore()
+    const { error, loading } = useDataStore()
 
     if (loading) {
         return (
@@ -17,7 +17,7 @@ export default function AppWrapper(props: Props) {
         )
     }
 
-    if (error != null || !Object.prototype.hasOwnProperty.call(data?.config, "enrollment")) {
+    if (error != null) {
         return (
             <CenteredContent>
                 Something went wrong wen loading the app, please check if you app is already configured

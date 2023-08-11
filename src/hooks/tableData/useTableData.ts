@@ -28,6 +28,7 @@ interface TeiQueryProps {
     ouMode: string
     trackedEntity: string
     orgUnit: string
+    order: string
 }
 
 const EVENT_QUERY = ({ ouMode, page, pageSize, program, order, programStage, filter, orgUnit, filterAttributes }: EventQueryProps) => ({
@@ -48,11 +49,12 @@ const EVENT_QUERY = ({ ouMode, page, pageSize, program, order, programStage, fil
     }
 })
 
-const TEI_QUERY = ({ ouMode, pageSize, program, trackedEntity, orgUnit }: TeiQueryProps) => ({
+const TEI_QUERY = ({ ouMode, pageSize, program, trackedEntity, orgUnit, order }: TeiQueryProps) => ({
     results: {
         resource: "tracker/trackedEntities",
         params: {
             program,
+            order,
             ouMode,
             pageSize,
             trackedEntity,
@@ -103,13 +105,15 @@ export function useTableData() {
     async function getData(page: number, pageSize: number) {
         setLoading(true)
 
+        console.log(school, "school");
+
         const eventsResults: EventQueryResults = await engine.query(EVENT_QUERY({
-            ouMode: "SELECTED",
+            ouMode: school != null ? "SELECTED" : "ACCESSIBLE",
             page,
             pageSize,
-            program: dataStoreState?.enrollment.program as unknown as string,
+            program: dataStoreState?.program as unknown as string,
             order: "createdAt:desc",
-            programStage: dataStoreState?.enrollment.programStage as unknown as string,
+            programStage: dataStoreState?.registration?.programStage as unknown as string,
             filter: headerFieldsState?.dataElements,
             filterAttributes: headerFieldsState?.attributes,
             orgUnit: school
@@ -125,9 +129,10 @@ export function useTableData() {
 
         const teiResults: TeiQueryResults = trackedEntityToFetch?.length > 0
             ? await engine.query(TEI_QUERY({
-                ouMode: "SELECTED",
+                ouMode: school != null ? "SELECTED" : "ACCESSIBLE",
+                order: "created:desc",
                 pageSize,
-                program: dataStoreState?.enrollment.program as unknown as string,
+                program: dataStoreState?.program as unknown as string,
                 orgUnit: school,
                 trackedEntity: trackedEntityToFetch
             })).catch((error) => {
