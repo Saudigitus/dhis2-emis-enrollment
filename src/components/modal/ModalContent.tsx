@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { ModalActions, Button, ButtonStrip, CircularLoader } from "@dhis2/ui";
+import { ModalActions, Button, ButtonStrip, CircularLoader, CenteredContent } from "@dhis2/ui";
 import WithPadding from "../template/WithPadding";
 import { Form } from "react-final-form";
 import { formFields } from "../../utils/constants/enrollmentForm/enrollmentForm";
@@ -10,7 +10,8 @@ import { ProgramConfigState } from "../../schema/programSchema";
 import { useParams } from "../../hooks/commons/useQueryParams";
 import usePostTei from "../../hooks/tei/usePostTei";
 import { format } from "date-fns";
-import { teiPostBody } from "../../utils/tei/formatPostBody";
+import { useGetPatternCode } from "../../hooks/tei/useGetPatternCode";
+import { useGetAttributes } from "../../hooks/programs/useGetAttributes";
 interface ContentProps {
   setOpen: (value: boolean) => void
 }
@@ -36,6 +37,12 @@ function ModalContentComponent({ setOpen }: ContentProps): React.ReactElement {
     registerschoolstaticform: orgUnitName,
     eventdatestaticform: format(new Date(), "yyyy-MM-dd")
   })
+  const { attributes = [] } = useGetAttributes()
+  const { returnPattern, loadingCodes, generatedVariables } = useGetPatternCode()
+
+  useEffect(() => {
+    void returnPattern(attributes)
+  }, [data])
 
   useEffect(() => { setClicked(false) }, [])
 
@@ -63,8 +70,12 @@ function ModalContentComponent({ setOpen }: ContentProps): React.ReactElement {
     { id: "saveandcontinue", type: "submit", label: "Save and close", primary: true, disabled: loading, onClick: () => { setClickedButton("saveandcontinue"); setClicked(true) } }
   ];
 
-  if (enrollmentsData.length < 1) {
-    return <CircularLoader />
+  if (enrollmentsData.length < 1 || loadingCodes) {
+    return (
+      <CenteredContent>
+        <CircularLoader />
+      </CenteredContent>
+    )
   }
 
   function onChange(e: any): void {
@@ -83,10 +94,13 @@ function ModalContentComponent({ setOpen }: ContentProps): React.ReactElement {
 
   return (
     <WithPadding>
-      <Form initialValues={initialValues} onSubmit={onSubmit}>
-        {({ handleSubmit, values, form }) => {
+      <Form initialValues={{ ...initialValues, ...generatedVariables }} onSubmit={onSubmit}>
+        {({ handleSubmit, values, pristine, form }) => {
           formRef.current = form;
-          return <form onSubmit={handleSubmit} onChange={onChange(values)} noValidate={true}>
+          return <form
+            onSubmit={handleSubmit}
+            onChange={onChange(values)}
+          >
             {
               formFields(enrollmentsData).map((field: any, index: number) => (
                 <GroupForm
