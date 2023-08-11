@@ -12,6 +12,7 @@ import usePostTei from "../../hooks/tei/usePostTei";
 import { format } from "date-fns";
 import { useGetPatternCode } from "../../hooks/tei/useGetPatternCode";
 import { useGetAttributes } from "../../hooks/programs/useGetAttributes";
+import { teiPostBody } from "../../utils/tei/formatPostBody";
 interface ContentProps {
   setOpen: (value: boolean) => void
 }
