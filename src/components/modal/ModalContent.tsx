@@ -5,14 +5,15 @@ import { Form } from "react-final-form";
 import { formFields } from "../../utils/constants/enrollmentForm/enrollmentForm";
 import useGetEnrollmentForm from "../../hooks/form/useGetEnrollmentForm";
 import GroupForm from "../form/GroupForm";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { ProgramConfigState } from "../../schema/programSchema";
 import { useParams } from "../../hooks/commons/useQueryParams";
-import { teiPostBody } from "../../utils/tei/formatPostBody";
 import usePostTei from "../../hooks/tei/usePostTei";
 import { format } from "date-fns";
 import { useGetPatternCode } from "../../hooks/tei/useGetPatternCode";
 import { useGetAttributes } from "../../hooks/programs/useGetAttributes";
+import { teiPostBody } from "../../utils/tei/formatPostBody";
+import { onSubmitClicked } from "../../schema/formOnSubmitClicked";
 interface ContentProps {
   setOpen: (value: boolean) => void
 }
@@ -24,6 +25,7 @@ function ModalContentComponent({ setOpen }: ContentProps): React.ReactElement {
   const orgUnit = useQuery().get("school");
   const orgUnitName = useQuery().get("schoolName");
   const { enrollmentsData } = useGetEnrollmentForm();
+  const [, setClicked] = useRecoilState<boolean>(onSubmitClicked);
   const [values, setValues] = useState<object>({})
   const [fieldsWitValue, setFieldsWitValues] = useState<any[]>([enrollmentsData])
   const { postTei, loading, data } = usePostTei()
@@ -39,24 +41,30 @@ function ModalContentComponent({ setOpen }: ContentProps): React.ReactElement {
     void returnPattern(attributes)
   }, [data])
 
+  useEffect(() => { setClicked(false) }, [])
+
   // When Save and continue button clicked and data posted, close the modal
   useEffect(() => {
     if (data !== undefined && data?.status === "OK") {
       if (clickedButton === "saveandcontinue") {
         setOpen(false)
       }
-      formRef.current.reset()
+      setClicked(false)
+      formRef.current.restart()
     }
   }, [data])
 
   function onSubmit() {
-    void postTei({ data: teiPostBody(fieldsWitValue, (getProgram != null) ? getProgram.id : "", orgUnit ?? "", values?.eventdatestaticform ?? "") })
+    const allFields = fieldsWitValue.flat()
+    if (allFields.filter((element: any) => (element?.value === undefined && element.required)).length === 0) {
+      void postTei({ data: teiPostBody(fieldsWitValue, (getProgram != null) ? getProgram.id : "", orgUnit ?? "", values?.eventdatestaticform ?? "") })
+    }
   }
 
   const modalActions = [
     { id: "cancel", type: "button", label: "Cancel", disabled: loading, onClick: () => { setClickedButton("cancel"); setOpen(false) } },
-    { id: "saveandnew", type: "submit", label: "Save and add new", primary: true, disabled: loading, onClick: () => { setClickedButton("saveandnew") } },
-    { id: "saveandcontinue", type: "submit", label: "Save and close", primary: true, disabled: loading, onClick: () => { setClickedButton("saveandcontinue") } }
+    { id: "saveandnew", type: "submit", label: "Save and add new", primary: true, disabled: loading, onClick: () => { setClickedButton("saveandnew"); setClicked(true) } },
+    { id: "saveandcontinue", type: "submit", label: "Save and close", primary: true, disabled: loading, onClick: () => { setClickedButton("saveandcontinue"); setClicked(true) } }
   ];
 
   if (enrollmentsData.length < 1 || loadingCodes) {

@@ -14,7 +14,7 @@ interface FormProps {
 }
 
 function GroupForm(props: FormProps) {
-    const { name, fields, disabled, description } = props
+    const { name, fields, description } = props
 
     return (
         <WithBorder type={"all"}>
