@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { ModalActions, Button, ButtonStrip, CircularLoader } from "@dhis2/ui";
+import { ModalActions, Button, ButtonStrip, CircularLoader, CenteredContent } from "@dhis2/ui";
 import WithPadding from "../template/WithPadding";
 import { Form } from "react-final-form";
 import { formFields } from "../../utils/constants/enrollmentForm/enrollmentForm";
@@ -11,6 +11,8 @@ import { useParams } from "../../hooks/commons/useQueryParams";
 import { teiPostBody } from "../../utils/tei/formatPostBody";
 import usePostTei from "../../hooks/tei/usePostTei";
 import { format } from "date-fns";
+import { useGetPatternCode } from "../../hooks/tei/useGetPatternCode";
+import { useGetAttributes } from "../../hooks/programs/useGetAttributes";
 interface ContentProps {
   setOpen: (value: boolean) => void
 }
@@ -30,6 +32,12 @@ function ModalContentComponent({ setOpen }: ContentProps): React.ReactElement {
     registerschoolstaticform: orgUnitName,
     eventdatestaticform: format(new Date(), "yyyy-MM-dd")
   })
+  const { attributes = [] } = useGetAttributes()
+  const { returnPattern, loadingCodes, generatedVariables } = useGetPatternCode()
+
+  useEffect(() => {
+    void returnPattern(attributes)
+  }, [data])
 
   // When Save and continue button clicked and data posted, close the modal
   useEffect(() => {
@@ -51,8 +59,12 @@ function ModalContentComponent({ setOpen }: ContentProps): React.ReactElement {
     { id: "saveandcontinue", label: "Save and close", primary: true, disabled: loading, onClick: () => { setClickedButton("saveandcontinue"); onSubmit() } }
   ];
 
-  if (enrollmentsData.length < 1) {
-    return <CircularLoader />
+  if (enrollmentsData.length < 1 || loadingCodes) {
+    return (
+      <CenteredContent>
+        <CircularLoader />
+      </CenteredContent>
+    )
   }
 
   function onChange(e: any): void {
@@ -71,7 +83,7 @@ function ModalContentComponent({ setOpen }: ContentProps): React.ReactElement {
 
   return (
     <WithPadding>
-      <Form initialValues={initialValues} onSubmit={() => { alert(JSON.stringify(values)) }}>
+      <Form initialValues={{ ...initialValues, ...generatedVariables }} onSubmit={() => { alert(JSON.stringify(values)) }}>
         {({ values, pristine, form }) => {
           formRef.current = form;
           return <form onChange={onChange(values)}>
