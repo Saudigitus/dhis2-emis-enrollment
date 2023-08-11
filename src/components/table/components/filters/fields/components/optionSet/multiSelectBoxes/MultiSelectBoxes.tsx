@@ -1,8 +1,7 @@
-import { Checkbox, spacersNum, CenteredContent, CircularLoader } from '@dhis2/ui';
+import { Checkbox, spacersNum } from '@dhis2/ui';
 import { createStyles, type Theme } from '@material-ui/core/styles';
 import { makeStyles } from '@material-ui/core';
 import React from 'react'
-import { useGetOptionSets } from '../../../../../../../../hooks/optionSets/useGetOptionSets';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -15,7 +14,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 interface MultiSelectBoxesProps {
-    options: { optionSet: { id: string } }
+    options: { optionSet: { options: [{ label: string, value: string }] } }
     value: any
     id: string
     onChange: (value: any, id?: string, type?: string) => void
@@ -27,7 +26,6 @@ let checkedValues = "";
 function MultiSelectBoxes(props: MultiSelectBoxesProps) {
     const { options, id, onChange, value = "", valueType } = props;
     const classes = useStyles()
-    const { data, loading } = useGetOptionSets({ optionSetId: options.optionSet.id })
 
     const handleOptionChange = (e: { checked: boolean, value: string }) => {
         checkedValues = value;
@@ -48,22 +46,14 @@ function MultiSelectBoxes(props: MultiSelectBoxesProps) {
         return value.split(",").filter((x: string) => x === e).length > 0;
     }
 
-    if (loading) {
-        return (
-            <CenteredContent>
-                <CircularLoader small />
-            </CenteredContent>
-        )
-    }
-
-    return data?.result?.options?.map(({ code, displayName }: { code: string, displayName: string }, index: number) => (
+    return options?.optionSet.options.map(({ label, value }, index: number) => (
         <Checkbox
             key={index}
-            checked={isChecked(code)}
-            label={displayName}
+            checked={isChecked(value)}
+            label={label}
             name={`multiSelectBoxes-${index}`}
             onChange={(e: any) => { handleOptionChange(e); }}
-            value={code}
+            value={value}
             className={classes.checkbox}
             dense
         />

@@ -12,12 +12,11 @@ interface FilterComponentProps {
     onChange: () => void
     value: any
     id: string
-    options: { optionSet: { id: string } }
+    options: { optionSet: { options: [{ value: string, label: string }] } }
 }
 
 function FilterComponents(props: FilterComponentProps) {
     const { type, column, onChange, value } = props;
-
     switch (type) {
         case Attribute.valueType.LIST as unknown as CustomAttributeProps["valueType"]:
             return <SelectBoxes

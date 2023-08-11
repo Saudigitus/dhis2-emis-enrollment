@@ -105,8 +105,6 @@ export function useTableData() {
     async function getData(page: number, pageSize: number) {
         setLoading(true)
 
-        console.log(school, "school");
-
         const eventsResults: EventQueryResults = await engine.query(EVENT_QUERY({
             ouMode: school != null ? "SELECTED" : "ACCESSIBLE",
             page,
