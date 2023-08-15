@@ -2,8 +2,7 @@ import { z } from "zod";
 
 const booleanStringTransformer = (str: string) => {
     if (str === "false" || str === "no") return false;
-    if (str === "true" || str === "yes") return true;
-    return false
+    return str === "true" || str === "yes";
     // throw new Error("Invalid boolean string");
 };
 // Define the EnrollmentDetails schema

@@ -1,7 +1,7 @@
 import { type UploadTemplate} from "../../types/bulkImport/TemplateFormat";
 import {EnrollmentObjectSchema, type EnrollmentObject} from "../../schema/importSchema";
 export const processData = (data: UploadTemplate): any => {
-    var validRecords: EnrollmentObject[] = []
+    const validRecords: EnrollmentObject[] = []
     data.Enrollments.slice(1).forEach((v: any) => {
         // const {schoolName, schoolID, ...rest} = v
         const {

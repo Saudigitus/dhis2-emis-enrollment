@@ -2,10 +2,7 @@ import {type ProgramConfig} from "../../types/programConfig/ProgramConfig";
 
 export const getProgramTEAttributeID = (programConfig: ProgramConfig, attribute: string): string => {
     const attr = programConfig?.programTrackedEntityAttributes.filter((v: any) => {
-        if (v.trackedEntityAttribute.displayName === attribute) {
-            return true;
-        }
-        return false;
+        return v.trackedEntityAttribute.displayName === attribute
     })
     if (attr?.length > 0) {
         return attr[0]?.trackedEntityAttribute?.id
