@@ -5,6 +5,7 @@ import ModalContentComponent from '../../../modal/ModalContent';
 import ImportContent from '../../../modal/ImportContent';
 import DropdownButtonComponent from '../../../buttons/DropdownButton';
 import { type FlyoutOptionsProps } from '../../../../types/buttons/FlyoutOptions';
+import {BulkEnrollment} from "../../../bulkImport/BulkEnrollment";
 
 function EnrollmentActionsButtons() {
   const [open, setOpen] = useState<boolean>(false);
@@ -26,6 +27,7 @@ function EnrollmentActionsButtons() {
           icon={<IconUserGroup16 />}
           options={enrollmentOptions}
         />
+        <BulkEnrollment/>
       </ButtonStrip>
 
       {open && <ModalComponent title="Single Student Enrollment" open={open} setOpen={setOpen}><ModalContentComponent setOpen={setOpen} /></ModalComponent>}
