@@ -5,6 +5,7 @@ import { makeStyles, type Theme, createStyles } from '@material-ui/core/styles';
 import { RowCell, RowTable } from '../components';
 import { getDisplayName } from '../../../utils/table/rows/getDisplayNameByOption';
 import { type CustomAttributeProps } from '../../../types/table/AttributeColumns';
+import { useConfig } from '@dhis2/app-runtime';
 
 interface RenderHeaderProps {
     rowsData: any[]
@@ -37,6 +38,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 function RenderRows({ headerData, rowsData }: RenderHeaderProps): React.ReactElement {
     const classes = useStyles()
+    const { baseUrl } = useConfig()
 
     if (rowsData.length === 0) {
         return (
@@ -61,6 +63,7 @@ function RenderRows({ headerData, rowsData }: RenderHeaderProps): React.ReactEle
                         <RowCell
                             key={column.id}
                             className={classNames(classes.cell, classes.bodyCell)}
+                            onClick={() => { window.open(`${baseUrl}/dhis-web-capture/index.html#/enrollment?enrollmentId=${row?.enrollmentId}&orgUnitId=${row?.orgUnitId}&programId=${row?.programId}&teiId=${row?.trackedEntity}`, "_blank") }}
                         >
                             <div>
                                 {getDisplayName({ attribute: column.id, headers: headerData, value: row[column.id] })}

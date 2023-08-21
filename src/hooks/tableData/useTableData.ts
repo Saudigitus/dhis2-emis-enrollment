@@ -59,7 +59,7 @@ const TEI_QUERY = ({ ouMode, pageSize, program, trackedEntity, orgUnit, order }:
             pageSize,
             trackedEntity,
             orgUnit,
-            fields: "trackedEntity,createdAt,orgUnit,attributes[attribute,value],enrollments[enrollment,status,orgUnit,enrolledAt]"
+            fields: "trackedEntity,createdAt,orgUnit,attributes[attribute,value],enrollments[enrollment,orgUnit,program]"
         }
     }
 })
@@ -103,36 +103,19 @@ export function useTableData() {
     const school = urlParamiters().school as unknown as string
 
     async function getData(page: number, pageSize: number) {
-        setLoading(true)
+        if (school !== null) {
+            setLoading(true)
 
-        const eventsResults: EventQueryResults = await engine.query(EVENT_QUERY({
-            ouMode: school != null ? "SELECTED" : "ACCESSIBLE",
-            page,
-            pageSize,
-            program: dataStoreState?.program as unknown as string,
-            order: "createdAt:desc",
-            programStage: dataStoreState?.registration?.programStage as unknown as string,
-            filter: headerFieldsState?.dataElements,
-            filterAttributes: headerFieldsState?.attributes,
-            orgUnit: school
-        })).catch((error) => {
-            show({
-                message: `${("Could not get data")}: ${error.message}`,
-                type: { critical: true }
-            });
-            setTimeout(hide, 5000);
-        })
-
-        const trackedEntityToFetch = eventsResults?.results?.instances.map((x: { trackedEntity: string }) => x.trackedEntity).toString().replaceAll(",", ";")
-
-        const teiResults: TeiQueryResults = trackedEntityToFetch?.length > 0
-            ? await engine.query(TEI_QUERY({
+            const eventsResults: EventQueryResults = await engine.query(EVENT_QUERY({
                 ouMode: school != null ? "SELECTED" : "ACCESSIBLE",
-                order: "created:desc",
+                page,
                 pageSize,
                 program: dataStoreState?.program as unknown as string,
-                orgUnit: school,
-                trackedEntity: trackedEntityToFetch
+                order: "createdAt:desc",
+                programStage: dataStoreState?.registration?.programStage as unknown as string,
+                filter: headerFieldsState?.dataElements,
+                filterAttributes: headerFieldsState?.attributes,
+                orgUnit: school
             })).catch((error) => {
                 show({
                     message: `${("Could not get data")}: ${error.message}`,
@@ -140,14 +123,33 @@ export function useTableData() {
                 });
                 setTimeout(hide, 5000);
             })
-            : { results: { instances: [] } }
 
-        setTableData(formatResponseRows({
-            eventsInstances: eventsResults?.results?.instances,
-            teiInstances: teiResults?.results?.instances
-        }));
+            const trackedEntityToFetch = eventsResults?.results?.instances.map((x: { trackedEntity: string }) => x.trackedEntity).toString().replaceAll(",", ";")
 
-        setLoading(false)
+            const teiResults: TeiQueryResults = trackedEntityToFetch?.length > 0
+                ? await engine.query(TEI_QUERY({
+                    ouMode: school != null ? "SELECTED" : "ACCESSIBLE",
+                    order: "created:desc",
+                    pageSize,
+                    program: dataStoreState?.program as unknown as string,
+                    orgUnit: school,
+                    trackedEntity: trackedEntityToFetch
+                })).catch((error) => {
+                    show({
+                        message: `${("Could not get data")}: ${error.message}`,
+                        type: { critical: true }
+                    });
+                    setTimeout(hide, 5000);
+                })
+                : { results: { instances: [] } }
+
+            setTableData(formatResponseRows({
+                eventsInstances: eventsResults?.results?.instances,
+                teiInstances: teiResults?.results?.instances
+            }));
+
+            setLoading(false)
+        }
     }
 
     return {

@@ -167,7 +167,7 @@ function ContentFilter(props: ContentFilterProps) {
                         variant='outlined'
                         onClick={handleClick}
                     >
-                        Mais filtros
+                        More Filters
                     </Button>
                 }
                 <MenuFilters

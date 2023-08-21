@@ -58,20 +58,20 @@ function RenderHeader(props: renderHeaderProps): React.ReactElement {
                 className={classNames(classes.cell, classes.headerCell)}
             >
                 {/* TODO: the sortLabel must be optional 👇 */}
-                <SortLabel
+                {/* <SortLabel
                     active={orderBy === column.id}
                     direction={orderBy === column.id ? order : 'asc'}
                     createSortHandler={createSortHandler(column.id)}
-                >
-                    {column.header}
-                    {orderBy === column.id
+                > */}
+                {column.header}
+                {/* {orderBy === column.id
                         ? (
                             <span className={classes.visuallyHidden}>
                                 {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
                             </span>
                         )
                         : null}
-                </SortLabel>
+                </SortLabel> */}
             </HeaderCell>
         ))
     }, [rowsHeader]);
