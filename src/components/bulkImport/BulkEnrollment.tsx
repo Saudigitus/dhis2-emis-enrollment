@@ -14,10 +14,7 @@ import {type AttributeAlias, TEAttributeAliasState} from "../../schema/importSch
 import {type TrackedEntity} from "../../schema/trackerSchema";
 import {usePostTei} from "../../hooks/bulkImport/postTEs";
 
-interface BulkEnrollmentProps {
-    onSubmit?: () => void
-}
-export const BulkEnrollment = ({onSubmit}: BulkEnrollmentProps): React.ReactElement => {
+export const BulkEnrollment = (): React.ReactElement => {
     const {baseUrl} = useConfig()
     const [open, setOpen] = useState(false);
     const [isProcessing, setIsProcessing] = useState(false);
@@ -26,7 +23,7 @@ export const BulkEnrollment = ({onSubmit}: BulkEnrollmentProps): React.ReactElem
     const { postTei} = usePostTei()
     // const [numberOfImportRecords, setNumberOffImportRecords] = useState<number>(0);
     // const setBulkEnrollments = useRecoilState(BulkEnrollmentsState);
-    const useStyles = makeStyles(theme => createStyles({
+    const useStyles = makeStyles(() => createStyles({
         previewChip: {
             minWidth: 160,
             maxWidth: 210

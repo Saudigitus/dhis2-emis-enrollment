@@ -49,7 +49,7 @@ export type EnrollmentObject = z.infer<typeof EnrollmentObjectSchema>;
 interface AttributeConf {
     id: string
     name: string
-};
+}
 export type AttributeAlias = Record<string, AttributeConf>;
 
 const AttributeAliases: AttributeAlias = {
