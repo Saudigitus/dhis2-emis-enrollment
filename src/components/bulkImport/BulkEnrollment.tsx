@@ -6,11 +6,13 @@ import {createStyles, makeStyles, MuiThemeProvider, createTheme} from '@material
 import {read, utils} from "xlsx";
 import { type UploadTemplate} from "../../types/bulkImport/TemplateFormat";
 import {processData} from "../../utils/bulkImport/processImportData";
-import {fetchTEI, getProgramTEAttributeID} from "../../utils/bulkImport/fetchTEIs";
 import {useRecoilValue} from "recoil";
 import {ProgramConfigState, type ProgramSchemaConfig} from "../../schema/programSchema";
 import {type ProgramConfig} from "../../types/programConfig/ProgramConfig";
 import { useConfig } from '@dhis2/app-runtime'
+import {type AttributeAlias, TEAttributeAliasState} from "../../schema/importSchema";
+import {type TrackedEntity} from "../../schema/trackerSchema";
+import {usePostTei} from "../../hooks/bulkImport/postTEs";
 
 interface BulkEnrollmentProps {
     onSubmit?: () => void
@@ -18,12 +20,12 @@ interface BulkEnrollmentProps {
 export const BulkEnrollment = ({onSubmit}: BulkEnrollmentProps): React.ReactElement => {
     const {baseUrl} = useConfig()
     const [open, setOpen] = useState(false);
+    const [isProcessing, setIsProcessing] = useState(false);
     const getProgramConfigState: ProgramSchemaConfig | undefined = useRecoilValue<ProgramSchemaConfig | undefined>(ProgramConfigState)
-    // const programConfing: ProgramConfig = getProgramConfigState
+    const attributeAliasState: AttributeAlias = useRecoilValue<AttributeAlias>(TEAttributeAliasState)
+    const { postTei} = usePostTei()
+    // const [numberOfImportRecords, setNumberOffImportRecords] = useState<number>(0);
     // const setBulkEnrollments = useRecoilState(BulkEnrollmentsState);
-    const conf = getProgramTEAttributeID(getProgramConfigState as ProgramConfig, "System ID")
-    console.log(getProgramConfigState, conf)
-    console.log(fetchTEI(`${baseUrl}/api/`, getProgramConfigState as ProgramConfig, "001123"))
     const useStyles = makeStyles(theme => createStyles({
         previewChip: {
             minWidth: 160,
@@ -36,15 +38,17 @@ export const BulkEnrollment = ({onSubmit}: BulkEnrollmentProps): React.ReactElem
     })
     const templateHeaders: string[] = [
         "#", "schoolName", "schoolUID", "enrollmentDate", "academicYear",
-        "grade", "class", "studentID", "firstName", "surName", "dateOfBirth",
+        "grade", "studentClass", "studentID", "firstName", "surName", "dateOfBirth",
         "sex", "nationality", "specialNeeds", "healthIssues", "practicalSkills", "talents"]
     const configHeaders: string[] = ["school", "schoolUID"]
     //
     const classes = useStyles();
     const handleFileChange = (file: any) => {
+        setIsProcessing(true)
+        console.log("Processing:", isProcessing)
         try {
             const reader: FileReader = new FileReader();
-            reader.onload = (e: ProgressEvent<FileReader>) => {
+            reader.onload = async(e: ProgressEvent<FileReader>) => {
                 const data: Uint8Array = new Uint8Array(e.target?.result as any);
                 const workbook = read(data, {
                     type: 'array',
@@ -61,17 +65,34 @@ export const BulkEnrollment = ({onSubmit}: BulkEnrollmentProps): React.ReactElem
                 const configWorksheet = workbook.Sheets[configSheet];
                 const configData = utils.sheet_to_json(configWorksheet, {header: configHeaders});
                 const templateData: UploadTemplate = {Enrollments: jsonData, Config: configData}
+                // setNumberOffImportRecords(templateData.Enrollments.length - 1)
                 // setBulkEnrollments(templateData);
                 // Process jsonData as needed (e.g., update form fields)
-                console.log('Excel Data:', processData(templateData), templateData, conf);
+                const processedData = await processData(templateData,
+                    getProgramConfigState as ProgramConfig, attributeAliasState, baseUrl)
+                const chunkSize = 250
+                for (let i: number = 0; i < processedData.length; i = i + chunkSize) {
+                    const teis: TrackedEntity[] = processedData.slice(i, i + chunkSize)
+                    const teisPayload: any = {
+                        trackedEntities: teis
+                    }
+                    void postTei({data: teisPayload})
+                    console.log('Excel Slice Data:', teisPayload);
+                }
             };
             reader.readAsArrayBuffer(file);
         } catch (error) {
             console.error('Error processing Excel file:', error);
         }
+        setIsProcessing(false)
     };
+    const onSave = (files: any) => {
+        console.log('Files:', files);
+        handleFileChange(files[0])
+        // setBulkEnrollments({Enrollments: [], Config: []})
+        // setOpen(false);
+    }
 
-    // const {data: tes, loading} = useGetTEBySystemID({id: "123", orgUnit: "flPJKKJWmUP", program: "wQaiD2V27Dp"})
     return (
         <>
             <Button variant="contained" color="primary" onClick={() => { setOpen(true) }}>
@@ -99,10 +120,7 @@ export const BulkEnrollment = ({onSubmit}: BulkEnrollmentProps): React.ReactElem
                     acceptedFiles={[".xlsx"]}
                     open={open}
                     onClose={() => { setOpen(false) }}
-                    onSave={(files: any) => {
-                        console.log('Files:', files);
-                        handleFileChange(files[0])
-                    }}
+                    onSave={onSave }
                     clearOnUnmount={true}
                 />
             </MuiThemeProvider>

@@ -2,10 +2,17 @@ import {type ProgramConfig} from "../../types/programConfig/ProgramConfig";
 
 export const getProgramTEAttributeID = (programConfig: ProgramConfig, attribute: string): string => {
     const attr = programConfig?.programTrackedEntityAttributes.filter((v: any) => {
-        return v.trackedEntityAttribute.displayName === attribute
+        return (v.trackedEntityAttribute.displayName === attribute)
     })
     if (attr?.length > 0) {
         return attr[0]?.trackedEntityAttribute?.id
+    }
+    return "";
+}
+export const getProgramStageID = (programConfig: ProgramConfig, programStageName: string): string => {
+    const pstage = programConfig?.programStages.find(ps => ps.displayName === programStageName)
+    if (pstage !== undefined) {
+        return pstage.id
     }
     return "";
 }
@@ -26,7 +33,6 @@ export const fetchTEI = async (apiBaseUrl: string, program: ProgramConfig, teiId
                     `fetchTEI ${teiId} fetch error: `,
                     error
                 )
-                return await Promise.reject(error)
             })
     }
     if (program !== undefined) {
@@ -41,4 +47,14 @@ export const fetchTEI = async (apiBaseUrl: string, program: ProgramConfig, teiId
         }
     }
     return undefined;
+}
+
+export const fetchURL = async (url: string) => {
+    try {
+        const response = await fetch(url, {credentials: 'include'})
+        return await response.json();
+    } catch (error) {
+        console.error(`fetchURL error: `, error)
+        return {}
+    }
 }

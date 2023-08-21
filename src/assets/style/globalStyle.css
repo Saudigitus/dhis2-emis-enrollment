@@ -14,3 +14,7 @@ body {
     margin: 0;
     padding: 0;
 }
+
+svg.MuiSvgIcon-root.MuiDropzonePreviewList-image {
+    height: 30px;
+}
