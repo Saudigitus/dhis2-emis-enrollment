@@ -4,10 +4,10 @@ import DateInput from "./fields/DateInput.js";
 import InputNumber from "./fields/InputNumber.js";
 import InputText from "./fields/InputText.js";
 import SingleSelectField from "./fields/SingleSelect.js";
-import SwitchInput from "./fields/SwitchInput.js";
 import InputArea from "./fields/InputArea.js";
 import { type CustomAttributeProps } from "../../types/table/AttributeColumns.js";
 import { Attribute } from "../../types/generated/models.js";
+import RadioButton from "./fields/RadioButton.js";
 
 interface GenericFieldsProps {
   attribute: CustomAttributeProps
@@ -19,9 +19,9 @@ function GenericFields({ attribute, disabled, valueType }: GenericFieldsProps) {
   switch (valueType) {
     case Attribute.valueType.BOOLEAN as unknown as CustomAttributeProps["valueType"]:
       return (
-        <SwitchInput
+        <RadioButton
           {...attribute}
-          disabled={disabled || attribute.disabled}
+          disabled={disabled}
         />
       );
 
