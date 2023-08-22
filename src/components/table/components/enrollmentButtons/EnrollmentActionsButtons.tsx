@@ -25,23 +25,12 @@ function EnrollmentActionsButtons() {
       <ButtonStrip>
         <Tooltip title={orgUnit === null ? "Please select an organisation unit before" : ""}>
           <span>
-            <Button disabled={orgUnit == null} onClick={() => { setOpen(true); }} icon={<IconAddCircle24 />}>Enrol single student</Button>
-          </span>
-        </Tooltip>
-
-        <Tooltip title={orgUnit === null ? "Please select an organisation unit before" : ""}>
-          <span>
-            <DropdownButtonComponent
-              disabled={orgUnit == null}
-              name="Bulk enrollment"
-              icon={<IconUserGroup16 />}
-              options={enrollmentOptions}
-            />
+            <Button disabled={orgUnit == null} onClick={() => { setOpen(true); }} icon={<IconAddCircle24 />}>Add new staff</Button>
           </span>
         </Tooltip>
       </ButtonStrip>
 
-      {open && <ModalComponent title="Single Student Enrollment" open={open} setOpen={setOpen}><ModalContentComponent setOpen={setOpen} /></ModalComponent>}
+      {open && <ModalComponent title="Add new staff" open={open} setOpen={setOpen}><ModalContentComponent setOpen={setOpen} /></ModalComponent>}
       {openImport && <ModalComponent title="Import Students" open={openImport} setOpen={setOpenImport}><ImportContent setOpen={setOpen} /></ModalComponent>}
     </div>
   )

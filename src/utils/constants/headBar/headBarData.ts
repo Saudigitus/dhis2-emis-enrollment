@@ -11,18 +11,18 @@ function headBarData(selectedOptions: SelectedOptionsTypes): HeadBarTypes[] {
         },
         {
             id: "981ed8a3",
-            label: "Grade",
-            value: selectedOptions?.grade ?? "Select a grade",
-            placeholder: "Search for grade",
-            dataElementId: "kNNoif9gASf",
+            label: "Position",
+            value: selectedOptions?.grade ?? "Select a position",
+            placeholder: "Search for a position",
+            dataElementId: "EuzOMK1tTNv",
             component: "menuItemContainer"
         },
         {
             id: "7ce5c7f3",
-            label: "Class",
-            value: selectedOptions?.class ?? "Select a class",
-            placeholder: "Search for class",
-            dataElementId: "RhABRLO2Fae",
+            label: "Employment type",
+            value: selectedOptions?.class ?? "Select an employment type",
+            placeholder: "Search for an employment type",
+            dataElementId: "gXBJIHjcwiH",
             component: "menuItemContainer"
         },
         {

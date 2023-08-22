@@ -6,7 +6,7 @@ import useShowAlerts from '../commons/useShowAlert';
 
 const DATASTORE_QUERY = ({
     config: {
-        resource: "dataStore/semis/values",
+        resource: "dataStore/semis/testing",
         params: {
             fields: "*"
         }

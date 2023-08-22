@@ -1,8 +1,9 @@
 import { type ParamsMapping } from "../../types/menu/MenuItemTypes";
 
+// TODO: @amuchanga --- Why the IDs are fixed here? We need to make it flexible
 const paramsMapping: ParamsMapping = {
-    RhABRLO2Fae: "class",
+    gXBJIHjcwiH: "class",
     iDSrFrrVgmX: "academicYear",
-    kNNoif9gASf: "grade"
+    EuzOMK1tTNv: "grade"
 }
 export { paramsMapping }

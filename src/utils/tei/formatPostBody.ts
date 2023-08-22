@@ -31,18 +31,6 @@ export const teiPostBody = (enrollmentsData: any[], programId: string, orgUnit: 
         }
     }
 
-    performanceProgramStages.forEach(performanceProgramStage => {
-        form.events.push({
-            occurredAt: enrollmentDate,
-            notes: [],
-            status: "ACTIVE",
-            program: programId,
-            programStage: performanceProgramStage,
-            orgUnit,
-            scheduledAt: enrollmentDate
-        })
-    })
-
     return {
         trackedEntities: [
             {
@@ -58,7 +46,7 @@ export const teiPostBody = (enrollmentsData: any[], programId: string, orgUnit: 
                     }
                 ],
                 orgUnit,
-                trackedEntityType: "eMLK4VQm3Kj"
+                trackedEntityType: "EmSCvAyT8T0"
             }
         ]
     }

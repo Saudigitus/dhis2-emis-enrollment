@@ -51,7 +51,7 @@ function formFields(enrollmentsData: any[]): FormSectionProps[] {
   const [enrollmentDetails, studentsProfile, socioEconomicDetails] = enrollmentsData;
   return [
     {
-      section: "Enrollment Details",
+      section: "General details",
       description: "Details related to the enrollment process",
       fields: [
         staticForm().registeringSchool,
@@ -60,15 +60,15 @@ function formFields(enrollmentsData: any[]): FormSectionProps[] {
       ]
     },
     {
-      section: "Student profile",
-      description: "Student personal details",
+      section: "Staff profile",
+      description: "Staff personal details",
       fields: [
         ...studentsProfile
       ]
     },
     {
-      section: "Socio-economic details",
-      description: "Details about the student socio-economic status",
+      section: "Staff details",
+      description: "Details about the staff details",
       fields: [
         ...socioEconomicDetails
       ]
