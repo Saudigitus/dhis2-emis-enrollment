@@ -39,7 +39,7 @@ function sideBarData (): SideBarItemProps[] {
                     icon: gauge,
                     label: "Final result",
                     showBadge: false,
-                    disabled: false,
+                    disabled: true,
                     appName: "SEMIS-Final-Result",
                     route: "enrollment?sectionType=student"
                 },
@@ -47,7 +47,7 @@ function sideBarData (): SideBarItemProps[] {
                     icon: logOut,
                     label: "Transfer",
                     showBadge: false,
-                    disabled: false,
+                    disabled: true,
                     appName: "SEMIS-Student-Transfer",
                     route: "student-transfer?sectionType=student"
                 }
@@ -76,9 +76,9 @@ function sideBarData (): SideBarItemProps[] {
                     icon: logOut,
                     label: "Transfer",
                     showBadge: false,
-                    disabled: false,
+                    disabled: true,
                     appName: "SEMIS-Staff-Transfer",
-                    route: "staff-transfer?sectionType=student&academicYear=2023"
+                    route: "staff-transfer"
                 }
             ]
         }
