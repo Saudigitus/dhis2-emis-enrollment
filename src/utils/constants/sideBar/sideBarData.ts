@@ -48,7 +48,7 @@ function sideBarData (): SideBarItemProps[] {
                     label: "Transfer",
                     showBadge: false,
                     disabled: false,
-                    appName: "SEMIS---Student-Transfer",
+                    appName: "SEMIS-Student-Transfer",
                     route: "student-transfer?sectionType=student"
                 }
             ]
@@ -69,7 +69,7 @@ function sideBarData (): SideBarItemProps[] {
                     label: "Attendance",
                     showBadge: false,
                     disabled: false,
-                    appName: "Attendance-Staff",
+                    appName: "SEMIS-Attendance-Staff",
                     route: "staff-attendance?sectionType=staff&academicYear=2023"
                 },
                 {
@@ -77,7 +77,7 @@ function sideBarData (): SideBarItemProps[] {
                     label: "Transfer",
                     showBadge: false,
                     disabled: false,
-                    appName: "SEMIS---Student-Transfer",
+                    appName: "SEMIS-Staff-Transfer",
                     route: "staff-transfer?sectionType=student&academicYear=2023"
                 }
             ]
