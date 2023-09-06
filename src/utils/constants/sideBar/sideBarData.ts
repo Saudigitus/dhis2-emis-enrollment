@@ -6,7 +6,7 @@ import logOut from "../../../assets/images/sidebar/log-out.svg"
 import userGroup from "../../../assets/images/sidebar/user-group.svg"
 import { type SideBarItemProps } from "../../../types/sideBar/SideBarTypes"
 
-function sideBarData (): SideBarItemProps[] {
+function sideBarData(): SideBarItemProps[] {
     return [
         {
             title: "Students",
@@ -17,7 +17,7 @@ function sideBarData (): SideBarItemProps[] {
                     showBadge: false,
                     disabled: false,
                     appName: "SEMIS-Enrollment",
-                    route: "enrollment?sectionType=student&academicYear=2023"
+                    route: "/enrollment?sectionType=student&academicYear=2023"
                 },
                 {
                     icon: glyph,
@@ -25,7 +25,7 @@ function sideBarData (): SideBarItemProps[] {
                     showBadge: false,
                     disabled: false,
                     appName: "SEMIS-Attendance",
-                    route: "attendance?sectionType=student&academicYear=2023"
+                    route: "/attendance?sectionType=student&academicYear=2023"
                 },
                 {
                     icon: fileDocument,
@@ -33,7 +33,7 @@ function sideBarData (): SideBarItemProps[] {
                     showBadge: false,
                     disabled: false,
                     appName: "SEMIS-Performance",
-                    route: "performance?sectionType=student&academicYear=2023"
+                    route: "/performance?sectionType=student&academicYear=2023"
                 },
                 {
                     icon: gauge,
@@ -41,7 +41,7 @@ function sideBarData (): SideBarItemProps[] {
                     showBadge: false,
                     disabled: true,
                     appName: "SEMIS-Final-Result",
-                    route: "enrollment?sectionType=student"
+                    route: "/enrollment?sectionType=student"
                 },
                 {
                     icon: logOut,
@@ -49,7 +49,7 @@ function sideBarData (): SideBarItemProps[] {
                     showBadge: false,
                     disabled: true,
                     appName: "SEMIS-Student-Transfer",
-                    route: "student-transfer?sectionType=student"
+                    route: "/student-transfer?sectionType=student"
                 }
             ]
         },
@@ -62,7 +62,7 @@ function sideBarData (): SideBarItemProps[] {
                     showBadge: false,
                     disabled: false,
                     appName: "SEMIS-Enrollment-Staff",
-                    route: "teacher?sectionType=staff&academicYear=2023"
+                    route: "/teacher?sectionType=staff&academicYear=2023"
                 },
                 {
                     icon: glyph,
@@ -70,7 +70,7 @@ function sideBarData (): SideBarItemProps[] {
                     showBadge: false,
                     disabled: false,
                     appName: "SEMIS-Attendance-Staff",
-                    route: "staff-attendance?sectionType=staff&academicYear=2023"
+                    route: "/staff-attendance?sectionType=staff&academicYear=2023"
                 },
                 {
                     icon: logOut,
@@ -78,10 +78,10 @@ function sideBarData (): SideBarItemProps[] {
                     showBadge: false,
                     disabled: true,
                     appName: "SEMIS-Staff-Transfer",
-                    route: "staff-transfer"
+                    route: "/staff-transfer"
                 }
             ]
         }
     ]
 }
-export {sideBarData}
+export { sideBarData }
