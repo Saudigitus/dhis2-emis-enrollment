@@ -27,7 +27,7 @@ function sideBarData(): SideBarItemProps[] {
                     disabled: false,
                     appName: "SEMIS-Attendance",
                     route: "attendance?sectionType=student&academicYear=2023",
-                    pathName: "attendance"
+                    pathName: "/attendance"
                 },
                 {
                     icon: fileDocument,
@@ -36,7 +36,7 @@ function sideBarData(): SideBarItemProps[] {
                     disabled: false,
                     appName: "SEMIS-Performance",
                     route: "performance?sectionType=student&academicYear=2023",
-                    pathName: "performance"
+                    pathName: "/performance"
                 },
                 {
                     icon: gauge,
@@ -45,7 +45,7 @@ function sideBarData(): SideBarItemProps[] {
                     disabled: true,
                     appName: "SEMIS-Final-Result",
                     route: "enrollment?sectionType=student",
-                    pathName: "enrollment"
+                    pathName: "/enrollment"
                 },
                 {
                     icon: logOut,
@@ -54,7 +54,7 @@ function sideBarData(): SideBarItemProps[] {
                     disabled: true,
                     appName: "SEMIS-Student-Transfer",
                     route: "student-transfer?sectionType=student",
-                    pathName: "student-transfer"
+                    pathName: "/student-transfer"
                 }
             ]
         },
@@ -68,7 +68,7 @@ function sideBarData(): SideBarItemProps[] {
                     disabled: false,
                     appName: "SEMIS-Enrollment-Staff",
                     route: "teacher?sectionType=staff&academicYear=2023",
-                    pathName: "teacher"
+                    pathName: "/teacher"
                 },
                 {
                     icon: glyph,
@@ -77,7 +77,7 @@ function sideBarData(): SideBarItemProps[] {
                     disabled: false,
                     appName: "SEMIS-Attendance-Staff",
                     route: "staff-attendance?sectionType=staff&academicYear=2023",
-                    pathName: "staff-attendance"
+                    pathName: "/staff-attendance"
                 },
                 {
                     icon: logOut,
@@ -86,7 +86,7 @@ function sideBarData(): SideBarItemProps[] {
                     disabled: true,
                     appName: "SEMIS-Staff-Transfer",
                     route: "staff-transfer",
-                    pathName: "staff-transfer"
+                    pathName: "/staff-transfer"
                 }
             ]
         }
