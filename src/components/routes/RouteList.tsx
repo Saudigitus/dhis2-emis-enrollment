@@ -8,10 +8,10 @@ export default function RouteList() {
         {
             path: "/",
             layout: SimpleLayout,
-            component: () => <Navigate to="/enrollment" replace />
+            component: () => <Navigate to="/enrollment-teacher" replace />
         },
         {
-            path: "/enrollment",
+            path: "/enrollment-teacher",
             layout: FullLayout,
             component: () => <TableComponent />
         },

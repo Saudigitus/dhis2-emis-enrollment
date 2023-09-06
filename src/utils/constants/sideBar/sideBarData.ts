@@ -17,7 +17,7 @@ function sideBarData(): SideBarItemProps[] {
                     showBadge: false,
                     disabled: false,
                     appName: "SEMIS-Enrollment",
-                    route: "enrollment?sectionType=student&academicYear=2023",
+                    route: "enrollment?sectionType=student",
                     pathName: "/enrollment"
                 },
                 {
@@ -26,7 +26,7 @@ function sideBarData(): SideBarItemProps[] {
                     showBadge: false,
                     disabled: false,
                     appName: "SEMIS-Attendance",
-                    route: "attendance?sectionType=student&academicYear=2023",
+                    route: "attendance?sectionType=student",
                     pathName: "/attendance"
                 },
                 {
@@ -35,7 +35,7 @@ function sideBarData(): SideBarItemProps[] {
                     showBadge: false,
                     disabled: false,
                     appName: "SEMIS-Performance",
-                    route: "performance?sectionType=student&academicYear=2023",
+                    route: "performance?sectionType=student",
                     pathName: "/performance"
                 },
                 {
@@ -67,7 +67,7 @@ function sideBarData(): SideBarItemProps[] {
                     showBadge: false,
                     disabled: false,
                     appName: "SEMIS-Enrollment-Staff",
-                    route: "teacher?sectionType=staff&academicYear=2023",
+                    route: "enrollment-teacher?sectionType=staff",
                     pathName: "/enrollment-teacher"
                 },
                 {
@@ -76,7 +76,7 @@ function sideBarData(): SideBarItemProps[] {
                     showBadge: false,
                     disabled: false,
                     appName: "SEMIS-Attendance-Staff",
-                    route: "staff-attendance?sectionType=staff&academicYear=2023",
+                    route: "staff-attendance?sectionType=staff",
                     pathName: "/staff-attendance"
                 },
                 {
