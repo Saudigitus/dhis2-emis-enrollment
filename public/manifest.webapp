@@ -1,8 +1,8 @@
 {
   "appType": "APP",
-  "short_name": "SEMIS-Enrollment",
-  "name": "SEMIS-Enrollment",
-  "description": "SEMIS-Enrollment",
+  "short_name": "SEMIS-Enrollment-Staff",
+  "name": "SEMIS-Enrollment-Staff",
+  "description": "SEMIS-Enrollment-Staff",
   "version": "1.0.0",
   "launch_path": "index.html",
   "default_locale": "en",

@@ -1,7 +1,7 @@
 const config = {
     type: 'app',
-    name: 'SEMIS-Enrollment-Staff',
-    description:"SEMIS-Enrollment-Staff",
+    name: 'SEMIS-Enrollment-Staff-Staff',
+    description: "SEMIS-Enrollment-Staff-Staff",
 
     entryPoints: {
         app: './src/app/App.tsx',

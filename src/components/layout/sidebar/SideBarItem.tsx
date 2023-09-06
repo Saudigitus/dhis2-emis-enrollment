@@ -10,7 +10,7 @@ export default function SideBarItem({ title, subItems }: SideBarItemProps): Reac
             <SideBarItemTitle title={title} />
             <ul className={style.SideBarItemListContainer}>
                 {subItems.map((subItem, index) => (
-                    <SideBarSubItem route={subItem.route} key={index} icon={subItem.icon} label={subItem.label} showBadge={subItem.showBadge} disabled={subItem.disabled} appName={subItem.appName} />
+                    <SideBarSubItem pathName={subItem.pathName} route={subItem.route} key={index} icon={subItem.icon} label={subItem.label} showBadge={subItem.showBadge} disabled={subItem.disabled} appName={subItem.appName} />
                 ))}
             </ul>
         </section>
