@@ -88,6 +88,11 @@ interface TeiQueryResults {
         instances: [{
             trackedEntity: string
             attributes: attributesProps[]
+            enrollments: [{
+                enrollment: string
+                orgUnit: string
+                program: string
+            }]
         }]
     }
 }
