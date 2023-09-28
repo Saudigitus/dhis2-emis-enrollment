@@ -11,13 +11,13 @@ export const teiPostBody = (enrollmentsData: any[], programId: string, orgUnit: 
     for (const enrollmentData of enrollmentsData) {
         if (enrollmentData[0].type === "attribute") {
             enrollmentData.forEach((attribute: any) => {
-                if (attribute.value !== undefined) {
-                    form.attributes.push({ attribute: attribute.id, value: attribute.value })
+                if (attribute.assignedValue !== undefined && attribute.assignedValue !== false) {
+                    form.attributes.push({ attribute: attribute.id, value: attribute.assignedValue })
                 }
             });
         } else if (enrollmentData[0].type === "dataElement") {
             for (const [key, value] of Object.entries(reducer(enrollmentData))) {
-                form.events.push({
+            form.events.push({
                     occurredAt: enrollmentDate,
                     notes: [],
                     status: "ACTIVE",
