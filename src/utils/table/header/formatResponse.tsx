@@ -29,7 +29,7 @@ export function formatResponse(data: ProgramConfig): CustomAttributeProps[] {
                 type: VariablesTypes.Attribute
             }
         }).concat(
-            Object.keys(originalData).length > 0
+            Object.keys(originalData)?.length > 0
                 ? originalData?.programStageDataElements?.map((programStageDataElement) => {
                     return {
                         id: programStageDataElement.dataElement.id,

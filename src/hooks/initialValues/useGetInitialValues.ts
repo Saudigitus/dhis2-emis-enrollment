@@ -22,4 +22,8 @@ export function useGetInitialValues() {
             dataElements: dataElementsQuerybuilder
         })
     }
+
+    return {
+        isSetSectionType: location?.search.includes("sectionType")
+    }
 }

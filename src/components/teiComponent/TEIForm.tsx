@@ -11,7 +11,7 @@ function TEIGenericForm() {
   const { returnPattern, loadingCodes, generatedVariables } = useGetPatternCode()
 
   useEffect(() => {
-    if (attributes.length > 0) {
+    if (attributes?.length > 0) {
       void returnPattern(attributes)
     }
   }, [])

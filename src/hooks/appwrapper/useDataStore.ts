@@ -27,7 +27,7 @@ export function useDataStore() {
     })
 
     useEffect(() => {
-        setDataStoreState(data?.config[0])
+        setDataStoreState(data?.config)
     }, [data])
 
     return {
