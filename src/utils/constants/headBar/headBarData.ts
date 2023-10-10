@@ -14,7 +14,7 @@ function headBarData(selectedOptions: SelectedOptionsTypes): HeadBarTypes[] {
             label: "Grade",
             value: selectedOptions?.grade ?? "Select a grade",
             placeholder: "Search for grade",
-            dataElementId: "kNNoif9gASf",
+            dataElementId: "zDXPJwCWJ1s",
             component: "menuItemContainer"
         },
         {
@@ -22,7 +22,7 @@ function headBarData(selectedOptions: SelectedOptionsTypes): HeadBarTypes[] {
             label: "Class",
             value: selectedOptions?.class ?? "Select a class",
             placeholder: "Search for class",
-            dataElementId: "RhABRLO2Fae",
+            dataElementId: "AYYkN0fkxzh",
             component: "menuItemContainer"
         },
         {
@@ -30,7 +30,7 @@ function headBarData(selectedOptions: SelectedOptionsTypes): HeadBarTypes[] {
             label: "Academic Year",
             value: selectedOptions?.academicYear ?? "Select academic year",
             placeholder: "Search for academic year",
-            dataElementId: "iDSrFrrVgmX",
+            dataElementId: "hyrJhjQXAue",
             component: "menuItemContainer"
         }
     ]

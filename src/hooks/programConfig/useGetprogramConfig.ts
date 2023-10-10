@@ -25,7 +25,7 @@ export function useGetProgramConfig() {
     const setProgramConfigState = useSetRecoilState(ProgramConfigState);
     const { hide, show } = useShowAlerts()
 
-    const { data, loading } = useDataQuery<{ results: ProgramConfig }>(PROGRAMQUERY("wQaiD2V27Dp"), {
+    const { data, loading } = useDataQuery<{ results: ProgramConfig }>(PROGRAMQUERY("a6t4ASRXwPZ"), {
         onError(error) {
             show({
                 message: `${("Could not get data")}: ${error.message}`,

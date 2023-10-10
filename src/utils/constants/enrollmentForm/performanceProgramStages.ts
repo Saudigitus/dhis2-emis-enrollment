@@ -1,1 +1,2 @@
-export const performanceProgramStages = ["mBEhR2M4DRQ", "aDmsN3qemOA", "rZGdcch2PCh", "hcrjYJ6Yl5F"]
+// Mapping program stages: PERFORMANCE (if applicable) and FINAL RESULT
+export const performanceProgramStages = ["Re0wdGlPMJn"]

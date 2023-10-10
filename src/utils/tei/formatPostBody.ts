@@ -58,7 +58,7 @@ export const teiPostBody = (enrollmentsData: any[], programId: string, orgUnit: 
                     }
                 ],
                 orgUnit,
-                trackedEntityType: "eMLK4VQm3Kj"
+                trackedEntityType: "cflHpY0b39w"
             }
         ]
     }
