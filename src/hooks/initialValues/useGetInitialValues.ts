@@ -1,10 +1,11 @@
 import { useSetRecoilState } from "recoil"
 import { HeaderFieldsState } from "../../schema/headersSchema"
-import { paramsMapping } from "../../utils/commons/paramsMapping";
 import { useLocation } from "react-router-dom";
+import useDataElementsParamMapping from "../dataElements/useDataElementsParamMapping";
 
 export function useGetInitialValues() {
     const location = useLocation()
+    const paramsMapping = useDataElementsParamMapping();
     const setHeaderFields = useSetRecoilState(HeaderFieldsState)
     const entries = location?.search?.split('?')?.[1]?.split('&')?.map((item) => item.split('='))
     const dataElementsQuerybuilder = []

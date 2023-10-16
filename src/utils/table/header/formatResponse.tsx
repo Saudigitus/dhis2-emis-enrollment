@@ -1,14 +1,14 @@
+import { type dataStoreRecord } from "../../../schema/dataStoreSchema";
 import { Attribute } from "../../../types/generated/models";
 import { type ProgramConfig } from "../../../types/programConfig/ProgramConfig";
 import { VariablesTypes, type CustomAttributeProps } from "../../../types/table/AttributeColumns";
 import { useMemo } from "react";
 
-export function formatResponse(data: ProgramConfig): CustomAttributeProps[] {
+export function formatResponse(data: ProgramConfig, dataStoreData: dataStoreRecord): CustomAttributeProps[] {
     const headerResponse = useMemo(() => {
         // TODO: Remove this when the API is fixed and solve this bug 👇
         // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-        const originalData = ((data?.programStages?.find(programStge => programStge.id === "Ni2qsy2WJn4")) ?? {} as ProgramConfig["programStages"][0])
-
+        const originalData = ((data?.programStages?.find(programStge => programStge.id === dataStoreData?.registration?.programStage)) ?? {} as ProgramConfig["programStages"][0])
         return data?.programTrackedEntityAttributes?.map((item) => {
             return {
                 id: item.trackedEntityAttribute.id,

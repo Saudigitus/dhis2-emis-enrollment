@@ -10,7 +10,7 @@ export default function FullLayout({ children }: { children: React.ReactNode }) 
     useGetInitialValues()
     const { isSetSectionType } = useGetInitialValues()
     const { getDataStoreData } = getSelectedKey()
-    const { loading } = useGetProgramConfig(getDataStoreData.program)
+    const { loading } = useGetProgramConfig(getDataStoreData.program);
 
     if (!isSetSectionType) {
         return (

@@ -34,12 +34,14 @@ interface transfer {
 export interface dataStoreRecord {
     attendance: attendance
     key: string
+    trackedEntityType: string
     lastUpdate: string
     performance: performance
     program: string
     registration: registration
     ["socio-economics"]: programStages
     transfer: transfer
+    ["final-result"]: programStages
 
 }
 

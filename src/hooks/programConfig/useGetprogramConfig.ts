@@ -27,29 +27,25 @@ export function useGetProgramConfig(program: string) {
     const setProgramConfigState = useSetRecoilState(ProgramConfigState);
     const { hide, show } = useShowAlerts()
 
-    const { data, loading, refetch } = useDataQuery<{ results: ProgramConfig }>(PROGRAMQUERY(program), {
+    const { loading, refetch } = useDataQuery<{ results: ProgramConfig }>(PROGRAMQUERY(program), {
         onError(error) {
             show({
-                message: `${("Could not get data")}: ${error.message}`,
+                message: `${("Could not get program")}: ${error.message}`,
                 type: { critical: true }
             });
             setTimeout(hide, 5000);
+        },
+        onComplete(response) {
+            setProgramConfigState(response?.results);
         },
         lazy: true
     })
 
     useEffect(() => {
-        if (isSetSectionType && program !== undefined) {
+        if (isSetSectionType && (program !== undefined || program !== null)) {
             void refetch()
         }
-    }, [isSetSectionType, program])
+    }, [isSetSectionType])
 
-    useEffect(() => {
-        setProgramConfigState(data?.results);
-    }, [loading])
-
-    return {
-        data,
-        loading
-    }
+    return { loading }
 }
