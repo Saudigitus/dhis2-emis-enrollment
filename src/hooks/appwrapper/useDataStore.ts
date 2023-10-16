@@ -23,12 +23,11 @@ export function useDataStore() {
                 type: { critical: true }
             });
             setTimeout(hide, 5000);
+        },
+        onComplete(data) {
+            setDataStoreState(data?.config)
         }
     })
-
-    useEffect(() => {
-        setDataStoreState(data?.config)
-    }, [data])
 
     return {
         data,
