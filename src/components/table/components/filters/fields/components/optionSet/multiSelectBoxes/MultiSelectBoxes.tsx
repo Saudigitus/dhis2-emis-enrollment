@@ -40,10 +40,10 @@ function MultiSelectBoxes(props: MultiSelectBoxesProps) {
     }
 
     const isChecked = (e: string) => {
-        if (value.length === 0) {
+        if (value?.length === 0) {
             return false;
         }
-        return value.split(",").filter((x: string) => x === e).length > 0;
+        return value.split(",").filter((x: string) => x === e)?.length > 0;
     }
 
     return options?.optionSet.options.map(({ label, value }, index: number) => (

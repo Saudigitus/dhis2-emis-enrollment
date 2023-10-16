@@ -31,7 +31,7 @@ function DialogSelectColumns(props: DialogSelectColumnsProps) {
     };
 
     const handleSave = () => {
-        updateVariables(columnsList.length > 0 ? columnsList : headers)
+        updateVariables(columnsList?.length > 0 ? columnsList : headers)
 
         onClose()
     };
@@ -50,7 +50,7 @@ function DialogSelectColumns(props: DialogSelectColumnsProps) {
                 <DialogTitle>{i18n.t('Columns to show in the table')}</DialogTitle>
                 <DialogContent>
                     <DragDropList
-                        listItems={columnsList.length > 0 ? columnsList : headers}
+                        listItems={columnsList?.length > 0 ? columnsList : headers}
                         handleUpdateListOrder={handleUpdateListOrder}
                         handleToggle={handleToggle}
                     />

@@ -40,7 +40,7 @@ function RenderRows({ headerData, rowsData }: RenderHeaderProps): React.ReactEle
     const classes = useStyles()
     const { baseUrl } = useConfig()
 
-    if (rowsData.length === 0) {
+    if (rowsData?.length === 0) {
         return (
             <RowTable
                 className={classes.row}

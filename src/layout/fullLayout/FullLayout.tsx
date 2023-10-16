@@ -12,9 +12,7 @@ export default function FullLayout({ children }: { children: React.ReactNode }) 
     const { getDataStoreData } = getSelectedKey()
     const { loading } = useGetProgramConfig(getDataStoreData.program)
 
-    console.log(getDataStoreData.program === undefined);
-
-    if (!isSetSectionType || getDataStoreData.program === undefined) {
+    if (!isSetSectionType) {
         return (
             <CenteredContent>
                 Cant load the app without section type

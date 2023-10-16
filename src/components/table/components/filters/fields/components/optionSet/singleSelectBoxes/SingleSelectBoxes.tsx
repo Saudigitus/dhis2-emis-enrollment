@@ -27,7 +27,7 @@ function SingleSelectBoxes(props: SingleSelectBoxesProps) {
         onChange(e.value, id)
     }
     const isChecked = (localValue: string) => {
-        return (value.length > 0 && value.includes(localValue));
+        return (value?.length > 0 && value.includes(localValue));
     }
 
     return options?.optionSet.options.map(({ label, value }, index: number) => (

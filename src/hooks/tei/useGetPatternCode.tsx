@@ -31,7 +31,7 @@ export const useGetPatternCode = () => {
         for (const variable of variables) {
             const { pattern = "", name: id }: CustomAttributeProps = variable
             let code: QueryResults = { results: { value: "" } }
-            if (pattern.length > 0) {
+            if (pattern?.length > 0) {
                 console.log(pattern, id);
                 code = await engine.query(TEI_ATTRIBUTES, { variables: { id } })
                 patterns.push({ [id]: code?.results?.value })

@@ -24,10 +24,8 @@ const PROGRAMQUERY = (id: string) => ({
 
 export function useGetProgramConfig(program: string) {
     const { isSetSectionType } = useGetInitialValues()
-    console.log(program, isSetSectionType, "before");
     const setProgramConfigState = useSetRecoilState(ProgramConfigState);
     const { hide, show } = useShowAlerts()
-    console.log(program, isSetSectionType, "after");
 
     const { data, loading, refetch } = useDataQuery<{ results: ProgramConfig }>(PROGRAMQUERY(program), {
         onError(error) {

@@ -56,7 +56,7 @@ function ModalContentComponent({ setOpen }: ContentProps): React.ReactElement {
 
   function onSubmit() {
     const allFields = fieldsWitValue.flat()
-    if (allFields.filter((element: any) => (element?.assignedValue === undefined && element.required)).length === 0) {
+    if (allFields.filter((element: any) => (element?.assignedValue === undefined && element.required))?.length === 0) {
       void postTei({ data: teiPostBody(fieldsWitValue, (getProgram != null) ? getProgram.id : "", orgUnit ?? "", values?.eventdatestaticform ?? "") })
     }
   }
@@ -67,7 +67,7 @@ function ModalContentComponent({ setOpen }: ContentProps): React.ReactElement {
     { id: "saveandcontinue", type: "submit", label: "Save and close", primary: true, disabled: loading, onClick: () => { setClickedButton("saveandcontinue"); setClicked(true) } }
   ];
 
-  if (enrollmentsData.length < 1 || loadingCodes) {
+  if (enrollmentsData?.length < 1 || loadingCodes) {
     return (
       <CenteredContent>
         <CircularLoader />
@@ -78,7 +78,7 @@ function ModalContentComponent({ setOpen }: ContentProps): React.ReactElement {
   function onChange(e: any): void {
     const sections = enrollmentsData;
     for (const [key, value] of Object.entries(e)) {
-      for (let i = 0; i < sections.length; i++) {
+      for (let i = 0; i < sections?.length; i++) {
         if (sections[i].find((element: any) => element.id === key) !== null && sections[i].find((element: any) => element.id === key) !== undefined) {
           // Sending onChanging form value to variables object
           sections[i].find((element: any) => element.id === key).assignedValue = value
