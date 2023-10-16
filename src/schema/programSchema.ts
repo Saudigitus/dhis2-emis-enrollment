@@ -66,8 +66,6 @@ export const programSchema = z.object({
     })
 })
 
-// type ProgramSchemaConfig = z.infer<typeof programSchema>
-
 export const ProgramConfigState = atom<ProgramConfig>({
     key: "programConfig-get-state",
     default: undefined

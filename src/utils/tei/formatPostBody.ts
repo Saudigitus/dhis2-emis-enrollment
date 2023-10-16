@@ -1,8 +1,7 @@
 import { type formType } from "../../types/form/initialFormTypes";
 import { reducer } from "../commons/formatDistinctValue";
-import { performanceProgramStages } from "../constants/enrollmentForm/performanceProgramStages";
 
-export const teiPostBody = (enrollmentsData: any[], programId: string, orgUnit: string, enrollmentDate: string) => {
+export const teiPostBody = (enrollmentsData: any[], programId: string, orgUnit: string, enrollmentDate: string, programStagesToSave: string[], trackedEntityType: string) => {
     const form: formType = {
         attributes: [],
         events: []
@@ -17,7 +16,7 @@ export const teiPostBody = (enrollmentsData: any[], programId: string, orgUnit: 
             });
         } else if (enrollmentData[0].type === "dataElement") {
             for (const [key, value] of Object.entries(reducer(enrollmentData))) {
-            form.events.push({
+                form.events.push({
                     occurredAt: enrollmentDate,
                     notes: [],
                     status: "ACTIVE",
@@ -31,13 +30,13 @@ export const teiPostBody = (enrollmentsData: any[], programId: string, orgUnit: 
         }
     }
 
-    performanceProgramStages.forEach(performanceProgramStage => {
+    programStagesToSave.forEach(programStageToSave => {
         form.events.push({
             occurredAt: enrollmentDate,
             notes: [],
             status: "ACTIVE",
             program: programId,
-            programStage: performanceProgramStage,
+            programStage: programStageToSave,
             orgUnit,
             scheduledAt: enrollmentDate
         })
@@ -58,7 +57,7 @@ export const teiPostBody = (enrollmentsData: any[], programId: string, orgUnit: 
                     }
                 ],
                 orgUnit,
-                trackedEntityType: "eMLK4VQm3Kj"
+                trackedEntityType
             }
         ]
     }

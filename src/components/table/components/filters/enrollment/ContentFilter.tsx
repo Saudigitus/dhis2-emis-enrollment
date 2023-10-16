@@ -121,7 +121,7 @@ function ContentFilter(props: ContentFilterProps) {
     }
 
     useEffect(() => {
-        if (resetValues.length > 0) {
+        if (resetValues?.length > 0) {
             onQuerySubmit()
             setresetValues("")
         }
@@ -156,7 +156,7 @@ function ContentFilter(props: ContentFilterProps) {
                 ))
             }
             <div style={{ marginTop: 0 }}>
-                {headers?.filter(x => !localFilters.includes(x)).length > 0 &&
+                {headers?.filter(x => !localFilters.includes(x))?.length > 0 &&
                     <Button style={{
                         color: "rgb(33, 41, 52)",
                         fontSize: 14,
