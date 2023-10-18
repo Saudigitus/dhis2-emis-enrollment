@@ -16,9 +16,9 @@ interface performance {
 
 interface registration {
     academicYear: string
-    grade: string
+    position: string
     programStage: string
-    section: string
+    employmentType: string
 }
 
 interface dataStoreRecord {

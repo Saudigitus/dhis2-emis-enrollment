@@ -1,6 +1,5 @@
 import { type formType } from "../../types/form/initialFormTypes";
 import { reducer } from "../commons/formatDistinctValue";
-import { performanceProgramStages } from "../constants/enrollmentForm/performanceProgramStages";
 
 export const teiPostBody = (enrollmentsData: any[], programId: string, orgUnit: string, enrollmentDate: string) => {
     const form: formType = {
@@ -11,8 +10,8 @@ export const teiPostBody = (enrollmentsData: any[], programId: string, orgUnit: 
     for (const enrollmentData of enrollmentsData) {
         if (enrollmentData[0].type === "attribute") {
             enrollmentData.forEach((attribute: any) => {
-                if (attribute.value !== undefined) {
-                    form.attributes.push({ attribute: attribute.id, value: attribute.value })
+                if (attribute.assignedValue !== undefined && attribute.assignedValue !== false) {
+                    form.attributes.push({ attribute: attribute.id, value: attribute.assignedValue })
                 }
             });
         } else if (enrollmentData[0].type === "dataElement") {
@@ -46,7 +45,7 @@ export const teiPostBody = (enrollmentsData: any[], programId: string, orgUnit: 
                     }
                 ],
                 orgUnit,
-                trackedEntityType: "EmSCvAyT8T0"
+                trackedEntityType: "qNcIYjSgoOq"
             }
         ]
     }

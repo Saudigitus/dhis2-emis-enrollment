@@ -23,7 +23,7 @@ export function formatResponseTEI(attributes: ProgramConfig) {
                 header: trackedEntityAttribute?.trackedEntityAttribute?.displayName,
                 type: VariablesTypes.Attribute,
                 programStage: "",
-                value: undefined
+                assignedValue: undefined
             });
         }
         return headers;

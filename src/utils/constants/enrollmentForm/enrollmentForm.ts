@@ -22,7 +22,7 @@ const staticForm = () => {
       displayName: "Registering School",
       header: "Registering School",
       type: VariablesTypes.DataElement,
-      value: undefined
+      assignedValue: undefined
     },
     enrollmentDate: {
       required: true,
@@ -42,7 +42,7 @@ const staticForm = () => {
       displayName: "Enrollment date",
       header: "Enrollment date",
       type: VariablesTypes.DataElement,
-      value: format(new Date(), "yyyy-MM-dd")
+      assignedValue: format(new Date(), "yyyy-MM-dd")
     }
   }
 }
