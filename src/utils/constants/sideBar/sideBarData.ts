@@ -83,7 +83,7 @@ function sideBarData(): SideBarItemProps[] {
                     icon: logOut,
                     label: "Transfer",
                     showBadge: false,
-                    disabled: true,
+                    disabled: false,
                     appName: "SEMIS-Staff-Transfer",
                     route: "staff-transfer",
                     pathName: "/staff-transfer"
