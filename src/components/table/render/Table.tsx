@@ -33,7 +33,7 @@ function Table() {
 
     useEffect(() => {
         void getData(page, pageSize)
-    }, [columns, useQuery(), headerFieldsState, page, pageSize, refetch])
+    }, [useQuery(), headerFieldsState, page, pageSize, refetch])
 
     const onPageChange = (newPage: number) => {
         setpage(newPage)

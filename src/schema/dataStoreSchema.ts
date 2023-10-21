@@ -4,6 +4,11 @@ interface attendance {
     absenceReason: string
     programStage: string
     status: string
+    statusOptions: [{
+        code: string
+        icon: string
+        key: string
+    }]
 }
 
 interface programStages {
@@ -16,12 +21,18 @@ interface performance {
 
 interface registration {
     academicYear: string
-    grade: string
+    position: string
     programStage: string
-    section: string
+    employmentType: string
 }
 
-interface dataStoreRecord {
+interface transfer {
+    destinySchool: string
+    programStage: string
+    status: string
+}
+
+export interface dataStoreRecord {
     attendance: attendance
     key: string
     lastUpdate: string
@@ -29,10 +40,11 @@ interface dataStoreRecord {
     program: string
     registration: registration
     ["socio-economics"]: programStages
+    transfer: transfer
 
 }
 
-export const DataStoreState = atom<dataStoreRecord | null>({
+export const DataStoreState = atom<dataStoreRecord[]>({
     key: "dataStore-get-state",
-    default: null
+    default: []
 })

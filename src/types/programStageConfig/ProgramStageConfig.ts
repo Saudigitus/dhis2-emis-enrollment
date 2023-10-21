@@ -14,11 +14,10 @@ export interface ProgramStageConfig {
                 valueType: string
                 optionSet: {
                     id: string
-                    options: {
-                        [x: string]: any
+                    options: [{
                         value: string
                         label: string
-                    }
+                    }]
                 }
             }
         }

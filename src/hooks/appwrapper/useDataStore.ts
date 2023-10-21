@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { useDataQuery } from "@dhis2/app-runtime"
 import { useSetRecoilState } from 'recoil';
 import { DataStoreState } from '../../schema/dataStoreSchema';
@@ -23,12 +22,11 @@ export function useDataStore() {
                 type: { critical: true }
             });
             setTimeout(hide, 5000);
+        },
+        onComplete(data) {
+            setDataStoreState(data?.config)
         }
     })
-
-    useEffect(() => {
-        setDataStoreState(data?.config[0])
-    }, [data])
 
     return {
         data,

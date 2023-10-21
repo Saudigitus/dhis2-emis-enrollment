@@ -8,7 +8,6 @@ import { RecoilRoot } from 'recoil';
 import { DataStoreProvider } from "@dhis2/app-service-datastore";
 import { CircularLoader, CenteredContent } from "@dhis2/ui";
 import AppWrapper from './AppWrapper';
-import AppConfigurations from './AppConfigurations';
 
 function App() {
     return (
@@ -22,9 +21,7 @@ function App() {
         >
             <RecoilRoot>
                 <AppWrapper>
-                    <AppConfigurations>
-                        <Router />
-                    </AppConfigurations>
+                    <Router />
                 </AppWrapper>
             </RecoilRoot>
         </DataStoreProvider>

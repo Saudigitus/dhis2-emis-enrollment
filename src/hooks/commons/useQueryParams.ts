@@ -3,6 +3,7 @@ import React from 'react'
 
 const useParams = () => {
     const [searchParams, setSearchParams] = useSearchParams()
+
     const add = (key: string, value: string) => {
         searchParams.set(key, value)
         setSearchParams(searchParams)
@@ -19,8 +20,8 @@ const useParams = () => {
         return {
             school: useQuery().get('school'),
             schoolName: useQuery().get('schoolName'),
-            grade: useQuery().get('grade'),
-            class: useQuery().get('class'),
+            position: useQuery().get('position'),
+            employmentType: useQuery().get('employmentType'),
             academicYear: useQuery().get('academicYear')
         }
     }
