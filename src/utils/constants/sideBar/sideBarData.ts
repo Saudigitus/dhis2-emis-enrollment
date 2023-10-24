@@ -67,8 +67,8 @@ function sideBarData(): SideBarItemProps[] {
                     showBadge: false,
                     disabled: false,
                     appName: "SEMIS-Enrollment-Staff",
-                    route: "teacher?sectionType=staff&academicYear=2023",
-                    pathName: "/teacher"
+                    route: "enrollment-teacher?sectionType=staff&academicYear=2023",
+                    pathName: "/enrollment-teacher"
                 },
                 {
                     icon: glyph,
