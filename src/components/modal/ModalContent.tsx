@@ -14,6 +14,7 @@ import { useGetPatternCode } from "../../hooks/tei/useGetPatternCode";
 import { useGetAttributes } from "../../hooks/programs/useGetAttributes";
 import { teiPostBody } from "../../utils/tei/formatPostBody";
 import { onSubmitClicked } from "../../schema/formOnSubmitClicked";
+import { getSelectedKey } from "../../utils/commons/dataStore/getSelectedKey";
 interface ContentProps {
   setOpen: (value: boolean) => void
 }
@@ -24,6 +25,7 @@ function ModalContentComponent({ setOpen }: ContentProps): React.ReactElement {
   const formRef: React.MutableRefObject<FormApi<IForm, Partial<IForm>>> = useRef(null);
   const orgUnit = useQuery().get("school");
   const orgUnitName = useQuery().get("schoolName");
+  const { getDataStoreData } = getSelectedKey();
   const { enrollmentsData } = useGetEnrollmentForm();
   const [, setClicked] = useRecoilState<boolean>(onSubmitClicked);
   const [values, setValues] = useState<object>({})
@@ -57,7 +59,7 @@ function ModalContentComponent({ setOpen }: ContentProps): React.ReactElement {
   function onSubmit() {
     const allFields = fieldsWitValue.flat()
     if (allFields.filter((element: any) => (element?.value === undefined && element.required)).length === 0) {
-      void postTei({ data: teiPostBody(fieldsWitValue, (getProgram != null) ? getProgram.id : "", orgUnit ?? "", values?.eventdatestaticform ?? "") })
+      void postTei({ data: teiPostBody(fieldsWitValue, (getProgram != null) ? getProgram.id : "", orgUnit ?? "", values?.eventdatestaticform ?? "", getDataStoreData?.trackedEntityType) })
     }
   }
 
