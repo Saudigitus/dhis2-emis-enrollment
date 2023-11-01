@@ -5,6 +5,7 @@ export const getDataStoreKeys = {
     getDataStoreKey: () => getSelectedKey().getDataStoreData.key,
     getPerformace: () => getSelectedKey().getDataStoreData.performance,
     getProgramId: () => getSelectedKey().getDataStoreData.program,
+    getTrackedEntityType: () => getSelectedKey().getDataStoreData.trackedEntityType,
     getRegistration: () => getSelectedKey().getDataStoreData.registration,
     getSocioEconomics: () => getSelectedKey().getDataStoreData['socio-economics'],
     getTransfer: () => getSelectedKey().getDataStoreData.transfer,

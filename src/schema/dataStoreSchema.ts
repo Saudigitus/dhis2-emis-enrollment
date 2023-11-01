@@ -38,6 +38,7 @@ export interface dataStoreRecord {
     lastUpdate: string
     performance: performance
     program: string
+    trackedEntityType: string
     registration: registration
     ["socio-economics"]: programStages
     transfer: transfer

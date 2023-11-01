@@ -1,8 +1,7 @@
 import { type formType } from "../../types/form/initialFormTypes";
 import { reducer } from "../commons/formatDistinctValue";
-import { performanceProgramStages } from "../constants/enrollmentForm/performanceProgramStages";
 
-export const teiPostBody = (enrollmentsData: any[], programId: string, orgUnit: string, enrollmentDate: string) => {
+export const teiPostBody = (enrollmentsData: any[], programId: string, orgUnit: string, enrollmentDate: string, trackedEntityType: string) => {
     const form: formType = {
         attributes: [],
         events: []
@@ -46,7 +45,7 @@ export const teiPostBody = (enrollmentsData: any[], programId: string, orgUnit: 
                     }
                 ],
                 orgUnit,
-                trackedEntityType: "EmSCvAyT8T0"
+                trackedEntityType
             }
         ]
     }
