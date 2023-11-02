@@ -16,6 +16,7 @@ interface EventQueryProps {
     ouMode: string
     program: string
     order: string
+    programStatus: string
     programStage: string
     orgUnit: string
     filter?: string[]
@@ -31,13 +32,14 @@ interface TeiQueryProps {
     order: string
 }
 
-const EVENT_QUERY = ({ ouMode, page, pageSize, program, order, programStage, filter, orgUnit, filterAttributes }: EventQueryProps) => ({
+const EVENT_QUERY = ({ ouMode, page, pageSize, program, order, programStage, filter, orgUnit, filterAttributes, programStatus }: EventQueryProps) => ({
     results: {
         resource: "tracker/events",
         params: {
             order,
             page,
             pageSize,
+            programStatus,
             ouMode,
             program,
             programStage,
@@ -120,7 +122,8 @@ export function useTableData() {
                 programStage: getDataStoreData?.registration?.programStage as unknown as string,
                 filter: headerFieldsState?.dataElements,
                 filterAttributes: headerFieldsState?.attributes,
-                orgUnit: school
+                orgUnit: school,
+                programStatus: "ACTIVE",
             })).catch((error) => {
                 show({
                     message: `${("Could not get data")}: ${error.message}`,
