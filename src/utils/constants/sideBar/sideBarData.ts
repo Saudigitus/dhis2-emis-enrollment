@@ -44,7 +44,7 @@ function sideBarData(): SideBarItemProps[] {
                     showBadge: false,
                     disabled: false,
                     appName: "SEMIS-Final-Result",
-                    route: "final-result?sectionType=student",
+                    route: "final-result?sectionType=student&academicYear=2023",
                     pathName: "/final-result"
                 },
                 {
@@ -85,7 +85,7 @@ function sideBarData(): SideBarItemProps[] {
                     showBadge: false,
                     disabled: false,
                     appName: "SEMIS-Staff-Transfer",
-                    route: "staff-transfer",
+                    route: "staff-transfer?sectionType=staff",
                     pathName: "/staff-transfer"
                 }
             ]
