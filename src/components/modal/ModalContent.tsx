@@ -16,9 +16,7 @@ import { teiPostBody } from "../../utils/tei/formatPostBody";
 import { onSubmitClicked } from "../../schema/formOnSubmitClicked";
 import useGetUsedPProgramStages from "../../hooks/programStages/useGetUsedPProgramStages";
 import { getSelectedKey } from "../../utils/commons/dataStore/getSelectedKey";
-interface ContentProps {
-  setOpen: (value: boolean) => void
-}
+import { ContentProps } from "../../types/common/components";
 
 function ModalContentComponent({ setOpen }: ContentProps): React.ReactElement {
   const getProgram = useRecoilValue(ProgramConfigState);

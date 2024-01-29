@@ -5,7 +5,7 @@ import InputNumber from "./fields/InputNumber.js";
 import InputText from "./fields/InputText.js";
 import SingleSelectField from "./fields/SingleSelect.js";
 import InputArea from "./fields/InputArea.js";
-import { type CustomAttributeProps } from "../../types/table/AttributeColumns.js";
+import { type CustomAttributeProps } from "../../types/common/components";
 import { Attribute } from "../../types/generated/models.js";
 import RadioButton from "./fields/RadioButton.js";
 import { type GenericFieldsComponentProps } from "../../types/fields/GenericFieldsTypes.js";

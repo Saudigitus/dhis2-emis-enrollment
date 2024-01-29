@@ -1,10 +1,7 @@
 import React from 'react'
+import {AppConfigurationsProps} from '../types/common/components'
 
-interface Props {
-    children: React.ReactNode
-}
-
-export default function AppConfigurations(props: Props) {
+export default function AppConfigurations(props: AppConfigurationsProps) {
     return (
         <>{props.children}</>
     )

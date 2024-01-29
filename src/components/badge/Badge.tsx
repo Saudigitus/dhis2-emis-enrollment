@@ -1,9 +1,6 @@
 import React from 'react'
 import style from "./Badge.module.css"
-
-interface BadgeProps {
-    value: string
-}
+import { type BadgeProps } from '../../types/common/components'
 
 export default function Badge(props: BadgeProps): React.ReactElement {
     const { value } = props;

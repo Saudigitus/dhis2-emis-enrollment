@@ -1,7 +1,7 @@
 import { MenuItem, FlyoutMenu } from "@dhis2/ui";
 import React from "react";
 import { Divider } from "@material-ui/core"
-import { type FlyoutOptionsProps } from "../../types/buttons/FlyoutOptions";
+import {  FlyoutOptionsProps } from "../../types/common/components";
 
 function FlyoutMenuComponent({ options}: {options: FlyoutOptionsProps[]}): React.ReactElement {
   return (

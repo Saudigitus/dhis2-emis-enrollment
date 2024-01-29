@@ -1,13 +1,7 @@
 import React from "react";
 import { Modal, ModalTitle, ModalContent } from "@dhis2/ui";
 import styles from "./modal.module.css";
-
-interface ModalProps {
-  open: boolean
-  setOpen: (value: boolean) => void
-  title: string
-  children: React.ReactNode
-}
+import { ModalProps } from "../../types/common/components";
 
 function ModalComponent({
   open,

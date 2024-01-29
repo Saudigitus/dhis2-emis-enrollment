@@ -2,7 +2,7 @@ import { useSetRecoilState } from "recoil";
 import { ProgramConfigState } from "../../schema/programSchema";
 import { useDataQuery } from "@dhis2/app-runtime";
 import { useEffect } from "react";
-import { type ProgramConfig } from "../../types/programConfig/ProgramConfig";
+import { ProgramConfig } from "../../types/common/components";
 import useShowAlerts from "../commons/useShowAlert";
 import { useGetInitialValues } from "../initialValues/useGetInitialValues";
 

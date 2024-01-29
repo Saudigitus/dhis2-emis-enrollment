@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import style from "./MainHeader.module.css"
 import { DropdownButton, FlyoutMenu } from "@dhis2/ui"
-import { type HeadBarTypes } from '../../../types/headBar/HeadBarTypes'
+import { HeadBarTypes } from '../../../types/common/components'
 import info from "../../../assets/images/headbar/info.svg"
 import { SimpleSearch } from '../../search'
 import { componentMapping } from '../../../utils/commons/componentMapping'

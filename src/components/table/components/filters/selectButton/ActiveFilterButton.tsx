@@ -3,6 +3,7 @@ import createSvgIcon from '@material-ui/icons/utils/createSvgIcon';
 import { makeStyles } from '@material-ui/styles';
 import classNames from 'classnames';
 import React, { useState } from 'react'
+import { ActiveFilterButtonProps } from '../../../../../types/common/components';
 
 const ClearIcon = createSvgIcon(
     <React.Fragment>
@@ -26,15 +27,6 @@ const useStyles = makeStyles(() => ({
     }
 }));
 
-interface ActiveFilterButtonProps {
-    onChange: () => void
-    iconClass: any
-    title: string
-    arrowIconElement: React.ReactElement
-    buttonText: string
-    onClear: () => void
-    innerRef: (instance: HTMLDivElement | null) => void
-}
 
 const MAX_LENGTH_OF_VALUE = 10;
 function ActiveFilterButton(props: ActiveFilterButtonProps) {

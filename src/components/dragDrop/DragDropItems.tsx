@@ -1,41 +1,24 @@
-
 import { Checkbox, IconReorder24 } from '@dhis2/ui';
 import TableCell from '@material-ui/core/TableCell';
 import React from 'react'
-
-const style = {
-    outline: 'none'
-};
-
-interface DragDropItemsProps {
-    id: string
-    visible: boolean
-    text: string
-    classes?: {
-        checkbox: string
-    }
-    handleToggle: (id: string) => void
-}
+import styles from './DragDropItems.module.css'
+import { DragDropItemsProps } from '../../types/common/components';
 
 function DragDropItems(props: DragDropItemsProps) {
     const { handleToggle, id, text } = props;
+
     return (
-        <tr key={props.id} tabIndex={-1} style={{
-            ...style
-        }}>
+        <tr key={props.id} tabIndex={-1} className={styles.tr} >
             <TableCell component="th" scope="row">
                 <Checkbox
                     checked={props.visible}
                     tabIndex={-1}
                     onChange={() => { handleToggle(id); }}
                     label={text}
-                    // className={classes.checkbox}
                     valid dense />
             </TableCell>
             <TableCell>
-                <span style={{
-                    float: 'right'
-                }}>
+                <span className={styles.iconContainer} >
                     <IconReorder24 />
                 </span>
             </TableCell>

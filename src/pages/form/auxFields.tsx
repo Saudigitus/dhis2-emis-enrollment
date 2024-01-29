@@ -1,5 +1,5 @@
 import { Attribute } from "../../types/generated/models";
-import { type CustomAttributeProps } from "../../types/table/attributeColumns";
+import { CustomAttributeProps } from "../../types/common/components";
 
 export const fieldsData: CustomAttributeProps[] = [
   {
