@@ -6,9 +6,9 @@
     justify-content: center;
     align-items: flex-end;
     border-radius: 24px;
-    background: #FF5F5F;
+    background: var(--badge-background-error-color);
     font-family: var(--primary-font-family);
-    color: #FFF;
+    color: var(--secondary-colort-white);
     font-size: 12px;
     font-style: normal;
     font-weight: 500;

@@ -3,8 +3,8 @@
 .MainHeaderContainer {
     height: auto;
     width: 100%;
-    background-color: var(--secondary-colort);
-    border-bottom: 1px solid #D0CCCC;
+    background-color: var(--secondary-colort-white);
+    border-bottom: 1px solid var(--main-header-border-color);
     display: flex;
     flex-wrap: wrap;
 }
@@ -39,7 +39,7 @@
 }
 
 .HeaderItemContainer span {
-    color: black !important;
+    color: var(--black-color) !important;
     margin-right: 12px !important;
 }
 

@@ -8,14 +8,9 @@ import InputArea from "./fields/InputArea.js";
 import { type CustomAttributeProps } from "../../types/table/AttributeColumns.js";
 import { Attribute } from "../../types/generated/models.js";
 import RadioButton from "./fields/RadioButton.js";
+import { type GenericFieldsComponentProps } from "../../types/fields/GenericFieldsTypes.js";
 
-interface GenericFieldsProps {
-  attribute: CustomAttributeProps
-  disabled: boolean
-  valueType: CustomAttributeProps["valueType"]
-}
-
-function GenericFields({ attribute, disabled, valueType }: GenericFieldsProps) {
+function GenericFields({ attribute, disabled, valueType }: GenericFieldsComponentProps) {
   switch (valueType) {
     case Attribute.valueType.BOOLEAN as unknown as CustomAttributeProps["valueType"]:
       return (
