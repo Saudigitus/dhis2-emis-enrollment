@@ -27,15 +27,19 @@ export const useGetPatternCode = () => {
 
     async function returnPattern(variables: CustomAttributeProps[]) {
         setloadingCodes(true)
+        const patterns = []
         for (const variable of variables) {
             const { pattern = "", name: id }: CustomAttributeProps = variable
             let code: QueryResults = { results: { value: "" } }
-            if (pattern.length > 0) {
+            if (pattern?.length > 0) {
                 console.log(pattern, id);
                 code = await engine.query(TEI_ATTRIBUTES, { variables: { id } })
-                setvalue({ [id]: code?.results?.value })
+                patterns.push({ [id]: code?.results?.value })
             }
         }
+        const value = patterns.reduce((key, pattern) => ({ ...key, ...pattern }), {});
+
+        setvalue(value);
         setloadingCodes(false)
     }
 

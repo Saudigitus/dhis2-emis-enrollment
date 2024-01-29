@@ -62,7 +62,7 @@ function ActiveFilterButton(props: ActiveFilterButtonProps) {
     }
 
     const getViewValueForFilter = (buttonText: string) => {
-        const calculatedValue = buttonText.length > MAX_LENGTH_OF_VALUE ? getCappedValue(buttonText) : buttonText;
+        const calculatedValue = buttonText?.length > MAX_LENGTH_OF_VALUE ? getCappedValue(buttonText) : buttonText;
         return `: ${calculatedValue}`;
     }
 

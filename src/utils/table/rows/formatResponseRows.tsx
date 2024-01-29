@@ -16,6 +16,11 @@ interface formatResponseRowsProps {
     teiInstances: [{
         trackedEntity: string
         attributes: attributesProps[]
+        enrollments: [{
+            enrollment: string
+            orgUnit: string
+            program: string
+        }]
     }]
 }
 
@@ -25,7 +30,14 @@ export function formatResponseRows({ eventsInstances, teiInstances }: formatResp
     const allRows: RowsProps[] = []
     for (const event of eventsInstances || []) {
         const teiDetails = teiInstances.find(tei => tei.trackedEntity === event.trackedEntity)
-        allRows.push({ ...dataValues(event.dataValues), ...(attributes((teiDetails?.attributes) ?? [])) })
+        allRows.push({
+            ...dataValues(event.dataValues),
+            ...(attributes((teiDetails?.attributes) ?? [])),
+            trackedEntity: event.trackedEntity,
+            enrollmentId: teiDetails?.enrollments?.[0]?.enrollment,
+            orgUnitId: teiDetails?.enrollments?.[0]?.orgUnit,
+            programId: teiDetails?.enrollments?.[0]?.program
+        })
     }
     return allRows;
 }

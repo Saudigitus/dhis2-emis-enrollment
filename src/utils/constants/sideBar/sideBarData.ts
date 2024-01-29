@@ -6,7 +6,7 @@ import logOut from "../../../assets/images/sidebar/log-out.svg"
 import userGroup from "../../../assets/images/sidebar/user-group.svg"
 import { type SideBarItemProps } from "../../../types/sideBar/SideBarTypes"
 
-function sideBarData (): SideBarItemProps[] {
+function sideBarData(): SideBarItemProps[] {
     return [
         {
             title: "Students",
@@ -17,39 +17,44 @@ function sideBarData (): SideBarItemProps[] {
                     showBadge: false,
                     disabled: false,
                     appName: "SEMIS-Enrollment",
-                    route: "/enrollment"
+                    route: "enrollment?sectionType=student&academicYear=2023",
+                    pathName: "/enrollment"
                 },
                 {
                     icon: glyph,
                     label: "Attendance",
                     showBadge: false,
-                    disabled: true,
-                    appName: "DHIS2-App-Name",
-                    route: "#"
+                    disabled: false,
+                    appName: "SEMIS-Attendance",
+                    route: "attendance?sectionType=student&academicYear=2023",
+                    pathName: "/attendance"
                 },
                 {
                     icon: fileDocument,
                     label: "Performance",
                     showBadge: false,
-                    disabled: true,
-                    appName: "DHIS2-App-Name",
-                    route: "#"
+                    disabled: false,
+                    appName: "SEMIS-Performance",
+                    route: "performance?sectionType=student&academicYear=2023",
+                    pathName: "/performance"
                 },
                 {
                     icon: gauge,
                     label: "Final result",
                     showBadge: false,
-                    disabled: true,
-                    appName: "DHIS2-App-Name",
-                    route: "#"
+                    disabled: false,
+                    appName: "SEMIS-Final-Result",
+                    route: "final-result?sectionType=student&academicYear=2023",
+                    pathName: "/final-result"
                 },
                 {
                     icon: logOut,
                     label: "Transfer",
                     showBadge: false,
-                    disabled: true,
-                    appName: "DHIS2-App-Name",
-                    route: "#"
+                    disabled: false,
+                    appName: "SEMIS-Student-Transfer",
+                    route: "student-transfer?sectionType=student",
+                    pathName: "/student-transfer"
                 }
             ]
         },
@@ -58,51 +63,33 @@ function sideBarData (): SideBarItemProps[] {
             subItems: [
                 {
                     icon: userGroup,
-                    label: "Teacher registry",
+                    label: "Staff registry",
                     showBadge: false,
-                    disabled: true,
-                    appName: "DHIS2-App-Name",
-                    route: "#"
-                },
-                {
-                    icon: userGroup,
-                    label: "Non-teacher registry",
-                    showBadge: false,
-                    disabled: true,
-                    appName: "DHIS2-App-Name",
-                    route: "#"
+                    disabled: false,
+                    appName: "SEMIS-Enrollment-Staff",
+                    route: "enrollment-teacher?sectionType=staff&academicYear=2023",
+                    pathName: "/enrollment-teacher"
                 },
                 {
                     icon: glyph,
                     label: "Attendance",
                     showBadge: false,
-                    disabled: true,
-                    appName: "DHIS2-App-Name",
-                    route: "#"
+                    disabled: false,
+                    appName: "SEMIS-Attendance-Staff",
+                    route: "staff-attendance?sectionType=staff&academicYear=2023",
+                    pathName: "/staff-attendance"
                 },
                 {
                     icon: logOut,
                     label: "Transfer",
                     showBadge: false,
-                    disabled: true,
-                    appName: "DHIS2-App-Name",
-                    route: "#"
-                }
-            ]
-        },
-        {
-            title: "Academic Year",
-            subItems: [
-                {
-                    icon: listAdd,
-                    label: "School Calendar",
-                    showBadge: false,
-                    disabled: true,
-                    appName: "DHIS2-App-Name",
-                    route: "#"
+                    disabled: false,
+                    appName: "SEMIS-Staff-Transfer",
+                    route: "staff-transfer?sectionType=staff",
+                    pathName: "/staff-transfer"
                 }
             ]
         }
     ]
 }
-export {sideBarData}
+export { sideBarData }

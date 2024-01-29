@@ -14,6 +14,8 @@ import { useGetPatternCode } from "../../hooks/tei/useGetPatternCode";
 import { useGetAttributes } from "../../hooks/programs/useGetAttributes";
 import { teiPostBody } from "../../utils/tei/formatPostBody";
 import { onSubmitClicked } from "../../schema/formOnSubmitClicked";
+import useGetUsedPProgramStages from "../../hooks/programStages/useGetUsedPProgramStages";
+import { getSelectedKey } from "../../utils/commons/dataStore/getSelectedKey";
 interface ContentProps {
   setOpen: (value: boolean) => void
 }
@@ -24,9 +26,11 @@ function ModalContentComponent({ setOpen }: ContentProps): React.ReactElement {
   const formRef: React.MutableRefObject<FormApi<IForm, Partial<IForm>>> = useRef(null);
   const orgUnit = useQuery().get("school");
   const orgUnitName = useQuery().get("schoolName");
+  const performanceProgramStages = useGetUsedPProgramStages();
   const { enrollmentsData } = useGetEnrollmentForm();
   const [, setClicked] = useRecoilState<boolean>(onSubmitClicked);
   const [values, setValues] = useState<object>({})
+  const { getDataStoreData } = getSelectedKey();
   const [fieldsWitValue, setFieldsWitValues] = useState<any[]>([enrollmentsData])
   const { postTei, loading, data } = usePostTei()
   const [clickedButton, setClickedButton] = useState<string>("");
@@ -56,8 +60,13 @@ function ModalContentComponent({ setOpen }: ContentProps): React.ReactElement {
 
   function onSubmit() {
     const allFields = fieldsWitValue.flat()
-    if (allFields.filter((element: any) => (element?.value === undefined && element.required)).length === 0) {
-      void postTei({ data: teiPostBody(fieldsWitValue, (getProgram != null) ? getProgram.id : "", orgUnit ?? "", values?.eventdatestaticform ?? "") })
+    if (allFields.filter((element: any) => (element?.assignedValue === undefined && element.required))?.length === 0) {
+      void postTei({
+        data: teiPostBody(fieldsWitValue,
+          (getProgram != null) ? getProgram.id : "", orgUnit ?? "",
+          values?.eventdatestaticform ?? "",
+          performanceProgramStages, getDataStoreData?.trackedEntityType)
+      })
     }
   }
 
@@ -67,7 +76,7 @@ function ModalContentComponent({ setOpen }: ContentProps): React.ReactElement {
     { id: "saveandcontinue", type: "submit", label: "Save and close", primary: true, disabled: loading, onClick: () => { setClickedButton("saveandcontinue"); setClicked(true) } }
   ];
 
-  if (enrollmentsData.length < 1 || loadingCodes) {
+  if (enrollmentsData?.length < 1 || loadingCodes) {
     return (
       <CenteredContent>
         <CircularLoader />
@@ -78,10 +87,10 @@ function ModalContentComponent({ setOpen }: ContentProps): React.ReactElement {
   function onChange(e: any): void {
     const sections = enrollmentsData;
     for (const [key, value] of Object.entries(e)) {
-      for (let i = 0; i < sections.length; i++) {
+      for (let i = 0; i < sections?.length; i++) {
         if (sections[i].find((element: any) => element.id === key) !== null && sections[i].find((element: any) => element.id === key) !== undefined) {
           // Sending onChanging form value to variables object
-          sections[i].find((element: any) => element.id === key).value = value
+          sections[i].find((element: any) => element.id === key).assignedValue = value
         }
       }
     }

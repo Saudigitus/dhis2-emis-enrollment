@@ -14,7 +14,7 @@ export default function SwitchButtonView(): React.ReactElement {
 
   return (
     <div>
-      {items.length > 3 ? <SimpleDropdownButton items={items} selectedTerm={selectedTerm} setSelectedTerm={setSelectedTerm} /> : <SimpleButton items={items} selectedTerm={selectedTerm} setSelectedTerm={setSelectedTerm} />}
+      {items?.length > 3 ? <SimpleDropdownButton items={items} selectedTerm={selectedTerm} setSelectedTerm={setSelectedTerm} /> : <SimpleButton items={items} selectedTerm={selectedTerm} setSelectedTerm={setSelectedTerm} />}
     </div>
   );
 }

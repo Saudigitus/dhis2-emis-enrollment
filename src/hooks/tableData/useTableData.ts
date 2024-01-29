@@ -1,12 +1,12 @@
 
 import { useRecoilValue } from "recoil";
-import { DataStoreState } from "../../schema/dataStoreSchema";
 import { useState } from "react";
 import { useDataEngine } from "@dhis2/app-runtime";
 import { formatResponseRows } from "../../utils/table/rows/formatResponseRows";
 import { useParams } from "../commons/useQueryParams";
 import { HeaderFieldsState } from "../../schema/headersSchema";
 import useShowAlerts from "../commons/useShowAlert";
+import { getSelectedKey } from "../../utils/commons/dataStore/getSelectedKey";
 
 type TableDataProps = Record<string, string>;
 
@@ -16,6 +16,7 @@ interface EventQueryProps {
     ouMode: string
     program: string
     order: string
+    programStatus: string
     programStage: string
     orgUnit: string
     filter?: string[]
@@ -31,13 +32,14 @@ interface TeiQueryProps {
     order: string
 }
 
-const EVENT_QUERY = ({ ouMode, page, pageSize, program, order, programStage, filter, orgUnit, filterAttributes }: EventQueryProps) => ({
+const EVENT_QUERY = ({ ouMode, page, pageSize, program, order, programStage, filter, orgUnit, filterAttributes, programStatus }: EventQueryProps) => ({
     results: {
         resource: "tracker/events",
         params: {
             order,
             page,
             pageSize,
+            programStatus,
             ouMode,
             program,
             programStage,
@@ -59,7 +61,7 @@ const TEI_QUERY = ({ ouMode, pageSize, program, trackedEntity, orgUnit, order }:
             pageSize,
             trackedEntity,
             orgUnit,
-            fields: "trackedEntity,createdAt,orgUnit,attributes[attribute,value],enrollments[enrollment,status,orgUnit,enrolledAt]"
+            fields: "trackedEntity,createdAt,orgUnit,attributes[attribute,value],enrollments[enrollment,orgUnit,program]"
         }
     }
 })
@@ -88,13 +90,18 @@ interface TeiQueryResults {
         instances: [{
             trackedEntity: string
             attributes: attributesProps[]
+            enrollments: [{
+                enrollment: string
+                orgUnit: string
+                program: string
+            }]
         }]
     }
 }
 
 export function useTableData() {
     const engine = useDataEngine();
-    const dataStoreState = useRecoilValue(DataStoreState);
+    const { getDataStoreData } = getSelectedKey()
     const headerFieldsState = useRecoilValue(HeaderFieldsState)
     const { urlParamiters } = useParams()
     const [loading, setLoading] = useState<boolean>(false)
@@ -103,36 +110,20 @@ export function useTableData() {
     const school = urlParamiters().school as unknown as string
 
     async function getData(page: number, pageSize: number) {
-        setLoading(true)
+        if (school !== null) {
+            setLoading(true)
 
-        const eventsResults: EventQueryResults = await engine.query(EVENT_QUERY({
-            ouMode: school != null ? "SELECTED" : "ACCESSIBLE",
-            page,
-            pageSize,
-            program: dataStoreState?.program as unknown as string,
-            order: "createdAt:desc",
-            programStage: dataStoreState?.registration?.programStage as unknown as string,
-            filter: headerFieldsState?.dataElements,
-            filterAttributes: headerFieldsState?.attributes,
-            orgUnit: school
-        })).catch((error) => {
-            show({
-                message: `${("Could not get data")}: ${error.message}`,
-                type: { critical: true }
-            });
-            setTimeout(hide, 5000);
-        })
-
-        const trackedEntityToFetch = eventsResults?.results?.instances.map((x: { trackedEntity: string }) => x.trackedEntity).toString().replaceAll(",", ";")
-
-        const teiResults: TeiQueryResults = trackedEntityToFetch?.length > 0
-            ? await engine.query(TEI_QUERY({
+            const eventsResults: EventQueryResults = await engine.query(EVENT_QUERY({
                 ouMode: school != null ? "SELECTED" : "ACCESSIBLE",
-                order: "created:desc",
+                page,
                 pageSize,
-                program: dataStoreState?.program as unknown as string,
-                orgUnit: school,
-                trackedEntity: trackedEntityToFetch
+                program: getDataStoreData?.program as unknown as string,
+                order: "createdAt:desc",
+                programStatus: "ACTIVE",
+                programStage: getDataStoreData?.registration?.programStage as unknown as string,
+                filter: headerFieldsState?.dataElements,
+                filterAttributes: headerFieldsState?.attributes,
+                orgUnit: school
             })).catch((error) => {
                 show({
                     message: `${("Could not get data")}: ${error.message}`,
@@ -140,14 +131,33 @@ export function useTableData() {
                 });
                 setTimeout(hide, 5000);
             })
-            : { results: { instances: [] } }
 
-        setTableData(formatResponseRows({
-            eventsInstances: eventsResults?.results?.instances,
-            teiInstances: teiResults?.results?.instances
-        }));
+            const trackedEntityToFetch = eventsResults?.results?.instances.map((x: { trackedEntity: string }) => x.trackedEntity).toString().replaceAll(",", ";")
 
-        setLoading(false)
+            const teiResults: TeiQueryResults = trackedEntityToFetch?.length > 0
+                ? await engine.query(TEI_QUERY({
+                    ouMode: school != null ? "SELECTED" : "ACCESSIBLE",
+                    order: "created:desc",
+                    pageSize,
+                    program: getDataStoreData?.program as unknown as string,
+                    orgUnit: school,
+                    trackedEntity: trackedEntityToFetch
+                })).catch((error) => {
+                    show({
+                        message: `${("Could not get data")}: ${error.message}`,
+                        type: { critical: true }
+                    });
+                    setTimeout(hide, 5000);
+                })
+                : { results: { instances: [] } }
+
+            setTableData(formatResponseRows({
+                eventsInstances: eventsResults?.results?.instances,
+                teiInstances: teiResults?.results?.instances
+            }));
+
+            setLoading(false)
+        }
     }
 
     return {
