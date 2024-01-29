@@ -1,0 +1,19 @@
+.container {
+    display: "flex";
+    flex-wrap: "wrap";
+    align-items: "center";
+    margin: 10;
+    margin-bottom: 10;
+    margin-top: 10
+}
+
+.moreFilters {
+    color: rgb(33, 41, 52);
+    font-size: 14;
+    text-transform: "none";
+    font-weight: 400
+}
+
+.moreFiltersContainer{
+    margin-top: 0
+}

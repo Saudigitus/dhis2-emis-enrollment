@@ -44,12 +44,16 @@
     width: 127px !important;
 }
 
-.dropdownIcon{
+.dropdownIcon {
     color: rgb(33, 41, 52, 0.7) !important;
     font-weight: 400 !important;
     margin-left: 20px;
 }
 
-.activeMenuItem{
+.activeMenuItem {
     background-color: #F0F0F0 !important;
+}
+
+.menuItem {
+    min-width: 127
 }

@@ -5,6 +5,8 @@ import Select from 'react-select';
 import defaultClasses from '../table.module.css';
 import { disableNextPage } from '../../../../utils/table/pagination/pagination';
 import { rowsPerPages } from '../../../../utils/constants/pagination/pagination';
+import styles from './Pagination.module.css'
+import classNames from 'classnames';
 
 interface PaginationProps {
     page: number
@@ -34,11 +36,11 @@ function IconButtonPagination(props: IconButtonPaginationProps): React.ReactElem
     return (
         <>
             <IconButton
-                style={{ paddingRight: 15 }}
                 // corrigir este erro 👇
                 onClick={props.onPageChange}
                 disabled={props.disabled}
                 aria-label={props.ariaLabel}
+                className={styles.iconButton}
             >
                 {props.Icon}
             </IconButton>
@@ -48,20 +50,16 @@ function IconButtonPagination(props: IconButtonPaginationProps): React.ReactElem
 
 function Pagination({ page, rowsPerPage, onPageChange, onRowsPerPageChange, loading, totalPerPage }: PaginationProps): React.ReactElement {
     return (
-        <div
-            className={defaultClasses.pagination}
-            style={{ display: 'flex', justifyContent: 'space-between' }}
-        >
+        <div className={classNames(defaultClasses.pagination, styles.container)}>
             <div />
 
             <div className={defaultClasses.rootPagination}>
                 {textPagination("Rows per page")}
 
                 <Select
-                    className={defaultClasses.textPagination}
+                    className={classNames(defaultClasses.textPagination, styles.rowsPerPageSelector)}
                     value={rowsPerPage}
                     clearValueText={false}
-                    style={{ maxWidth: 50, marginTop: -10, height: 10, marginRight: 10 }}
                     options={rowsPerPages}
                     clearable={false}
                     searchable={false}
@@ -70,7 +68,7 @@ function Pagination({ page, rowsPerPage, onPageChange, onRowsPerPageChange, load
                 />
                 {textPagination(`Page ${page}`)}
 
-                <div style={{ marginRight: 10 }} />
+                <div className={styles.separator} />
 
                 <IconButtonPagination
                     Icon={<KeyboardArrowLeft />}

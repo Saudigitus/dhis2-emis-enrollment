@@ -84,7 +84,7 @@ function SelectButton(props: SelectButtonProps) {
     }
 
     return (
-        <div style={{ padding: "0.25em 0.5em 0.25em 0em" }}>
+        <WithPadding p={"0.25em 0.5em 0.25em 0em"}>
             <div
                 data-test="filter-button-popover-anchor"
                 ref={anchorRef}
@@ -139,7 +139,7 @@ function SelectButton(props: SelectButtonProps) {
                     })()
                 }
             </Popover>
-        </div>
+        </WithPadding>
     )
 }
 

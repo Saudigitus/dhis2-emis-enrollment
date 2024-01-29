@@ -3,6 +3,7 @@ import styles from "../button.module.css";
 import { Menu, MenuItem, Button } from "@material-ui/core";
 import { ExpandLess, ExpandMore } from "@material-ui/icons";
 import { type SimpleButtonsProps } from "../../../types/Buttons/SimpleButtonsProps";
+import classNames from 'classnames';
 
 interface ButtonProps {
   items: SimpleButtonsProps[]
@@ -28,7 +29,7 @@ export default function SimpleDropdownButton(props: ButtonProps): React.ReactEle
         className={styles.simpleDropdownButton}
         variant="outlined"
         onClick={handleClick}
-        endIcon={anchorEl === null ? <ExpandMore className={styles.dropdownIcon}/> : <ExpandLess className={styles.dropdownIcon}/>}
+        endIcon={anchorEl === null ? <ExpandMore className={styles.dropdownIcon} /> : <ExpandLess className={styles.dropdownIcon} />}
       >
         {selectedTerm.label ?? "Terms"}
       </Button>
@@ -42,13 +43,12 @@ export default function SimpleDropdownButton(props: ButtonProps): React.ReactEle
         transformOrigin={{ vertical: "top", horizontal: "center" }}
         PaperProps={{
           style: { boxShadow: "rgba(0, 0, 0, 0.16) 0px 1px 4px" }
-         }}
+        }}
       >
         {items.map((item, i) => (
           <MenuItem
             key={i}
-            className={selectedTerm.id === item.id && styles.activeMenuItem}
-            style={{ minWidth: 127 }}
+            className={classNames(selectedTerm.id === item.id && styles.activeMenuItem, styles.menuItem)}
             onClick={() => { setSelectedTerm(item); setAnchorEl(null); }}
           >
             {item.label}

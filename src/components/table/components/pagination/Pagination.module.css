@@ -1,0 +1,19 @@
+.container {
+    display: 'flex';
+    justify-content: 'space-between'
+}
+
+.rowsPerPageSelector {
+    max-width: 50;
+    margin-top: -10;
+    height: 10;
+    margin-right: 10;
+}
+
+.separator {
+    margin-right: 10
+}
+
+.iconButton {
+    padding-right: 15
+}

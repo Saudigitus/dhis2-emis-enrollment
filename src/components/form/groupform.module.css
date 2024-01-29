@@ -6,3 +6,12 @@
     font-family: "Roboto", "Helvetica", "Arial", sans-serif;
     line-height: 1.16667em;
 }
+
+.labelName {
+    color: rgba(0, 0, 0, 0.87)
+}
+
+.content {
+    color: #E53935;
+    margin-top: 20
+}
