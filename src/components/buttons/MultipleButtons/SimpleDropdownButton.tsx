@@ -2,14 +2,8 @@ import React, { useState } from "react";
 import styles from "../button.module.css";
 import { Menu, MenuItem, Button } from "@material-ui/core";
 import { ExpandLess, ExpandMore } from "@material-ui/icons";
-import { type SimpleButtonsProps } from "../../../types/Buttons/SimpleButtonsProps";
+import { ButtonProps } from "../../../types/common/components";
 import classNames from 'classnames';
-
-interface ButtonProps {
-  items: SimpleButtonsProps[]
-  selectedTerm: any
-  setSelectedTerm: (arg: object) => void
-}
 
 export default function SimpleDropdownButton(props: ButtonProps): React.ReactElement {
   const { items, selectedTerm, setSelectedTerm } = props;

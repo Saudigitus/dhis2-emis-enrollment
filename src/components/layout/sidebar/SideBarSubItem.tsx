@@ -1,7 +1,7 @@
 import React from 'react';
 import style from "./SideBar.module.css"
 import Badge from '../../badge/Badge';
-import { type SideBarSubItemProps } from '../../../types/sideBar/SideBarTypes';
+import { SideBarSubItemProps } from '../../../types/common/components';
 import classNames from 'classnames';
 import { useConfig } from '@dhis2/app-runtime';
 import { useLocation } from 'react-router-dom';

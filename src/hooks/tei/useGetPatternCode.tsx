@@ -1,5 +1,5 @@
 import { useDataEngine } from "@dhis2/app-runtime"
-import { type CustomAttributeProps } from "../../types/table/AttributeColumns";
+import { CustomAttributeProps } from "../../types/common/components";
 import { useState } from "react";
 
 const TEI_ATTRIBUTES: any = {

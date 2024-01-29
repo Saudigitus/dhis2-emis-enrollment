@@ -1,7 +1,7 @@
 import { type dataStoreRecord } from "../../../schema/dataStoreSchema";
 import { Attribute } from "../../../types/generated/models";
-import { type ProgramConfig } from "../../../types/programConfig/ProgramConfig";
-import { VariablesTypes, type CustomAttributeProps } from "../../../types/table/AttributeColumns";
+import { ProgramConfig } from "../../../types/common/components";
+import { VariablesTypes, CustomAttributeProps } from "../../../types/common/components";
 import { useMemo } from "react";
 
 export function formatResponse(data: ProgramConfig, dataStoreData: dataStoreRecord): CustomAttributeProps[] {

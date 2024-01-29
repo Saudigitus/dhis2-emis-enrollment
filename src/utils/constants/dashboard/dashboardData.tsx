@@ -4,7 +4,7 @@ import calendar from "../../../assets/images/home/calendar.png";
 import performance from "../../../assets/images/home/performance.png";
 import transfer from "../../../assets/images/home/transfer.png";
 import result from "../../../assets/images/home/result.png";
-import { type DashboardCardProps } from "../../../types/dashboard/CardTypes";
+import {  DashboardCardProps } from "../../../types/common/components";
 
 function cardsData(): DashboardCardProps[] {
   return [

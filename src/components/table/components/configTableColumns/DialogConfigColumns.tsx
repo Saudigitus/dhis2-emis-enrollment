@@ -6,14 +6,8 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import React, { useState } from 'react'
 import DragDropList from '../../../dragDrop/DragDropList';
 import { Button } from 'react-bootstrap';
-import { type CustomAttributeProps } from '../../../../types/table/AttributeColumns';
+import { CustomAttributeProps, DialogSelectColumnsProps } from '../../../../types/common/components';
 
-interface DialogSelectColumnsProps {
-    open: boolean
-    onClose: () => void
-    headers: any[]
-    updateVariables: (list: any[]) => void
-}
 
 function DialogSelectColumns(props: DialogSelectColumnsProps) {
     const { open, onClose, headers = [], updateVariables } = props

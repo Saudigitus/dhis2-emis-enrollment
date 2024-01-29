@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import SimpleDropdownButton from "./SimpleDropdownButton";
 import SimpleButton from "./SimpleButton";
-import { type SimpleButtonsProps } from "../../../types/Buttons/SimpleButtonsProps";
+import { type SimpleButtonsProps } from "../../../types/common/components";
 
 const items: SimpleButtonsProps[] = [
   { id: "term1", label: "Term 1", type: "progarmStage" },

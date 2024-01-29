@@ -1,13 +1,7 @@
 import React from "react";
 import styles from "../button.module.css";
 import { ButtonStrip } from "@dhis2/ui";
-import { type SimpleButtonsProps } from "../../../types/Buttons/SimpleButtonsProps";
-
-interface ButtonProps {
-  items: SimpleButtonsProps[]
-  selectedTerm: any
-  setSelectedTerm: (arg: object) => void
-}
+import {  ButtonProps } from "../../../types/common/components";
 
 export default function SimpleButton(props: ButtonProps): React.ReactElement {
   const { items, selectedTerm, setSelectedTerm } = props;

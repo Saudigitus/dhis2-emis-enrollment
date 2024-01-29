@@ -5,15 +5,9 @@ import InputNumber from "./fields/InputNumber.js";
 import InputText from "./fields/InputText.js";
 import SingleSelectField from "./fields/SingleSelect.js";
 import InputArea from "./fields/InputArea.js";
-import { type CustomAttributeProps } from "../../types/table/AttributeColumns.js";
+import { CustomAttributeProps, GenericFieldsProps } from "../../types/common/components";
 import { Attribute } from "../../types/generated/models.js";
 import RadioButton from "./fields/RadioButton.js";
-
-interface GenericFieldsProps {
-  attribute: CustomAttributeProps
-  disabled: boolean
-  valueType: CustomAttributeProps["valueType"]
-}
 
 function GenericFields({ attribute, disabled, valueType }: GenericFieldsProps) {
   switch (valueType) {

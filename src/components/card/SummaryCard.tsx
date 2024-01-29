@@ -1,11 +1,6 @@
 import React from "react";
 import styles from "./card.module.css";
-
-interface CardProps {
-  value: string
-  label: string
-  color: string
-}
+import { CardProps } from '../../types/common/components'
 
 export default function SummaryCard(props: CardProps): React.ReactElement {
   const { value, label, color } = props;

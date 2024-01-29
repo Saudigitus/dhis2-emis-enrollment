@@ -1,18 +1,8 @@
-
 import { Checkbox, IconReorder24 } from '@dhis2/ui';
 import TableCell from '@material-ui/core/TableCell';
 import React from 'react'
 import styles from './DragDropItems.module.css'
-
-interface DragDropItemsProps {
-    id: string
-    visible: boolean
-    text: string
-    classes?: {
-        checkbox: string
-    }
-    handleToggle: (id: string) => void
-}
+import { DragDropItemsProps } from '../../types/common/components';
 
 function DragDropItems(props: DragDropItemsProps) {
     const { handleToggle, id, text } = props;

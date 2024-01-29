@@ -1,15 +1,6 @@
 import { SingleSelectField, SingleSelectOption } from '@dhis2/ui'
 import React from 'react'
-
-interface OptionsProps {
-    value: string
-    label: string
-}
-
-interface SingleSelectProps {
-    disabled: boolean
-    options: OptionsProps[]
-}
+import { SingleSelectProps } from '../../../types/common/components'
 
 function SingleSelect(props: SingleSelectProps) {
     return (

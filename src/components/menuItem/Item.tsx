@@ -1,6 +1,6 @@
 import React from 'react'
 import { MenuItem } from "@dhis2/ui"
-import { type MenuItemTypes } from '../../types/menu/MenuItemTypes'
+import { MenuItemTypes } from '../../types/common/components'
 import { useParams } from '../../hooks/commons/useQueryParams';
 import { useRecoilState } from 'recoil';
 import { HeaderFieldsState } from '../../schema/headersSchema';

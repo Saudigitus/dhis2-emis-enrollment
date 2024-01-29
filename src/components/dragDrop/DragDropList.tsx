@@ -9,16 +9,12 @@ import update from 'react-addons-update';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import DragDropListItem from './DragDropItems.js';
-
-interface DragDropListProps {
-    listItems: any[]
-    handleUpdateListOrder: (list: any[]) => void
-    handleToggle: (id: string) => void
-}
+import { DragDropListProps } from '../../types/common/components.js';
 
 function DragDropList(props: DragDropListProps) {
     const { listItems, handleUpdateListOrder, handleToggle } = props;
-    function moveListItem(dragIndex, hoverIndex) {
+
+    function moveListItem(dragIndex: any, hoverIndex: any) {
         const dragListItem = listItems[dragIndex];
         let sortedList = [];
         sortedList = update(listItems, {

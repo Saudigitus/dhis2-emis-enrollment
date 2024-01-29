@@ -3,16 +3,9 @@ import React from "react";
 import WithBorder from "../template/WithBorder";
 import WithPadding from "../template/WithPadding";
 import GenericFields from "../genericFields/GenericFields";
-import { type CustomAttributeProps } from "../../types/table/AttributeColumns";
+import { FormProps } from "../../types/common/components";
 import Subtitle from "../text/subtitle";
 import styles from './groupform.module.css'
-
-interface FormProps {
-    name: string
-    description: string
-    fields: CustomAttributeProps[]
-    disabled: boolean
-}
 
 function GroupForm(props: FormProps) {
     const { name, fields, description } = props

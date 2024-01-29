@@ -1,6 +1,6 @@
 import { atom } from "recoil"
 import { z } from "zod"
-import { type ProgramConfig } from "../types/programConfig/ProgramConfig"
+import { ProgramConfig } from "../types/common/components"
 
 export const programSchema = z.object({
     displayName: z.string(),
