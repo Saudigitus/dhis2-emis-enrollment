@@ -1,15 +1,6 @@
 import { MultiSelect, MultiSelectOption } from '@dhis2/ui'
 import React from 'react'
-
-interface OptionsProps {
-    value: string
-    label: string
-}
-
-interface MutlipleSelectProps {
-    disabled: boolean
-    options: OptionsProps[]
-}
+import { type MutlipleSelectProps } from '../../../types/fields/GenericFieldsTypes'
 
 function SelectMultiple(props: MutlipleSelectProps) {
     return (

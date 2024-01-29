@@ -1,6 +1,7 @@
 :root {
     --primary-color: #F9F9FA;
-    --secondary-colort: #FFFF;
+    --secondary-colort-white: #FFFF;
+    --black-color: #000;
 }
 
 /* FONT COLOR */
@@ -8,4 +9,14 @@
     --font-primary-color: #212121;
     --font-secondary-color: #555;
     --font-third-color: #1E6194;
+    --mui-error-color: rgb(211, 47, 47);
+    --badge-background-error-color: #FF5F5F;
+    --summary-card-border-success: #4CAF50;
+    --summary-card-success-background: #F4FBF4;
+    --summary-card-border-error: #DEA9A7;
+    --summary-card-error-background: #FFECE7;
+    --summary-card-background-secondary: #D5DDE5;
+    --summary-card-secondary-background: #FBFCFD;
+    --alert-icon-error-color: #FBFCFD;
+    --main-header-border-color: #D0CCCC;
 }

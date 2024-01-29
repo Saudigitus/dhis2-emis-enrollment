@@ -8,7 +8,7 @@ import Subtitle from "../text/subtitle";
 
 interface FormProps {
     name: string
-    description: string
+    description?: string
     fields: CustomAttributeProps[]
     disabled: boolean
 }

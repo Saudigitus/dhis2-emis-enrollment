@@ -20,10 +20,7 @@ export interface CustomAttributeProps {
     options: {
         optionSet: {
             id: string
-            options: [{
-                value: string
-                label: string
-            }]
+            options: OptionsProps[]
         }
     }
     pattern?: string
@@ -33,4 +30,9 @@ export interface CustomAttributeProps {
     key?: any
     description?: string
     type: VariablesTypes
+}
+
+export interface OptionsProps {
+    value: string
+    label: string
 }

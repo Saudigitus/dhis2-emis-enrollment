@@ -21,11 +21,11 @@ body {
 }
 
 .MuiFormHelperText-root.Mui-error {
-    color: rgb(211, 47, 47) !important;
+    color: var(--mui-error-color) !important;
     font-size: 12px !important;
     line-height: 14px;
 }
 
 .MuiOutlinedInput-root.Mui-error .MuiOutlinedInput-notchedOutline {
-    border-color: rgb(211, 47, 47) !important;
+    border-color: var(--mui-error-color) !important;
 }

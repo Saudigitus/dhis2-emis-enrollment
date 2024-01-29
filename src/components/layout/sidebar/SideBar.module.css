@@ -6,7 +6,7 @@
     height: 100%;
     width: 370px !important;
     position: relative;
-    background-color: var(--secondary-colort);
+    background-color: var(--secondary-colort-white);
     transition: width 0.3s ease !important;
 }
 
@@ -15,7 +15,7 @@
     height: 100%;
     max-width: 90px;
     position: relative;
-    background-color: var(--secondary-colort);
+    background-color: var(--secondary-colort-white);
     transition: width 0.3s ease !important;
 }
 

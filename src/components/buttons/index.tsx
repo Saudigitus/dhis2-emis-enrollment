@@ -1,3 +1,3 @@
-import Buttons from "./Button.jsx";
+import DropdownButtonComponent from "./DropdownButton";
 
-export { Buttons }
+export { DropdownButtonComponent }

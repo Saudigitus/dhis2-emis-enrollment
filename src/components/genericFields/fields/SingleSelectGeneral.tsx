@@ -1,17 +1,8 @@
 import { SingleSelectField, SingleSelectOption } from '@dhis2/ui'
 import React from 'react'
+import { type MutlipleSelectProps } from '../../../types/fields/GenericFieldsTypes'
 
-interface OptionsProps {
-    value: string
-    label: string
-}
-
-interface SingleSelectProps {
-    disabled: boolean
-    options: OptionsProps[]
-}
-
-function SingleSelect(props: SingleSelectProps) {
+function SingleSelect(props: MutlipleSelectProps) {
     return (
         <div>
             <SingleSelectField
