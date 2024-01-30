@@ -1,14 +1,7 @@
 import { atom } from "recoil"
-import { z } from "zod"
+import { type headersFieldsSchema } from "../types/common/components"
 
-export const headersFieldsSchema = z.object({
-    dataElements: z.array(z.any()),
-    attributes: z.array(z.any())
-})
-
-export type HeaderFieldsSchema = z.infer<typeof headersFieldsSchema>
-
-export const HeaderFieldsState = atom<HeaderFieldsSchema>({
+export const HeaderFieldsState = atom<headersFieldsSchema>({
     key: "headerFieldsState-get-state",
     default: {
         dataElements: [],

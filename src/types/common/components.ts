@@ -678,6 +678,26 @@ interface defaultProps {
         optionSets?: OptionSet[]
     }>
 }
+
+interface headersFieldsSchema {
+    dataElements: any[],
+    attributes: any[]
+}
+
+interface optionSetsSchema {
+    name: string,
+    id: string,
+    displayName: string,
+    options: [
+        {
+            code: string,
+            name: string,
+            id: string,
+            displayName: string
+        }
+    ]
+}
+
 export const fieldsType = {
     programStage: "executionDateLabel,programStageDataElements[displayInReports,compulsory,dataElement[id,displayName,valueType,optionSet[options[code~rename(value),displayName~rename(label)]]]],programStageSections[displayName,id,displayInReports,compulsory,dataElements[id,formName~rename(displayName),valueType,optionSet[options[code~rename(value),displayName~rename(label)]]]]",
     programStageSection: "executionDateLabel,programStageSections[displayName,id,displayInReports,compulsory,dataElements[id,formName~rename(displayName),valueType,optionSet[options[code~rename(value),displayName~rename(label)]]]]"
@@ -692,5 +712,5 @@ export type {
     ContentFilterProps, MenuFiltersProps, SelectorContentsProps, FilterComponentProps, DateFilterManagerProps, OptionSetProps, SelectBoxesProps, TextFilterProps,
     ActiveFilterButtonProps, RenderWithAppliedFilterProps, RenderWithoutAppliedFilterProps, TooltipProps, SelectButtonProps, HeaderCellProps, PaginationProps, IconButtonPaginationProps,
     RowProps, TableSortProps, TableComponentProps, renderHeaderProps, TitleProps, GeTDataElementsProps, EventQueryProps, TeiQueryProps, EventQueryResults, TeiQueryResults, QueryResults,
-    dataStoreRecord, getTypesOfButtonProps, formatResponseRowsProps, dataValuesProps, attributesProps, defaultProps
+    dataStoreRecord, getTypesOfButtonProps, formatResponseRowsProps, dataValuesProps, attributesProps, defaultProps, headersFieldsSchema, optionSetsSchema
 }
