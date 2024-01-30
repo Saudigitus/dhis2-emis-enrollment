@@ -8,7 +8,6 @@ import styles from "./fields.module.css"
 import { useRecoilState } from "recoil";
 import { onSubmitClicked } from "../../../schema/formOnSubmitClicked";
 
-
 const OptionSetAutocomplete = (props: AutoCompleteProps) => {
   const { input }: FieldRenderProps<any, HTMLElement> = useField(props.name);
   const [cliked] = useRecoilState<boolean>(onSubmitClicked);
@@ -36,7 +35,7 @@ const OptionSetAutocomplete = (props: AutoCompleteProps) => {
             {...params}
             variant="outlined"
             error={cliked && input.value === "" && props?.required}
-            helperText={(cliked && input.value === "" && props?.required) && "Please provide a value"}
+            helperText={(cliked && input.value === "" && (Boolean(props?.required))) && "Please provide a value"}
             size="small"
             InputProps={{
               ...params.InputProps,
@@ -52,7 +51,7 @@ const OptionSetAutocomplete = (props: AutoCompleteProps) => {
         }}
       />
       {
-        (cliked && input.value === "" && props?.required) && <div className={styles["alert-icon__area"]}>
+        (cliked && input.value === "" && (Boolean(props?.required))) && <div className={styles["alert-icon__area"]}>
           <ErrorIcon />
         </div>
       }

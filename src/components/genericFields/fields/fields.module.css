@@ -22,5 +22,5 @@
 }
 
 .alert-icon__area svg {
-    color: rgb(211, 47, 47);
+    color: var(--alert-icon-error-color);
 }

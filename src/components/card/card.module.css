@@ -1,7 +1,7 @@
 /* ========== Summary Cards styles ============== */
 .success {
-    border: solid 1px #4CAF50;
-    background-color: #F4FBF4;
+    border: solid 1px var(--summary-card-border-success);
+    background-color: var(--summary-card-success-background);
     width: 120px;
     height: 70px;
     display: flex;
@@ -12,8 +12,8 @@
 }
 
 .error {
-    border: solid 1px #DEA9A7;
-    background-color: #FFECE7;
+    border: solid 1px var(--summary-card-border-erro);
+    background-color: var(--summary-card-error-background);
     width: 120px;
     height: 70px;
     display: flex;
@@ -24,8 +24,8 @@
 }
 
 .secondary {
-    border: solid 1px #D5DDE5;
-    background-color: #FBFCFD;
+    border: solid 1px var(--summary-card-background-secondary);
+    background-color: var(--summary-card-secondary-background);
     width: 120px;
     height: 70px;
     display: flex;

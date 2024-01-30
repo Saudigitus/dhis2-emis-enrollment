@@ -13,12 +13,6 @@ function EnrollmentActionsButtons() {
   const { useQuery } = useParams();
   const orgUnit = useQuery().get("school")
 
-  const enrollmentOptions: FlyoutOptionsProps[] = [
-    { label: "Import students", divider: true, onClick: () => { setOpenImport(true); } },
-    { label: "Export empty template", divider: false, onClick: () => { alert("Export empty template"); } },
-    { label: "Export template with data", divider: false, onClick: () => { alert("Export template with data"); } }
-  ];
-
   return (
     <div>
       <ButtonStrip>
