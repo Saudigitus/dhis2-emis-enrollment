@@ -19,7 +19,6 @@ function TEIGenericForm() {
   function onChange(e: any): void {
     setValues(e)
   }
-  console.log(generatedVariables, loadingCodes, attributes);
 
   if (loadingCodes) {
     return (

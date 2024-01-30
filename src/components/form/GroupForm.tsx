@@ -29,6 +29,7 @@ function GroupForm(props: FormProps) {
                                 </div>
                                 <div className="col-12 col-md-6">
                                     <GenericFields
+                                        required=""
                                         attribute={x}
                                         disabled={x.disabled}
                                         valueType={x.valueType}

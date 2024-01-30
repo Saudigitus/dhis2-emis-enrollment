@@ -18,7 +18,7 @@ const getStyles = makeStyles((theme: Theme) =>
 
 
 function SelectorContents(props: SelectorContentsProps) {
-    const { onClose, disabledReset, colum, onQuerySubmit, disabled: disabledUpdate } = props;
+    const { onClose, disabledReset, colum, onQuerySubmit, disabled: disabledUpdate, } = props;
 
     const classes = getStyles()
 

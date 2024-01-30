@@ -6,13 +6,12 @@ import {
   WithPadding
 } from "../../components";
 
-const programId: string = "wQaiD2V27Dp"
 const programStageId: string = "Ni2qsy2WJn4"
 
 function GenericForm(): React.ReactElement {
   return (
     <WithPadding>
-      <TEIGenericForm programId={programId} />
+      <TEIGenericForm />
       <Divider />
       <EventGenericForm programStageId={programStageId} />
     </WithPadding>

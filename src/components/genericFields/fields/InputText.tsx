@@ -7,7 +7,7 @@ import {
 } from '@dhis2/ui'
 import React from 'react'
 import style from "./fields.module.css";
-import { type GenericFieldsProps } from '../../../types/fields/GenericFieldsTypes';
+import { type GenericFieldsProps } from "../../../types/common/components";
 
 const { Field } = ReactFinalForm
 

@@ -1,6 +1,6 @@
 import { ReactFinalForm, InputFieldFF, hasValue } from "@dhis2/ui";
 import React from "react";
-import { type GenericFieldsProps } from "../../../types/fields/GenericFieldsTypes";
+import { type GenericFieldsProps } from "../../../types/common/components";
 
 const { Field } = ReactFinalForm;
 

@@ -1,5 +1,5 @@
-import { type dataStoreRecord } from "../../../schema/dataStoreSchema";
 import { Attribute } from "../../../types/generated/models";
+import { type dataStoreRecord } from "../../../types/common/components";
 import { ProgramConfig } from "../../../types/common/components";
 import { VariablesTypes, CustomAttributeProps } from "../../../types/common/components";
 import { useMemo } from "react";

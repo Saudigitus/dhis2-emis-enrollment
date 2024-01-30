@@ -12,7 +12,7 @@ export const fieldsData: CustomAttributeProps[] = [
       .TEXT as unknown as CustomAttributeProps["valueType"],
     name: "name",
     required: false,
-    visible: true
+    visible: true,
   },
   {
     id: "birthdate",

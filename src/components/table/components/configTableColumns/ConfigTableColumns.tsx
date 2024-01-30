@@ -17,11 +17,6 @@ function ConfigTableColumns(props: ConfigTableColumnsProps) {
         setopen(true)
     }
 
-    // const handleSaveColumns = (columns) => {
-    //     // this.props.onSave(columns);
-    //     closeDialog();
-    // }
-
     return (
         <React.Fragment>
             <Tooltip
@@ -40,7 +35,6 @@ function ConfigTableColumns(props: ConfigTableColumnsProps) {
             <DialogConfigColumns
                 open={open}
                 onClose={closeDialog}
-                // onSave={handleSaveColumns}
                 updateVariables={updateVariables}
                 headers={headers}
             />

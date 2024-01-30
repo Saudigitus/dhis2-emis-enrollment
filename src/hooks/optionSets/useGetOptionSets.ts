@@ -16,7 +16,7 @@ const OPTIONSETS_QUERY = (id: string) => ({
 
 function useGetOptionSets({ optionSetId }: { optionSetId: string }) {
     const { hide, show } = useShowAlerts()
-    const setOptionSetsState = useSetRecoilState(OptionSetsState);
+    const setOptionSetsState = useSetRecoilState<any>(OptionSetsState);
     const getOptionSetsState = useRecoilValue(OptionSetsState);
     const { data, loading, error } = useDataQuery<{ result: any }>(OPTIONSETS_QUERY(optionSetId), {
         onError(error) {

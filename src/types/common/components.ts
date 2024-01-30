@@ -58,14 +58,6 @@ interface FormSectionProps {
     fields: SectionFieldsProps[]
 }
 
-//GenericFields interface
-interface GenericFieldsProps {
-    disabled: boolean
-    required: string | boolean
-    type?: string
-    optionSet?: CustomAttributeProps["options"]
-}
-
 interface formType {
     attributes: any[]
     events: any[]
@@ -226,7 +218,7 @@ interface CustomAttributeProps {
     valueType: typeof Attribute.valueType
     disabled: boolean
     visible: boolean
-    options: {
+    options?: {
         optionSet: {
             id: string
             options: [{
@@ -241,7 +233,7 @@ interface CustomAttributeProps {
     content?: string
     key?: any
     description?: string
-    type: VariablesTypes
+    type?: VariablesTypes
 }
 
 interface AppConfigurationsProps {
@@ -299,9 +291,13 @@ interface FormProps {
 }
 
 interface GenericFieldsProps {
-    attribute: CustomAttributeProps
     disabled: boolean
-    valueType: CustomAttributeProps["valueType"]
+    required: string | boolean
+    type?: string
+    optionSet?: CustomAttributeProps["options"]
+    attribute?: CustomAttributeProps
+    valueType?: CustomAttributeProps["valueType"]
+    name?: string
 }
 
 interface CheckFieldProps {
@@ -324,6 +320,7 @@ interface AutoCompleteProps {
     disabled?: boolean
     options?: CustomAttributeProps["options"]
     name: string
+    required?: boolean
 }
 
 interface SingleSelectProps {
@@ -526,11 +523,11 @@ interface TableComponentProps {
 
 
 interface renderHeaderProps {
-    rowsHeader: CustomAttributeProps[]
-    orderBy: string
-    order: "asc" | "desc"
+    rowsHeader?: CustomAttributeProps[]
+    orderBy?: string
+    order?: "asc" | "desc"
     // TODO resolve this bug.👇
-    createSortHandler: (property: string) => any
+    createSortHandler?: (property: string) => any
     rowsData?: any[]
     headerData?: CustomAttributeProps[]
 }

@@ -35,10 +35,8 @@ function DragDropList(props: DragDropListProps) {
                     {listItems?.map((item, i) =>
                         <DragDropListItem
                             key={item.id}
-                            // index={i}
                             id={item.id}
                             text={item.header}
-                            // moveListItem={moveListItem}
                             handleToggle={handleToggle}
                             visible={item.visible}
                         />

@@ -2,7 +2,7 @@ import { FormControlLabel, RadioGroup, Radio, withStyles } from "@material-ui/co
 import React from "react";
 import { Label } from "@dhis2/ui"
 import { useField, type FieldRenderProps } from "react-final-form";
-import { type GenericFieldsProps } from "../../../types/fields/GenericFieldsTypes";
+import { type GenericFieldsProps } from "../../../types/common/components";
 
 const CustomRadio = withStyles({
   root: {
@@ -17,7 +17,7 @@ const CustomRadio = withStyles({
 })((props: React.JSX.IntrinsicAttributes) => <Radio disableRipple size="small" color="default" {...props} />);
 
 function RadioButton(props: GenericFieldsProps) {
-  const { input }: FieldRenderProps<any, HTMLElement> = useField(props.name);
+  const { input }: FieldRenderProps<any, HTMLElement> = useField(props.name as unknown as string);
   return (
     <RadioGroup
       {...props}
