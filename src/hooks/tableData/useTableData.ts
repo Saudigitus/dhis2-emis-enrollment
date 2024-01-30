@@ -7,30 +7,9 @@ import { useParams } from "../commons/useQueryParams";
 import { HeaderFieldsState } from "../../schema/headersSchema";
 import useShowAlerts from "../commons/useShowAlert";
 import { getSelectedKey } from "../../utils/commons/dataStore/getSelectedKey";
+import { type EventQueryProps, type EventQueryResults, type TeiQueryProps, type TeiQueryResults } from "../../types/common/components";
 
 type TableDataProps = Record<string, string>;
-
-interface EventQueryProps {
-    page: number
-    pageSize: number
-    ouMode: string
-    program: string
-    order: string
-    programStatus: string
-    programStage: string
-    orgUnit: string
-    filter?: string[]
-    filterAttributes?: string[]
-}
-
-interface TeiQueryProps {
-    program: string
-    pageSize: number
-    ouMode: string
-    trackedEntity: string
-    orgUnit: string
-    order: string
-}
 
 const EVENT_QUERY = ({ ouMode, page, pageSize, program, order, programStage, filter, orgUnit, filterAttributes, programStatus }: EventQueryProps) => ({
     results: {
@@ -66,38 +45,6 @@ const TEI_QUERY = ({ ouMode, pageSize, program, trackedEntity, orgUnit, order }:
     }
 })
 
-interface dataValuesProps {
-    dataElement: string
-    value: string
-}
-
-interface attributesProps {
-    attribute: string
-    value: string
-}
-
-interface EventQueryResults {
-    results: {
-        instances: [{
-            trackedEntity: string
-            dataValues: dataValuesProps[]
-        }]
-    }
-}
-
-interface TeiQueryResults {
-    results: {
-        instances: [{
-            trackedEntity: string
-            attributes: attributesProps[]
-            enrollments: [{
-                enrollment: string
-                orgUnit: string
-                program: string
-            }]
-        }]
-    }
-}
 
 export function useTableData() {
     const engine = useDataEngine();

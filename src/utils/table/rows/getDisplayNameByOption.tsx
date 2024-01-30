@@ -1,13 +1,4 @@
-import { type OptionSet } from "../../../types/generated"
-
-interface defaultProps {
-    attribute: string
-    value: string
-    headers: Array<{
-        id: string
-        optionSets?: OptionSet[]
-    }>
-}
+import { type defaultProps } from "../../../types/common/components"
 
 export function getDisplayName({ attribute, value, headers }: defaultProps): string {
     // for (let i = 0; i < headers.length; i++) {

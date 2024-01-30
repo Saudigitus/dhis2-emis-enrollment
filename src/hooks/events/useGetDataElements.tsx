@@ -1,15 +1,7 @@
 import { useDataQuery } from "@dhis2/app-runtime";
 import { formatResponseEvents } from "../../utils/events/formatResponseEvents";
-
-interface GeTDataElementsProps {
-    programStageId: string
-    type?: keyof typeof fieldsType
-}
-
-const fieldsType = {
-    programStage: "executionDateLabel,programStageDataElements[displayInReports,compulsory,dataElement[id,displayName,valueType,optionSet[options[code~rename(value),displayName~rename(label)]]]],programStageSections[displayName,id,displayInReports,compulsory,dataElements[id,formName~rename(displayName),valueType,optionSet[options[code~rename(value),displayName~rename(label)]]]]",
-    programStageSection: "executionDateLabel,programStageSections[displayName,id,displayInReports,compulsory,dataElements[id,formName~rename(displayName),valueType,optionSet[options[code~rename(value),displayName~rename(label)]]]]"
-}
+import { fieldsType } from "../../types/common/components";
+import { type GeTDataElementsProps } from "../../types/common/components";
 
 const DATA_ELEMENTS_QUERY = (id: string, type: keyof typeof fieldsType) => ({
   result: {
@@ -22,8 +14,8 @@ const DATA_ELEMENTS_QUERY = (id: string, type: keyof typeof fieldsType) => ({
 });
 
 function useGetDataElements(props: GeTDataElementsProps) {
-    const { programStageId, type = "programStage" } = props
-    const { data, loading, error } = useDataQuery<{ result: any }>(DATA_ELEMENTS_QUERY(programStageId, type));
+  const { programStageId, type = "programStage" } = props
+  const { data, loading, error } = useDataQuery<{ result: any }>(DATA_ELEMENTS_QUERY(programStageId, type));
 
   return {
     dataElements: formatResponseEvents(data?.result),

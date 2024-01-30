@@ -1,28 +1,4 @@
-interface dataValuesProps {
-    dataElement: string
-    value: string
-}
-
-interface attributesProps {
-    attribute: string
-    value: string
-}
-
-interface formatResponseRowsProps {
-    eventsInstances: [{
-        trackedEntity: string
-        dataValues: dataValuesProps[]
-    }]
-    teiInstances: [{
-        trackedEntity: string
-        attributes: attributesProps[]
-        enrollments: [{
-            enrollment: string
-            orgUnit: string
-            program: string
-        }]
-    }]
-}
+import { type formatResponseRowsProps, type dataValuesProps,type attributesProps } from "../../../types/common/components";
 
 type RowsProps = Record<string, string | number | boolean | any>;
 

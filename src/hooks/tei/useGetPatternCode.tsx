@@ -1,6 +1,7 @@
 import { useDataEngine } from "@dhis2/app-runtime"
 import { CustomAttributeProps } from "../../types/common/components";
 import { useState } from "react";
+import { type QueryResults } from "../../types/common/components";
 
 const TEI_ATTRIBUTES: any = {
     results: {
@@ -9,12 +10,6 @@ const TEI_ATTRIBUTES: any = {
         params: {
             expiration: 3
         }
-    }
-}
-
-interface QueryResults {
-    results: {
-        value: string
     }
 }
 

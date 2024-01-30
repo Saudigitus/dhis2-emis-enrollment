@@ -1,4 +1,4 @@
-import { type Attribute } from '../generated/models';
+import { type Attribute, type OptionSet } from '../generated/models';
 
 //Buttons Actions Interface
 interface ButtonActionProps {
@@ -462,6 +462,11 @@ interface TooltipProps {
     ref: any
 }
 
+interface tableProps {
+    head: any
+    footer: any
+}
+
 interface SelectButtonProps {
     colum: any
     value: any
@@ -474,6 +479,210 @@ interface SelectButtonProps {
     title: string
     tooltipContent: string
 }
+
+interface HeaderCellProps {
+    children?: React.ReactNode
+    className?: string
+    passOnProps?: object
+    table?: tableProps
+    colspan?: number
+    onClick?: () => void
+}
+
+interface PaginationProps {
+    page: number
+    rowsPerPage: number
+    onPageChange: (page: number) => void
+    onRowsPerPageChange: (rowsPerPage: number) => void
+    loading: boolean
+    totalPerPage: number
+}
+
+interface RowProps {
+    children?: React.ReactNode
+    className?: string
+    passOnProps?: object
+    table?: tableProps
+}
+
+interface IconButtonPaginationProps {
+    onPageChange: (page: number) => void
+    ariaLabel: string
+    disabled: boolean
+    Icon: React.ReactNode
+}
+
+interface TableSortProps {
+    children?: React.ReactNode
+    active: boolean
+    direction?: 'asc' | 'desc'
+    createSortHandler: (rowsPerPage: string) => void
+}
+
+interface TableComponentProps {
+    children?: React.ReactNode
+    className?: string
+}
+
+
+interface renderHeaderProps {
+    rowsHeader: CustomAttributeProps[]
+    orderBy: string
+    order: "asc" | "desc"
+    // TODO resolve this bug.👇
+    createSortHandler: (property: string) => any
+    rowsData?: any[]
+    headerData?: CustomAttributeProps[]
+}
+
+interface TitleProps {
+    label: string
+}
+
+interface GeTDataElementsProps {
+    programStageId: string
+    type?: keyof typeof fieldsType
+}
+
+interface EventQueryProps {
+    page: number
+    pageSize: number
+    ouMode: string
+    program: string
+    order: string
+    programStatus: string
+    programStage: string
+    orgUnit: string
+    filter?: string[]
+    filterAttributes?: string[]
+}
+
+interface TeiQueryProps {
+    program: string
+    pageSize: number
+    ouMode: string
+    trackedEntity: string
+    orgUnit: string
+    order: string
+}
+
+interface dataValuesProps {
+    dataElement: string
+    value: string
+}
+
+interface attributesProps {
+    attribute: string
+    value: string
+}
+
+interface EventQueryResults {
+    results: {
+        instances: [{
+            trackedEntity: string
+            dataValues: dataValuesProps[]
+        }]
+    }
+}
+
+interface TeiQueryResults {
+    results: {
+        instances: [{
+            trackedEntity: string
+            attributes: attributesProps[]
+            enrollments: [{
+                enrollment: string
+                orgUnit: string
+                program: string
+            }]
+        }]
+    }
+}
+
+interface QueryResults {
+    results: {
+        value: string
+    }
+}
+
+interface attendance {
+    absenceReason: string
+    programStage: string
+    status: string
+    statusOptions: [{
+        code: string
+        icon: string
+    }]
+}
+
+interface programStages {
+    programStage: string
+}
+
+interface performance {
+    programStages: programStages[]
+}
+
+interface registration {
+    academicYear: string
+    grade: string
+    programStage: string
+    section: string
+}
+
+interface transfer {
+    destinySchool: string
+    programStage: string
+    status: string
+}
+
+interface dataStoreRecord {
+    attendance: attendance
+    key: string
+    trackedEntityType: string
+    lastUpdate: string
+    performance: performance
+    program: string
+    registration: registration
+    ["socio-economics"]: programStages
+    transfer: transfer
+    ["final-result"]: programStages
+
+}
+
+interface getTypesOfButtonProps {
+    type: string
+}
+
+interface formatResponseRowsProps {
+    eventsInstances: [{
+        trackedEntity: string
+        dataValues: dataValuesProps[]
+    }]
+    teiInstances: [{
+        trackedEntity: string
+        attributes: attributesProps[]
+        enrollments: [{
+            enrollment: string
+            orgUnit: string
+            program: string
+        }]
+    }]
+}
+
+interface defaultProps {
+    attribute: string
+    value: string
+    headers: Array<{
+        id: string
+        optionSets?: OptionSet[]
+    }>
+}
+export const fieldsType = {
+    programStage: "executionDateLabel,programStageDataElements[displayInReports,compulsory,dataElement[id,displayName,valueType,optionSet[options[code~rename(value),displayName~rename(label)]]]],programStageSections[displayName,id,displayInReports,compulsory,dataElements[id,formName~rename(displayName),valueType,optionSet[options[code~rename(value),displayName~rename(label)]]]]",
+    programStageSection: "executionDateLabel,programStageSections[displayName,id,displayInReports,compulsory,dataElements[id,formName~rename(displayName),valueType,optionSet[options[code~rename(value),displayName~rename(label)]]]]"
+}
+
 export type {
     ButtonActionProps, FlyoutOptionsProps, SimpleButtonsProps, DashboardCardProps, CardSubItemProps, SectionFieldsProps, FormSectionProps,
     formType, HeadBarTypes, SelectedOptionsTypes, MenuItemTypes, ComponentMapping, ParamsMapping, ProgramConfig, ProgramStageConfig, BadgeProps,
@@ -481,5 +690,7 @@ export type {
     DropdownButtonComponentProps, CardProps, DragDropItemsProps, DragDropListProps, EventFormProps, FormProps, GenericFieldsProps, CheckFieldProps,
     MutlipleSelectProps, AutoCompleteProps, SingleSelectProps, SwitchFieldProps, ContentProps, ModalProps, ConfigTableColumnsProps, DialogSelectColumnsProps,
     ContentFilterProps, MenuFiltersProps, SelectorContentsProps, FilterComponentProps, DateFilterManagerProps, OptionSetProps, SelectBoxesProps, TextFilterProps,
-    ActiveFilterButtonProps, RenderWithAppliedFilterProps, RenderWithoutAppliedFilterProps, TooltipProps, SelectButtonProps
+    ActiveFilterButtonProps, RenderWithAppliedFilterProps, RenderWithoutAppliedFilterProps, TooltipProps, SelectButtonProps, HeaderCellProps, PaginationProps, IconButtonPaginationProps,
+    RowProps, TableSortProps, TableComponentProps, renderHeaderProps, TitleProps, GeTDataElementsProps, EventQueryProps, TeiQueryProps, EventQueryResults, TeiQueryResults, QueryResults,
+    dataStoreRecord, getTypesOfButtonProps, formatResponseRowsProps, dataValuesProps, attributesProps, defaultProps
 }

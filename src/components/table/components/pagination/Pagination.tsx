@@ -7,22 +7,7 @@ import { disableNextPage } from '../../../../utils/table/pagination/pagination';
 import { rowsPerPages } from '../../../../utils/constants/pagination/pagination';
 import styles from './Pagination.module.css'
 import classNames from 'classnames';
-
-interface PaginationProps {
-    page: number
-    rowsPerPage: number
-    onPageChange: (page: number) => void
-    onRowsPerPageChange: (rowsPerPage: number) => void
-    loading: boolean
-    totalPerPage: number
-}
-
-interface IconButtonPaginationProps {
-    onPageChange: (page: number) => void
-    ariaLabel: string
-    disabled: boolean
-    Icon: React.ReactNode
-}
+import  { IconButtonPaginationProps,PaginationProps } from '../../../../types/common/components';
 
 function textPagination(text: string): React.ReactElement {
     return (
