@@ -9,7 +9,9 @@ import {
 } from "@dhis2/ui";
 import { ContentProps } from "../../types/common/components";
 
-function ImportContent({ setOpen }: ContentProps): React.ReactElement {
+function ImportContent(props: ContentProps): React.ReactElement {
+  const { setOpen } = props;
+  
   const modalActions = [
     { label: "Cancel", disabled: false, loading: false, onClick: () => { setOpen(false) } },
     { label: "Import", primary: true, disabled: false, loading: false, onClick: () => { setOpen(false) } }

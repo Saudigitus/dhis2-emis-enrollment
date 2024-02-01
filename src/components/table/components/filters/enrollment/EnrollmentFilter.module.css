@@ -1,7 +1,7 @@
 .container {
-    display: "flex";
-    flex-wrap: "wrap";
-    align-items: "center";
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
     margin-bottom: 10;
     margin-top: 10;
     margin-left: 10

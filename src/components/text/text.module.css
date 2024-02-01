@@ -4,7 +4,7 @@
     font-weight: 500;
     font-size: 18px;
     line-height: 23px;
-    color: rgba(33, 41, 52, 0.9);
+    color: var(--dark-label-color-secondary);
 }
 
 .title {
@@ -14,7 +14,7 @@
     font-size: 20px;
     line-height: 100%;
     letter-spacing: 0.15px;
-    color: rgba(0, 0, 0, 0.87);
+    color: var(--dark-label-color);
     flex: none;
     order: 0;
     flex-grow: 0;

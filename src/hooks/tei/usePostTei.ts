@@ -1,6 +1,7 @@
 import { useDataMutation } from "@dhis2/app-runtime"
 import useShowAlerts from '../commons/useShowAlert';
-import { atom, useRecoilState } from "recoil";
+import { useRecoilState } from "recoil";
+import { TeiRefetch } from "../../schema/refecthTeiSchema";
 
 const POST_TEI: any = {
     resource: "tracker",
@@ -11,14 +12,9 @@ const POST_TEI: any = {
     }
 }
 
-export const teiRefetch = atom({
-    key: "refetch-tei",
-    default: false
-})
-
 export default function usePostTei() {
     const { hide, show } = useShowAlerts()
-    const [refetch, setRefetch] = useRecoilState<boolean>(teiRefetch)
+    const [refetch, setRefetch] = useRecoilState(TeiRefetch)
 
     const [create, { loading, data }] = useDataMutation(POST_TEI, {
         onComplete: () => {

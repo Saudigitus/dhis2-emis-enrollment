@@ -34,7 +34,7 @@ function TEIGenericForm() {
         onSubmit={() => { alert(JSON.stringify(values)) }}
         initialValues={generatedVariables}
       >
-        {({ values, pristine, form }) => (
+        {({ pristine, form }) => (
           <form onChange={onChange}>
             <GroupForm
               name={"Attributes"}

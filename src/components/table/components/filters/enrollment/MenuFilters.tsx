@@ -3,10 +3,13 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import { MenuFiltersProps } from '../../../../../types/common/components';
 
-export default function MenuFilters({ anchorEl, setAnchorEl, addSearchableHeaders, options }: MenuFiltersProps) {
+export default function MenuFilters(props: MenuFiltersProps) {
+    const { anchorEl, setAnchorEl, addSearchableHeaders, options } = props;
+
     const handleClose = () => {
         setAnchorEl(null);
     };
+    
     return (
         <>
             <Menu

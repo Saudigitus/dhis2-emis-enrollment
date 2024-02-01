@@ -25,7 +25,7 @@ function OptionSet(props: OptionSetProps) {
             <div className={classes.selectBoxesInnerContainer}>
                 { /* $FlowFixMe */}
                 <SelectBoxes
-                    optionSet={options}
+                    options={options}
                     value={value}
                     orientation={"vertical"}
                     singleSelect={!singleSelect}

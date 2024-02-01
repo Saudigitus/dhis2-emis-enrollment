@@ -1,7 +1,7 @@
 .tr{
-    outline: 'none'
+    outline: none !important;
 }
 
 .iconContainer{
-    float: 'right'
+    float: right !important;
 }

@@ -31,7 +31,8 @@ const useStyles = makeStyles((theme: Theme) =>
     })
 );
 
-function RenderRows({ headerData, rowsData }: renderHeaderProps): React.ReactElement {
+function RenderRows(props: renderHeaderProps): React.ReactElement {
+    const { headerData, rowsData } = props;
     const classes = useStyles()
     const { baseUrl } = useConfig()
 

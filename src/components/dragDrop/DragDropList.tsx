@@ -24,7 +24,7 @@ function DragDropList(props: DragDropListProps) {
     }
 
     return (
-        <DndProvider backend={HTML5Backend}>
+        <DndProvider backend={HTML5Backend} chil>
             <Table>
                 <TableHead>
                     <TableRow>

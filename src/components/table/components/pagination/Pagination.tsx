@@ -5,8 +5,6 @@ import Select from 'react-select';
 import defaultClasses from '../table.module.css';
 import { disableNextPage } from '../../../../utils/table/pagination/pagination';
 import { rowsPerPages } from '../../../../utils/constants/pagination/pagination';
-import styles from './Pagination.module.css'
-import classNames from 'classnames';
 import  { IconButtonPaginationProps,PaginationProps } from '../../../../types/common/components';
 
 function textPagination(text: string): React.ReactElement {
@@ -25,7 +23,7 @@ function IconButtonPagination(props: IconButtonPaginationProps): React.ReactElem
                 onClick={props.onPageChange}
                 disabled={props.disabled}
                 aria-label={props.ariaLabel}
-                className={styles.iconButton}
+                className={defaultClasses.iconButton}
             >
                 {props.Icon}
             </IconButton>
@@ -35,14 +33,14 @@ function IconButtonPagination(props: IconButtonPaginationProps): React.ReactElem
 
 function Pagination({ page, rowsPerPage, onPageChange, onRowsPerPageChange, loading, totalPerPage }: PaginationProps): React.ReactElement {
     return (
-        <div className={classNames(defaultClasses.pagination, styles.container)}>
+        <div className={defaultClasses.pagination}>
             <div />
 
             <div className={defaultClasses.rootPagination}>
                 {textPagination("Rows per page")}
 
                 <Select
-                    className={classNames(defaultClasses.textPagination, styles.rowsPerPageSelector)}
+                    className={defaultClasses.textPagination}
                     value={rowsPerPage}
                     clearValueText={false}
                     options={rowsPerPages}
@@ -53,7 +51,7 @@ function Pagination({ page, rowsPerPage, onPageChange, onRowsPerPageChange, load
                 />
                 {textPagination(`Page ${page}`)}
 
-                <div className={styles.separator} />
+                <div className={defaultClasses.separator} />
 
                 <IconButtonPagination
                     Icon={<KeyboardArrowLeft />}

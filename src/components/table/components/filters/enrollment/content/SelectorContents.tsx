@@ -27,6 +27,7 @@ function SelectorContents(props: SelectorContentsProps) {
             <FilterComponents
                 type={colum.valueType}
                 column={colum}
+                options={colum.options}
                 {...props}
             />
             <div

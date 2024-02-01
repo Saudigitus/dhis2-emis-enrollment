@@ -1,6 +1,4 @@
-import { type formatResponseRowsProps, type dataValuesProps,type attributesProps } from "../../../types/common/components";
-
-type RowsProps = Record<string, string | number | boolean | any>;
+import { formatResponseRowsProps, dataValuesProps, attributesProps, RowsProps } from "../../../types/common/components";
 
 export function formatResponseRows({ eventsInstances, teiInstances }: formatResponseRowsProps): RowsProps[] {
     const allRows: RowsProps[] = []

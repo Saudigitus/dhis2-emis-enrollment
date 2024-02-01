@@ -11,7 +11,7 @@ const styles = (theme: any) => ({
 });
 
 function TrueOnly(props: any) {
-    const { header, classes, id, onChange, value } = props;
+    const { classes, id, onChange, value } = props;
     return (
         <div>
             <Checkbox

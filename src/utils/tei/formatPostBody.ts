@@ -1,8 +1,8 @@
-import { formType } from "../../types/common/components";
+import { FormToPostType } from "../../types/common/components";
 import { reducer } from "../commons/formatDistinctValue";
 
 export const teiPostBody = (enrollmentsData: any[], programId: string, orgUnit: string, enrollmentDate: string, programStagesToSave: string[], trackedEntityType: string) => {
-    const form: formType = {
+    const form: FormToPostType = {
         attributes: [],
         events: []
     }

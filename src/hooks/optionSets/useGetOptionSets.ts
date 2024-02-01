@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { OptionSetsState } from '../../schema/optionSetsSchema';
 import useShowAlerts from '../commons/useShowAlert';
+import { optionSetsSchema } from '../../types/common/components';
 
 const OPTIONSETS_QUERY = (id: string) => ({
     result: {
@@ -16,7 +17,7 @@ const OPTIONSETS_QUERY = (id: string) => ({
 
 function useGetOptionSets({ optionSetId }: { optionSetId: string }) {
     const { hide, show } = useShowAlerts()
-    const setOptionSetsState = useSetRecoilState<any>(OptionSetsState);
+    const setOptionSetsState = useSetRecoilState(OptionSetsState);
     const getOptionSetsState = useRecoilValue(OptionSetsState);
     const { data, loading, error } = useDataQuery<{ result: any }>(OPTIONSETS_QUERY(optionSetId), {
         onError(error) {
@@ -29,7 +30,7 @@ function useGetOptionSets({ optionSetId }: { optionSetId: string }) {
     })
 
     useEffect(() => {
-        const localData = { ...getOptionSetsState, [optionSetId]: data?.result }
+        const localData = { ...getOptionSetsState, [optionSetId]: data?.result } as unknown as optionSetsSchema | undefined
         setOptionSetsState(localData)
     }, [loading])
 

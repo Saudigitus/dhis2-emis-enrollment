@@ -28,11 +28,6 @@ function FilterComponents(props: FilterComponentProps) {
                 {...column}
             />
         case Attribute.valueType.TRUE_ONLY as unknown as CustomAttributeProps["valueType"]:
-            return <TrueOnly
-                onChange={onChange}
-                value={value}
-                {...column}
-            />
         case Attribute.valueType.INTEGER_ZERO_OR_POSITIVE as unknown as CustomAttributeProps["valueType"]:
             return <TrueOnly
                 onChange={onChange}
@@ -40,7 +35,7 @@ function FilterComponents(props: FilterComponentProps) {
                 {...column}
             />
         default:
-            return <div>not mapped</div>
+            return <div>Not mapped</div>
     }
 }
 

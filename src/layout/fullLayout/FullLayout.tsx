@@ -5,9 +5,11 @@ import { useGetInitialValues } from '../../hooks/initialValues/useGetInitialValu
 import { CenteredContent, CircularLoader } from "@dhis2/ui";
 import { useGetProgramConfig } from '../../hooks/programConfig/useGetprogramConfig';
 import { getSelectedKey } from '../../utils/commons/dataStore/getSelectedKey';
+import { LayoutProps } from '../../types/common/components';
 
-export default function FullLayout({ children }: { children: React.ReactNode }) {
+export default function FullLayout(props: LayoutProps) {
     useGetInitialValues()
+    const { children } = props;
     const { isSetSectionType } = useGetInitialValues()
     const { getDataStoreData } = getSelectedKey()
     const { loading } = useGetProgramConfig(getDataStoreData.program);

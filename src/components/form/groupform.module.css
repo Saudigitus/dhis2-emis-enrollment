@@ -1,5 +1,5 @@
 .textTitlle {
-    color: rgba(0, 0, 0, 0.87);
+    color: var(--dark-label-color);
     padding: 16px 8px 16px 12px;
     font-size: 16px;
     font-weight: 500;
@@ -8,10 +8,10 @@
 }
 
 .labelName {
-    color: rgba(0, 0, 0, 0.87)
+    color: var(--dark-label-color);
 }
 
 .content {
-    color: #E53935;
+    color: var(--error-message-color);
     margin-top: 20
 }

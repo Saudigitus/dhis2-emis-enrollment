@@ -5,10 +5,10 @@ import InputNumber from "./fields/InputNumber.js";
 import InputText from "./fields/InputText.js";
 import SingleSelectField from "./fields/SingleSelect.js";
 import InputArea from "./fields/InputArea.js";
-import { CustomAttributeProps, GenericFieldsProps } from "../../types/common/components";
 import { Attribute } from "../../types/generated/models.js";
 import RadioButton from "./fields/RadioButton.js";
-import { type GenericFieldsComponentProps } from "../../types/fields/GenericFieldsTypes.js";
+import { CustomAttributeProps } from "../../types/table/AttributeColumns.js";
+import { GenericFieldsComponentProps } from "../../types/common/components.js";
 
 function GenericFields({ attribute, disabled, valueType }: GenericFieldsComponentProps) {
   switch (valueType) {
@@ -48,7 +48,7 @@ function GenericFields({ attribute, disabled, valueType }: GenericFieldsComponen
       );
 
     case Attribute.valueType.LIST as unknown as CustomAttributeProps["valueType"]:
-      return <SingleSelectField {...attribute} disabled={!!(disabled || attribute?.disabled)} />;
+      return <SingleSelectField {...attribute} disabled={disabled || attribute.disabled} />;
 
     default:
       return <span>ValueType not mapped</span>;

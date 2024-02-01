@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react'
-import { RowTable, SortLabel } from '../components'
+import { RowTable } from '../components'
 import classNames from 'classnames';
 import { makeStyles, createStyles, type Theme } from '@material-ui/core/styles';
 import HeaderCell from '../components/head/HeaderCell';

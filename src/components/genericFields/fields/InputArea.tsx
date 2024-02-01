@@ -7,13 +7,13 @@ import {
 } from "@dhis2/ui";
 import React from "react";
 import style from "./fields.module.css";
-import { type GenericFieldsProps } from "../../../types/common/components";
+import { type FormFieldsProps } from "../../../types/common/components";
 
 const { Field } = ReactFinalForm;
 
 const VALIDATOR = composeValidators(string, hasValue);
 
-function InputArea(props: GenericFieldsProps) {
+function InputArea(props: FormFieldsProps) {
   return (
     <Field
       {...props}

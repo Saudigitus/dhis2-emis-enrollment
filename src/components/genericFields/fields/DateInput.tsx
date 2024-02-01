@@ -1,10 +1,10 @@
 import { ReactFinalForm, InputFieldFF, hasValue } from "@dhis2/ui";
 import React from "react";
-import { type GenericFieldsProps } from "../../../types/common/components";
+import { type FormFieldsProps } from "../../../types/common/components";
 
 const { Field } = ReactFinalForm;
 
-function DateInput(props: GenericFieldsProps) {
+function DateInput(props: FormFieldsProps) {
   return (
     <Field
       {...props}

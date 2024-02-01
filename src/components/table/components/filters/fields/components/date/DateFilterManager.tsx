@@ -12,7 +12,6 @@ const DateFilterManager = (props: DateFilterManagerProps) => {
             <div className={styles.fromToContainer}>
                 <div>
                     <KeyboardDatePicker
-                        // disableToolbar
                         variant="inline"
                         format="yyyy/MM/dd"
                         label={"From"}
@@ -25,7 +24,6 @@ const DateFilterManager = (props: DateFilterManagerProps) => {
                 <div className={styles.toLabelContainer} />
                 <div>
                     <KeyboardDatePicker
-                        // disableToolbar
                         variant="inline"
                         format="yyyy/MM/dd"
                         className={styles.KeyboardDatePicker}

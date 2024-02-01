@@ -1,4 +1,16 @@
 import { type Attribute, type OptionSet } from '../generated/models';
+import { CustomAttributeProps } from '../table/AttributeColumns';
+
+
+//Head Bar Types interface
+interface HeadBarTypes {
+    id: string
+    label: string
+    value: string
+    placeholder: string
+    component?: string
+    dataElementId?: string
+}
 
 //Buttons Actions Interface
 interface ButtonActionProps {
@@ -9,6 +21,10 @@ interface ButtonActionProps {
     disabled: boolean
     loading?: boolean
     onClick: () => void
+}
+
+interface FlyoutComponentProps {
+    options: FlyoutOptionsProps[]
 }
 
 //Flyout Options Interface 
@@ -58,19 +74,9 @@ interface FormSectionProps {
     fields: SectionFieldsProps[]
 }
 
-interface formType {
+interface FormToPostType {
     attributes: any[]
     events: any[]
-}
-
-//Head Bar Types interface
-interface HeadBarTypes {
-    id: string
-    label: string
-    value: string
-    placeholder: string
-    component?: string
-    dataElementId?: string
 }
 
 //Selected Options interface
@@ -82,9 +88,20 @@ interface SelectedOptionsTypes {
     schoolName: string | null
 }
 
+interface MenuItemsProps { 
+    menuItems: MenuItemTypes[]
+    dataElementId: string
+    onToggle: () => void
+ }
+
 interface MenuItemTypes {
     label: string
     value: string
+}
+
+interface MenuItemContainerProps {
+    dataElementId: string
+    onToggle: () => void
 }
 
 type ComponentMapping = Record<string, React.ComponentType<any>>;
@@ -98,31 +115,7 @@ interface ProgramConfig {
     description: string
     access?: any
     programType: string
-    programStages: [
-        {
-            autoGenerateEvent: boolean
-            displayName: string
-            id: string
-            programStageDataElements: [
-                {
-                    displayInReports: boolean
-                    compulsory: boolean
-                    dataElement: {
-                        displayName: string
-                        id: string
-                        valueType: string
-                        optionSet: {
-                            id: string
-                            options: [{
-                                value: string
-                                label: string
-                            }]
-                        }
-                    }
-                }
-            ]
-        }
-    ]
+    programStages: ProgramStageConfig[]
     programTrackedEntityAttributes: [
         {
             trackedEntityAttribute: {
@@ -167,10 +160,9 @@ interface ProgramStageConfig {
                 optionSet: {
                     id: string
                     options: {
-                        [x: string]: any
                         value: string
                         label: string
-                    }
+                    }[]
                 }
             }
         }
@@ -204,36 +196,6 @@ interface SideBarCollapseProps {
 export enum VariablesTypes {
     DataElement = "dataElement",
     Attribute = "attribute"
-}
-
-interface CustomAttributeProps {
-    id: string
-    displayName: string
-    header: string
-    required: boolean
-    name: string
-    programStage?: string
-    assignedValue?: string
-    labelName: string
-    valueType: typeof Attribute.valueType
-    disabled: boolean
-    visible: boolean
-    options?: {
-        optionSet: {
-            id: string
-            options: [{
-                value: string
-                label: string
-            }]
-        }
-    }
-    pattern?: string
-    searchable?: boolean
-    error?: boolean
-    content?: string
-    key?: any
-    description?: string
-    type?: VariablesTypes
 }
 
 interface AppConfigurationsProps {
@@ -290,14 +252,17 @@ interface FormProps {
     disabled: boolean
 }
 
-interface GenericFieldsProps {
+interface GenericFieldsComponentProps {
+    attribute: CustomAttributeProps
+    disabled: boolean
+    valueType: CustomAttributeProps["valueType"]
+}
+
+interface FormFieldsProps {
     disabled: boolean
     required: string | boolean
     type?: string
     optionSet?: CustomAttributeProps["options"]
-    attribute?: CustomAttributeProps
-    valueType?: CustomAttributeProps["valueType"]
-    name?: string
 }
 
 interface CheckFieldProps {
@@ -318,9 +283,9 @@ interface MutlipleSelectProps {
 
 interface AutoCompleteProps {
     disabled?: boolean
-    options?: CustomAttributeProps["options"]
+    options?: CustomAttributeProps['options']
     name: string
-    required?: boolean
+    required?: string | boolean
 }
 
 interface SingleSelectProps {
@@ -343,6 +308,16 @@ interface ModalProps {
     setOpen: (value: boolean) => void
     title: string
     children: React.ReactNode
+}
+
+interface OrgUnitTreeComponentProps {
+    onToggle: () => void
+}
+
+interface SimpleSearchProps {
+    children: React.ReactNode
+    placeholder: string
+    id: string
 }
 
 interface ConfigTableColumnsProps {
@@ -383,8 +358,8 @@ interface FilterComponentProps {
     column: CustomAttributeProps
     onChange: () => void
     value: any
-    id: string
-    options: { optionSet: { options: [{ value: string, label: string }] } }
+    id?: string
+    options: CustomAttributeProps['options']
 }
 
 interface ValueProps {
@@ -400,17 +375,17 @@ interface DateFilterManagerProps {
 
 interface OptionSetProps {
     onCommitValue: (value: string) => void
-    options: any[]
+    options: CustomAttributeProps['options']
     value: string
     singleSelect: boolean
 }
 
 interface SelectBoxesProps {
-    options: { optionSet: { options: [{ label: string, value: string }] } }
+    options?: CustomAttributeProps['options']
     value: any
-    id: string
-    onChange: (value: any, id?: string, type?: string) => void
-    valueType?: string
+    id?: string
+    onChange: (value: any, id?: string, type?: CustomAttributeProps['valueType']) => void
+    valueType?: CustomAttributeProps['valueType']
     orientation?: string
     singleSelect?: boolean
 }
@@ -532,14 +507,35 @@ interface renderHeaderProps {
     headerData?: CustomAttributeProps[]
 }
 
+type EnumBorderType = "all" | "bottom" | "top"
+interface WithBorderProps { 
+    children?: React.ReactNode
+    type: EnumBorderType 
+}
+
+interface WithPaddingProps {
+    children?: React.ReactNode
+    p?: string 
+}
+
 interface TitleProps {
     label: string
 }
+
+type AlertOptions = {
+    message: string
+};
+  
+type AlertType = {
+    type: Record<string, any>
+};
 
 interface GeTDataElementsProps {
     programStageId: string
     type?: keyof typeof fieldsType
 }
+
+type TableDataProps = Record<string, string>;
 
 interface EventQueryProps {
     page: number
@@ -596,10 +592,15 @@ interface TeiQueryResults {
     }
 }
 
-interface QueryResults {
+type GeneratedCodeType = Record<string, string>
+interface PatternCodeQueryResults {
     results: {
         value: string
     }
+}
+
+interface LayoutProps {
+    children: React.ReactNode
 }
 
 interface attendance {
@@ -612,12 +613,12 @@ interface attendance {
     }]
 }
 
-interface programStages {
+interface SimpleProgramStage {
     programStage: string
 }
 
 interface performance {
-    programStages: programStages[]
+    programStages: SimpleProgramStage[]
 }
 
 interface registration {
@@ -641,9 +642,9 @@ interface dataStoreRecord {
     performance: performance
     program: string
     registration: registration
-    ["socio-economics"]: programStages
+    ["socio-economics"]: SimpleProgramStage
     transfer: transfer
-    ["final-result"]: programStages
+    ["final-result"]: SimpleProgramStage
 
 }
 
@@ -651,20 +652,22 @@ interface getTypesOfButtonProps {
     type: string
 }
 
+type RowsProps = Record<string, string | number | boolean | any>;
+
 interface formatResponseRowsProps {
-    eventsInstances: [{
+    eventsInstances: {
         trackedEntity: string
         dataValues: dataValuesProps[]
-    }]
-    teiInstances: [{
+    }[]
+    teiInstances: {
         trackedEntity: string
         attributes: attributesProps[]
-        enrollments: [{
+        enrollments: {
             enrollment: string
             orgUnit: string
             program: string
-        }]
-    }]
+        }[]
+    }[]
 }
 
 interface defaultProps {
@@ -701,13 +704,13 @@ export const fieldsType = {
 }
 
 export type {
-    ButtonActionProps, FlyoutOptionsProps, SimpleButtonsProps, DashboardCardProps, CardSubItemProps, SectionFieldsProps, FormSectionProps,
-    formType, HeadBarTypes, SelectedOptionsTypes, MenuItemTypes, ComponentMapping, ParamsMapping, ProgramConfig, ProgramStageConfig, BadgeProps,
+    ButtonActionProps, FlyoutComponentProps, FlyoutOptionsProps, SimpleButtonsProps, DashboardCardProps, CardSubItemProps, SectionFieldsProps, FormSectionProps,
+    FormToPostType, HeadBarTypes, SelectedOptionsTypes, MenuItemsProps, MenuItemTypes, MenuItemContainerProps, ComponentMapping, ParamsMapping, ProgramConfig, ProgramStageConfig, BadgeProps,
     SideBarItemProps, SideBarItemTitleProps, SideBarSubItemProps, SideBarCollapseProps, CustomAttributeProps, AppConfigurationsProps, ButtonProps,
-    DropdownButtonComponentProps, CardProps, DragDropItemsProps, DragDropListProps, EventFormProps, FormProps, GenericFieldsProps, CheckFieldProps,
-    MutlipleSelectProps, AutoCompleteProps, SingleSelectProps, SwitchFieldProps, ContentProps, ModalProps, ConfigTableColumnsProps, DialogSelectColumnsProps,
+    DropdownButtonComponentProps, CardProps, DragDropItemsProps, DragDropListProps, EventFormProps, FormProps, GenericFieldsComponentProps, FormFieldsProps, CheckFieldProps,
+    MutlipleSelectProps, AutoCompleteProps, SingleSelectProps, SwitchFieldProps, ContentProps, OrgUnitTreeComponentProps, SimpleSearchProps, ModalProps, ConfigTableColumnsProps, DialogSelectColumnsProps,
     ContentFilterProps, MenuFiltersProps, SelectorContentsProps, FilterComponentProps, DateFilterManagerProps, OptionSetProps, SelectBoxesProps, TextFilterProps,
     ActiveFilterButtonProps, RenderWithAppliedFilterProps, RenderWithoutAppliedFilterProps, TooltipProps, SelectButtonProps, HeaderCellProps, PaginationProps, IconButtonPaginationProps,
-    RowProps, TableSortProps, TableComponentProps, renderHeaderProps, TitleProps, GeTDataElementsProps, EventQueryProps, TeiQueryProps, EventQueryResults, TeiQueryResults, QueryResults,
-    dataStoreRecord, getTypesOfButtonProps, formatResponseRowsProps, dataValuesProps, attributesProps, defaultProps, headersFieldsSchema, optionSetsSchema
+    RowProps, TableSortProps, TableComponentProps, renderHeaderProps, WithBorderProps, WithPaddingProps, TitleProps, AlertOptions, AlertType, GeTDataElementsProps, TableDataProps, EventQueryProps, TeiQueryProps, EventQueryResults, TeiQueryResults, PatternCodeQueryResults, GeneratedCodeType,
+    LayoutProps, SimpleProgramStage, dataStoreRecord, getTypesOfButtonProps, RowsProps, formatResponseRowsProps, dataValuesProps, attributesProps, defaultProps, headersFieldsSchema, optionSetsSchema
 }

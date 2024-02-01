@@ -18,7 +18,8 @@ import useGetUsedPProgramStages from "../../hooks/programStages/useGetUsedPProgr
 import { getSelectedKey } from "../../utils/commons/dataStore/getSelectedKey";
 import { ContentProps } from "../../types/common/components";
 
-function ModalContentComponent({ setOpen }: ContentProps): React.ReactElement {
+function ModalContentComponent(props: ContentProps): React.ReactElement {
+  const { setOpen } = props;
   const getProgram = useRecoilValue(ProgramConfigState);
   const { useQuery } = useParams();
   const formRef: React.MutableRefObject<FormApi<IForm, Partial<IForm>>> = useRef(null);
@@ -27,7 +28,7 @@ function ModalContentComponent({ setOpen }: ContentProps): React.ReactElement {
   const performanceProgramStages = useGetUsedPProgramStages();
   const { enrollmentsData } = useGetEnrollmentForm();
   const [, setClicked] = useRecoilState<boolean>(onSubmitClicked);
-  const [values, setValues] = useState<object>({})
+  const [values, setValues] = useState<Record<string,string>>({})
   const { getDataStoreData } = getSelectedKey();
   const [fieldsWitValue, setFieldsWitValues] = useState<any[]>([enrollmentsData])
   const { postTei, loading, data } = usePostTei()

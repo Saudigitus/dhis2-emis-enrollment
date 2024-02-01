@@ -7,40 +7,24 @@ import { useParams } from "../commons/useQueryParams";
 import { HeaderFieldsState } from "../../schema/headersSchema";
 import useShowAlerts from "../commons/useShowAlert";
 import { getSelectedKey } from "../../utils/commons/dataStore/getSelectedKey";
-import { type EventQueryProps, type EventQueryResults, type TeiQueryProps, type TeiQueryResults } from "../../types/common/components";
+import { TableDataProps, EventQueryProps, EventQueryResults, TeiQueryProps, TeiQueryResults } from "../../types/common/components";
 
-type TableDataProps = Record<string, string>;
-
-const EVENT_QUERY = ({ ouMode, page, pageSize, program, order, programStage, filter, orgUnit, filterAttributes, programStatus }: EventQueryProps) => ({
+const EVENT_QUERY = (queryProps: EventQueryProps) => ({
     results: {
         resource: "tracker/events",
         params: {
-            order,
-            page,
-            pageSize,
-            programStatus,
-            ouMode,
-            program,
-            programStage,
-            orgUnit,
-            filter,
-            filterAttributes,
-            fields: "*"
+            fields: "*",
+            ...queryProps
         }
     }
 })
 
-const TEI_QUERY = ({ ouMode, pageSize, program, trackedEntity, orgUnit, order }: TeiQueryProps) => ({
+const TEI_QUERY = (queryProps: TeiQueryProps) => ({
     results: {
         resource: "tracker/trackedEntities",
         params: {
-            program,
-            order,
-            ouMode,
-            pageSize,
-            trackedEntity,
-            orgUnit,
-            fields: "trackedEntity,createdAt,orgUnit,attributes[attribute,value],enrollments[enrollment,orgUnit,program]"
+            fields: "trackedEntity,createdAt,orgUnit,attributes[attribute,value],enrollments[enrollment,orgUnit,program]",
+            ...queryProps
         }
     }
 })
@@ -60,7 +44,7 @@ export function useTableData() {
         if (school !== null) {
             setLoading(true)
 
-            const eventsResults: EventQueryResults = await engine.query(EVENT_QUERY({
+            const eventsResults = await engine.query(EVENT_QUERY({
                 ouMode: school != null ? "SELECTED" : "ACCESSIBLE",
                 page,
                 pageSize,
@@ -77,11 +61,11 @@ export function useTableData() {
                     type: { critical: true }
                 });
                 setTimeout(hide, 5000);
-            })
+            }) as unknown as EventQueryResults;
 
             const trackedEntityToFetch = eventsResults?.results?.instances.map((x: { trackedEntity: string }) => x.trackedEntity).toString().replaceAll(",", ";")
 
-            const teiResults: TeiQueryResults = trackedEntityToFetch?.length > 0
+            const teiResults = trackedEntityToFetch?.length > 0
                 ? await engine.query(TEI_QUERY({
                     ouMode: school != null ? "SELECTED" : "ACCESSIBLE",
                     order: "created:desc",
@@ -95,8 +79,8 @@ export function useTableData() {
                         type: { critical: true }
                     });
                     setTimeout(hide, 5000);
-                })
-                : { results: { instances: [] } }
+                }) as unknown as TeiQueryResults
+                : { results: { instances: [] } } as unknown as TeiQueryResults
 
             setTableData(formatResponseRows({
                 eventsInstances: eventsResults?.results?.instances,

@@ -45,8 +45,6 @@
     text-align: left;
 }
 
-.tableCellFooter {}
-
 .pagination {
     display: flex;
     align-items: flex-end;
@@ -69,7 +67,6 @@
 }
 
 .rootPagination {
-    /* flex-shrink: 0; */
     display: flex;
 }
 
@@ -78,8 +75,17 @@
     color: rgba(0, 0, 0, 0.54);
     font-weight: 500;
     font-size: 0.75rem;
-    margin-top: 15px;
-    /* padding-top: 20px; */
+    margin-right: 10px !important;
+    display: flex;
+    align-items: center;
+}
+
+.separator {
+    margin-right: 10px;
+}
+
+.iconButton {
+    padding-right: 15px;
 }
 
 .sortLabelContainer {
