@@ -2,7 +2,7 @@ import React from 'react'
 import WithPadding from '../../../../template/WithPadding'
 import EnrollmentActionsButtons from '../../enrollmentButtons/EnrollmentActionsButtons';
 
-function WorkingLits() {
+function WorkingLists() {
   return (
     <WithPadding>
       <div className='d-flex justify-content-between'>
@@ -13,4 +13,4 @@ function WorkingLits() {
   )
 }
 
-export default WorkingLits
+export default WorkingLists

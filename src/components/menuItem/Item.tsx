@@ -1,10 +1,9 @@
 import React from 'react'
 import { MenuItem } from "@dhis2/ui"
-import { useParams } from '../../hooks/commons/useQueryParams';
 import { useRecoilState } from 'recoil';
 import { HeaderFieldsState } from '../../schema/headersSchema';
-import useDataElementsParamMapping from '../../hooks/dataElements/useDataElementsParamMapping';
 import { MenuItemsProps } from '../../types/menu/MenuItemTypes';
+import { useDataElementsParamMapping, useParams } from '../../hooks';
 
 
 

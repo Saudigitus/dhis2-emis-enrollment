@@ -8,8 +8,8 @@ import React from 'react'
 import update from 'react-addons-update';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import DragDropListItem from './DragDropItems.js';
-import { DragDropListProps } from '../../types/table/ConfigColumnsProps.js';
+import DragDropListItem from './DragDropItems';
+import { DragDropListProps } from '../../types/table/ConfigColumnsProps';
 
 function DragDropList(props: DragDropListProps) {
     const { listItems, handleUpdateListOrder, handleToggle } = props;

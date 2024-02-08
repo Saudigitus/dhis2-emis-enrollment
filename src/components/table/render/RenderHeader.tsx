@@ -2,8 +2,8 @@ import React, { useMemo } from 'react'
 import { RowTable } from '../components'
 import classNames from 'classnames';
 import { makeStyles, createStyles, type Theme } from '@material-ui/core/styles';
-import HeaderCell from '../components/head/HeaderCell';
 import { RenderHeaderProps } from '../../../types/table/TableContentProps';
+import HeaderCell from '../components/head/HeaderCell';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({

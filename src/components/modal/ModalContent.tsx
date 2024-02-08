@@ -3,20 +3,15 @@ import { ModalActions, Button, ButtonStrip, CircularLoader, CenteredContent } fr
 import WithPadding from "../template/WithPadding";
 import { Form } from "react-final-form";
 import { formFields } from "../../utils/constants/enrollmentForm/enrollmentForm";
-import useGetEnrollmentForm from "../../hooks/form/useGetEnrollmentForm";
 import GroupForm from "../form/GroupForm";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { ProgramConfigState } from "../../schema/programSchema";
-import { useParams } from "../../hooks/commons/useQueryParams";
-import usePostTei from "../../hooks/tei/usePostTei";
 import { format } from "date-fns";
-import { useGetPatternCode } from "../../hooks/tei/useGetPatternCode";
-import { useGetAttributes } from "../../hooks/programs/useGetAttributes";
 import { teiPostBody } from "../../utils/tei/formatPostBody";
 import { onSubmitClicked } from "../../schema/formOnSubmitClicked";
-import useGetUsedPProgramStages from "../../hooks/programStages/useGetUsedPProgramStages";
 import { getSelectedKey } from "../../utils/commons/dataStore/getSelectedKey";
 import { ModalContentProps } from "../../types/modal/ModalProps";
+import { useGetAttributes, useGetEnrollmentForm, useGetPatternCode, useGetUsedPProgramStages, useParams, usePostTei } from "../../hooks";
 
 function ModalContentComponent(props: ModalContentProps): React.ReactElement {
   const { setOpen } = props;

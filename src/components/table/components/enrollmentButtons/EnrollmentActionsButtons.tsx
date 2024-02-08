@@ -3,8 +3,8 @@ import { IconAddCircle24, Button, ButtonStrip } from "@dhis2/ui";
 import ModalComponent from '../../../modal/Modal';
 import ModalContentComponent from '../../../modal/ModalContent';
 import ImportContent from '../../../modal/ImportContent';
-import { useParams } from '../../../../hooks/commons/useQueryParams';
 import Tooltip from '@material-ui/core/Tooltip';
+import { useParams } from '../../../../hooks';
 
 function EnrollmentActionsButtons() {
   const [open, setOpen] = useState<boolean>(false);

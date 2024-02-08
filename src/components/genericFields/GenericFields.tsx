@@ -1,14 +1,14 @@
 import React from "react";
-import CheckInput from "./fields/CheckInput.js";
-import DateInput from "./fields/DateInput.js";
-import InputNumber from "./fields/InputNumber.js";
-import InputText from "./fields/InputText.js";
-import SingleSelectField from "./fields/SingleSelect.js";
-import InputArea from "./fields/InputArea.js";
-import { Attribute } from "../../types/generated/models.js";
-import RadioButton from "./fields/RadioButton.js";
-import { GenericFieldsComponentProps } from "../../types/form/GenericFieldsTypes.js";
-import { CustomAttributeProps } from "../../types/variables/AttributeColumns.js";
+import CheckInput from "./fields/CheckInput";
+import DateInput from "./fields/DateInput";
+import InputNumber from "./fields/InputNumber";
+import InputText from "./fields/InputText";
+import SingleSelectField from "./fields/SingleSelect";
+import InputArea from "./fields/InputArea";
+import { Attribute } from "../../types/generated/models";
+import RadioButton from "./fields/RadioButton";
+import { GenericFieldsComponentProps } from "../../types/form/GenericFieldsTypes";
+import { CustomAttributeProps } from "../../types/variables/AttributeColumns";
 
 function GenericFields({ attribute, disabled, valueType }: GenericFieldsComponentProps) {
   switch (valueType) {

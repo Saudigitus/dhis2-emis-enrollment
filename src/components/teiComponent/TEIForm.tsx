@@ -2,8 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Button, ButtonStrip, CenteredContent, CircularLoader } from "@dhis2/ui";
 import { GroupForm, WithPadding } from "../../components";
 import { Form } from "react-final-form";
-import { useGetAttributes } from "../../hooks/programs/useGetAttributes";
-import { useGetPatternCode } from "../../hooks/tei/useGetPatternCode";
+import { useGetAttributes, useGetPatternCode } from "../../hooks";
 
 function TEIGenericForm() {
   const { attributes = [] } = useGetAttributes()
