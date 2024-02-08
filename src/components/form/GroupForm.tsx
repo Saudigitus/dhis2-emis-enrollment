@@ -3,11 +3,11 @@ import React from "react";
 import WithBorder from "../template/WithBorder";
 import WithPadding from "../template/WithPadding";
 import GenericFields from "../genericFields/GenericFields";
-import { FormProps } from "../../types/common/components";
 import Subtitle from "../text/subtitle";
 import styles from './groupform.module.css'
+import { GroupFormProps } from "../../types/form/GroupFormProps";
 
-function GroupForm(props: FormProps) {
+function GroupForm(props: GroupFormProps) {
     const { name, fields, description } = props
 
     return (

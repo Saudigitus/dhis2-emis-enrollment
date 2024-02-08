@@ -2,11 +2,11 @@ import { TextField } from "@material-ui/core";
 import { Autocomplete } from "@material-ui/lab";
 import React from "react";
 import { useField, type FieldRenderProps } from "react-final-form";
-import { AutoCompleteProps } from "../../../types/common/components";
 import ErrorIcon from '@material-ui/icons/Error';
 import styles from "./fields.module.css"
 import { useRecoilState } from "recoil";
 import { onSubmitClicked } from "../../../schema/formOnSubmitClicked";
+import { AutoCompleteProps } from "../../../types/form/GenericFieldsTypes";
 
 const OptionSetAutocomplete = (props: AutoCompleteProps) => {
   const { input }: FieldRenderProps<any, HTMLElement> = useField(props.name);

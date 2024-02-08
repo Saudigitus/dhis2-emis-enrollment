@@ -1,6 +1,6 @@
 import { Attribute } from "../../types/generated/models";
-import { ProgramConfig } from "../../types/common/components";
-import { VariablesTypes, CustomAttributeProps } from "../../types/common/components";
+import { ProgramConfig } from "../../types/programConfig/ProgramConfig";
+import { CustomAttributeProps, VariablesTypes } from "../../types/variables/AttributeColumns";
 
 export function formatResponseTEI(attributes: ProgramConfig): CustomAttributeProps[] {
     if (!attributes) return [];

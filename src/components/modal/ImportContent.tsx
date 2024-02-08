@@ -7,9 +7,9 @@ import {
   ButtonStrip,
   Divider
 } from "@dhis2/ui";
-import { ContentProps } from "../../types/common/components";
+import { ModalContentProps } from "../../types/modal/ModalProps";
 
-function ImportContent(props: ContentProps): React.ReactElement {
+function ImportContent(props: ModalContentProps): React.ReactElement {
   const { setOpen } = props;
   
   const modalActions = [

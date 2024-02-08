@@ -1,5 +1,5 @@
 import React from 'react'
-import { WithBorderProps } from '../../types/common/components';
+import { WithBorderProps } from '../../types/template/TemplateProps';
 
 const borderTypes = {
     all: { border: "0.0625rem solid rgba(224, 224, 224, 1)" },

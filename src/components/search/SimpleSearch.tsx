@@ -2,7 +2,7 @@ import React from 'react'
 import style from "./Search.module.css"
 import { Input } from "@dhis2/ui"
 import classNames from 'classnames'
-import { SimpleSearchProps } from '../../types/common/components';
+import { SimpleSearchProps } from '../../types/headBar/SimpleSearchProps';
 
 export default function SimpleSearch(props: SimpleSearchProps): React.ReactElement {
     const { children, placeholder, id } = props;

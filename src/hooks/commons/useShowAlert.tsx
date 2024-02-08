@@ -1,5 +1,5 @@
 import { useAlert } from '@dhis2/app-runtime';
-import { AlertOptions, AlertType } from '../../types/common/components';
+import { AlertOptions, AlertType } from '../../types/alert/AlertProps';
 
 const useShowAlerts = () => {
     const { show, hide } = useAlert(({ message }: AlertOptions) => message, ({ type }: AlertType) => ({

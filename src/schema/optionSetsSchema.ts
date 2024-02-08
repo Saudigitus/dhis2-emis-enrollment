@@ -1,7 +1,7 @@
 import { atom } from "recoil"
-import { optionSetsSchema } from "../types/common/components"
+import { OptionSetsSchema } from "../types/optionSet/OptionSetConfig"
 
-export const OptionSetsState = atom<optionSetsSchema | undefined>({
+export const OptionSetsState = atom<OptionSetsSchema | undefined>({
     key: "optionSetsSchema-state",
     default: undefined
 })

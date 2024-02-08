@@ -1,5 +1,5 @@
-import { SelectedOptionsTypes, HeadBarTypes } from "../../../types/common/components"
-import { type dataStoreRecord } from "../../../types/common/components"
+import { dataStoreRecord } from "../../../types/dataStore/DataStoreConfig"
+import { HeadBarTypes, SelectedOptionsTypes } from "../../../types/headBar/HeadBarTypes"
 
 function headBarData(selectedOptions: SelectedOptionsTypes, dataStoreData: dataStoreRecord): HeadBarTypes[] {
     return [

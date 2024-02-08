@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import React from 'react'
 import defaultClasses from '../table.module.css';
-import { TableComponentProps } from '../../../../types/common/components';
+import { TableComponentProps } from '../../../../types/table/TableContentProps';
 
 function TableComponent(props: TableComponentProps): React.ReactElement {
     const { children, className, ...passOnProps } = props;

@@ -3,7 +3,7 @@ import { Button, ButtonStrip, CenteredContent, CircularLoader } from "@dhis2/ui"
 import { GroupForm, WithPadding } from "../../components";
 import { Form } from "react-final-form";
 import { useGetDataElements } from "../../hooks/events/useGetDataElements";
-import { EventFormProps } from "../../types/common/components";
+import { EventFormProps } from "../../types/form/EventFormProps";
 
 function EventGenericForm(props: EventFormProps): React.ReactElement {
   const { programStageId } = props;

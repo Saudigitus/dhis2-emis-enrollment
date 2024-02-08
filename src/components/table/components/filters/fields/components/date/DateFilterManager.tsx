@@ -2,7 +2,7 @@ import DateFnsUtils from '@date-io/date-fns';
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import React from 'react';
 import styles from './DateFilterManager.module.css'
-import { DateFilterManagerProps } from '../../../../../../../types/common/components';
+import { DateFilterManagerProps } from '../../../../../../../types/table/ContentFiltersProps';
 
 const DateFilterManager = (props: DateFilterManagerProps) => {
     const { onChange, value = { startDate: "", endDate: "" }, id } = props;

@@ -2,9 +2,10 @@ import React from 'react'
 import DateFilterManager from './components/date/DateFilterManager';
 import TextFilter from './components/text/Text'
 import TrueOnly from './components/trueOnly/TrueOnly';
-import { CustomAttributeProps, FilterComponentProps } from '../../../../../types/common/components';
 import { Attribute } from '../../../../../types/generated/models';
 import SelectBoxes from './components/optionSet/selectBoxes/SelectBoxes';
+import { FilterComponentProps } from '../../../../../types/table/ContentFiltersProps';
+import { CustomAttributeProps } from '../../../../../types/variables/AttributeColumns';
 
 function FilterComponents(props: FilterComponentProps) {
     const { type, column, onChange, value } = props;

@@ -3,7 +3,7 @@ import i18n from '@dhis2/d2-i18n';
 import { IconSettings24 } from '@dhis2/ui';
 import { IconButton, Tooltip } from '@material-ui/core';
 import DialogConfigColumns from './DialogConfigColumns';
-import { ConfigTableColumnsProps } from '../../../../types/common/components';
+import { ConfigTableColumnsProps } from '../../../../types/table/ConfigColumnsProps';
 
 function ConfigTableColumns(props: ConfigTableColumnsProps) {
     const { headers, updateVariables } = props;

@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { OptionSetsState } from '../../schema/optionSetsSchema';
 import useShowAlerts from '../commons/useShowAlert';
-import { optionSetsSchema } from '../../types/common/components';
+import { OptionSetsSchema } from '../../types/optionSet/OptionSetConfig';
 
 const OPTIONSETS_QUERY = (id: string) => ({
     result: {
@@ -30,7 +30,7 @@ function useGetOptionSets({ optionSetId }: { optionSetId: string }) {
     })
 
     useEffect(() => {
-        const localData = { ...getOptionSetsState, [optionSetId]: data?.result } as unknown as optionSetsSchema | undefined
+        const localData = { ...getOptionSetsState, [optionSetId]: data?.result } as unknown as OptionSetsSchema | undefined
         setOptionSetsState(localData)
     }, [loading])
 

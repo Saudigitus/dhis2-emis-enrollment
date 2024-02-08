@@ -5,7 +5,7 @@ import Select from 'react-select';
 import defaultClasses from '../table.module.css';
 import { disableNextPage } from '../../../../utils/table/pagination/pagination';
 import { rowsPerPages } from '../../../../utils/constants/pagination/pagination';
-import  { IconButtonPaginationProps,PaginationProps } from '../../../../types/common/components';
+import { IconButtonPaginationProps, PaginationProps } from '../../../../types/table/PaginationProps';
 
 function textPagination(text: string): React.ReactElement {
     return (

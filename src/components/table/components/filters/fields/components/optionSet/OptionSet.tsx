@@ -1,7 +1,7 @@
 import { makeStyles } from '@material-ui/core';
 import React from 'react'
 import SelectBoxes from './selectBoxes/SelectBoxes';
-import { OptionSetProps } from '../../../../../../../types/common/components';
+import { OptionSetProps } from '../../../../../../../types/table/ContentFiltersProps';
 
 const getStyles = makeStyles(() => ({
     selectBoxesContainer: {

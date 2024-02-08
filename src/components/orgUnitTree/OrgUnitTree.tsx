@@ -3,7 +3,7 @@ import { OrganisationUnitTree, CenteredContent, CircularLoader, Help } from "@dh
 import React, { useState } from 'react'
 import { useParams } from '../../hooks/commons/useQueryParams';
 import useShowAlerts from '../../hooks/commons/useShowAlert';
-import { OrgUnitTreeComponentProps } from '../../types/common/components';
+import { OrgUnitTreeComponentProps } from '../../types/orgUnit/OrgUnitTreeProps';
 
 const ORG_UNIT_QUERY = {
     results: {

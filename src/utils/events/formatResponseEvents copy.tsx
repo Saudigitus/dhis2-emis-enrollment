@@ -1,6 +1,6 @@
 import { Attribute } from "../../types/generated/models";
-import { ProgramStageConfig } from "../../types/common/components";
-import { VariablesTypes, CustomAttributeProps } from "../../types/common/components";
+import { ProgramStageConfig } from "../../types/programStageConfig/ProgramStageConfig";
+import { CustomAttributeProps, VariablesTypes } from "../../types/variables/AttributeColumns";
 
 export function formatResponseEvents(object: ProgramStageConfig) {
     const dataElements: CustomAttributeProps[] = [];

@@ -9,7 +9,7 @@ import update from 'react-addons-update';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import DragDropListItem from './DragDropItems.js';
-import { DragDropListProps } from '../../types/common/components.js';
+import { DragDropListProps } from '../../types/table/ConfigColumnsProps.js';
 
 function DragDropList(props: DragDropListProps) {
     const { listItems, handleUpdateListOrder, handleToggle } = props;
@@ -24,7 +24,7 @@ function DragDropList(props: DragDropListProps) {
     }
 
     return (
-        <DndProvider backend={HTML5Backend} chil>
+        <DndProvider backend={HTML5Backend}>
             <Table>
                 <TableHead>
                     <TableRow>

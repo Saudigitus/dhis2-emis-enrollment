@@ -1,7 +1,7 @@
 import React from 'react';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
-import { MenuFiltersProps } from '../../../../../types/common/components';
+import { MenuFiltersProps } from '../../../../../types/table/ContentFiltersProps';
 
 export default function MenuFilters(props: MenuFiltersProps) {
     const { anchorEl, setAnchorEl, addSearchableHeaders, options } = props;

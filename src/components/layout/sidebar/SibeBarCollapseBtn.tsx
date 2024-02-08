@@ -1,6 +1,6 @@
 import React from 'react'
 import style from "./SideBar.module.css"
-import { SideBarCollapseProps } from '../../../types/common/components';
+import { SideBarCollapseProps } from '../../../types/sideBar/SideBarTypes';
 
 export default function SibeBarCollapseBtn(props: SideBarCollapseProps) {
     const { collapsed, setCollapsed } = props

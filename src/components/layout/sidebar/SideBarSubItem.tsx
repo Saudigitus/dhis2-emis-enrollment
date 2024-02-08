@@ -1,10 +1,10 @@
 import React from 'react';
 import style from "./SideBar.module.css"
 import Badge from '../../badge/Badge';
-import { SideBarSubItemProps } from '../../../types/common/components';
 import classNames from 'classnames';
 import { useConfig } from '@dhis2/app-runtime';
 import { useLocation } from 'react-router-dom';
+import { SideBarSubItemProps } from '../../../types/sideBar/SideBarTypes';
 
 export default function SideBarSubItem(props: SideBarSubItemProps) {
     const { icon, label, showBadge, disabled, route, appName, pathName } = props;

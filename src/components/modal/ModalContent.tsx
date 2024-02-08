@@ -16,9 +16,9 @@ import { teiPostBody } from "../../utils/tei/formatPostBody";
 import { onSubmitClicked } from "../../schema/formOnSubmitClicked";
 import useGetUsedPProgramStages from "../../hooks/programStages/useGetUsedPProgramStages";
 import { getSelectedKey } from "../../utils/commons/dataStore/getSelectedKey";
-import { ContentProps } from "../../types/common/components";
+import { ModalContentProps } from "../../types/modal/ModalProps";
 
-function ModalContentComponent(props: ContentProps): React.ReactElement {
+function ModalContentComponent(props: ModalContentProps): React.ReactElement {
   const { setOpen } = props;
   const getProgram = useRecoilValue(ProgramConfigState);
   const { useQuery } = useParams();
@@ -100,7 +100,7 @@ function ModalContentComponent(props: ContentProps): React.ReactElement {
   return (
     <WithPadding>
       <Form initialValues={{ ...initialValues, ...generatedVariables }} onSubmit={onSubmit}>
-        {({ handleSubmit, values, pristine, form }) => {
+        {({ handleSubmit, values, form }) => {
           formRef.current = form;
           return <form
             onSubmit={handleSubmit}

@@ -2,7 +2,7 @@ import { FormControlLabel, RadioGroup, Radio, withStyles } from "@material-ui/co
 import React from "react";
 import { Label } from "@dhis2/ui"
 import { useField, type FieldRenderProps } from "react-final-form";
-import { type FormFieldsProps } from "../../../types/common/components";
+import { FormFieldsProps } from "../../../types/form/GenericFieldsTypes";
 
 const CustomRadio = withStyles({
   root: {

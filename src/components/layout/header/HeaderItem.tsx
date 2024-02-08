@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
 import style from "./MainHeader.module.css"
 import { DropdownButton, FlyoutMenu } from "@dhis2/ui"
-import { HeadBarTypes } from '../../../types/common/components'
 import info from "../../../assets/images/headbar/info.svg"
 import { SimpleSearch } from '../../search'
 import { componentMapping } from '../../../utils/commons/componentMapping'
 import classNames from 'classnames'
+import { HeadBarTypes } from '../../../types/headBar/HeadBarTypes'
 
 export default function HeaderItem(props: HeadBarTypes): React.ReactElement {
     const { label, value, placeholder, component, dataElementId, id } = props;

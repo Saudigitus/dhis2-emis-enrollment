@@ -5,7 +5,7 @@ import { useGetInitialValues } from '../../hooks/initialValues/useGetInitialValu
 import { CenteredContent, CircularLoader } from "@dhis2/ui";
 import { useGetProgramConfig } from '../../hooks/programConfig/useGetprogramConfig';
 import { getSelectedKey } from '../../utils/commons/dataStore/getSelectedKey';
-import { LayoutProps } from '../../types/common/components';
+import { LayoutProps } from '../../types/layout/LayoutProps';
 
 export default function FullLayout(props: LayoutProps) {
     useGetInitialValues()

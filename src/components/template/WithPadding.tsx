@@ -1,5 +1,5 @@
 import React from 'react'
-import { WithPaddingProps } from '../../types/common/components';
+import { WithPaddingProps } from '../../types/template/TemplateProps';
 
 function WithPadding(props: WithPaddingProps): React.ReactElement {
     const { children, p = "0.5rem" } = props;

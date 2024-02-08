@@ -7,7 +7,9 @@ import { useParams } from "../commons/useQueryParams";
 import { HeaderFieldsState } from "../../schema/headersSchema";
 import useShowAlerts from "../commons/useShowAlert";
 import { getSelectedKey } from "../../utils/commons/dataStore/getSelectedKey";
-import { TableDataProps, EventQueryProps, EventQueryResults, TeiQueryProps, TeiQueryResults } from "../../types/common/components";
+import { EventQueryProps, EventQueryResults } from "../../types/api/WithoutRegistrationProps";
+import { TeiQueryProps, TeiQueryResults } from "../../types/api/WithRegistrationProps";
+import { TableDataProps } from "../../types/table/TableContentProps";
 
 const EVENT_QUERY = (queryProps: EventQueryProps) => ({
     results: {

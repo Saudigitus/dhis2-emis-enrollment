@@ -1,5 +1,5 @@
+import { FlyoutOptionsProps } from "../../types/buttons/FlyoutOptionsProps";
 
-import { FlyoutOptionsProps } from "../../types/common/components";
 
 export const enrollmentOptions: FlyoutOptionsProps[] = [
   { label: "Import students", divider: true, onClick: () => { alert("Import students"); } },

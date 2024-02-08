@@ -4,8 +4,8 @@ import classNames from 'classnames';
 import { makeStyles, type Theme, createStyles } from '@material-ui/core/styles';
 import { RowCell, RowTable } from '../components';
 import { getDisplayName } from '../../../utils/table/rows/getDisplayNameByOption';
-import { renderHeaderProps } from '../../../types/common/components';
 import { useConfig } from '@dhis2/app-runtime';
+import { RenderHeaderProps } from '../../../types/table/TableContentProps';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme: Theme) =>
     })
 );
 
-function RenderRows(props: renderHeaderProps): React.ReactElement {
+function RenderRows(props: RenderHeaderProps): React.ReactElement {
     const { headerData, rowsData } = props;
     const classes = useStyles()
     const { baseUrl } = useConfig()

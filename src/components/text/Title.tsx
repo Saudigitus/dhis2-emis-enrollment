@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "./text.module.css";
-import { type TitleProps } from "../../types/common/components";
+import { TitleProps } from "../../types/template/TemplateProps";
 
 function Title(props: TitleProps): React.ReactElement {
   const { label } = props;

@@ -1,4 +1,4 @@
-import { type defaultProps } from "../../../types/common/components"
+import { defaultProps } from "../../../types/utils/FormatRowsDataProps";
 
 export function getDisplayName({ attribute, value, headers }: defaultProps): string {
     // for (let i = 0; i < headers.length; i++) {

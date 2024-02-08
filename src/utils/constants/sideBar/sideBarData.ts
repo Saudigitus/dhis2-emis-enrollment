@@ -4,7 +4,7 @@ import glyph from "../../../assets/images/sidebar/Glyph.svg"
 import listAdd from "../../../assets/images/sidebar/listAdd.svg"
 import logOut from "../../../assets/images/sidebar/log-out.svg"
 import userGroup from "../../../assets/images/sidebar/user-group.svg"
-import { SideBarItemProps } from "../../../types/common/components"
+import { SideBarItemProps } from "../../../types/sideBar/SideBarTypes"
 
 function sideBarData(): SideBarItemProps[] {
     return [

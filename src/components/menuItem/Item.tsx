@@ -1,10 +1,12 @@
 import React from 'react'
 import { MenuItem } from "@dhis2/ui"
-import { MenuItemTypes, MenuItemsProps } from '../../types/common/components'
 import { useParams } from '../../hooks/commons/useQueryParams';
 import { useRecoilState } from 'recoil';
 import { HeaderFieldsState } from '../../schema/headersSchema';
 import useDataElementsParamMapping from '../../hooks/dataElements/useDataElementsParamMapping';
+import { MenuItemsProps } from '../../types/menu/MenuItemTypes';
+
+
 
 export default function Item(props: MenuItemsProps): React.ReactElement {
     const {  menuItems, dataElementId, onToggle } = props;
@@ -14,7 +16,7 @@ export default function Item(props: MenuItemsProps): React.ReactElement {
     const paramsMapping = useDataElementsParamMapping()
 
     const onChange = (selectedOption: { label: string, value: string }) => {
-        add(paramsMapping[dataElementId], selectedOption.value);
+        add(paramsMapping[dataElementId as unknown as keyof typeof paramsMapping], selectedOption.value);
         let dataElements: string[][] = [...headerFields.dataElements]
         const attributes: string[][] = [...headerFields.attributes]
 

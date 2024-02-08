@@ -4,7 +4,7 @@ import { useRecoilValue } from 'recoil';
 import { ProgramConfigState } from '../../schema/programSchema';
 import { formatResponse } from '../../utils/table/header/formatResponse';
 import { getSelectedKey } from '../../utils/commons/dataStore/getSelectedKey';
-import { MenuItemContainerProps } from '../../types/common/components';
+import { MenuItemContainerProps } from '../../types/menu/MenuItemTypes';
 
 function MenuItemContainer(props: MenuItemContainerProps): React.ReactElement {
     const {  dataElementId, onToggle } = props;

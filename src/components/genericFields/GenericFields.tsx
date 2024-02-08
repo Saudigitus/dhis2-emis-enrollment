@@ -7,8 +7,8 @@ import SingleSelectField from "./fields/SingleSelect.js";
 import InputArea from "./fields/InputArea.js";
 import { Attribute } from "../../types/generated/models.js";
 import RadioButton from "./fields/RadioButton.js";
-import { CustomAttributeProps } from "../../types/table/AttributeColumns.js";
-import { GenericFieldsComponentProps } from "../../types/common/components.js";
+import { GenericFieldsComponentProps } from "../../types/form/GenericFieldsTypes.js";
+import { CustomAttributeProps } from "../../types/variables/AttributeColumns.js";
 
 function GenericFields({ attribute, disabled, valueType }: GenericFieldsComponentProps) {
   switch (valueType) {

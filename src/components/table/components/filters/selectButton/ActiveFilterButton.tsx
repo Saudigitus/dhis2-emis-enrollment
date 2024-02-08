@@ -3,7 +3,7 @@ import createSvgIcon from '@material-ui/icons/utils/createSvgIcon';
 import { makeStyles } from '@material-ui/styles';
 import classNames from 'classnames';
 import React, { useState } from 'react'
-import { ActiveFilterButtonProps } from '../../../../../types/common/components';
+import { ActiveFilterButtonProps } from '../../../../../types/table/ContentFiltersProps';
 
 const ClearIcon = createSvgIcon(
     <React.Fragment>

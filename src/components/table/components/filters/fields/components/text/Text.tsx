@@ -1,6 +1,6 @@
 import { TextField } from '@material-ui/core';
 import React from 'react'
-import  { TextFilterProps } from '../../../../../../../types/common/components';
+import { TextFilterProps } from '../../../../../../../types/table/ContentFiltersProps';
 
 function TextFilter(props: TextFilterProps) {
     const { value, onChange, id } = props;
