@@ -2,16 +2,16 @@ import React from 'react'
 import style from "../Layout.module.css"
 import { MainHeader, SideBar } from '../../components'
 import { CenteredContent, CircularLoader } from "@dhis2/ui";
-import { getSelectedKey } from '../../utils/commons/dataStore/getSelectedKey';
 import { LayoutProps } from '../../types/layout/LayoutProps';
 import { useGetInitialValues, useGetProgramConfig } from '../../hooks';
+import { getDataStoreKeys } from '../../utils/commons/dataStore/getDataStoreKeys';
 
 export default function FullLayout(props: LayoutProps) {
     useGetInitialValues()
     const { children } = props;
     const { isSetSectionType } = useGetInitialValues()
-    const { getDataStoreData } = getSelectedKey()
-    const { loading } = useGetProgramConfig(getDataStoreData.program);
+    const { program } = getDataStoreKeys()
+    const { loading } = useGetProgramConfig(program);
 
     if (!isSetSectionType) {
         return (
