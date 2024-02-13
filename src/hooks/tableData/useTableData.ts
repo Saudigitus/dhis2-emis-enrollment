@@ -6,10 +6,10 @@ import { formatResponseRows } from "../../utils/table/rows/formatResponseRows";
 import { useParams } from "../commons/useQueryParams";
 import { HeaderFieldsState } from "../../schema/headersSchema";
 import useShowAlerts from "../commons/useShowAlert";
-import { getSelectedKey } from "../../utils/commons/dataStore/getSelectedKey";
 import { EventQueryProps, EventQueryResults } from "../../types/api/WithoutRegistrationProps";
 import { TeiQueryProps, TeiQueryResults } from "../../types/api/WithRegistrationProps";
 import { TableDataProps } from "../../types/table/TableContentProps";
+import { getDataStoreKeys } from "../../utils/commons/dataStore/getDataStoreKeys";
 
 const EVENT_QUERY = (queryProps: EventQueryProps) => ({
     results: {
@@ -34,7 +34,7 @@ const TEI_QUERY = (queryProps: TeiQueryProps) => ({
 
 export function useTableData() {
     const engine = useDataEngine();
-    const { getDataStoreData } = getSelectedKey()
+    const { program, registration } = getDataStoreKeys()
     const headerFieldsState = useRecoilValue(HeaderFieldsState)
     const { urlParamiters } = useParams()
     const [loading, setLoading] = useState<boolean>(false)
@@ -50,10 +50,10 @@ export function useTableData() {
                 ouMode: school != null ? "SELECTED" : "ACCESSIBLE",
                 page,
                 pageSize,
-                program: getDataStoreData?.program as unknown as string,
+                program: program as unknown as string,
                 order: "createdAt:desc",
                 programStatus: "ACTIVE",
-                programStage: getDataStoreData?.registration?.programStage as unknown as string,
+                programStage: registration?.programStage as unknown as string,
                 filter: headerFieldsState?.dataElements,
                 filterAttributes: headerFieldsState?.attributes,
                 orgUnit: school
@@ -72,7 +72,7 @@ export function useTableData() {
                     ouMode: school != null ? "SELECTED" : "ACCESSIBLE",
                     order: "created:desc",
                     pageSize,
-                    program: getDataStoreData?.program as unknown as string,
+                    program: program as unknown as string,
                     orgUnit: school,
                     trackedEntity: trackedEntityToFetch
                 })).catch((error) => {

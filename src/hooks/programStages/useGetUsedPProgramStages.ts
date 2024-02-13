@@ -1,9 +1,9 @@
 import { simpleProgramStage } from "../../types/dataStore/DataStoreConfig";
-import { getSelectedKey } from "../../utils/commons/dataStore/getSelectedKey";
+import { getDataStoreKeys } from "../../utils/commons/dataStore/getDataStoreKeys";
 
 const useGetUsedPProgramStages = () => {
-    const { getDataStoreData } = getSelectedKey();
-    const performanceProgramStages = getDataStoreData?.performance?.programStages.map((programStage: simpleProgramStage) => programStage.programStage);
-    return [...performanceProgramStages, getDataStoreData?.["final-result"]?.programStage]
+    const { performance, finalResult } = getDataStoreKeys();
+    const performanceProgramStages = performance?.programStages.map((programStage: simpleProgramStage) => programStage.programStage);
+    return [...performanceProgramStages, finalResult?.programStage]
 }
 export default useGetUsedPProgramStages

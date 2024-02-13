@@ -9,9 +9,9 @@ import { ProgramConfigState } from "../../schema/programSchema";
 import { format } from "date-fns";
 import { teiPostBody } from "../../utils/tei/formatPostBody";
 import { onSubmitClicked } from "../../schema/formOnSubmitClicked";
-import { getSelectedKey } from "../../utils/commons/dataStore/getSelectedKey";
 import { ModalContentProps } from "../../types/modal/ModalProps";
 import { useGetAttributes, useGetEnrollmentForm, useGetPatternCode, useGetUsedPProgramStages, useParams, usePostTei } from "../../hooks";
+import { getDataStoreKeys } from "../../utils/commons/dataStore/getDataStoreKeys";
 
 function ModalContentComponent(props: ModalContentProps): React.ReactElement {
   const { setOpen } = props;
@@ -24,7 +24,7 @@ function ModalContentComponent(props: ModalContentProps): React.ReactElement {
   const { enrollmentsData } = useGetEnrollmentForm();
   const [, setClicked] = useRecoilState<boolean>(onSubmitClicked);
   const [values, setValues] = useState<Record<string,string>>({})
-  const { getDataStoreData } = getSelectedKey();
+  const { trackedEntityType } = getDataStoreKeys();
   const [fieldsWitValue, setFieldsWitValues] = useState<any[]>([enrollmentsData])
   const { postTei, loading, data } = usePostTei()
   const [clickedButton, setClickedButton] = useState<string>("");
@@ -59,7 +59,7 @@ function ModalContentComponent(props: ModalContentProps): React.ReactElement {
         data: teiPostBody(fieldsWitValue,
           (getProgram != null) ? getProgram.id : "", orgUnit ?? "",
           values?.eventdatestaticform ?? "",
-          performanceProgramStages, getDataStoreData?.trackedEntityType)
+          performanceProgramStages, trackedEntityType)
       })
     }
   }

@@ -30,6 +30,10 @@ interface transfer {
     status: string
 }
 
+interface defaults {
+    currentAcademicYear: string
+}
+
 interface dataStoreRecord {
     attendance: attendance
     key: string
@@ -41,6 +45,8 @@ interface dataStoreRecord {
     ["socio-economics"]: simpleProgramStage
     transfer: transfer
     ["final-result"]: simpleProgramStage
+    defaults: defaults 
+
 
 }
 

@@ -1,14 +1,20 @@
 import { getSelectedKey } from "./getSelectedKey";
 
-const { attendance, key, performance, program, registration, 'socio-economics': socioEconomics, transfer, lastUpdate } = getSelectedKey().getDataStoreData;
 
-export const getDataStoreKeys = {
-    getAttendance: () => attendance,
-    getDataStoreKey: () => key,
-    getPerformace: () => performance,
-    getProgramId: () => program,
-    getRegistration: () => registration,
-    getSocioEconomics: () => socioEconomics,
-    getTransfer: () => transfer,
-    getDataStoreLastUpdate: () => lastUpdate
+export const getDataStoreKeys =() => {
+    const { attendance, key, performance, program, registration, "final-result": finalResult, 'socio-economics': socioEconomics, transfer, trackedEntityType, lastUpdate, defaults } = getSelectedKey().getDataStoreData;
+    
+    return {
+        attendance,
+        dataStoreKey: key,
+        performance,
+        program,
+        registration,
+        finalResult,
+        socioEconomics,
+        transfer,
+        trackedEntityType,
+        lastUpdate,
+        currentAcademicYear: defaults.currentAcademicYear
+    }
 };
