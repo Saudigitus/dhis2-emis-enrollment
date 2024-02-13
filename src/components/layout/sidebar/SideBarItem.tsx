@@ -2,9 +2,10 @@ import React from 'react'
 import style from "./SideBar.module.css"
 import SideBarItemTitle from './SideBarItemTitle'
 import SideBarSubItem from './SideBarSubItem'
-import { type SideBarItemProps } from '../../../types/sideBar/SideBarTypes'
+import { SideBarItemProps } from '../../../types/sideBar/SideBarTypes';
 
-export default function SideBarItem({ title, subItems }: SideBarItemProps): React.ReactElement {
+export default function SideBarItem(props: SideBarItemProps): React.ReactElement {
+    const { title, subItems } = props;
     return (
         <section className={style.SideBarItemContainer}>
             <SideBarItemTitle title={title} />

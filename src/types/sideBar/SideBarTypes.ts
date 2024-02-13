@@ -1,3 +1,4 @@
+
 interface SideBarItemProps {
     title: string
     subItems: SideBarSubItemProps[]
@@ -21,4 +22,9 @@ interface SideBarCollapseProps {
     collapsed: boolean
     setCollapsed: (collapsed: boolean) => void
 }
-export type { SideBarItemProps, SideBarItemTitleProps, SideBarSubItemProps, SideBarCollapseProps }
+
+
+interface BadgeProps {
+    value: string
+}
+export type { SideBarItemProps, SideBarItemTitleProps, SideBarSubItemProps, SideBarCollapseProps, BadgeProps }

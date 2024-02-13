@@ -1,0 +1,20 @@
+.fromToContainer {
+    display: flex;
+    flex-wrap: wrap
+}
+
+.toLabelContainer {
+    width: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 0px
+}
+
+.logicErrorContainer {
+    padding-top: 0px
+}
+
+.KeyboardDatePicker {
+    width: 150px
+}

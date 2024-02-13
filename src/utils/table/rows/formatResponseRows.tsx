@@ -1,33 +1,9 @@
-interface dataValuesProps {
-    dataElement: string
-    value: string
-}
+import { attributesProps } from "../../../types/api/WithRegistrationProps";
+import { dataValuesProps } from "../../../types/api/WithoutRegistrationProps";
+import { FormatResponseRowsProps, RowsDataProps } from "../../../types/utils/FormatRowsDataProps";
 
-interface attributesProps {
-    attribute: string
-    value: string
-}
-
-interface formatResponseRowsProps {
-    eventsInstances: [{
-        trackedEntity: string
-        dataValues: dataValuesProps[]
-    }]
-    teiInstances: [{
-        trackedEntity: string
-        attributes: attributesProps[]
-        enrollments: [{
-            enrollment: string
-            orgUnit: string
-            program: string
-        }]
-    }]
-}
-
-type RowsProps = Record<string, string | number | boolean | any>;
-
-export function formatResponseRows({ eventsInstances, teiInstances }: formatResponseRowsProps): RowsProps[] {
-    const allRows: RowsProps[] = []
+export function formatResponseRows({ eventsInstances, teiInstances }: FormatResponseRowsProps): RowsDataProps[] {
+    const allRows: RowsDataProps[] = []
     for (const event of eventsInstances || []) {
         const teiDetails = teiInstances.find(tei => tei.trackedEntity === event.trackedEntity)
         allRows.push({
@@ -42,16 +18,16 @@ export function formatResponseRows({ eventsInstances, teiInstances }: formatResp
     return allRows;
 }
 
-function dataValues(data: dataValuesProps[]): RowsProps {
-    const localData: RowsProps = {}
+function dataValues(data: dataValuesProps[]): RowsDataProps {
+    const localData: RowsDataProps = {}
     for (const dataElement of data) {
         localData[dataElement.dataElement] = dataElement.value
     }
     return localData
 }
 
-function attributes(data: attributesProps[]): RowsProps {
-    const localData: RowsProps = {}
+function attributes(data: attributesProps[]): RowsDataProps {
+    const localData: RowsDataProps = {}
     for (const attribute of data) {
         localData[attribute.attribute] = attribute.value
     }

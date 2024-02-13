@@ -1,12 +1,6 @@
 import React from 'react'
 import { TableSortLabel } from '@material-ui/core';
-
-interface TableSortProps {
-    children?: React.ReactNode
-    active: boolean
-    direction?: 'asc' | 'desc'
-    createSortHandler: (rowsPerPage: string) => void
-}
+import { TableSortProps } from '../../../../types/table/TableContentProps';
 
 function SortLabel(props: TableSortProps): React.ReactElement {
     return (

@@ -8,17 +8,13 @@ import React from 'react'
 import update from 'react-addons-update';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import DragDropListItem from './DragDropItems.js';
-
-interface DragDropListProps {
-    listItems: any[]
-    handleUpdateListOrder: (list: any[]) => void
-    handleToggle: (id: string) => void
-}
+import DragDropListItem from './DragDropItems';
+import { DragDropListProps } from '../../types/table/ConfigColumnsProps';
 
 function DragDropList(props: DragDropListProps) {
     const { listItems, handleUpdateListOrder, handleToggle } = props;
-    function moveListItem(dragIndex, hoverIndex) {
+
+    function moveListItem(dragIndex: any, hoverIndex: any) {
         const dragListItem = listItems[dragIndex];
         let sortedList = [];
         sortedList = update(listItems, {
@@ -39,10 +35,8 @@ function DragDropList(props: DragDropListProps) {
                     {listItems?.map((item, i) =>
                         <DragDropListItem
                             key={item.id}
-                            // index={i}
                             id={item.id}
                             text={item.header}
-                            // moveListItem={moveListItem}
                             handleToggle={handleToggle}
                             visible={item.visible}
                         />

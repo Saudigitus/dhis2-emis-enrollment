@@ -1,16 +1,15 @@
 import { Button } from '@material-ui/core';
 import React, { useState, useEffect } from 'react';
 import MenuFilters from './MenuFilters';
-import { type CustomAttributeProps } from '../../../../../types/table/AttributeColumns';
 import SelectButton from "../selectButton/SelectButton";
 import { format } from 'date-fns';
 import { useRecoilState } from 'recoil';
 import { HeaderFieldsState } from '../../../../../schema/headersSchema';
 import { convertArrayToObject } from '../../../../../utils/table/filter/formatArrayToObject';
+import styles from './ContentFilter.module.css'
+import { ContentFilterProps } from '../../../../../types/table/ContentFiltersProps';
+import { CustomAttributeProps } from '../../../../../types/variables/AttributeColumns';
 
-interface ContentFilterProps {
-    headers: CustomAttributeProps[]
-}
 
 type FiltersValuesProps = Record<string, any | { endDate: string } | { startDate: string }>;
 
@@ -128,7 +127,7 @@ function ContentFilter(props: ContentFilterProps) {
     }, [resetValues])
 
     return (
-        <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", marginBottom: 10, marginTop: 10 }}>
+        <div className={styles.container}>
             {
                 localFilters.map((colums, index) => (
                     <SelectButton key={index}
@@ -155,15 +154,9 @@ function ContentFilter(props: ContentFilterProps) {
                     />
                 ))
             }
-            <div style={{ marginTop: 0 }}>
+            <div className={styles.moreFiltersContainer}>
                 {headers?.filter(x => !localFilters.includes(x))?.length > 0 &&
-                    <Button style={{
-                        color: "rgb(33, 41, 52)",
-                        fontSize: 14,
-                        textTransform: "none",
-                        fontWeight: 400
-                    }}
-
+                    <Button className={styles.moreFilters}
                         variant='outlined'
                         onClick={handleClick}
                     >

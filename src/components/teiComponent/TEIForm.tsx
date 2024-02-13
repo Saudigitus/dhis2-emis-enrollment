@@ -2,8 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Button, ButtonStrip, CenteredContent, CircularLoader } from "@dhis2/ui";
 import { GroupForm, WithPadding } from "../../components";
 import { Form } from "react-final-form";
-import { useGetAttributes } from "../../hooks/programs/useGetAttributes";
-import { useGetPatternCode } from "../../hooks/tei/useGetPatternCode";
+import { useGetAttributes, useGetPatternCode } from "../../hooks";
 
 function TEIGenericForm() {
   const { attributes = [] } = useGetAttributes()
@@ -19,7 +18,6 @@ function TEIGenericForm() {
   function onChange(e: any): void {
     setValues(e)
   }
-  console.log(generatedVariables, loadingCodes, attributes);
 
   if (loadingCodes) {
     return (
@@ -35,7 +33,7 @@ function TEIGenericForm() {
         onSubmit={() => { alert(JSON.stringify(values)) }}
         initialValues={generatedVariables}
       >
-        {({ values, pristine, form }) => (
+        {({ pristine, form }) => (
           <form onChange={onChange}>
             <GroupForm
               name={"Attributes"}

@@ -6,7 +6,7 @@
   "private": true,
   "scripts": {
     "build": "d2-app-scripts build",
-    "start": "d2-app-scripts start --proxy https://emis.dhis2.org/dev",
+    "start": "d2-app-scripts start --proxy https://emis.dhis2.org/startracker",
     "test": "d2-app-scripts test",
     "deploy": "d2-app-scripts deploy"
   },
@@ -37,7 +37,6 @@
     "react-dnd-html5-backend": "14.0.1",
     "react-router-dom": "^6.14.1",
     "react-select": "1.3.0",
-    "recoil": "^0.7.7",
-    "zod": "^3.21.4"
+    "recoil": "^0.7.7"
   }
 }

@@ -1,0 +1,17 @@
+.textTitlle {
+    color: var(--dark-label-color);
+    padding: 16px 8px 16px 12px;
+    font-size: 16px;
+    font-weight: 500;
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+    line-height: 1.16667em;
+}
+
+.labelName {
+    color: var(--dark-label-color);
+}
+
+.content {
+    color: var(--error-message-color);
+    margin-top: 20
+}

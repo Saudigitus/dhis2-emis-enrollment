@@ -1,20 +1,6 @@
 import React from 'react'
 import { Button, IconChevronDown16, IconChevronUp16, Tooltip } from '@dhis2/ui';
-
-interface RenderWithoutAppliedFilterProps {
-    selectorVisible: boolean
-    classes: any
-    title: string
-    disabled: boolean
-    tooltipContent: string
-    openFilterSelector: () => void
-}
-
-interface TooltipProps {
-    onMouseOver: () => void
-    onMouseOut: () => void
-    ref: any
-}
+import { RenderWithoutAppliedFilterProps, TooltipProps } from '../../../../../types/table/ContentFiltersProps';
 
 function RenderWithoutAppliedFilter(props: RenderWithoutAppliedFilterProps): React.ReactElement {
     const { selectorVisible, classes, title, disabled, tooltipContent, openFilterSelector } = props;

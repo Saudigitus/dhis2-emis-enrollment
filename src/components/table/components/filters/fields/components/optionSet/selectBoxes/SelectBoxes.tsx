@@ -1,15 +1,7 @@
 import React from 'react'
 import MultiSelectBoxes from '../multiSelectBoxes/MultiSelectBoxes';
 import SingleSelectBoxes from '../singleSelectBoxes/SingleSelectBoxes';
-
-interface SelectBoxesProps {
-    singleSelect?: boolean
-    options: { optionSet: { options: [{ value: string, label: string }] } }
-    onChange: (value: any, id?: string, type?: string) => void
-    value: any
-    id: string
-    orientation?: any
-}
+import { SelectBoxesProps } from '../../../../../../../../types/table/ContentFiltersProps';
 
 function SelectBoxes(props: SelectBoxesProps) {
     const { singleSelect, onChange, ...passOnProps } = props;

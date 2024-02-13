@@ -1,8 +1,8 @@
 import { SingleSelectField, SingleSelectOption } from '@dhis2/ui'
 import React from 'react'
-import { type MutlipleSelectProps } from '../../../types/fields/GenericFieldsTypes'
+import { SingleSelectProps } from '../../../types/form/GenericFieldsTypes'
 
-function SingleSelect(props: MutlipleSelectProps) {
+function SingleSelect(props: SingleSelectProps) {
     return (
         <div>
             <SingleSelectField

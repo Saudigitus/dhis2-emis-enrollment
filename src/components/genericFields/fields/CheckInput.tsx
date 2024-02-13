@@ -1,10 +1,6 @@
 import { ReactFinalForm, CheckboxFieldFF, hasValue, Label } from "@dhis2/ui";
 import React from "react";
-
-interface CheckFieldProps {
-  disabled: boolean
-  required: string | boolean
-}
+import { CheckFieldProps } from "../../../types/form/GenericFieldsTypes";
 
 const { Field } = ReactFinalForm;
 

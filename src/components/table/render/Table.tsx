@@ -1,19 +1,16 @@
 import React, { useEffect, useState } from 'react'
 import { CenteredContent, CircularLoader } from "@dhis2/ui";
-import { HeaderFilters, Pagination, TableComponent } from '../components'
+import { HeaderFilters, Pagination, TableComponent, WorkingLists } from '../components'
 import RenderHeader from './RenderHeader'
 import RenderRows from './RenderRows'
 import { makeStyles } from '@material-ui/core/styles';
 import { Paper } from '@material-ui/core';
 import WithBorder from '../../template/WithBorder';
 import WithPadding from '../../template/WithPadding';
-import WorkingLits from '../components/filters/workingList/WorkingLits';
-import { useHeader } from '../../../hooks/tableHeader/useHeader';
-import { useTableData } from '../../../hooks/tableData/useTableData';
-import { useParams } from '../../../hooks/commons/useQueryParams';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilValue } from 'recoil';
 import { HeaderFieldsState } from '../../../schema/headersSchema';
-import { teiRefetch } from '../../../hooks/tei/usePostTei';
+import { TeiRefetch } from '../../../schema/refecthTeiSchema';
+import { useHeader, useParams, useTableData } from '../../../hooks';
 
 const usetStyles = makeStyles({
     tableContainer: {
@@ -29,7 +26,7 @@ function Table() {
     const headerFieldsState = useRecoilValue(HeaderFieldsState)
     const [page, setpage] = useState(1)
     const [pageSize, setpageSize] = useState(10)
-    const [refetch] = useRecoilState(teiRefetch)
+    const refetch = useRecoilValue(TeiRefetch)
 
     useEffect(() => {
         void getData(page, pageSize)
@@ -51,7 +48,7 @@ function Table() {
                     <CircularLoader />
                 </CenteredContent>
             }
-            <WorkingLits />
+            <WorkingLists />
             <WithBorder type='bottom' />
             <WithPadding >
                 <WithBorder type='all' >

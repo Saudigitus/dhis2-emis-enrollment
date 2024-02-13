@@ -1,4 +1,5 @@
 import React from 'react'
+import { WithBorderProps } from '../../types/template/TemplateProps';
 
 const borderTypes = {
     all: { border: "0.0625rem solid rgba(224, 224, 224, 1)" },
@@ -6,9 +7,7 @@ const borderTypes = {
     top: { borderTop: "0.0625rem solid rgba(224, 224, 224, 1)" }
 }
 
-type EnumType = "all" | "bottom" | "top"
-
-function WithBorder(props: { children?: React.ReactNode, type: EnumType }): React.ReactElement {
+function WithBorder(props: WithBorderProps): React.ReactElement {
     const { children, type } = props;
 
     return (

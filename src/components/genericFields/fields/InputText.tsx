@@ -6,14 +6,14 @@ import {
     string
 } from '@dhis2/ui'
 import React from 'react'
-import style from "./Fields.module.css";
-import { type GenericFieldsProps } from '../../../types/fields/GenericFieldsTypes';
+import style from "./fields.module.css";
+import { FormFieldsProps } from '../../../types/form/GenericFieldsTypes';
 
 const { Field } = ReactFinalForm
 
 const VALIDATOR = composeValidators(string, hasValue)
 
-function InputText(props: GenericFieldsProps) {
+function InputText(props: FormFieldsProps) {
     return (
         <Field
             {...props}

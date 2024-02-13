@@ -3,24 +3,18 @@ import { ModalActions, Button, ButtonStrip, CircularLoader, CenteredContent } fr
 import WithPadding from "../template/WithPadding";
 import { Form } from "react-final-form";
 import { formFields } from "../../utils/constants/enrollmentForm/enrollmentForm";
-import useGetEnrollmentForm from "../../hooks/form/useGetEnrollmentForm";
 import GroupForm from "../form/GroupForm";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { ProgramConfigState } from "../../schema/programSchema";
-import { useParams } from "../../hooks/commons/useQueryParams";
-import usePostTei from "../../hooks/tei/usePostTei";
 import { format } from "date-fns";
-import { useGetPatternCode } from "../../hooks/tei/useGetPatternCode";
-import { useGetAttributes } from "../../hooks/programs/useGetAttributes";
 import { teiPostBody } from "../../utils/tei/formatPostBody";
 import { onSubmitClicked } from "../../schema/formOnSubmitClicked";
-import useGetUsedPProgramStages from "../../hooks/programStages/useGetUsedPProgramStages";
 import { getSelectedKey } from "../../utils/commons/dataStore/getSelectedKey";
-interface ContentProps {
-  setOpen: (value: boolean) => void
-}
+import { ModalContentProps } from "../../types/modal/ModalProps";
+import { useGetAttributes, useGetEnrollmentForm, useGetPatternCode, useGetUsedPProgramStages, useParams, usePostTei } from "../../hooks";
 
-function ModalContentComponent({ setOpen }: ContentProps): React.ReactElement {
+function ModalContentComponent(props: ModalContentProps): React.ReactElement {
+  const { setOpen } = props;
   const getProgram = useRecoilValue(ProgramConfigState);
   const { useQuery } = useParams();
   const formRef: React.MutableRefObject<FormApi<IForm, Partial<IForm>>> = useRef(null);
@@ -29,7 +23,7 @@ function ModalContentComponent({ setOpen }: ContentProps): React.ReactElement {
   const performanceProgramStages = useGetUsedPProgramStages();
   const { enrollmentsData } = useGetEnrollmentForm();
   const [, setClicked] = useRecoilState<boolean>(onSubmitClicked);
-  const [values, setValues] = useState<object>({})
+  const [values, setValues] = useState<Record<string,string>>({})
   const { getDataStoreData } = getSelectedKey();
   const [fieldsWitValue, setFieldsWitValues] = useState<any[]>([enrollmentsData])
   const { postTei, loading, data } = usePostTei()
@@ -101,7 +95,7 @@ function ModalContentComponent({ setOpen }: ContentProps): React.ReactElement {
   return (
     <WithPadding>
       <Form initialValues={{ ...initialValues, ...generatedVariables }} onSubmit={onSubmit}>
-        {({ handleSubmit, values, pristine, form }) => {
+        {({ handleSubmit, values, form }) => {
           formRef.current = form;
           return <form
             onSubmit={handleSubmit}

@@ -14,4 +14,5 @@ interface SelectedOptionsTypes {
     school: string | null
     schoolName: string | null
 }
+
 export type { HeadBarTypes, SelectedOptionsTypes }

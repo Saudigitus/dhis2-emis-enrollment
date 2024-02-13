@@ -1,4 +1,6 @@
-export interface ProgramStageConfig {
+import { OptionsProps } from "../variables/AttributeColumns"
+
+interface ProgramStageConfig {
     autoGenerateEvent: boolean
     displayName: string
     id: string
@@ -14,13 +16,11 @@ export interface ProgramStageConfig {
                 valueType: string
                 optionSet: {
                     id: string
-                    options: {
-                        [x: string]: any
-                        value: string
-                        label: string
-                    }
+                    options: OptionsProps[]
                 }
             }
         }
     ]
 }
+
+export type { ProgramStageConfig }

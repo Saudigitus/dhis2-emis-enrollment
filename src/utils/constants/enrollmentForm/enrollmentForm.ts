@@ -1,6 +1,6 @@
 import { format } from "date-fns";
-import { type FormSectionProps } from "../../../types/fields/FieldsTypes";
-import { VariablesTypes } from "../../../types/table/AttributeColumns";
+import { VariablesTypes } from "../../../types/variables/AttributeColumns";
+import { FormSectionProps } from "../../../types/form/FormSectionProps";
 
 const staticForm = () => {
   return {

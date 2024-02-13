@@ -1,6 +1,7 @@
 import { Radio, spacersNum, colors } from '@dhis2/ui'
 import { makeStyles } from '@material-ui/core';
 import React from 'react'
+import { SelectBoxesProps } from '../../../../../../../../types/table/ContentFiltersProps';
 
 const useStyle = makeStyles(() => ({
     iconDeselected: {
@@ -12,14 +13,7 @@ const useStyle = makeStyles(() => ({
     }
 }));
 
-interface SingleSelectBoxesProps {
-    options: { optionSet: { options: [{ label: string, value: string }] } }
-    value: any
-    id: string
-    onChange: (value: any, id?: string) => void
-}
-
-function SingleSelectBoxes(props: SingleSelectBoxesProps) {
+function SingleSelectBoxes(props: SelectBoxesProps) {
     const { options, id, onChange, value = "" } = props;
     const classes = useStyle()
 

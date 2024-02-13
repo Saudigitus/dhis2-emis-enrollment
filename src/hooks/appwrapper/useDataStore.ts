@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { useDataQuery } from "@dhis2/app-runtime"
 import { useSetRecoilState } from 'recoil';
 import { DataStoreState } from '../../schema/dataStoreSchema';

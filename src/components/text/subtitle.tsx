@@ -1,10 +1,8 @@
 import React from "react";
 import styles from "./text.module.css";
+import { TitleProps } from "../../types/template/TemplateProps";
 
-interface SubtitleProps {
-  label: string
-}
-function Subtitle(props: SubtitleProps): React.ReactElement {
+function Subtitle(props: TitleProps): React.ReactElement {
   const { label } = props;
 
   return <h6 className={styles.subTitle}>{label}</h6>;

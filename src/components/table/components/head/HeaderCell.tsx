@@ -1,19 +1,7 @@
 import classNames from 'classnames';
 import React from 'react'
 import defaultClasses from '../table.module.css';
-
-interface tableProps {
-    head: any
-    footer: any
-}
-
-interface HeaderCellProps {
-    children?: React.ReactNode
-    className?: string
-    passOnProps?: object
-    table?: tableProps
-    colspan?: number
-}
+import { HeaderCellProps } from '../../../../types/table/TableContentProps';
 
 function HeaderCell(props: HeaderCellProps): React.ReactElement {
     const { children, className, passOnProps, table, colspan } = props;

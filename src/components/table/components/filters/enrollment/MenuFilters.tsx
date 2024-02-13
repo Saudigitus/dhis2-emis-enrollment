@@ -1,19 +1,15 @@
 import React from 'react';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
-import { type CustomAttributeProps } from '../../../../../types/table/AttributeColumns';
+import { MenuFiltersProps } from '../../../../../types/table/ContentFiltersProps';
 
-interface MenuFiltersProps {
-    anchorEl: any
-    setAnchorEl: (value: any) => void
-    addSearchableHeaders: (value: any) => void
-    options: CustomAttributeProps[]
-}
+export default function MenuFilters(props: MenuFiltersProps) {
+    const { anchorEl, setAnchorEl, addSearchableHeaders, options } = props;
 
-export default function MenuFilters({ anchorEl, setAnchorEl, addSearchableHeaders, options }: MenuFiltersProps) {
     const handleClose = () => {
         setAnchorEl(null);
     };
+    
     return (
         <>
             <Menu

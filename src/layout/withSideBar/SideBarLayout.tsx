@@ -1,8 +1,10 @@
 import React from 'react'
 import style from "../Layout.module.css"
 import { SideBar } from '../../components'
+import { LayoutProps } from '../../types/layout/LayoutProps';
 
-export default function SideBarLayout({ children }: { children: React.ReactNode }): React.ReactElement {
+export default function SideBarLayout(props: LayoutProps): React.ReactElement {
+    const { children } = props;
     return (
         <div className={style.LayoutContainer}>
             <SideBar />

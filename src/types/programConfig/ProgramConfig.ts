@@ -1,35 +1,13 @@
+import { ProgramStageConfig } from "../programStageConfig/ProgramStageConfig"
+import { OptionsProps } from "../variables/AttributeColumns"
 
-export interface ProgramConfig {
+interface ProgramConfig {
     displayName: string
     id: string
     description: string
     access?: any
     programType: string
-    programStages: [
-        {
-            autoGenerateEvent: boolean
-            displayName: string
-            id: string
-            programStageDataElements: [
-                {
-                    displayInReports: boolean
-                    compulsory: boolean
-                    dataElement: {
-                        displayName: string
-                        id: string
-                        valueType: string
-                        optionSet: {
-                            id: string
-                            options: [{
-                                value: string
-                                label: string
-                            }]
-                        }
-                    }
-                }
-            ]
-        }
-    ]
+    programStages: ProgramStageConfig[]
     programTrackedEntityAttributes: [
         {
             trackedEntityAttribute: {
@@ -38,7 +16,7 @@ export interface ProgramConfig {
                 displayName: string
                 id: string
                 valueType: string
-                optionSet: { id: string, options: [{ value: string, label: string }] }
+                optionSet: { id: string, options: OptionsProps[] }
             }
             searchable: boolean
             displayInList: boolean
@@ -56,3 +34,5 @@ export interface ProgramConfig {
         id: string
     }
 }
+
+export type { ProgramConfig }

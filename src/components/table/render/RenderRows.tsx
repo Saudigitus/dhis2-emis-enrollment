@@ -4,13 +4,8 @@ import classNames from 'classnames';
 import { makeStyles, type Theme, createStyles } from '@material-ui/core/styles';
 import { RowCell, RowTable } from '../components';
 import { getDisplayName } from '../../../utils/table/rows/getDisplayNameByOption';
-import { type CustomAttributeProps } from '../../../types/table/AttributeColumns';
 import { useConfig } from '@dhis2/app-runtime';
-
-interface RenderHeaderProps {
-    rowsData: any[]
-    headerData: CustomAttributeProps[]
-}
+import { RenderHeaderProps } from '../../../types/table/TableContentProps';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -36,7 +31,8 @@ const useStyles = makeStyles((theme: Theme) =>
     })
 );
 
-function RenderRows({ headerData, rowsData }: RenderHeaderProps): React.ReactElement {
+function RenderRows(props: RenderHeaderProps): React.ReactElement {
+    const { headerData, rowsData } = props;
     const classes = useStyles()
     const { baseUrl } = useConfig()
 
@@ -58,7 +54,7 @@ function RenderRows({ headerData, rowsData }: RenderHeaderProps): React.ReactEle
     return (
         <React.Fragment>
             {
-                rowsData.map((row, index) => {
+                rowsData?.map((row, index) => {
                     const cells = headerData?.filter(x => x.visible)?.map(column => (
                         <RowCell
                             key={column.id}

@@ -1,6 +1,7 @@
 import { makeStyles } from '@material-ui/core';
 import React from 'react'
 import SelectBoxes from './selectBoxes/SelectBoxes';
+import { OptionSetProps } from '../../../../../../../types/table/ContentFiltersProps';
 
 const getStyles = makeStyles(() => ({
     selectBoxesContainer: {
@@ -12,12 +13,6 @@ const getStyles = makeStyles(() => ({
     }
 }));
 
-interface OptionSetProps {
-    onCommitValue: (value: string) => void
-    options: any[]
-    value: string
-    singleSelect: boolean
-}
 
 function OptionSet(props: OptionSetProps) {
     const { options, value, singleSelect } = props;
@@ -30,7 +25,7 @@ function OptionSet(props: OptionSetProps) {
             <div className={classes.selectBoxesInnerContainer}>
                 { /* $FlowFixMe */}
                 <SelectBoxes
-                    optionSet={options}
+                    options={options}
                     value={value}
                     orientation={"vertical"}
                     singleSelect={!singleSelect}

@@ -1,5 +1,5 @@
 .SimpleSearchContainer {
-    background: rgb(255, 255, 255);
+    background: var(--secondary-colort-white);
     box-shadow: rgba(33, 41, 52, 0.06) 0px 1px 2px, rgba(33, 41, 52, 0.1) 0px 1px 3px !important;
     min-width: 395px;
     min-height: 400px;
