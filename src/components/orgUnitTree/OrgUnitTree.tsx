@@ -91,6 +91,12 @@ export default function OrgUnitTree({ onToggle }: { onToggle: () => void }): Rea
         )
     }
 
+    if (!searchData?.orgUnits?.organisationUnits.length && stringQuery) {
+        return <Help>
+            No organisation units found
+        </Help>
+    }
+
     const renderOrgUnitTree = () => {
         if (stringQuery?.length) {
             return (<OrgUnitTreeComponent

@@ -1,15 +1,21 @@
 import React from 'react'
-import { MenuItem } from "@dhis2/ui"
-import { useRecoilState } from 'recoil';
+import { MenuItem, Help } from "@dhis2/ui"
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { HeaderFieldsState } from '../../schema/headersSchema';
 import { MenuItemsProps } from '../../types/menu/MenuItemTypes';
 import { useDataElementsParamMapping, useParams } from '../../hooks';
+import { OuQueryString } from '../../schema/headerSearchInputSchema';
 
 
 
 export default function Item(props: MenuItemsProps): React.ReactElement {
     const {  menuItems, dataElementId, onToggle } = props;
-    
+
+    const stringQuery = useRecoilValue(OuQueryString);
+    const filteredMenuItems = stringQuery
+    ? menuItems.filter(item => item.label.toLowerCase().includes(stringQuery.toLowerCase()))
+    : menuItems;
+
     const { add } = useParams();
     const [headerFields, setHeaderFields] = useRecoilState(HeaderFieldsState)
     const paramsMapping = useDataElementsParamMapping()
@@ -31,10 +37,16 @@ export default function Item(props: MenuItemsProps): React.ReactElement {
         onToggle()
     }
 
+    if ((stringQuery && !filteredMenuItems.length) || !menuItems.length) {
+        return <Help>
+            No items found
+        </Help>
+    }
+
     return (
         <>
             {
-                menuItems?.map(menuItem => (
+                filteredMenuItems?.map(menuItem => (
                     < MenuItem onClick={() => { onChange(menuItem) }} key={menuItem.value} label={menuItem.label} />
                 ))
             }

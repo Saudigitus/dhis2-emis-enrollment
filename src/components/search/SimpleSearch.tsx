@@ -17,9 +17,9 @@ export default function SimpleSearch(props: SimpleSearchProps): React.ReactEleme
 
     return (
         <div className={classNames(style.SimpleSearchContainer, style[id])}>
-            {id === "c540ac7c" ? <div className={style.SimpleSearcInputContainer}>
+            <div className={style.SimpleSearcInputContainer}>
                 <Input placeholder={placeholder} value={stringQuery} onChange={onChange} initialFocus dense label="An input" name="input" />
-            </div> : null}
+            </div>
             <div className={style.ChildrenContentContainer}>{children}</div>
         </div>
     )
