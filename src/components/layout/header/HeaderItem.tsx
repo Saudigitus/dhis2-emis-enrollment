@@ -6,12 +6,19 @@ import { SimpleSearch } from '../../search'
 import { componentMapping } from '../../../utils/commons/componentMapping'
 import classNames from 'classnames'
 import { HeadBarTypes } from '../../../types/headBar/HeadBarTypes'
+import { useRecoilState } from 'recoil'
+import { OuQueryString } from '../../../schema/headerSearchInputSchema'
 
 export default function HeaderItem(props: HeadBarTypes): React.ReactElement {
     const { label, value, placeholder, component, dataElementId, id } = props;
     const Component = (component != null) ? componentMapping[component] : null;
     const [openDropDown, setOpenDropDown] = useState<boolean>(false);
-    const onToggle = () => { setOpenDropDown(!openDropDown) }
+    const [, setStringQuery] = useRecoilState(OuQueryString);
+
+    const onToggle = () => {
+        setStringQuery(undefined)
+        setOpenDropDown(!openDropDown)
+    }
 
     return (
         <DropdownButton
