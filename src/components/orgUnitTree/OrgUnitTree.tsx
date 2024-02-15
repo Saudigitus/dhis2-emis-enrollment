@@ -47,7 +47,7 @@ export default function OrgUnitTree({ onToggle }: { onToggle: () => void }): Rea
                             'id,displayName,path,publicAccess,access,lastUpdated',
                             'children[id,displayName,publicAccess,access,path,children::isNotEmpty]',
                         ].join(','),
-                        paging: false,
+                        paging: true,
                         query: currentSearchText,
                         withinUserSearchHierarchy: true,
                         pageSize: 15,
