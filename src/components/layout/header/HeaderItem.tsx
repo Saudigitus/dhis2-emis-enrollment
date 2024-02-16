@@ -8,9 +8,12 @@ import classNames from 'classnames'
 import { HeadBarTypes } from '../../../types/headBar/HeadBarTypes'
 import { useRecoilState } from 'recoil'
 import { OuQueryString } from '../../../schema/headerSearchInputSchema'
+import { useDataElementsParamMapping, useParams } from '../../../hooks'
+import HeaderResetItemValue from './HeaderResetItemValue'
 
 export default function HeaderItem(props: HeadBarTypes): React.ReactElement {
-    const { label, value, placeholder, component, dataElementId, id } = props;
+    const { label, value, placeholder, component, dataElementId, id, selected } = props;
+    const { remove } = useParams()
     const Component = (component != null) ? componentMapping[component] : null;
     const [openDropDown, setOpenDropDown] = useState<boolean>(false);
     const [, setStringQuery] = useRecoilState(OuQueryString);
@@ -18,6 +21,18 @@ export default function HeaderItem(props: HeadBarTypes): React.ReactElement {
     const onToggle = () => {
         setStringQuery(undefined)
         setOpenDropDown(!openDropDown)
+    }
+
+    const paramsMapping = useDataElementsParamMapping()
+
+    const onReset = () => {
+        if(dataElementId)
+            remove(paramsMapping[dataElementId as unknown as keyof typeof paramsMapping])
+        else
+            if(id === "c540ac7c") {
+                remove("school");
+                remove("schoolName");
+            }
     }
 
     return (
@@ -34,6 +49,7 @@ export default function HeaderItem(props: HeadBarTypes): React.ReactElement {
             }
         >
             <h5>{label} <span>{value}</span></h5>
+            {selected && <HeaderResetItemValue onReset={onReset}/> }
             <img src={info} />
         </DropdownButton >
     )
