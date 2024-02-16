@@ -14,7 +14,7 @@ function sideBarData(currentAcademicYear: string): SideBarItemProps[] {
                 {
                     icon: listAdd,
                     label: "Enrollment",
-                    showBadge: true,
+                    showBadge: false,
                     disabled: false,
                     appName: "SEMIS-Enrollment",
                     route: `enrollment?sectionType=student&academicYear=${currentAcademicYear}`,
