@@ -1,8 +1,10 @@
 import { useSearchParams } from 'react-router-dom'
 import React from 'react'
 
+
 const useParams = () => {
     const [searchParams, setSearchParams] = useSearchParams()
+
     const add = (key: string, value: string) => {
         searchParams.set(key, value)
         setSearchParams(searchParams)
@@ -19,9 +21,12 @@ const useParams = () => {
         return {
             school: useQuery().get('school'),
             schoolName: useQuery().get('schoolName'),
+            academicYear: useQuery().get('academicYear'),
+            sectionType: useQuery().get('sectionType'),
             grade: useQuery().get('grade'),
             class: useQuery().get('class'),
-            academicYear: useQuery().get('academicYear')
+            position: useQuery().get('position'),
+            employmentType: useQuery().get('employmentType')
         }
     }
     return { add, remove, useQuery, urlParamiters }

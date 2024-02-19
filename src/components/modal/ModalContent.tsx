@@ -12,11 +12,13 @@ import { onSubmitClicked } from "../../schema/formOnSubmitClicked";
 import { ModalContentProps } from "../../types/modal/ModalProps";
 import { useGetAttributes, useGetEnrollmentForm, useGetPatternCode, useGetUsedPProgramStages, useParams, usePostTei } from "../../hooks";
 import { getDataStoreKeys } from "../../utils/commons/dataStore/getDataStoreKeys";
+import useGetSectionTypeLabel from "../../hooks/commons/useGetSectionTypeLabel";
 
 function ModalContentComponent(props: ModalContentProps): React.ReactElement {
   const { setOpen } = props;
   const getProgram = useRecoilValue(ProgramConfigState);
   const { useQuery } = useParams();
+  const { sectionName } = useGetSectionTypeLabel();
   const formRef: React.MutableRefObject<FormApi<IForm, Partial<IForm>>> = useRef(null);
   const orgUnit = useQuery().get("school");
   const orgUnitName = useQuery().get("schoolName");
@@ -102,7 +104,7 @@ function ModalContentComponent(props: ModalContentProps): React.ReactElement {
             onChange={onChange(values)}
           >
             {
-              formFields(enrollmentsData).map((field: any, index: number) => (
+              formFields(enrollmentsData, sectionName).map((field: any, index: number) => (
                 <GroupForm
                   name={field.section}
                   description={field.description}

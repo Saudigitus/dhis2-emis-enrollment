@@ -1,11 +1,12 @@
 import { getDataStoreKeys } from "../../utils/commons/dataStore/getDataStoreKeys";
+import { formatFilterItems } from "../../utils/constants/headBar/formatFilterItemsMapping";
 
 const useDataElementsParamMapping = () => {
-    const { registration } = getDataStoreKeys()
+    const { registration, filterItems } = getDataStoreKeys()
+
     return {
-        [registration?.section]: "class",
         [registration?.academicYear]: "academicYear",
-        [registration?.grade]: "grade"
+        ...formatFilterItems(filterItems)
     }
 }
 export default useDataElementsParamMapping;
