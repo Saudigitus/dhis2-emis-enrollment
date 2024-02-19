@@ -7,7 +7,7 @@ import {
     createNumberRange
 } from '@dhis2/ui'
 import React from 'react'
-import style from "./fields.module.css";
+import style from "./Fields.module.css";
 import { formatToString } from '../../../utils/commons/formatToString'
 import { FormFieldsProps } from '../../../types/form/GenericFieldsTypes';
 
