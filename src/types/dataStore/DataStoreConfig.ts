@@ -34,6 +34,12 @@ interface defaults {
     currentAcademicYear: string
 }
 
+interface filterItem {
+    code: string
+    dataElement: string
+    order: number
+}
+
 interface dataStoreRecord {
     attendance: attendance
     key: string
@@ -45,9 +51,11 @@ interface dataStoreRecord {
     ["socio-economics"]: simpleProgramStage
     transfer: transfer
     ["final-result"]: simpleProgramStage
-    defaults: defaults 
-
-
+    defaults: defaults
+    filters: {
+        dataElements: filterItem[]
+    }
 }
 
-export type { dataStoreRecord, transfer, registration, performance, attendance, simpleProgramStage}
+
+export type { dataStoreRecord, transfer, registration, performance, attendance, simpleProgramStage, filterItem}
