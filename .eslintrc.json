@@ -24,6 +24,7 @@
     "@typescript-eslint/explicit-function-return-type": "off",
     "@typescript-eslint/space-before-function-paren": "off",
     "@typescript-eslint/object-curly-spacing": "off",
-    "@typescript-eslint/semi": "off"
+    "@typescript-eslint/semi": "off",
+    "@typescript-eslint/consistent-type-imports": "off"
   }
 }
