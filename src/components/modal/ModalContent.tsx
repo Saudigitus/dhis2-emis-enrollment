@@ -98,8 +98,6 @@ function ModalContentComponent(props: ModalContentProps): React.ReactElement {
     setValues(e)
   }
 
-  console.log(formFields(enrollmentsData, sectionName), enrollmentsData, sectionName);
-
   return (
     <WithPadding>
       <Form initialValues={{ ...initialValues, ...generatedVariables }} onSubmit={onSubmit}>
@@ -110,7 +108,7 @@ function ModalContentComponent(props: ModalContentProps): React.ReactElement {
             onChange={onChange(values)}
           >
             {
-              formFields(enrollmentsData, sectionName).map((field: any, index: number) => (
+              updatedVariables?.filter(x => x.visible)?.map((field: any, index: number) => (
                 <GroupForm
                   name={field.section}
                   description={field.description}

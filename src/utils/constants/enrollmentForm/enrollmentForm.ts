@@ -53,6 +53,7 @@ function formFields(enrollmentsData: any[], sectionName: string): FormSectionPro
     {
       section: "Enrollment Details",
       description: "Details related to the enrollment process",
+      visible: true,
       fields: [
         staticForm().registeringSchool,
         ...enrollmentDetails,
@@ -62,6 +63,7 @@ function formFields(enrollmentsData: any[], sectionName: string): FormSectionPro
     {
       section: `${sectionName} profile`,
       description: `${sectionName} personal details`,
+      visible: true,
       fields: [
         ...studentsProfile
       ]
@@ -69,6 +71,7 @@ function formFields(enrollmentsData: any[], sectionName: string): FormSectionPro
     {
       section: "Socio-economic details",
       description: `Details about the ${sectionName} socio-economic status`,
+      visible: true,
       fields: [
         ...socioEconomicDetails
       ]

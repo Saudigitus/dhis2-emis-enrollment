@@ -21,8 +21,7 @@ export const Dhis2RulesEngine = (props: RulesEngineProps) => {
     const [newProgramRules, setnewProgramRules] = useState<FormattedPRulesType[]>([])
     const [updatedVariables, setupdatedVariables] = useState([...variables])
 
-    console.log("programRules", programRules)
-    console.log("programRulesVariables", programRulesVariables)
+    // console.log("programRules", programRules)
 
     useEffect(() => {
         if (programRules?.length > 0 && Object.keys(programRulesVariables)?.length > 0 && newProgramRules?.length === 0) {
@@ -33,6 +32,7 @@ export const Dhis2RulesEngine = (props: RulesEngineProps) => {
                         functionName: getFunctionExpression(programRule.condition),
                         condition: replaceConditionVariables(removeSpecialCharacters(programRule?.condition), programRulesVariables),
                         data: replaceConditionVariables(removeSpecialCharacters(programRule?.data), programRulesVariables),
+                        valueType: getValueTypeVariable(variables, programRule, type)
                     }
                 })
             setnewProgramRules(newProgramR)
@@ -69,7 +69,7 @@ export const Dhis2RulesEngine = (props: RulesEngineProps) => {
         const localVariablesSections = [...updatedVariables]
         const updatedVariablesCopy = localVariablesSections?.map(section => {
             const updatedSection = { ...section };
-            updatedSection.dataElements = section?.dataElements?.map((variable: any) => {
+            updatedSection.fields = section?.fields?.map((variable: any) => {
                 return applyRulesToVariable(variable);
             });
             return updatedSection;
@@ -99,16 +99,16 @@ export const Dhis2RulesEngine = (props: RulesEngineProps) => {
                                 const firstCondition = existValue(programRule.condition, values);
                                 const value = executeFunctionName(programRule.functionName, existValue(programRule.data, values))
 
-                                if (eval(firstCondition)) {
-                                    if (value != "NaN" && value != "Infinity" && value != "-Infinity" && value != "undefined") {
-                                        // setvaluesAssigned(variable.name, value)
-                                        console.log(value);
-                                    } else {
-                                        if (values[variable.name] !== "") {
-                                            // setvaluesAssigned("", variable.name)
-                                        }
-                                    }
-                                }
+                                // if (eval(firstCondition)) {
+                                //     if (value != "NaN" && value != "Infinity" && value != "-Infinity" && value != "undefined") {
+                                //         // setvaluesAssigned(variable.name, value)
+                                //         console.log(value);
+                                //     } else {
+                                //         if (values[variable.name] !== "") {
+                                //             // setvaluesAssigned("", variable.name)
+                                //         }
+                                //     }
+                                // }
                                 variable.disabled = true
                             }
                             break;
@@ -144,6 +144,7 @@ export const Dhis2RulesEngine = (props: RulesEngineProps) => {
                             break;
                         case "HIDEFIELD":
                             if (variable.name === programRule.variable) {
+                                // console.log(variable);
                                 if (executeFunctionName(programRule.functionName, existValue(programRule.condition, values))) {
                                     variable.visible = false;
                                 } else {
@@ -234,6 +235,7 @@ export function replaceConditionVariables(condition: string | undefined, variabl
             newcondition = newcondition.replaceAll(value, `'${variables[value]}'` || "''")
         }
     }
+    console.log(newcondition);
     return newcondition;
 }
 
@@ -297,4 +299,18 @@ export function existValue(condition: string | undefined, values: Record<string,
     }
 
     return localCondition;
+}
+
+function getValueTypeVariable(variables: any, variable: any, type: string) {
+    if (type === "programStageSection") {
+        let variableType = ""
+        variables?.map((section: any) => {
+            section?.fields?.map((sectionVar: any) => {
+                if (sectionVar.name === variable.variable) {
+                    variableType = sectionVar.valueType
+                }
+            });
+        });
+        return variableType
+    }
 }
