@@ -4,10 +4,12 @@ import {createStyles, createTheme, makeStyles, MuiThemeProvider} from "@material
 import {DropzoneDialog} from "material-ui-dropzone";
 import {CloudUpload} from "@material-ui/icons";
 import {read, utils} from "xlsx";
-import {useShowAlerts} from "../../hooks";
+import {useGetEnrollmentForm, useGetUsedPProgramStages, useShowAlerts} from "../../hooks";
 import {ProgramConfigState} from "../../schema/programSchema";
 import {ProgramConfig} from "../../types/programConfig/ProgramConfig";
 import {useRecoilValue} from "recoil";
+import {useGetEnrollmentStages} from "../../hooks/bulkImport/useGetEnrollmentStages";
+import {validateTemplate} from "../../utils/bulkImport/validateTemplate";
 
 interface BulkEnrollmentProps {
     setOpen: React.Dispatch<React.SetStateAction<boolean>>
@@ -15,8 +17,11 @@ interface BulkEnrollmentProps {
 }
 
 export const BulkEnrollment = ({setOpen, isOpen}: BulkEnrollmentProps): React.ReactElement => {
-    const programConfig: ProgramConfig | undefined = useRecoilValue<ProgramConfig | undefined>(ProgramConfigState)
+    const programConfig: ProgramConfig = useRecoilValue<ProgramConfig>(ProgramConfigState)
     console.log(programConfig)
+    // const p = useGetUsedPProgramStages();
+    const enrollmentStages = useGetEnrollmentStages();
+    const { enrollmentsData } = useGetEnrollmentForm();
     const { hide, show } = useShowAlerts()
     const useStyles = makeStyles(() => createStyles({
         previewChip: {
@@ -42,28 +47,23 @@ export const BulkEnrollment = ({setOpen, isOpen}: BulkEnrollmentProps): React.Re
 
             const sheetName = workbook.SheetNames[0];
             const worksheet = workbook.Sheets[sheetName];
-            const jsonData = utils.sheet_to_json(worksheet, {raw: false, dateNF: 'yyyy-mm-dd'});
+            const jsonData = utils.sheet_to_json(worksheet, {header: 1, raw: false, dateNF: 'yyyy-mm-dd'});
             const configSheet = workbook.SheetNames[1];
             const configWorksheet = workbook.Sheets[configSheet];
             const configData = utils.sheet_to_json(configWorksheet);
-            if (configData.length === 0) {
+
+            const validationMessage: string = validateTemplate(
+                jsonData, configData, programConfig, enrollmentStages)
+            if (validationMessage.length > 1) {
                 show({
-                    message: "Invalid Import File: No metadata",
+                    message: validationMessage,
                     type: {critical: true}
                 })
                 setTimeout(hide, 3000)
-                return
+                // return
             }
-            const {programId} = configData[0] as any
-            if (programId !== programConfig?.id) {
-                show({
-                    message: `Unknown program [${programId.toString() as string}] in the Metadata sheet`,
-                    type: {critical: true}
-                })
-                setTimeout(hide, 3000)
-                return
-            }
-            console.log(jsonData, configData, programId)
+
+            // console.log(jsonData, enrollmentStages, enrollmentsData)
         };
         reader.readAsArrayBuffer(file);
     }
