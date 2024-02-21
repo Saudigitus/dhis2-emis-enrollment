@@ -4,7 +4,7 @@ import {createStyles, createTheme, makeStyles, MuiThemeProvider} from "@material
 import {DropzoneDialog} from "material-ui-dropzone";
 import {CloudUpload} from "@material-ui/icons";
 import {read, utils} from "xlsx";
-import {useGetEnrollmentForm, useGetUsedPProgramStages, useShowAlerts} from "../../hooks";
+import {useShowAlerts} from "../../hooks";
 import {ProgramConfigState} from "../../schema/programSchema";
 import {ProgramConfig} from "../../types/programConfig/ProgramConfig";
 import {useRecoilValue} from "recoil";
@@ -21,7 +21,6 @@ export const BulkEnrollment = ({setOpen, isOpen}: BulkEnrollmentProps): React.Re
     console.log(programConfig)
     // const p = useGetUsedPProgramStages();
     const enrollmentStages = useGetEnrollmentStages();
-    const { enrollmentsData } = useGetEnrollmentForm();
     const { hide, show } = useShowAlerts()
     const useStyles = makeStyles(() => createStyles({
         previewChip: {
