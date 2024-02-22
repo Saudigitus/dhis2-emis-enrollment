@@ -8,6 +8,8 @@ interface ModalProps {
 
 interface ModalContentProps {
     setOpen: (value: boolean) => void
+    sectionName?: any
+    enrollmentsData?: any
 }
 
 

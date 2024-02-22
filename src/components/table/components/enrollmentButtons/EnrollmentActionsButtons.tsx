@@ -4,7 +4,7 @@ import ModalComponent from '../../../modal/Modal';
 import ModalContentComponent from '../../../modal/ModalContent';
 import ImportContent from '../../../modal/ImportContent';
 import Tooltip from '@material-ui/core/Tooltip';
-import { useParams } from '../../../../hooks';
+import { useGetEnrollmentForm, useParams } from '../../../../hooks';
 import useGetSectionTypeLabel from '../../../../hooks/commons/useGetSectionTypeLabel';
 
 function EnrollmentActionsButtons() {
@@ -12,7 +12,8 @@ function EnrollmentActionsButtons() {
   const [openImport, setOpenImport] = useState<boolean>(false);
   const { useQuery } = useParams();
   const orgUnit = useQuery().get("school")
-  const { sectionName } = useGetSectionTypeLabel()
+  const { sectionName } = useGetSectionTypeLabel();
+  const { enrollmentsData } = useGetEnrollmentForm();
 
   return (
     <div>
@@ -24,7 +25,13 @@ function EnrollmentActionsButtons() {
         </Tooltip>
       </ButtonStrip>
 
-      {open && <ModalComponent title={`Single ${sectionName} Enrollment`} open={open} setOpen={setOpen}><ModalContentComponent setOpen={setOpen} /></ModalComponent>}
+      {open && <ModalComponent title={`Single ${sectionName} Enrollment`} open={open} setOpen={setOpen}>
+        <ModalContentComponent
+          sectionName={sectionName}
+          enrollmentsData={enrollmentsData}
+          setOpen={setOpen}
+        />
+      </ModalComponent>}
       {openImport && <ModalComponent title={`Import ${sectionName}`} open={openImport} setOpen={setOpenImport}><ImportContent setOpen={setOpen} /></ModalComponent>}
     </div>
   )

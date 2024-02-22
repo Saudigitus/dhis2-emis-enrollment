@@ -13,19 +13,18 @@ import { ModalContentProps } from "../../types/modal/ModalProps";
 import { useGetAttributes, useGetEnrollmentForm, useGetPatternCode, useGetUsedPProgramStages, useParams, usePostTei } from "../../hooks";
 import { getDataStoreKeys } from "../../utils/commons/dataStore/getDataStoreKeys";
 import useGetSectionTypeLabel from "../../hooks/commons/useGetSectionTypeLabel";
+import { Dhis2RulesEngine } from "../../hooks/programRules/rules-engine/RulesEngine";
 
 function ModalContentComponent(props: ModalContentProps): React.ReactElement {
-  const { setOpen } = props;
+  const { setOpen, enrollmentsData, sectionName } = props;
   const getProgram = useRecoilValue(ProgramConfigState);
   const { useQuery } = useParams();
-  const { sectionName } = useGetSectionTypeLabel();
   const formRef: React.MutableRefObject<FormApi<IForm, Partial<IForm>>> = useRef(null);
   const orgUnit = useQuery().get("school");
   const orgUnitName = useQuery().get("schoolName");
   const performanceProgramStages = useGetUsedPProgramStages();
-  const { enrollmentsData } = useGetEnrollmentForm();
   const [, setClicked] = useRecoilState<boolean>(onSubmitClicked);
-  const [values, setValues] = useState<Record<string,string>>({})
+  const [values, setValues] = useState<Record<string, string>>({})
   const { trackedEntityType } = getDataStoreKeys();
   const [fieldsWitValue, setFieldsWitValues] = useState<any[]>([enrollmentsData])
   const { postTei, loading, data } = usePostTei()
@@ -36,6 +35,11 @@ function ModalContentComponent(props: ModalContentProps): React.ReactElement {
   })
   const { attributes = [] } = useGetAttributes()
   const { returnPattern, loadingCodes, generatedVariables } = useGetPatternCode()
+  const {runRulesEngine, updatedVariables } = Dhis2RulesEngine({ variables: formFields(enrollmentsData, sectionName), values, type:"programStageSection" })
+
+  useEffect(() => {
+    runRulesEngine()
+  }, [values])
 
   useEffect(() => {
     void returnPattern(attributes)
@@ -93,6 +97,8 @@ function ModalContentComponent(props: ModalContentProps): React.ReactElement {
     setFieldsWitValues(sections)
     setValues(e)
   }
+
+  console.log(formFields(enrollmentsData, sectionName), enrollmentsData, sectionName);
 
   return (
     <WithPadding>

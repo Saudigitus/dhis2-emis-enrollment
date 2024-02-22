@@ -4,10 +4,11 @@ import { ProgramConfig } from "../../../types/programConfig/ProgramConfig";
 import { dataStoreRecord } from "../../../types/dataStore/DataStoreConfig";
 import { CustomAttributeProps, VariablesTypes } from "../../../types/variables/AttributeColumns";
 
-export function formatResponse(data: ProgramConfig, dataStoreData: dataStoreRecord): CustomAttributeProps[] {
+export function formatResponse(data: ProgramConfig, dataStoreData: dataStoreRecord, tableColumns: CustomAttributeProps[] = []): CustomAttributeProps[] {
     const headerResponse = useMemo(() => {
         const originalData = ((data?.programStages?.find(programStge => programStge.id === dataStoreData?.registration?.programStage)) ?? {} as ProgramConfig["programStages"][0])
-        return data?.programTrackedEntityAttributes?.map((item) => {
+
+        return tableColumns?.length > 0 ? tableColumns : data?.programTrackedEntityAttributes?.map((item) => {
             return {
                 id: item.trackedEntityAttribute.id,
                 displayName: item.trackedEntityAttribute.displayName,
@@ -50,7 +51,7 @@ export function formatResponse(data: ProgramConfig, dataStoreData: dataStoreReco
                 }) as []
                 : []
         )
-    }, [data]);
+    }, [data, tableColumns]);
 
     return headerResponse;
 }
