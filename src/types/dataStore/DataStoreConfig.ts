@@ -40,6 +40,10 @@ interface filterItem {
     order: number
 }
 
+interface filters {
+    dataElements: filterItem[]
+}
+
 interface dataStoreRecord {
     attendance: attendance
     key: string
@@ -52,9 +56,7 @@ interface dataStoreRecord {
     transfer: transfer
     ["final-result"]: simpleProgramStage
     defaults: defaults
-    filters: {
-        dataElements: filterItem[]
-    }
+    filters: filters
 }
 
 
