@@ -4,12 +4,15 @@ import glyph from "../../../assets/images/sidebar/Glyph.svg"
 import listAdd from "../../../assets/images/sidebar/listAdd.svg"
 import logOut from "../../../assets/images/sidebar/log-out.svg"
 import userGroup from "../../../assets/images/sidebar/user-group.svg"
-import { SideBarItemProps } from "../../../types/sideBar/SideBarTypes"
+import { type SideBarItemProps } from "../../../types/sideBar/SideBarTypes"
+import { subItemRoute } from "./subItemRoute"
+import { filterItem } from "../../../types/dataStore/DataStoreConfig"
 
-function sideBarData(currentAcademicYear: string): SideBarItemProps[] {
+function sideBarData(locationParms : string, filterDataElements: filterItem[]): SideBarItemProps[] {
+
     return [
         {
-            title: "Students",
+            title: "student",
             subItems: [
                 {
                     icon: listAdd,
@@ -17,7 +20,7 @@ function sideBarData(currentAcademicYear: string): SideBarItemProps[] {
                     showBadge: false,
                     disabled: false,
                     appName: "SEMIS-Enrollment",
-                    route: `enrollment?sectionType=student&academicYear=${currentAcademicYear}`,
+                    route: `enrollment?${subItemRoute(locationParms.slice(1), 'student', filterDataElements)}`, 
                     pathName: "/enrollment"
                 },
                 {
@@ -26,7 +29,7 @@ function sideBarData(currentAcademicYear: string): SideBarItemProps[] {
                     showBadge: false,
                     disabled: false,
                     appName: "SEMIS-Attendance",
-                    route: `attendance?sectionType=student&academicYear=${currentAcademicYear}`,
+                    route: `attendance?${subItemRoute(locationParms.slice(1), 'student', filterDataElements)}`, 
                     pathName: "/attendance"
                 },
                 {
@@ -35,7 +38,7 @@ function sideBarData(currentAcademicYear: string): SideBarItemProps[] {
                     showBadge: false,
                     disabled: false,
                     appName: "SEMIS-Performance",
-                    route: `performance?sectionType=student&academicYear=${currentAcademicYear}`,
+                    route: `performance?${subItemRoute(locationParms.slice(1), 'student', filterDataElements)}`, 
                     pathName: "/performance"
                 },
                 {
@@ -44,7 +47,7 @@ function sideBarData(currentAcademicYear: string): SideBarItemProps[] {
                     showBadge: false,
                     disabled: false,
                     appName: "SEMIS-Final-Result",
-                    route: `final-result?sectionType=student&academicYear=${currentAcademicYear}`,
+                    route: `final-result?${subItemRoute(locationParms.slice(1), 'student', filterDataElements)}`, 
                     pathName: "/final-result"
                 },
                 {
@@ -53,13 +56,13 @@ function sideBarData(currentAcademicYear: string): SideBarItemProps[] {
                     showBadge: false,
                     disabled: false,
                     appName: "SEMIS-Student-Transfer",
-                    route: "student-transfer?sectionType=student",
+                    route: `student-transfer?${subItemRoute(locationParms.slice(1), 'student', filterDataElements, true)}`, 
                     pathName: "/student-transfer"
                 }
             ]
         },
         {
-            title: "Staff",
+            title: "staff",
             subItems: [
                 {
                     icon: userGroup,
@@ -67,7 +70,7 @@ function sideBarData(currentAcademicYear: string): SideBarItemProps[] {
                     showBadge: false,
                     disabled: false,
                     appName: "SEMIS-Enrollment-Staff",
-                    route: `enrollment-teacher?sectionType=staff&academicYear=${currentAcademicYear}`,
+                    route:`enrollment-teacher?${subItemRoute(locationParms.slice(1), 'staff', filterDataElements)}`, 
                     pathName: "/enrollment-teacher"
                 },
                 {
@@ -76,7 +79,7 @@ function sideBarData(currentAcademicYear: string): SideBarItemProps[] {
                     showBadge: false,
                     disabled: false,
                     appName: "SEMIS-Attendance-Staff",
-                    route: `staff-attendance?sectionType=staff&academicYear=${currentAcademicYear}`,
+                    route: `staff-attendance?${subItemRoute(locationParms.slice(1), 'staff', filterDataElements)}`, 
                     pathName: "/staff-attendance"
                 },
                 {
@@ -85,7 +88,7 @@ function sideBarData(currentAcademicYear: string): SideBarItemProps[] {
                     showBadge: false,
                     disabled: false,
                     appName: "SEMIS-Staff-Transfer",
-                    route: "staff-transfer?sectionType=staff",
+                    route: `staff-transfer?${subItemRoute(locationParms.slice(1), 'staff', filterDataElements, true)}`, 
                     pathName: "/staff-transfer"
                 }
             ]
