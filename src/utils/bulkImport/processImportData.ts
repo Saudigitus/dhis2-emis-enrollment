@@ -3,6 +3,12 @@ import {SafeParseError, SafeParseSuccess, ZodString, ZodTypeAny} from 'zod';
 import {FieldMapping, TemplateData, TemplateFieldMapping, ValueType} from "../../types/bulkImport/Interfaces";
 import {ProgramConfig} from "../../types/programConfig/ProgramConfig";
 
+/**
+ * Generate an array of Record<string, any> objects using supplied headers as the keys for each field
+ * @param headers - the headers to use as keys for each record
+ * @param data - array of data from template
+ * @return - array of Record<string, any> objects
+ */
 export const generateData = (headers: string[], data: any[]): TemplateData => {
     return data.map((d) => fromPairs(
         d.map((v: any, idx: number) => [headers[idx], v]))
@@ -12,6 +18,12 @@ export const generateData = (headers: string[], data: any[]): TemplateData => {
 const parseDateString = (date: Date): string => {
     return date.toISOString().split('T')[0];
 }
+
+/**
+ * Returns an array of FieldMapping objects that are required for TE enrollment
+ * @param fieldsMap - A mapping of template fields - Record<string, FieldMapping>
+ * @returns An array of the fields that are required for TE enrollment
+ */
 const getMandatoryFields = (fieldsMap: TemplateFieldMapping): FieldMapping[] => {
     const mandatoryAttributes: FieldMapping[] = []
     Object.entries(fieldsMap).forEach(([key, value]) => {
@@ -22,6 +34,14 @@ const getMandatoryFields = (fieldsMap: TemplateFieldMapping): FieldMapping[] => 
     return mandatoryAttributes
 }
 
+/**
+ * Given a schema and whether a field is mandatory,
+ * extend schema to ensure required field isn't optional when parsing
+ * @param schema - a zod schema to use when parsing value
+ * @param value value to parse
+ * @param isRequired - whether value is required
+ * @return output from parsing value using zod schema
+ */
 const parseWithOptionality = (
     schema: ZodTypeAny, value: any, isRequired: boolean): SafeParseSuccess<any> | SafeParseError<any> => {
     // Check if the schema is a string schema and required
@@ -34,6 +54,12 @@ const parseWithOptionality = (
     return schema.safeParse(value);
 }
 
+/**
+ * Checks if a record in the Excel template meets the validation as per program configuration
+ * @param record - a record in the Excel template
+ * @param fieldsMap - a dictionary with mappings for each field
+ * @return an object indicating whether the record is valid and errors if any
+ */
 const validateRecord = (
     record: Record<string, any>, fieldsMap: TemplateFieldMapping): {isValid: boolean, errors: Record<string, string[]>} => {
     const errors: Record<string, string[]> = {};
@@ -57,6 +83,12 @@ const validateRecord = (
     };
 }
 
+/**
+ * getProgramTEAttributeID returns the id of a tracked entity attribute given its name
+ * @param programConfig - the DHIS2 program configuration object
+ * @param attribute the name of the tracked entity attribute
+ * @return the id of the tracked entity attribute
+ */
 export const getProgramTEAttributeID = (programConfig: ProgramConfig, attribute: string): string => {
     const attr = programConfig?.programTrackedEntityAttributes.filter((v: any) => {
         return (v.trackedEntityAttribute.displayName === attribute)
@@ -67,6 +99,14 @@ export const getProgramTEAttributeID = (programConfig: ProgramConfig, attribute:
     return "";
 }
 
+/**
+ * Checks the existence of tracked entity given some te attributes in filterParams, the program & orgUnit
+ * @param engine - an instance of the DHIS2 DataEngine
+ * @param programId - the student program ID
+ * @param ouID - the orgUnit id for the school
+ * @param filterParams - filter params for te attributes in the form UID:EQ:VALUE;UID:EQ:VALUE
+ * @returns - a promise of an Array of tracked entities matching the search params
+ */
 const checkTEI = async (engine: any, programId: string, ouID: string, filterParams: string): Promise<any[]> => {
     const queryResult = await engine.query({
         trackedEntities: {
@@ -83,7 +123,12 @@ const checkTEI = async (engine: any, programId: string, ouID: string, filterPara
     }
     return []
 }
-
+/**
+ * Returns a system generated "System ID" tracked entity attribute from DHIS2
+ * @param engine
+ * @param systemIDAttribute
+ * @returns - a promise for the System ID attribute
+ */
 const getTESystemID = async (engine: any, systemIDAttribute: string): Promise<string> => {
     const queryResult = await engine.query({
         trackedEntityAttribute: {
