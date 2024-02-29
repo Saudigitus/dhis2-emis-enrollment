@@ -12,7 +12,7 @@ function sideBarData(locationParms : string, filterDataElements: filterItem[]): 
 
     return [
         {
-            title: "student",
+            title: "Students",
             subItems: [
                 {
                     icon: listAdd,
@@ -62,7 +62,7 @@ function sideBarData(locationParms : string, filterDataElements: filterItem[]): 
             ]
         },
         {
-            title: "staff",
+            title: "Staff",
             subItems: [
                 {
                     icon: userGroup,
