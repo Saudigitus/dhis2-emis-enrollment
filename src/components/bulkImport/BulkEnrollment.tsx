@@ -4,13 +4,13 @@ import {createStyles, createTheme, makeStyles, MuiThemeProvider} from "@material
 import {DropzoneDialog} from "material-ui-dropzone";
 import {CloudUpload} from "@material-ui/icons";
 import {read, utils} from "xlsx";
-import {useShowAlerts} from "../../hooks";
+import {useGetUsedPProgramStages, useShowAlerts} from "../../hooks";
 import {ProgramConfigState} from "../../schema/programSchema";
 import {ProgramConfig} from "../../types/programConfig/ProgramConfig";
 import {useRecoilValue} from "recoil";
 import {useGetEnrollmentStages} from "../../hooks/bulkImport/useGetEnrollmentStages";
 import {fieldsMap, validateTemplate} from "../../utils/bulkImport/validateTemplate";
-import {generateData, processData} from "../../utils/bulkImport/processImportData";
+import {createTrackedEntityPayload, generateData, processData} from "../../utils/bulkImport/processImportData";
 import {useDataEngine} from "@dhis2/app-runtime";
 
 interface BulkEnrollmentProps {
@@ -22,9 +22,9 @@ export const BulkEnrollment = ({setOpen, isOpen}: BulkEnrollmentProps): React.Re
     const programConfig: ProgramConfig = useRecoilValue<ProgramConfig>(ProgramConfigState)
     console.log(programConfig)
     const engine = useDataEngine()
-    // const p = useGetUsedPProgramStages();
+    const performanceStages = useGetUsedPProgramStages();
     const enrollmentStages = useGetEnrollmentStages();
-    const { hide, show } = useShowAlerts()
+    const {hide, show} = useShowAlerts()
     const useStyles = makeStyles(() => createStyles({
         previewChip: {
             minWidth: 160,
@@ -67,12 +67,14 @@ export const BulkEnrollment = ({setOpen, isOpen}: BulkEnrollmentProps): React.Re
                 return
             }
             const headers: string[] = rawData[1] as string[]
-            const x: Array<Record<string, any>> = generateData(headers, rawData.slice(2))
-            // console.log(jsonData, enrollmentStages, enrollmentsData)
+            const dataWithHeaders: Array<Record<string, any>> = generateData(headers, rawData.slice(2))
             const fieldMapping = fieldsMap(programConfig, enrollmentStages)
-            // console.log("<<<<<<", fieldsMap(programConfig, enrollmentStages))
-            const [invalidRecords, validRecords, newRecords, recordsToUpdate] = await processData(x, fieldMapping, programConfig, engine)
+            // console.log("<<<<<<", fieldMapping)
+            const [invalidRecords, validRecords, newRecords, recordsToUpdate] = await processData(
+                dataWithHeaders, fieldMapping, programConfig, engine)
             console.log(invalidRecords, validRecords, newRecords, recordsToUpdate)
+            const trackedEntities = createTrackedEntityPayload(newRecords, fieldMapping, programConfig, enrollmentStages, performanceStages)
+            console.log("trackedEntities=>", trackedEntities.slice(0, 1))
         };
         reader.readAsArrayBuffer(file);
     }

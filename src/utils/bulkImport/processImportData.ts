@@ -2,12 +2,13 @@ import {fromPairs} from "./validateTemplate";
 import {SafeParseError, SafeParseSuccess, ZodString, ZodTypeAny} from 'zod';
 import {FieldMapping, TemplateData, TemplateFieldMapping, ValueType} from "../../types/bulkImport/Interfaces";
 import {ProgramConfig} from "../../types/programConfig/ProgramConfig";
+import {Attribute, DataValue, Enrollment, ProgramEvent, TrackedEntity} from "../../schema/trackerSchema";
 
 /**
  * Generate an array of Record<string, any> objects using supplied headers as the keys for each field
  * @param headers - the headers to use as keys for each record
- * @param data - array of data from template
- * @return - array of Record<string, any> objects
+ * @param data - an array of data from template
+ * @return - an array of Record<string, any> objects
  */
 export const generateData = (headers: string[], data: any[]): TemplateData => {
     return data.map((d) => fromPairs(
@@ -25,13 +26,8 @@ const parseDateString = (date: Date): string => {
  * @returns An array of the fields that are required for TE enrollment
  */
 const getMandatoryFields = (fieldsMap: TemplateFieldMapping): FieldMapping[] => {
-    const mandatoryAttributes: FieldMapping[] = []
-    Object.entries(fieldsMap).forEach(([key, value]) => {
-        if (value.required && value.isTEAttribute && value.name !== "System ID") {
-            mandatoryAttributes.push(value)
-        }
-    })
-    return mandatoryAttributes
+    return Object.values(fieldsMap)
+        .filter((field) => field.required && field.isTEAttribute && field.name !== "System ID")
 }
 
 /**
@@ -61,7 +57,10 @@ const parseWithOptionality = (
  * @return an object indicating whether the record is valid and errors if any
  */
 const validateRecord = (
-    record: Record<string, any>, fieldsMap: TemplateFieldMapping): {isValid: boolean, errors: Record<string, string[]>} => {
+    record: Record<string, any>, fieldsMap: TemplateFieldMapping): {
+    isValid: boolean,
+    errors: Record<string, string[]>
+} => {
     const errors: Record<string, string[]> = {};
     Object.entries(record).forEach(([key, value]) => {
         // const parser = parsers[key as ParserKeys];
@@ -115,7 +114,8 @@ const checkTEI = async (engine: any, programId: string, ouID: string, filterPara
                 program: programId,
                 orgUnit: ouID,
                 filter: filterParams
-            }
+            },
+            fields: ['trackedEntity', 'attributes']
         }
     });
     if (queryResult?.trackedEntities?.instances.length > 0) {
@@ -125,7 +125,7 @@ const checkTEI = async (engine: any, programId: string, ouID: string, filterPara
 }
 /**
  * Returns a system generated "System ID" tracked entity attribute from DHIS2
- * @param engine
+ * @param engine - DHIS2 DataEngine obtained from useDataEngine()
  * @param systemIDAttribute
  * @returns - a promise for the System ID attribute
  */
@@ -133,15 +133,23 @@ const getTESystemID = async (engine: any, systemIDAttribute: string): Promise<st
     const queryResult = await engine.query({
         trackedEntityAttribute: {
             resource: 'trackedEntityAttributes',
-            id: ({ id }: { id: string }) => `${id}/generate`,
+            id: ({id}: { id: string }) => `${id}/generate`,
             params: {
                 expiration: 3
             }
         }
-    }, { variables: {id: systemIDAttribute}});
+    }, {variables: {id: systemIDAttribute}});
     return queryResult?.trackedEntityAttribute?.value
 }
 
+/**
+ * Processes Data from Excel template to return valid, invalid, new and records to update
+ * @param data - An array of Records<string, any> for the records from Excel template
+ * @param fieldsMap - A dictionary for Excel field headers and their configs
+ * @param programConfig - The program configuration object
+ * @param engine - The DHIS2 data engine from useDataEgine
+ * @returns a Promise of an array with invalid, valid, new, and records to update
+ */
 export const processData = async (
     data: TemplateData,
     fieldsMap: TemplateFieldMapping,
@@ -155,6 +163,7 @@ export const processData = async (
     for (const record of data.slice(0, 2)) {
         const {isValid, errors} = validateRecord(record, fieldsMap)
         if (!isValid) {
+            record.errors = errors
             invalidRecords.push(record)
             continue
         } else {
@@ -174,22 +183,161 @@ export const processData = async (
 
         const instances = await checkTEI(engine, programConfig.id, record.orgUnit, filterParams)
         if (instances.length > 0) {
+            record.trackedEntity = instances[0].trackedEntity
             recordsToUpdate.push(record)
         } else {
-            newRecords.push(record)
             const systemIDTEAttributeID: string = getProgramTEAttributeID(programConfig, "System ID")
-            const systemID = await getTESystemID(
+            record[systemIDTEAttributeID] = await getTESystemID(
                 engine,
                 systemIDTEAttributeID.length > 0
                     ? systemIDTEAttributeID
                     : "G0B8B0AH5Ek"
             )
-            console.log("System ID", systemID)
+            newRecords.push(record)
         }
     }
     return [invalidRecords, validRecords, newRecords, recordsToUpdate]
 }
 
-export const createTrackedEntityPayload = (records: TemplateData[], fieldsMapping: FieldMapping) => {
+/**
+ * Given a fields mapping, returns an array of fields that are tracked entity attributes
+ * @param fieldsMapping - A dictionary for Excel field headers and their configs
+ * @returns a string array with tracked entity attribute UIDs
+ */
+const getTEAttributesFromMapping = (fieldsMapping: TemplateFieldMapping): string[] => {
+    return Object.values(fieldsMapping).flatMap(field => {
+        if (field.isTEAttribute) {
+            return [field.key]
+        } else {
+            return []
+        }
+    })
+}
+/**
+ * Returns a record with enrollment program stages as keys and the values as and array of DataVales
+ *   - we could use lodash's groupBy too, but didn't want to extra libraries.
+ * @param data - an array of arrays with data for the enrollment program stages
+ * @returns a Record with enrollment program stages as keys and the values as and array of DataVales
+ *
+ * @example
+ *  const data: any[][] = [
+ *      [ 'Ni2qsy2WJn4.iDSrFrrVgmX', '2023' ],
+ *      [ 'Ni2qsy2WJn4.kNNoif9gASf', 'Grade 1' ],
+ *      [ 'Wi3KEZ7C3w9.xOiyqnsPZS7', 'Yes' ],
+ *      [ 'Wi3KEZ7C3w9.ReiryBkZcCT', 'No' ],
+ *  ]
+ *  const programStagesDataValues = groupDataValuesByProgramStage(data)
+ *  console.log(programStagesDataValues) // Output: {
+ *      "Ni2qsy2WJn4": [{dataElement: "iDSrFrrVgmX", value: "2023"}, {dataElement: "kNNoif9gASf", value: "Grade 1"}],
+ *      "Wi3KEZ7C3w9": [{dataElement: "xOiyqnsPZS7", value: "Yes"},{dataElement: "ReiryBkZcCT", value: "No"}]
+ *  }
+ */
+export const groupDataValuesByProgramStage = (data: any[][]): Record<string, DataValue[]> => {
+    return data.reduce((acc, [first, second]) => {
+        // Split the first element on a . and get the zeroth part as key.
+        const key = first.split('.')[0]
+        // If the key doesn't exist, initialize it with an empty array
+        if (!acc[key]) {
+            acc[key] = []
+        }
+        // Push the DataValue {dataElement: "", value: ""} to the group corresponding to the key
+        const dataElement = first.split('.')[1]
+        const dataValue: DataValue = {
+            dataElement,
+            value: second
+        }
+        // acc[key].push([first, second])
+        acc[key].push(dataValue)
+        return acc;
+    }, {} as Record<string, DataValue[]>)
+}
+
+/**
+ * Creates an array of tracked entity payloads from the data passed.
+ * It supports both new TEs and TEs for update
+ * @param records - An array of records Record<string, any>
+ * @param fieldsMapping - A dictionary for Excel field headers and their configs
+ * @param programConfig - program configuration object
+ * @param enrollmentProgramStages - a string array with uids for enrollment program
+ * @param performanceProgramStages - a string array of performance program stages
+ * @param forUpdate - a boolean indicating whether records are for updates to enrollments
+ */
+export const createTrackedEntityPayload = (
+    records: TemplateData,
+    fieldsMapping: TemplateFieldMapping,
+    programConfig: ProgramConfig,
+    enrollmentProgramStages: string[],
+    performanceProgramStages: string[],
+    forUpdate: boolean = false
+    ): TrackedEntity[] => {
     // to be implemented
+
+    const teAttributes = getTEAttributesFromMapping(fieldsMapping)
+
+    const TEIs: TrackedEntity[] = []
+    records.forEach((record) => {
+        console.log("^^^^^^", teAttributes)
+        const attributes: Attribute[] = Object.entries(record)
+            .flatMap(([key, value]) => {
+                if (teAttributes.includes(key)) {
+                    const attr: Attribute = {attribute: key, value: value}
+                    return [attr]
+                } else {
+                    return []
+                }
+            })
+        // get the data for the enrollment program stages from the record
+        const programStagesData = Object.entries(record).filter(r => {
+            if (r[0].includes('.')) {
+                const pStage = r[0].split('.')[0]
+                return enrollmentProgramStages.includes(pStage)
+            }
+        })
+        const enrollmentProgramStagesDataVales = groupDataValuesByProgramStage(programStagesData)
+        const enrollmentEvents: ProgramEvent[] = Object.entries(enrollmentProgramStagesDataVales)
+            .flatMap(([programStage, dataValues]) => {
+                 const event: ProgramEvent = {
+                     programStage,
+                     orgUnit: record.orgUnit,
+                     occurredAt: record.enrollmentDate,
+                     dataValues
+                 }
+                 return [event]
+
+            })
+
+        const programEvents: ProgramEvent[] = []
+        performanceProgramStages.forEach(programStage => {
+            let ev: ProgramEvent = {
+                programStage: programStage,
+                orgUnit: record.orgUnit,
+                occurredAt: record.enrollmentDate
+            }
+            ev = forUpdate && record?.trackedEntity.length > 0
+                ? {...ev,trackedEntity: record.trackedEntity} : ev
+            programEvents.push(ev)
+        })
+        const events = [...enrollmentEvents, ...programEvents]
+        let enrollment: Enrollment = {
+            program: programConfig.id,
+            orgUnit: record.orgUnit,
+            occurredAt: record.enrollmentDate,
+            enrolledAt: record.enrollmentDate,
+            status: "ACTIVE",
+            events
+        }
+        enrollment = forUpdate && record?.trackedEntity.length > 0
+            ? {...enrollment, trackedEntity: record.trackedEntity} : enrollment
+        let tei: TrackedEntity = {
+            orgUnit: record.orgUnit,
+            attributes,
+            enrollments: [enrollment],
+            trackedEntityType: programConfig.trackedEntityType.id,
+        }
+        tei = forUpdate && record?.trackedEntity.length > 0
+            ? {...tei, trackedEntity: record.trackedEntity} : tei
+
+        TEIs.push(tei);
+    })
+    return TEIs
 }
