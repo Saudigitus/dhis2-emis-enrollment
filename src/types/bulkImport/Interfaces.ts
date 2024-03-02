@@ -45,3 +45,13 @@ export interface FieldMapping {
 }
 export type TemplateData = Array<Record<string, any>>
 export type TemplateFieldMapping = Record<string, FieldMapping>
+
+export interface Stats {
+    created: number
+    deleted: number
+    ignored: number
+    total: number
+    updated: number
+    conflicts: number
+    invalid?: number
+}
