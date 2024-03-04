@@ -1,4 +1,5 @@
 import {ProgramConfig} from "../../types/programConfig/ProgramConfig";
+import {FieldMapping} from "../../types/bulkImport/Interfaces";
 
 /**
  * Transforms an array of key-value pairs into an object.
@@ -25,8 +26,8 @@ export const fromPairs = <T>(pairs: Array<[string, T]>): Record<string, T> => {
  * @returns A string array of TEI attribute UIDs in headers
  */
 const teiAttributesInTemplate = (headers: string[]): string[] => {
-    const regex = /^[A-Z][0-9A-Za-z]{10}$/;
-    return headers.filter(h => regex.test(h))
+    const regex = /^[A-Za-z][0-9A-Za-z]{10}$/;
+    return headers.filter(h => (regex.test(h) && !["orgUnitName"].includes(h)))
 }
 /**
  * Get programStages in Excel Template
@@ -135,4 +136,60 @@ export const validateTemplate = (
         return `Unknown ProgramStage.DataElement pairs in Template [${invalidDEs}]`
     }
     return ""
+}
+
+export const fieldsMap = (programConfig: ProgramConfig, enrollmentProgramStages: string[]): Record<string, FieldMapping> => {
+    const stagesFieldsMapping = programConfig.programStages
+        .filter(stage => enrollmentProgramStages.includes(stage.id))
+        .map(p => {
+            return p.programStageDataElements.map(de => {
+                const mapping: FieldMapping = {
+                    key: `${p.id}.${de.dataElement.id}`,
+                    id: de.dataElement.id,
+                    name: de.dataElement.displayName,
+                    required: de.compulsory,
+                    valueType: de.dataElement.valueType,
+                    isTEAttribute: false
+                }
+                return mapping
+            })
+        })
+    const fieldsMapping = stagesFieldsMapping
+        .map(y => fromPairs(y.map(x => [x.key, x])))
+        .reduce((accumulator, currentObj) => {
+            return {...accumulator, ...currentObj}
+        })
+    // Let's add a mapping for the program Tracked entity attributes
+    const _teiMap = programConfig.programTrackedEntityAttributes.map(te => {
+        console.log()
+        const mapping: FieldMapping = {
+            key: `${te.trackedEntityAttribute.id}`,
+            id: `${te.trackedEntityAttribute.id}`,
+            name: te.trackedEntityAttribute.displayName,
+            required: te.mandatory,
+            valueType: te.trackedEntityAttribute.valueType,
+            isTEAttribute: true
+        }
+        return mapping
+    })
+    const teiMap = [_teiMap].map(y => fromPairs(y.map(x => [x.key, x])))
+        .reduce((accumulator, currentObj) => {
+            return {...accumulator, ...currentObj}
+        })
+
+    // Manually add ref, enrollmentDate & orgUnit & orgUnitName
+    const extraMap: Record<string, FieldMapping> = {
+        ref: {key: "ref", id: "ref", name: "ref", required: false, valueType: "TEXT", isTEAttribute: false},
+        orgUnitName: {key: "orgUnitName", id: "orgUnitName", name: "orgUnitName", required: true, valueType: "TEXT", isTEAttribute: false},
+        orgUnit: {key: "orgUnit", id: "orgUnit", name: "orgUnit", required: true, valueType: "ORGANISATION_UNIT", isTEAttribute: false},
+        enrollmentDate: {
+            key: "enrollmentDate",
+            id: "enrollmentDate",
+            name: "enrollmentDate",
+            required: true,
+            valueType: "DATE",
+            isTEAttribute: false
+        }
+    }
+    return {...fieldsMapping, ...extraMap, ...teiMap}
 }

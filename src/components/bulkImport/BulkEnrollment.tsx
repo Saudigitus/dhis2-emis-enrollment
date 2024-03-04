@@ -9,7 +9,9 @@ import {ProgramConfigState} from "../../schema/programSchema";
 import {ProgramConfig} from "../../types/programConfig/ProgramConfig";
 import {useRecoilValue} from "recoil";
 import {useGetEnrollmentStages} from "../../hooks/bulkImport/useGetEnrollmentStages";
-import {validateTemplate} from "../../utils/bulkImport/validateTemplate";
+import {fieldsMap, validateTemplate} from "../../utils/bulkImport/validateTemplate";
+import {generateData, processData} from "../../utils/bulkImport/processImportData";
+import {useDataEngine} from "@dhis2/app-runtime";
 
 interface BulkEnrollmentProps {
     setOpen: React.Dispatch<React.SetStateAction<boolean>>
@@ -19,6 +21,7 @@ interface BulkEnrollmentProps {
 export const BulkEnrollment = ({setOpen, isOpen}: BulkEnrollmentProps): React.ReactElement => {
     const programConfig: ProgramConfig = useRecoilValue<ProgramConfig>(ProgramConfigState)
     console.log(programConfig)
+    const engine = useDataEngine()
     // const p = useGetUsedPProgramStages();
     const enrollmentStages = useGetEnrollmentStages();
     const { hide, show } = useShowAlerts()
@@ -46,23 +49,30 @@ export const BulkEnrollment = ({setOpen, isOpen}: BulkEnrollmentProps): React.Re
 
             const sheetName = workbook.SheetNames[0];
             const worksheet = workbook.Sheets[sheetName];
-            const jsonData = utils.sheet_to_json(worksheet, {header: 1, raw: false, dateNF: 'yyyy-mm-dd'});
+            const rawData = utils.sheet_to_json(worksheet,
+                {header: 1, raw: false, dateNF: 'yyyy-mm-dd', defval: ""});
             const configSheet = workbook.SheetNames[1];
             const configWorksheet = workbook.Sheets[configSheet];
             const configData = utils.sheet_to_json(configWorksheet);
 
+            console.log(rawData.slice(0, 3))
             const validationMessage: string = validateTemplate(
-                jsonData, configData, programConfig, enrollmentStages)
+                rawData, configData, programConfig, enrollmentStages)
             if (validationMessage.length > 1) {
                 show({
                     message: validationMessage,
                     type: {critical: true}
                 })
                 setTimeout(hide, 3000)
-                // return
+                return
             }
-
+            const headers: string[] = rawData[1] as string[]
+            const x: Array<Record<string, any>> = generateData(headers, rawData.slice(2))
             // console.log(jsonData, enrollmentStages, enrollmentsData)
+            const fieldMapping = fieldsMap(programConfig, enrollmentStages)
+            // console.log("<<<<<<", fieldsMap(programConfig, enrollmentStages))
+            const [invalidRecords, validRecords, newRecords, recordsToUpdate] = await processData(x, fieldMapping, programConfig, engine)
+            console.log(invalidRecords, validRecords, newRecords, recordsToUpdate)
         };
         reader.readAsArrayBuffer(file);
     }
