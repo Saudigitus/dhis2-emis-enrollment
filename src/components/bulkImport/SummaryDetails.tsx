@@ -21,16 +21,16 @@ const SummaryDetails = (): React.ReactElement => {
     // const [page, setPage] = useState<number>(1)
     // const pageSize = 5
     const [pagination, setPagination] = useState<PaginationState>({
-        new: { page: 1, pageSize: 5 },
-        updates: { page: 1, pageSize: 5 },
-        conflicts: { page: 1, pageSize: 5 },
-        invalids: { page: 1, pageSize: 5 }
+        new: {page: 1, pageSize: 5},
+        updates: {page: 1, pageSize: 5},
+        conflicts: {page: 1, pageSize: 5},
+        invalids: {page: 1, pageSize: 5}
     });
 
     const handlePageChange = (newPage: number) => {
         setPagination((prev) => ({
             ...prev,
-            [activeTab]: { ...prev[activeTab], page: newPage }
+            [activeTab]: {...prev[activeTab], page: newPage}
         }));
     };
     const getCurrentStudents = () => {
@@ -60,20 +60,28 @@ const SummaryDetails = (): React.ReactElement => {
     // Calculate the slice of data to display for the current page
     // const displayData = students.slice((page - 1) * pageSize, page * pageSize);
     return (<>
-        <TabBar >
-            <Tab onClick={() => { tabClick("new") } } selected={activeTab === 'new'}>
+        <TabBar>
+            <Tab onClick={() => {
+                tabClick("new")
+            }} selected={activeTab === 'new'}>
                 {processedRecords.newRecords.length}<br/>
                 New Students
             </Tab>
-            <Tab onClick={() => { tabClick("updates") } } selected={activeTab === 'updates'}>
+            <Tab onClick={() => {
+                tabClick("updates")
+            }} selected={activeTab === 'updates'}>
                 {processedRecords.recordsToUpdate.length}
                 <br/>
                 Potential Duplicates
             </Tab>
-            <Tab onClick={() => { tabClick("conflicts") } } selected={activeTab === 'conflicts'}>
+            <Tab onClick={() => {
+                tabClick("conflicts")
+            }} selected={activeTab === 'conflicts'}>
                 0<br/> Conflicts
             </Tab>
-            <Tab onClick={() => { tabClick("invalids") } } selected={activeTab === 'invalids'}>
+            <Tab onClick={() => {
+                tabClick("invalids")
+            }} selected={activeTab === 'invalids'}>
                 {processedRecords.invalidRecords.length}<br/> Invalid Records
             </Tab>
         </TabBar>
@@ -81,6 +89,7 @@ const SummaryDetails = (): React.ReactElement => {
         <DataTable>
             <DataTableHead>
                 <DataTableRow>
+                    <DataTableColumnHeader />
                     <DataTableColumnHeader>Excel ID</DataTableColumnHeader>
                     <DataTableColumnHeader>School</DataTableColumnHeader>
                     {
@@ -91,7 +100,7 @@ const SummaryDetails = (): React.ReactElement => {
                 </DataTableRow>
             </DataTableHead>
             <DataTableBody>
-                {displayData.map(student => (
+                {(displayData.length > 0) && displayData.map(student => (
                     <DataTableRow key={student.ref}>
                         <DataTableCell>{student.ref}</DataTableCell>
                         <DataTableCell>{student.orgUnitName}</DataTableCell>
@@ -102,13 +111,17 @@ const SummaryDetails = (): React.ReactElement => {
                         <DataTableCell>{""}</DataTableCell>
                     </DataTableRow>
                 ))}
+                {(displayData?.length === 0) &&
+                    <DataTableCell>{"No Data"}</DataTableCell>
+                }
             </DataTableBody>
         </DataTable>
         <br/>
         {total > 0 && <Pagination
             page={currentPage}
             onPageChange={handlePageChange}
-            onPageSizeChange={() => {}}
+            onPageSizeChange={() => {
+            }}
             pageSize={tabPageSize}
             pageCount={tabPageCount}
             total={total}
