@@ -25,7 +25,7 @@ const parseDateString = (date: Date): string => {
  * @param fieldsMap - A mapping of template fields - Record<string, FieldMapping>
  * @returns An array of the fields that are required for TE enrollment
  */
-const getMandatoryFields = (fieldsMap: TemplateFieldMapping): FieldMapping[] => {
+export const getMandatoryFields = (fieldsMap: TemplateFieldMapping): FieldMapping[] => {
     return Object.values(fieldsMap)
         .filter((field) => field.required && field.isTEAttribute && field.name !== "System ID")
 }
@@ -160,7 +160,7 @@ export const processData = async (
     const invalidRecords: TemplateData = []
     const recordsToUpdate: TemplateData = []
     const newRecords: TemplateData = []
-    for (const record of data.slice(0, 2)) {
+    for (const record of data) {
         const {isValid, errors} = validateRecord(record, fieldsMap)
         if (!isValid) {
             record.errors = errors
