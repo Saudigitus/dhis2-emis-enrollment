@@ -10,11 +10,11 @@ interface RulesEngineProps {
     variables: any[]
     values: Record<string, any>
     type: string
-    setvaluesAssigned?: any
+    formatKeyValueType?: any
 }
 
 export const Dhis2RulesEngine = (props: RulesEngineProps) => {
-    const { variables, values, type, setvaluesAssigned } = props
+    const { variables, values, type, formatKeyValueType } = props
     const { programRules } = useFormatProgramRules()
     const { programRulesVariables } = useFormatProgramRulesVariables()
     const getOptionGroups = useRecoilValue(OptionGroupsConfigState)
@@ -96,25 +96,22 @@ export const Dhis2RulesEngine = (props: RulesEngineProps) => {
                     switch (programRule.programRuleActionType) {
                         case "ASSIGN":
                             if (variable.name === programRule.variable) {
-                                const firstCondition = existValue(programRule.condition, values);
-                                const value = executeFunctionName(programRule.functionName, existValue(programRule.data, values))
+                                const firstCondition = existValue(programRule.condition, values, formatKeyValueType);
+                                const value = executeFunctionName(programRule.functionName, existValue(programRule.data, values, formatKeyValueType))
 
-                                // if (eval(firstCondition)) {
-                                //     if (value != "NaN" && value != "Infinity" && value != "-Infinity" && value != "undefined") {
-                                //         // setvaluesAssigned(variable.name, value)
-                                //         console.log(value);
-                                //     } else {
-                                //         if (values[variable.name] !== "") {
-                                //             // setvaluesAssigned("", variable.name)
-                                //         }
-                                //     }
-                                // }
+                                if (eval(firstCondition)) {
+                                    if (!isNaN(value) && isFinite(value) && value !== undefined) {
+                                        values[variable.name] = value
+                                    } else {
+                                        values[variable.name] = ""
+                                    }
+                                }
                                 variable.disabled = true
                             }
                             break;
                         case "SHOWOPTIONGROUP":
                             if (variable.name === programRule.variable) {
-                                if (executeFunctionName(programRule.functionName, existValue(programRule.condition, values))) {
+                                if (executeFunctionName(programRule.functionName, existValue(programRule.condition, values, formatKeyValueType))) {
                                     const options = getOptionGroups?.filter((op) => op.id === programRule.optionGroup)?.[0]?.options || []
                                     variable.options = options
                                 }
@@ -122,7 +119,7 @@ export const Dhis2RulesEngine = (props: RulesEngineProps) => {
                             break;
                         case "SHOWWARNING":
                             if (variable.name === programRule.variable) {
-                                if (executeFunctionName(programRule.functionName, existValue(programRule.condition, values))) {
+                                if (executeFunctionName(programRule.functionName, existValue(programRule.condition, values, formatKeyValueType))) {
                                     variable.content = programRule.content
                                 } else {
                                     variable.content = ""
@@ -131,7 +128,7 @@ export const Dhis2RulesEngine = (props: RulesEngineProps) => {
                             break;
                         case "SHOWERROR":
                             if (variable.name === programRule.variable) {
-                                if (executeFunctionName(programRule.functionName, existValue(programRule.condition, values))) {
+                                if (executeFunctionName(programRule.functionName, existValue(programRule.condition, values, formatKeyValueType))) {
                                     variable.error = true;
                                     variable.content = programRule.content
                                     variable.required = true;
@@ -144,8 +141,7 @@ export const Dhis2RulesEngine = (props: RulesEngineProps) => {
                             break;
                         case "HIDEFIELD":
                             if (variable.name === programRule.variable) {
-                                // console.log(variable);
-                                if (executeFunctionName(programRule.functionName, existValue(programRule.condition, values))) {
+                                if (executeFunctionName(programRule.functionName, existValue(programRule.condition, values, formatKeyValueType))) {
                                     variable.visible = false;
                                 } else {
                                     variable.visible = true;
@@ -176,7 +172,7 @@ export const Dhis2RulesEngine = (props: RulesEngineProps) => {
                                 break;
                             case "HIDEFIELD":
                                 if (sectionVariable.name === programRule.variable) {
-                                    if (executeFunctionName(programRule.functionName, existValue(programRule.condition, values))) {
+                                    if (executeFunctionName(programRule.functionName, existValue(programRule.condition, values, formatKeyValueType))) {
                                         sectionVariable.visible = false;
                                     } else {
                                         sectionVariable.visible = true;
@@ -185,7 +181,7 @@ export const Dhis2RulesEngine = (props: RulesEngineProps) => {
                                 break;
                             case "HIDESECTION":
                                 if (variable.name === programRule.variable) {
-                                    if (executeFunctionName(programRule.functionName, existValue(programRule.condition, values))) {
+                                    if (executeFunctionName(programRule.functionName, existValue(programRule.condition, values, formatKeyValueType))) {
                                         variable.visible = false;
                                     } else {
                                         variable.visible = true;
@@ -235,7 +231,6 @@ export function replaceConditionVariables(condition: string | undefined, variabl
             newcondition = newcondition.replaceAll(value, `'${variables[value]}'` || "''")
         }
     }
-    console.log(newcondition);
     return newcondition;
 }
 
@@ -287,14 +282,28 @@ function d2YearsBetween(origin: string | undefined, condition: string[] | undefi
 
 
 // replace varieble by value from condition
-export function existValue(condition: string | undefined, values: Record<string, any> = {}) {
+export function existValue(condition: string | undefined, values: Record<string, any> = {}, formatKeyValueType: any) {
     let localCondition = `'false'`;
     for (const value of Object.keys(values) || []) {
         if (condition?.includes(value)) {
             if (localCondition.includes(`'false'`)) {
                 localCondition = condition
             }
-            localCondition = localCondition.replaceAll(value, `${values[value]}`)
+
+            switch (formatKeyValueType[value]) {
+                case "BOOLEAN":
+                    localCondition = localCondition.replaceAll(value, `${values[value]}`.replace("false", "0").replace("true", "1"))
+                    break;
+
+                case "NUMBER":
+                case "INTEGER_ZERO_OR_POSITIVE":
+                    localCondition = localCondition.replaceAll(`'${value}'`, String(Number(values[value] ?? 0)))
+                    break;
+
+                default:
+                    localCondition = localCondition.replaceAll(value, `${values[value]}`)
+                    break;
+            }
         }
     }
 

@@ -14,6 +14,7 @@ import { useGetAttributes, useGetEnrollmentForm, useGetPatternCode, useGetUsedPP
 import { getDataStoreKeys } from "../../utils/commons/dataStore/getDataStoreKeys";
 import useGetSectionTypeLabel from "../../hooks/commons/useGetSectionTypeLabel";
 import { Dhis2RulesEngine } from "../../hooks/programRules/rules-engine/RulesEngine";
+import { formatKeyValueType } from "../../utils/programRules/formatKeyValueType";
 
 function ModalContentComponent(props: ModalContentProps): React.ReactElement {
   const { setOpen, enrollmentsData, sectionName } = props;
@@ -35,7 +36,7 @@ function ModalContentComponent(props: ModalContentProps): React.ReactElement {
   })
   const { attributes = [] } = useGetAttributes()
   const { returnPattern, loadingCodes, generatedVariables } = useGetPatternCode()
-  const {runRulesEngine, updatedVariables } = Dhis2RulesEngine({ variables: formFields(enrollmentsData, sectionName), values, type:"programStageSection" })
+  const {runRulesEngine, updatedVariables } = Dhis2RulesEngine({ variables: formFields(enrollmentsData, sectionName), values, type:"programStageSection", formatKeyValueType: formatKeyValueType(enrollmentsData) })
 
   useEffect(() => {
     runRulesEngine()
