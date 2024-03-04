@@ -106,7 +106,7 @@ export const getProgramTEAttributeID = (programConfig: ProgramConfig, attribute:
  * @param filterParams - filter params for te attributes in the form UID:EQ:VALUE;UID:EQ:VALUE
  * @returns - a promise of an Array of tracked entities matching the search params
  */
-const checkTEI = async (engine: any, programId: string, ouID: string, filterParams: string): Promise<any[]> => {
+const checkTEI = async (engine: any, programId: string, ouID: string, filterParams: string[]): Promise<any[]> => {
     const queryResult = await engine.query({
         trackedEntities: {
             resource: 'tracker/trackedEntities',
@@ -173,13 +173,13 @@ export const processData = async (
         const mandatoryAttributes = getMandatoryFields(fieldsMap)
         // console.log("Mandatory Fields", mandatoryAttributes)
         // search for existence in DHIS2 here
-        const filterParams: string = mandatoryAttributes.map((a: FieldMapping) => {
+        const filterParams: string[] = mandatoryAttributes.flatMap((a: FieldMapping) => {
             if (a.key !== undefined) {
                 const value: string = (record[a.key] instanceof Date) ? parseDateString(record[a.key]) : record[a.key]
-                return `${a.id}:EQ:${value}`
+                return [`${a.id}:EQ:${value}`]
             }
-            return "";
-        }).join("&filter=")
+            return [];
+        })
 
         const instances = await checkTEI(engine, programConfig.id, record.orgUnit, filterParams)
         if (instances.length > 0) {
@@ -335,7 +335,8 @@ export const createTrackedEntityPayload = (
             trackedEntityType: programConfig.trackedEntityType.id,
         }
         tei = forUpdate && record?.trackedEntity.length > 0
-            ? {...tei, trackedEntity: record.trackedEntity} : tei
+            ? {...tei, trackedEntity: record.trackedEntity}
+            : tei
 
         TEIs.push(tei);
     })

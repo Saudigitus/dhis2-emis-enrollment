@@ -52,6 +52,45 @@ export interface Stats {
     ignored: number
     total: number
     updated: number
-    conflicts: number
+    conflicts?: number
     invalid?: number
 }
+
+export interface ApiResponse {
+    status: string
+    validationReport: ValidationReport
+    stats: Stats
+    bundleReport: BundleReport
+}
+
+interface ValidationReport {
+    errorReports: any[]
+    warningReports: any[]
+}
+
+interface BundleReport {
+    status: string
+    typeReportMap: TypeReportMap
+    stats: Stats
+}
+
+interface TypeReportMap {
+    TRACKED_ENTITY: TypeReport
+    RELATIONSHIP: TypeReport
+    EVENT: TypeReport
+    ENROLLMENT: TypeReport
+}
+
+interface TypeReport {
+    trackerType: string
+    stats: Stats
+    objectReports: ObjectReport[]
+}
+
+interface ObjectReport {
+    trackerType: string
+    uid: string
+    index: number
+    errorReports: any[]
+}
+
