@@ -1,5 +1,6 @@
 import {ProgramConfig} from "../../types/programConfig/ProgramConfig";
 import {FieldMapping} from "../../types/bulkImport/Interfaces";
+import {getProgramTEAttributeID} from "./processImportData";
 
 /**
  * Transforms an array of key-value pairs into an object.
@@ -184,11 +185,27 @@ export const fieldsMap = (programConfig: ProgramConfig, enrollmentProgramStages:
             return {...accumulator, ...currentObj}
         })
 
-    // Manually add ref, enrollmentDate & orgUnit & orgUnitName
-    const extraMap: Record<string, FieldMapping> = {
+    // Manually add ref, enrollmentDate & orgUnit, orgUnitName, system ID
+    const uid: string = getProgramTEAttributeID(programConfig, "System ID")
+    const systemIDTEAttributeID = uid.length > 0 ? uid : "G0B8B0AH5Ek"
+    let extraMap: Record<string, FieldMapping> = {
         ref: {key: "ref", id: "ref", name: "ref", required: false, valueType: "TEXT", isTEAttribute: false},
-        orgUnitName: {key: "orgUnitName", id: "orgUnitName", name: "orgUnitName", required: true, valueType: "TEXT", isTEAttribute: false},
-        orgUnit: {key: "orgUnit", id: "orgUnit", name: "orgUnit", required: true, valueType: "ORGANISATION_UNIT", isTEAttribute: false},
+        orgUnitName: {
+            key: "orgUnitName",
+            id: "orgUnitName",
+            name: "orgUnitName",
+            required: true,
+            valueType: "TEXT",
+            isTEAttribute: false
+        },
+        orgUnit: {
+            key: "orgUnit",
+            id: "orgUnit",
+            name: "orgUnit",
+            required: true,
+            valueType: "ORGANISATION_UNIT",
+            isTEAttribute: false
+        },
         enrollmentDate: {
             key: "enrollmentDate",
             id: "enrollmentDate",
@@ -196,7 +213,23 @@ export const fieldsMap = (programConfig: ProgramConfig, enrollmentProgramStages:
             required: true,
             valueType: "DATE",
             isTEAttribute: false
-        }
+        },
+        trackedEntity: {
+            key: "trackedEntity",
+            id: "trackedEntity",
+            name: "trackedEntity",
+            required: false,
+            valueType: "TEXT",
+            isTEAttribute: false
+        },
+    }
+    extraMap[systemIDTEAttributeID] = {
+        key: systemIDTEAttributeID,
+        id: systemIDTEAttributeID,
+        name: "System ID",
+        required: false,
+        valueType: "TEXT",
+        isTEAttribute: true
     }
     return {...fieldsMapping, ...extraMap, ...teiMap}
 }
