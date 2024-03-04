@@ -138,6 +138,13 @@ export const validateTemplate = (
     return ""
 }
 
+/**
+ * Generated a mapping for the field headers as in the template with their corresponding attributes as defined in
+ * the DHIS2 program configuration.
+ * @param programConfig - the program configuration
+ * @param enrollmentProgramStages - the stages marked for student enrollment
+ * @returns - the generated mapping for the field headers
+ */
 export const fieldsMap = (programConfig: ProgramConfig, enrollmentProgramStages: string[]): Record<string, FieldMapping> => {
     const stagesFieldsMapping = programConfig.programStages
         .filter(stage => enrollmentProgramStages.includes(stage.id))
