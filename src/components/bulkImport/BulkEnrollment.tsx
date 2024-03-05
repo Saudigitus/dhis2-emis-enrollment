@@ -44,6 +44,7 @@ export const BulkEnrollment = ({setOpen, isOpen}: BulkEnrollmentProps): React.Re
     const {hide, show} = useShowAlerts()
     const [uploadStats, setUploadStats] = useRecoilState<BulkImportStats>(BulkImportStatsState);
     const [processedRecords, setProcessedRecords] = useRecoilState<ProcessingRecords>(ProcessingRecordsState);
+    const [isValidTemplate, setIsValidTemplate] = useState(false)
 
 
     const useStyles = makeStyles(() => createStyles({
@@ -108,6 +109,7 @@ export const BulkEnrollment = ({setOpen, isOpen}: BulkEnrollmentProps): React.Re
                 setTimeout(hide, 3000)
                 return
             }
+            setIsValidTemplate(true)
             const headers: string[] = rawData[1] as string[]
             const dataWithHeaders: Array<Record<string, any>> = generateData(headers, rawData.slice(2))
             const fieldMapping = fieldsMap(programConfig, enrollmentStages)
@@ -162,7 +164,7 @@ export const BulkEnrollment = ({setOpen, isOpen}: BulkEnrollmentProps): React.Re
     }
     return (
         <>
-            { (!isProcessing && !summaryOpen) &&
+            { ((!isProcessing && !summaryOpen) || !isValidTemplate) &&
                 <MuiThemeProvider theme={theme}>
                     <DropzoneDialog
                         dialogTitle={"Bulk Enrollment"}
@@ -192,7 +194,7 @@ export const BulkEnrollment = ({setOpen, isOpen}: BulkEnrollmentProps): React.Re
                     />
                 </MuiThemeProvider>
             }
-            { summaryOpen &&
+            { (summaryOpen && isValidTemplate) &&
                 <Modal fluid>
                     <ModalTitle>{isProcessing ? "Processing Bulk Enrolment" : "Bulk Enrolment Summary"}</ModalTitle>
                     <ModalContent>

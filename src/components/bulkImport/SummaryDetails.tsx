@@ -89,7 +89,7 @@ const SummaryDetails = (): React.ReactElement => {
         <DataTable>
             <DataTableHead>
                 <DataTableRow>
-                    <DataTableColumnHeader />
+                    {/*<DataTableColumnHeader />*/}
                     <DataTableColumnHeader>Excel ID</DataTableColumnHeader>
                     <DataTableColumnHeader>School</DataTableColumnHeader>
                     {
