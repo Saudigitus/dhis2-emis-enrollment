@@ -18,11 +18,18 @@ interface ModalContentProps {
 }
 
 const ModalSummaryContent = (props: ModalContentProps): React.ReactElement => {
-    const {setOpen, summaryData, summaryDetails} = props;
+    const {
+        setOpen,
+        summaryData,
+        summaryDetails
+    } = props;
 
     const [showDetails, setShowDetails] = useState(false)
     const processedRecords: ProcessingRecords = useRecoilValue<ProcessingRecords>(ProcessingRecordsState)
-    const {postTrackedEntities, data} = usePostTrackedEntities()
+    const {
+        postTrackedEntities,
+        data
+    } = usePostTrackedEntities()
 
     useEffect(() => {
         console.log("Posting Data....", data)
@@ -32,12 +39,18 @@ const ModalSummaryContent = (props: ModalContentProps): React.ReactElement => {
     }
     const importStudents = (importMode: string) => {
         console.log("IMPORT TEs: ", processedRecords?.newTrackedEntities, importMode)
-        const params = {async: false, importMode}
+        const params = {
+            async: false,
+            importMode
+        }
         try {
             const teisPayload: any = {
                 trackedEntities: processedRecords?.newTrackedEntities
             }
-            void postTrackedEntities({data: teisPayload, params})
+            void postTrackedEntities({
+                data: teisPayload,
+                params
+            })
 
         } catch (error: any) {
             console.error("Error importing Tracked Entities: ", error)
@@ -47,18 +60,27 @@ const ModalSummaryContent = (props: ModalContentProps): React.ReactElement => {
 
     const modalActions: ButtonActionProps[] = [
         {
-            label: "Dry Run", loading: false, disabled: false, onClick: () => {
+            label: "Dry Run",
+            loading: false,
+            disabled: newImportDisabled,
+            onClick: () => {
                 importStudents("VALIDATE")
             }
         },
         {
-            label: "Import new students", primary: true, loading: false,
-            disabled: newImportDisabled, onClick: () => {
+            label: "Import new students",
+            primary: true,
+            loading: false,
+            disabled: newImportDisabled,
+            onClick: () => {
                 importStudents("COMMIT")
             }
         },
         {
-            label: "Close", disabled: false, loading: false, onClick: () => {
+            label: "Close",
+            disabled: false,
+            loading: false,
+            onClick: () => {
                 setOpen(false)
             }
         }

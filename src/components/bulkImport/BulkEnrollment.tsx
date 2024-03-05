@@ -9,7 +9,7 @@ import {ProgramConfigState} from "../../schema/programSchema";
 import {ProgramConfig} from "../../types/programConfig/ProgramConfig";
 import {useRecoilState, useRecoilValue} from "recoil";
 import {useGetEnrollmentStages} from "../../hooks/bulkImport/useGetEnrollmentStages";
-import {fieldsMap, validateTemplate} from "../../utils/bulkImport/validateTemplate";
+import {fieldsMap, fromPairs, validateTemplate} from "../../utils/bulkImport/validateTemplate";
 import {
     createTrackedEntityPayload,
     generateData,
@@ -24,8 +24,9 @@ import SummaryDetails from "./SummaryDetails";
 import {
     BulkImportStats,
     BulkImportStatsState,
+    Headings,
     ProcessingRecords,
-    ProcessingRecordsState
+    ProcessingRecordsState, TemplateHeadingsState
 } from "../../schema/bulkImportSchema";
 
 interface BulkEnrollmentProps {
@@ -43,6 +44,7 @@ export const BulkEnrollment = ({setOpen, isOpen}: BulkEnrollmentProps): React.Re
     const enrollmentStages = useGetEnrollmentStages();
     const {hide, show} = useShowAlerts()
     const [uploadStats, setUploadStats] = useRecoilState<BulkImportStats>(BulkImportStatsState);
+    const [excelTemplateHeaders, setExcelTemplateHeaders] = useRecoilState<Headings>(TemplateHeadingsState)
     const [processedRecords, setProcessedRecords] = useRecoilState<ProcessingRecords>(ProcessingRecordsState);
     const [isValidTemplate, setIsValidTemplate] = useState(false)
 
@@ -110,7 +112,11 @@ export const BulkEnrollment = ({setOpen, isOpen}: BulkEnrollmentProps): React.Re
                 return
             }
             setIsValidTemplate(true)
-            const headers: string[] = rawData[1] as string[]
+            const headings: string[] = rawData[0] as string[] // headings seen by user
+            const headers: string[] = rawData[1] as string[] // hidden header in template
+            const templateHeadings = fromPairs(headers.map((val, idx) => {return [val, headings[idx] ?? ""]}))
+            setExcelTemplateHeaders(templateHeadings)
+            console.log("templateHeadings", templateHeadings)
             const dataWithHeaders: Array<Record<string, any>> = generateData(headers, rawData.slice(2))
             const fieldMapping = fieldsMap(programConfig, enrollmentStages)
             // console.log("<<<<<<", fieldMapping)

@@ -41,3 +41,9 @@ export const ProcessingRecordsState = atom<ProcessingRecords>({
         mandatoryFields: []
     }
 })
+
+export type Headings = Record<string, string>
+export const TemplateHeadingsState = atom<Headings>({
+    key: "template-headings",
+    default: {}
+})
