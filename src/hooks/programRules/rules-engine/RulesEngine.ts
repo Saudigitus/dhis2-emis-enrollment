@@ -5,6 +5,8 @@ import { OptionGroupsConfigState } from "../../../schema/optionGroupsSchema";
 import { FormattedPRulesType } from "../../../types/programRules/FormattedPRules";
 import { useFormatProgramRules } from "../useFormatProgramRules";
 import { useFormatProgramRulesVariables } from "../useFormatProgramRulesVariables";
+import { OrgUnitsGroupsConfigState } from "../../../schema/orgUnitsGroupSchema";
+import { compareStringByLabel } from "../../../utils/commons/sortStringsByLabel";
 
 interface RulesEngineProps {
     variables: any[]
@@ -20,6 +22,7 @@ export const Dhis2RulesEngine = (props: RulesEngineProps) => {
     const getOptionGroups = useRecoilValue(OptionGroupsConfigState)
     const [newProgramRules, setnewProgramRules] = useState<FormattedPRulesType[]>([])
     const [updatedVariables, setupdatedVariables] = useState([...variables])
+    const orgUnitsGroups = useRecoilValue(OrgUnitsGroupsConfigState)
 
     // console.log("programRules", programRules)
 
@@ -113,7 +116,7 @@ export const Dhis2RulesEngine = (props: RulesEngineProps) => {
                             if (variable.name === programRule.variable) {
                                 if (executeFunctionName(programRule.functionName, existValue(programRule.condition, values, formatKeyValueType))) {
                                     const options = getOptionGroups?.filter((op) => op.id === programRule.optionGroup)?.[0]?.options || []
-                                    variable.options = options
+                                    variable.options = { optionSet: { options: options } }
                                 }
                             }
                             break;
@@ -151,50 +154,28 @@ export const Dhis2RulesEngine = (props: RulesEngineProps) => {
                         case "HIDESECTION":
                             break;
 
+                        case "HIDEOPTIONGROUP":
+                            if (variable.name === programRule.variable) {
+                                const orgUnitGroup = programRule?.condition?.replace(/[^a-zA-Z]/g, '')
+                                const foundOrgUnitGroup = orgUnitsGroups?.filter(x => x.value === orgUnitGroup)
+
+                                if (foundOrgUnitGroup.length > 0) {
+
+                                    if (foundOrgUnitGroup[0]?.organisationUnits.findIndex(x => x.value === values["orgUnit"]) > -1) {
+                                        variable.options = { optionSet: { options: getOptionGroups?.filter((op) => op.id === programRule.optionGroup)?.[0]?.options?.slice()?.sort(compareStringByLabel) || [] } }
+                                    } else {
+                                        variable.options = { optionSet: { options: [] } }
+                                    }
+                                } else {
+                                    variable.options = { optionSet: { options: [] } }
+                                }
+                            }
+                            break;
+
                         default:
                             break;
                     }
                     break;
-                case "section":
-                    for (const sectionVariable of variable.dataElements || variable.variable || []) {
-                        switch (programRule.programRuleActionType) {
-                            case "ASSIGN":
-
-                                break;
-                            case "SHOWOPTIONGROUP":
-
-                                break;
-                            case "SHOWWARNING":
-
-                                break;
-                            case "SHOWERROR":
-
-                                break;
-                            case "HIDEFIELD":
-                                if (sectionVariable.name === programRule.variable) {
-                                    if (executeFunctionName(programRule.functionName, existValue(programRule.condition, values, formatKeyValueType))) {
-                                        sectionVariable.visible = false;
-                                    } else {
-                                        sectionVariable.visible = true;
-                                    }
-                                }
-                                break;
-                            case "HIDESECTION":
-                                if (variable.name === programRule.variable) {
-                                    if (executeFunctionName(programRule.functionName, existValue(programRule.condition, values, formatKeyValueType))) {
-                                        variable.visible = false;
-                                    } else {
-                                        variable.visible = true;
-                                    }
-                                }
-                                break;
-
-                            default:
-                                break;
-
-                        }
-                        break;
-                    }
             }
         }
         return variable;
@@ -213,6 +194,7 @@ export function removeSpecialCharacters(text: string | undefined) {
             .replaceAll("d2:hasValue", "")
             .replaceAll("d2:yearsBetween", "")
             .replaceAll("d2:concatenate", "")
+            .replaceAll("d2:inOrgUnitGroup", "")
             .replaceAll("#{", "")
             .replaceAll("A{", "")
             .replaceAll("V{", "")
@@ -259,6 +241,10 @@ function executeFunctionName(functionName: string | undefined, condition: string
             return eval(condition ?? "");
         case "yearsBetween":
             return eval(d2YearsBetween(condition, condition?.split(")")) ?? "");
+
+        case "inOrgUnitGroup":
+            console.log(condition);
+            return true
         default:
             return eval(condition ?? "");
     }

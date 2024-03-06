@@ -101,7 +101,7 @@ function ModalContentComponent(props: ModalContentProps): React.ReactElement {
 
   return (
     <WithPadding>
-      <Form initialValues={{ ...initialValues, ...generatedVariables }} onSubmit={onSubmit}>
+      <Form initialValues={{ ...initialValues, ...generatedVariables, orgUnit }} onSubmit={onSubmit}>
         {({ handleSubmit, values, form }) => {
           formRef.current = form;
           return <form
