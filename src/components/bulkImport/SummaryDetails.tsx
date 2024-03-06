@@ -1,17 +1,12 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {
     TabBar,
     Tab,
-    DataTable,
-    DataTableBody,
-    DataTableCell,
-    DataTableColumnHeader,
-    DataTableHead,
-    DataTableRow,
     Pagination
 } from '@dhis2/ui'
 import {type ProcessingRecords, ProcessingRecordsState} from "../../schema/bulkImportSchema";
 import {useRecoilValue} from "recoil";
+import {SummaryTable} from "./SummaryContent";
 // import styles from "./modal.module.css";
 
 type PaginationState = Record<string, { page: number, pageSize: number }>;
@@ -26,6 +21,11 @@ const SummaryDetails = (): React.ReactElement => {
         conflicts: {page: 1, pageSize: 5},
         invalids: {page: 1, pageSize: 5}
     });
+    useEffect(() => {
+        if (activeTab === "new") {
+            setShowErrorsOrConflicts(false)
+        }
+    }, [activeTab]);
 
     const handlePageChange = (newPage: number) => {
         setPagination((prev) => ({
@@ -53,10 +53,23 @@ const SummaryDetails = (): React.ReactElement => {
     const tabPageSize = pagination[activeTab].pageSize;
     const tabPageCount = Math.ceil(total / tabPageSize)
     const displayData = students.slice((currentPage - 1) * tabPageSize, currentPage * tabPageSize);
+    const [showErrorsOrConflicts, setShowErrorsOrConflicts] = useState<boolean>(true)
 
     const tabClick = (tab: string) => {
+        if (["invalids", "conflicts"].includes(tab)){
+            setShowErrorsOrConflicts(true)
+        } else {
+            setShowErrorsOrConflicts(false)
+        }
         setActiveTab(tab);
+        console.log('>>>', tab, showErrorsOrConflicts)
     };
+    const onPageSizeChange = (pageSize: number) => {
+        setPagination((prev) => ({
+         ...prev,
+            [activeTab]: {...prev[activeTab], pageSize: pageSize}
+        }));
+    }
     // Calculate the slice of data to display for the current page
     // const displayData = students.slice((page - 1) * pageSize, page * pageSize);
     return (<>
@@ -86,42 +99,18 @@ const SummaryDetails = (): React.ReactElement => {
             </Tab>
         </TabBar>
         <br/>
-        <DataTable>
-            <DataTableHead>
-                <DataTableRow>
-                    {/*<DataTableColumnHeader />*/}
-                    <DataTableColumnHeader>Excel ID</DataTableColumnHeader>
-                    <DataTableColumnHeader>School</DataTableColumnHeader>
-                    {
-                        processedRecords.mandatoryFields.map(field => (
-                            <DataTableColumnHeader>{field.name}</DataTableColumnHeader>))
-                    }
-                    <DataTableColumnHeader>Details</DataTableColumnHeader>
-                </DataTableRow>
-            </DataTableHead>
-            <DataTableBody>
-                {(displayData.length > 0) && displayData.map(student => (
-                    <DataTableRow key={student.ref}>
-                        <DataTableCell>{student.ref}</DataTableCell>
-                        <DataTableCell>{student.orgUnitName}</DataTableCell>
-                        {
-                            processedRecords.mandatoryFields.map(field => (
-                                <DataTableColumnHeader>{student[field.key]}</DataTableColumnHeader>))
-                        }
-                        <DataTableCell>{""}</DataTableCell>
-                    </DataTableRow>
-                ))}
-                {(displayData?.length === 0) &&
-                    <DataTableCell>{"No Data"}</DataTableCell>
-                }
-            </DataTableBody>
-        </DataTable>
+        <SummaryTable
+            displayData={displayData}
+            mandatoryFields={processedRecords.mandatoryFields}
+            showErrorsOrConflicts={showErrorsOrConflicts}
+            activeTab={activeTab}
+        />
+
         <br/>
         {total > 0 && <Pagination
             page={currentPage}
             onPageChange={handlePageChange}
-            onPageSizeChange={() => {
-            }}
+            onPageSizeChange={onPageSizeChange}
             pageSize={tabPageSize}
             pageCount={tabPageCount}
             total={total}

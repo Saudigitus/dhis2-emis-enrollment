@@ -8,7 +8,7 @@ export const ValueType: Record<string, ZodString | ZodBoolean | ZodNumber | ZodL
     EMAIL: z.string().email(),
     BOOLEAN: z.boolean(),
     TRUE_ONLY: z.literal(true),
-    DATE: z.string().regex(/^(\d{4})-(\d{2})-(\d{2})/),
+    DATE: z.string().regex(/^(\d{4})-(\d{2})-(\d{2})/, {message: "Invalid date"}),
     DATETIME: z
         .string()
         .regex(
@@ -25,8 +25,8 @@ export const ValueType: Record<string, ZodString | ZodBoolean | ZodNumber | ZodL
     TRACKER_ASSOCIATE: z.string().regex(/^[A-Z][0-9A-Za-z]{10}$/),
     USERNAME: z.string(),
     COORDINATE: z.string(),
-    ORGANISATION_UNIT: z.string().regex(/^[A-Za-z][0-9A-Za-z]{10}$/),
-    REFERENCE: z.string().regex(/^[A-Za-z][0-9A-Za-z]{10}$/),
+    ORGANISATION_UNIT: z.string().regex(/^[A-Za-z][0-9A-Za-z]{10}$/, {message: "Invalid UID"}),
+    REFERENCE: z.string().regex(/^[A-Za-z][0-9A-Za-z]{10}$/, {message: "Invalid UID"}),
     AGE: z.string().regex(/^(\d{4})-(\d{2})-(\d{2})/),
     URL: z.string().url(),
     FILE_RESOURCE: z.string(),

@@ -42,7 +42,7 @@ const parseWithOptionality = (
     schema: ZodTypeAny, value: any, isRequired: boolean): SafeParseSuccess<any> | SafeParseError<any> => {
     // Check if the schema is a string schema and required
     if (schema instanceof ZodString && isRequired) {
-        schema = schema.min(1);
+        schema = schema.min(1, {message: "Field is required"});
     } else if (!isRequired) {
         // Make schema optional
         schema = schema.optional();

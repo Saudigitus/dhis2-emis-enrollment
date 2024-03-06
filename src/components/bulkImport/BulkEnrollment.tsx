@@ -56,7 +56,7 @@ export const BulkEnrollment = ({setOpen, isOpen}: BulkEnrollmentProps): React.Re
         }
     }));
     const theme = createTheme({
-        overrides: {}
+        overrides: {},
     });
 
     const resetUploadStats = () => {
@@ -174,7 +174,7 @@ export const BulkEnrollment = ({setOpen, isOpen}: BulkEnrollmentProps): React.Re
                 <MuiThemeProvider theme={theme}>
                     <DropzoneDialog
                         dialogTitle={"Bulk Enrollment"}
-                        submitButtonText={"Import"}
+                        submitButtonText={"Start Import"}
                         dropzoneText={"Drag and drop a file here or Browse"}
                         Icon={CloudUpload as any}
                         filesLimit={1}
