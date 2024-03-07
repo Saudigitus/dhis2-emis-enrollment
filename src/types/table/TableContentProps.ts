@@ -26,6 +26,16 @@ interface RowProps {
     table?: TableProps
 }
 
+interface RowActionsType {
+    label: string
+    divider: boolean
+    onClick: () => void
+}
+interface RowActionsProps {
+    options: RowActionsType[]
+}
+
+
 interface RenderHeaderProps {
     rowsHeader?: CustomAttributeProps[]
     orderBy?: string
@@ -47,4 +57,4 @@ interface TableSortProps {
 type TableDataProps = Record<string, string>;
 
 
-export type { TableComponentProps, HeaderCellProps, RowProps, RenderHeaderProps, TableSortProps, TableDataProps }
+export type { TableComponentProps, HeaderCellProps, RowProps,RowActionsType,  RowActionsProps, RenderHeaderProps, TableSortProps, TableDataProps }

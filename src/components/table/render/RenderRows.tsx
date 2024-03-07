@@ -1,11 +1,12 @@
 import React from 'react'
 import i18n from '@dhis2/d2-i18n';
 import classNames from 'classnames';
-import { makeStyles, type Theme, createStyles } from '@material-ui/core/styles';
-import { RowCell, RowTable } from '../components';
-import { getDisplayName } from '../../../utils/table/rows/getDisplayNameByOption';
 import { useConfig } from '@dhis2/app-runtime';
-import { RenderHeaderProps } from '../../../types/table/TableContentProps';
+import { RowCell, RowTable } from '../components';
+import RowActions from './rowsActions/RowActions';
+import { makeStyles, type Theme, createStyles } from '@material-ui/core/styles';
+import { getDisplayName } from '../../../utils/table/rows/getDisplayNameByOption';
+import { RenderHeaderProps, RowActionsType } from '../../../types/table/TableContentProps';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -32,9 +33,13 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 function RenderRows(props: RenderHeaderProps): React.ReactElement {
-    const { headerData, rowsData } = props;
     const classes = useStyles()
-    const { baseUrl } = useConfig()
+    const { headerData, rowsData } = props;
+
+    const rowsActions: RowActionsType[] = [
+        { label: "1. Go to capture", divider: false, onClick: () => { console.log(true); }, },
+        { label: "2. Edit Student", divider: false, onClick: () => { console.log(true); } },
+    ];
 
     if (rowsData?.length === 0) {
         return (
@@ -59,10 +64,15 @@ function RenderRows(props: RenderHeaderProps): React.ReactElement {
                         <RowCell
                             key={column.id}
                             className={classNames(classes.cell, classes.bodyCell)}
-                            onClick={() => { window.open(`${baseUrl}/dhis-web-capture/index.html#/enrollment?enrollmentId=${row?.enrollmentId}&orgUnitId=${row?.orgUnitId}&programId=${row?.programId}&teiId=${row?.trackedEntity}`, "_blank") }}
+                            // onClick={() => { console.log(row); window.open(`${baseUrl}/dhis-web-capture/index.html#/enrollment?enrollmentId=${row?.enrollmentId}&orgUnitId=${row?.orgUnitId}&programId=${row?.programId}&teiId=${row?.trackedEntity}`, "_blank") }}
                         >
                             <div>
                                 {getDisplayName({ attribute: column.id, headers: headerData, value: row[column.id] })}
+                                {
+                                    (column.displayName == "Actions") ?
+                                        <RowActions options={rowsActions}/>
+                                    : null
+                                }
                             </div>
                         </RowCell>
                     ));

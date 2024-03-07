@@ -10,12 +10,11 @@ import { format } from "date-fns";
 import { teiPostBody } from "../../utils/tei/formatPostBody";
 import { onSubmitClicked } from "../../schema/formOnSubmitClicked";
 import { ModalContentProps } from "../../types/modal/ModalProps";
-import { useGetAttributes, useGetEnrollmentForm, useGetPatternCode, useGetUsedPProgramStages, useParams, usePostTei } from "../../hooks";
+import { useGetAttributes, useGetPatternCode, useGetUsedPProgramStages, useParams, usePostTei } from "../../hooks";
 import { getDataStoreKeys } from "../../utils/commons/dataStore/getDataStoreKeys";
-import useGetSectionTypeLabel from "../../hooks/commons/useGetSectionTypeLabel";
 import { Dhis2RulesEngine } from "../../hooks/programRules/rules-engine/RulesEngine";
 
-function ModalContentComponent(props: ModalContentProps): React.ReactElement {
+function ModalUpdate(props: ModalContentProps): React.ReactElement {
   const { setOpen, enrollmentsData, sectionName } = props;
   const getProgram = useRecoilValue(ProgramConfigState);
   const { useQuery } = useParams();
@@ -37,7 +36,6 @@ function ModalContentComponent(props: ModalContentProps): React.ReactElement {
   const { returnPattern, loadingCodes, generatedVariables } = useGetPatternCode()
   const {runRulesEngine, updatedVariables } = Dhis2RulesEngine({ variables: formFields(enrollmentsData, sectionName), values, type:"programStageSection" })
 
-  console.log(setOpen, enrollmentsData, sectionName, 4)
   useEffect(() => {
     runRulesEngine()
   }, [values])
@@ -99,7 +97,7 @@ function ModalContentComponent(props: ModalContentProps): React.ReactElement {
     setValues(e)
   }
 
-  // console.log(formFields(enrollmentsData, sectionName), enrollmentsData, sectionName);
+  console.log(formFields(enrollmentsData, sectionName), enrollmentsData, sectionName);
 
   return (
     <WithPadding>
@@ -141,4 +139,4 @@ function ModalContentComponent(props: ModalContentProps): React.ReactElement {
   )
 }
 
-export default ModalContentComponent;
+export default ModalUpdate;
