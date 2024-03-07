@@ -7,7 +7,7 @@ import {read, utils} from "xlsx";
 import {useGetUsedPProgramStages, useShowAlerts} from "../../hooks";
 import {ProgramConfigState} from "../../schema/programSchema";
 import {ProgramConfig} from "../../types/programConfig/ProgramConfig";
-import {useRecoilState, useRecoilValue} from "recoil";
+import {useRecoilState, useRecoilValue, useResetRecoilState} from "recoil";
 import {useGetEnrollmentStages} from "../../hooks/bulkImport/useGetEnrollmentStages";
 import {fieldsMap, fromPairs, validateTemplate} from "../../utils/bulkImport/validateTemplate";
 import {
@@ -26,7 +26,7 @@ import {
     BulkImportStatsState,
     Headings,
     ProcessingRecords,
-    ProcessingRecordsState, TemplateHeadingsState
+    ProcessingRecordsState, ProcessingStage, TemplateHeadingsState
 } from "../../schema/bulkImportSchema";
 
 interface BulkEnrollmentProps {
@@ -44,8 +44,9 @@ export const BulkEnrollment = ({setOpen, isOpen}: BulkEnrollmentProps): React.Re
     const enrollmentStages = useGetEnrollmentStages();
     const {hide, show} = useShowAlerts()
     const [uploadStats, setUploadStats] = useRecoilState<BulkImportStats>(BulkImportStatsState);
-    const [excelTemplateHeaders, setExcelTemplateHeaders] = useRecoilState<Headings>(TemplateHeadingsState)
-    const [processedRecords, setProcessedRecords] = useRecoilState<ProcessingRecords>(ProcessingRecordsState);
+    const [_excelTemplateHeaders, setExcelTemplateHeaders] = useRecoilState<Headings>(TemplateHeadingsState)
+    const [_processedRecords, setProcessedRecords] = useRecoilState<ProcessingRecords>(ProcessingRecordsState);
+    const resetProcessingStage = useResetRecoilState(ProcessingStage);
     const [isValidTemplate, setIsValidTemplate] = useState(false)
 
 
@@ -73,12 +74,11 @@ export const BulkEnrollment = ({setOpen, isOpen}: BulkEnrollmentProps): React.Re
             }
         })
     }
-    useEffect(() => {
-        console.log("######", isProcessing)
-    }, [isProcessing])
+
     const classes = useStyles();
     const handleFileChange = (file: File) => {
-        resetUploadStats();
+        resetProcessingStage()
+        resetUploadStats()
         setIsProcessing(true)
         setSummaryOpen(true)
         const reader: FileReader = new FileReader();
@@ -108,7 +108,8 @@ export const BulkEnrollment = ({setOpen, isOpen}: BulkEnrollmentProps): React.Re
                     message: validationMessage,
                     type: {critical: true}
                 })
-                setTimeout(hide, 3000)
+                setOpen(false)
+                setTimeout(hide, 2000)
                 return
             }
             setIsValidTemplate(true)
@@ -221,7 +222,6 @@ export const BulkEnrollment = ({setOpen, isOpen}: BulkEnrollmentProps): React.Re
                                 summaryDetails={
                                     <>
                                         <SummaryDetails/>
-
                                     </>
                                 }
                             />

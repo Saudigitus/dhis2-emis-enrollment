@@ -1,5 +1,6 @@
 import type { ZodBoolean, ZodLiteral, ZodNumber, ZodString } from "zod";
 import z from "zod";
+import {TrackedEntity} from "../../schema/trackerSchema";
 export const ValueType: Record<string, ZodString | ZodBoolean | ZodNumber | ZodLiteral<true>> = {
     TEXT: z.string(),
     LONG_TEXT: z.string(),
@@ -45,6 +46,7 @@ export interface FieldMapping {
 }
 export type TemplateData = Array<Record<string, any>>
 export type TemplateFieldMapping = Record<string, FieldMapping>
+export type PaginationState = Record<string, { page: number, pageSize: number }>;
 
 export interface Stats {
     created: number
@@ -92,5 +94,14 @@ interface ObjectReport {
     uid: string
     index: number
     errorReports: any[]
+}
+
+export interface NestedTrackerPayload {
+    trackedEntities: TrackedEntity[]
+}
+
+export interface createMutationParams {
+    async: boolean
+    importMode: "VALIDATE" | "COMMIT"
 }
 

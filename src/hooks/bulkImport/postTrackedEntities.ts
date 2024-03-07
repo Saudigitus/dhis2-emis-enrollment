@@ -1,19 +1,15 @@
-import { useDataMutation } from "@dhis2/app-runtime"
+import { DataMutation, useDataMutation } from "@dhis2/app-runtime"
 import useShowAlerts from '../commons/useShowAlert';
-import { atom, useRecoilState } from "recoil";
-import {ApiResponse} from "../../types/bulkImport/Interfaces";
+import { useRecoilState } from "recoil";
+import {ApiResponse, createMutationParams, NestedTrackerPayload} from "../../types/bulkImport/Interfaces";
+import {teiRefetch} from "../../schema/bulkImportSchema";
 
 const POST_TEI: any = {
     resource: "tracker",
     type: 'create',
-    data: ({ data }: any) => data,
+    data: ({data}: any) => data,
     params: ({params}: any) => params
 }
-
-export const teiRefetch = atom({
-    key: "refetch-tei",
-    default: false
-})
 
 export const usePostTrackedEntities = () => {
     const { hide, show } = useShowAlerts()

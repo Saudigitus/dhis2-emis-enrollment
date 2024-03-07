@@ -7,9 +7,10 @@ import Title from "../text/Title";
 import SummaryCards from "./SummaryCards";
 import {Collapse} from "@material-ui/core";
 import {InfoOutlined} from "@material-ui/icons";
-import {ProcessingRecords, ProcessingRecordsState} from "../../schema/bulkImportSchema";
-import {useRecoilValue} from "recoil";
+import {ProcessingRecords, ProcessingRecordsState, ProcessingStage} from "../../schema/bulkImportSchema";
+import {useRecoilState, useRecoilValue} from "recoil";
 import {usePostTrackedEntities} from "../../hooks/bulkImport/postTrackedEntities";
+import {TrackedEntity} from "../../schema/trackerSchema";
 
 interface ModalContentProps {
     setOpen: (value: boolean) => void
@@ -26,6 +27,7 @@ const ModalSummaryContent = (props: ModalContentProps): React.ReactElement => {
 
     const [showDetails, setShowDetails] = useState(false)
     const processedRecords: ProcessingRecords = useRecoilValue<ProcessingRecords>(ProcessingRecordsState)
+    const [processingStage, setProcessingStage] = useRecoilState<string>(ProcessingStage)
     const {
         postTrackedEntities,
         data
@@ -34,18 +36,29 @@ const ModalSummaryContent = (props: ModalContentProps): React.ReactElement => {
     useEffect(() => {
         console.log("Posting Data....", data)
     }, [data]);
+    useEffect(() => {
+    },[processingStage])
     const handleShowDetails = () => {
         setShowDetails(!showDetails);
     }
-    const importStudents = (importMode: string) => {
-        console.log("IMPORT TEs: ", processedRecords?.newTrackedEntities, importMode)
+    const summaryTitle = processingStage === "template-processing"
+        ? "Template Processing" : processingStage === "dry-run"
+            ? "Dry Run": "Import"
+
+    const importStudents = (importMode: "VALIDATE" | "COMMIT") => {
+        if (importMode === "VALIDATE") {
+            setProcessingStage("dry-run")
+        } else {
+            setProcessingStage("commit")
+        }
+        console.log("IMPORT TEs: ", processedRecords?.newTrackedEntities, importMode, processingStage)
         const params = {
             async: false,
             importMode
         }
         try {
             const teisPayload: any = {
-                trackedEntities: processedRecords?.newTrackedEntities
+                trackedEntities: processedRecords?.newTrackedEntities as TrackedEntity[]
             }
             void postTrackedEntities({
                 data: teisPayload,
@@ -92,7 +105,7 @@ const ModalSummaryContent = (props: ModalContentProps): React.ReactElement => {
                 preview </Tag>
 
             <WithPadding/>
-            <Title label="Summary"/>
+            <Title label={`${summaryTitle} Summary`}/>
             <WithPadding/>
 
             <SummaryCards {...summaryData} />

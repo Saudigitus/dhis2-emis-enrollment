@@ -7,9 +7,8 @@ import {
 import {type ProcessingRecords, ProcessingRecordsState} from "../../schema/bulkImportSchema";
 import {useRecoilValue} from "recoil";
 import {SummaryTable} from "./SummaryContent";
-// import styles from "./modal.module.css";
+import {PaginationState} from "../../types/bulkImport/Interfaces";
 
-type PaginationState = Record<string, { page: number, pageSize: number }>;
 const SummaryDetails = (): React.ReactElement => {
     const processedRecords: ProcessingRecords = useRecoilValue<ProcessingRecords>(ProcessingRecordsState)
     const [activeTab, setActiveTab] = useState("invalids")
@@ -86,11 +85,6 @@ const SummaryDetails = (): React.ReactElement => {
                 {processedRecords.recordsToUpdate.length}
                 <br/>
                 Potential Duplicates
-            </Tab>
-            <Tab onClick={() => {
-                tabClick("conflicts")
-            }} selected={activeTab === 'conflicts'}>
-                0<br/> Conflicts
             </Tab>
             <Tab onClick={() => {
                 tabClick("invalids")

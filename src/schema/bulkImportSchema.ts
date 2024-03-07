@@ -47,3 +47,13 @@ export const TemplateHeadingsState = atom<Headings>({
     key: "template-headings",
     default: {}
 })
+
+export const teiRefetch = atom({
+    key: "refetch-tei",
+    default: false
+})
+
+export const ProcessingStage = atom<string>({
+    key: "bulkimport-processing-stage",
+    default: "template-processing"
+})
