@@ -1,12 +1,11 @@
 import React from 'react'
 import i18n from '@dhis2/d2-i18n';
 import classNames from 'classnames';
-import { useConfig } from '@dhis2/app-runtime';
 import { RowCell, RowTable } from '../components';
 import RowActions from './rowsActions/RowActions';
+import { RenderHeaderProps } from '../../../types/table/TableContentProps';
 import { makeStyles, type Theme, createStyles } from '@material-ui/core/styles';
 import { getDisplayName } from '../../../utils/table/rows/getDisplayNameByOption';
-import { RenderHeaderProps, RowActionsType } from '../../../types/table/TableContentProps';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -34,15 +33,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 function RenderRows(props: RenderHeaderProps): React.ReactElement {
     const classes = useStyles()
-    const { baseUrl } = useConfig()
     const { headerData, rowsData } = props;
-
-    const rowsActions = ({onOpenCapture, onEditStudent}: any) : RowActionsType[] => {
-        return [
-            { label: "1. Go to capture", divider: false, onClick: () => { onOpenCapture() }},
-            { label: "2. Edit Student", divider: false, onClick: () => { onEditStudent() }},
-        ];
-    } 
 
     if (rowsData?.length === 0) {
         return (
@@ -72,13 +63,7 @@ function RenderRows(props: RenderHeaderProps): React.ReactElement {
                                 {getDisplayName({ attribute: column.id, headers: headerData, value: row[column.id] })}
                                 {
                                     (column.displayName == "Actions") ?
-                                        <RowActions 
-                                            options={
-                                              rowsActions({
-                                                onOpenCapture: () => window.open(`${baseUrl}/dhis-web-capture/index.html#/enrollment?enrollmentId=${row?.enrollmentId}&orgUnitId=${row?.orgUnitId}&programId=${row?.programId}&teiId=${row?.trackedEntity}`, "_blank"),
-                                                onEditStudent: () => console.log(0)
-                                            })}
-                                        />
+                                        <RowActions row={row} />
                                     : null
                                 }
                             </div>

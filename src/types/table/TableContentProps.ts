@@ -32,7 +32,7 @@ interface RowActionsType {
     onClick: () => void
 }
 interface RowActionsProps {
-    options: RowActionsType[]
+    row: any
 }
 
 

@@ -12,5 +12,11 @@ interface ModalContentProps {
     enrollmentsData?: any
 }
 
+interface ModalUpdateStudentProps {
+    setOpen: (value: boolean) => void
+    sectionName?: any
+    studentInitialValues?: any
+    enrollmentsData?: any
+}
 
-export type { ModalProps, ModalContentProps }
+export type { ModalProps, ModalContentProps, ModalUpdateStudentProps }

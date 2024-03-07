@@ -9,13 +9,13 @@ import { ProgramConfigState } from "../../schema/programSchema";
 import { format } from "date-fns";
 import { teiPostBody } from "../../utils/tei/formatPostBody";
 import { onSubmitClicked } from "../../schema/formOnSubmitClicked";
-import { ModalContentProps } from "../../types/modal/ModalProps";
+import { ModalUpdateStudentProps } from "../../types/modal/ModalProps";
 import { useGetAttributes, useGetPatternCode, useGetUsedPProgramStages, useParams, usePostTei } from "../../hooks";
 import { getDataStoreKeys } from "../../utils/commons/dataStore/getDataStoreKeys";
 import { Dhis2RulesEngine } from "../../hooks/programRules/rules-engine/RulesEngine";
 
-function ModalUpdate(props: ModalContentProps): React.ReactElement {
-  const { setOpen, enrollmentsData, sectionName } = props;
+function ModalUpdate(props: ModalUpdateStudentProps): React.ReactElement {
+  const { setOpen,  sectionName, studentInitialValues, enrollmentsData } = props;
   const getProgram = useRecoilValue(ProgramConfigState);
   const { useQuery } = useParams();
   const formRef: React.MutableRefObject<FormApi<IForm, Partial<IForm>>> = useRef(null);
@@ -30,7 +30,8 @@ function ModalUpdate(props: ModalContentProps): React.ReactElement {
   const [clickedButton, setClickedButton] = useState<string>("");
   const [initialValues] = useState<object>({
     registerschoolstaticform: orgUnitName,
-    eventdatestaticform: format(new Date(), "yyyy-MM-dd")
+    eventdatestaticform: format(new Date(), "yyyy-MM-dd"),
+    ...studentInitialValues
   })
   const { attributes = [] } = useGetAttributes()
   const { returnPattern, loadingCodes, generatedVariables } = useGetPatternCode()
@@ -48,10 +49,8 @@ function ModalUpdate(props: ModalContentProps): React.ReactElement {
 
   // When Save and continue button clicked and data posted, close the modal
   useEffect(() => {
-    if (data !== undefined && data?.status === "OK") {
-      if (clickedButton === "saveandcontinue") {
-        setOpen(false)
-      }
+    if (data && data["status" as unknown as keyof typeof data] === "OK") {
+      setOpen(false)
       setClicked(false)
       formRef.current.restart()
     }
@@ -71,8 +70,7 @@ function ModalUpdate(props: ModalContentProps): React.ReactElement {
 
   const modalActions = [
     { id: "cancel", type: "button", label: "Cancel", disabled: loading, onClick: () => { setClickedButton("cancel"); setOpen(false) } },
-    { id: "saveandnew", type: "submit", label: "Save and add new", primary: true, disabled: loading, onClick: () => { setClickedButton("saveandnew"); setClicked(true) } },
-    { id: "saveandcontinue", type: "submit", label: "Save and close", primary: true, disabled: loading, onClick: () => { setClickedButton("saveandcontinue"); setClicked(true) } }
+    { id: "save", type: "submit", label: "Update", primary: true, disabled: loading, onClick: () => { setClickedButton("save"); setClicked(true) } },
   ];
 
   if (enrollmentsData?.length < 1 || loadingCodes) {
@@ -88,7 +86,6 @@ function ModalUpdate(props: ModalContentProps): React.ReactElement {
     for (const [key, value] of Object.entries(e)) {
       for (let i = 0; i < sections?.length; i++) {
         if (sections[i].find((element: any) => element.id === key) !== null && sections[i].find((element: any) => element.id === key) !== undefined) {
-          // Sending onChanging form value to variables object
           sections[i].find((element: any) => element.id === key).assignedValue = value
         }
       }
@@ -97,16 +94,14 @@ function ModalUpdate(props: ModalContentProps): React.ReactElement {
     setValues(e)
   }
 
-  console.log(formFields(enrollmentsData, sectionName), enrollmentsData, sectionName);
-
   return (
     <WithPadding>
-      <Form initialValues={{ ...initialValues, ...generatedVariables }} onSubmit={onSubmit}>
+      <Form initialValues={{ ...initialValues }} onSubmit={onSubmit}>
         {({ handleSubmit, values, form }) => {
           formRef.current = form;
           return <form
             onSubmit={handleSubmit}
-            onChange={onChange(values)}
+            onChange={()=> onChange(values)}
           >
             {
               formFields(enrollmentsData, sectionName).map((field: any, index: number) => (

@@ -21,8 +21,6 @@ export const Dhis2RulesEngine = (props: RulesEngineProps) => {
     const [newProgramRules, setnewProgramRules] = useState<FormattedPRulesType[]>([])
     const [updatedVariables, setupdatedVariables] = useState([...variables])
 
-    console.log("programRules", programRules)
-    console.log("programRulesVariables", programRulesVariables)
 
     useEffect(() => {
         if (programRules?.length > 0 && Object.keys(programRulesVariables)?.length > 0 && newProgramRules?.length === 0) {
@@ -102,7 +100,6 @@ export const Dhis2RulesEngine = (props: RulesEngineProps) => {
                                 if (eval(firstCondition)) {
                                     if (value != "NaN" && value != "Infinity" && value != "-Infinity" && value != "undefined") {
                                         // setvaluesAssigned(variable.name, value)
-                                        console.log(value);
                                     } else {
                                         if (values[variable.name] !== "") {
                                             // setvaluesAssigned("", variable.name)
