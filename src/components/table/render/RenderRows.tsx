@@ -34,12 +34,15 @@ const useStyles = makeStyles((theme: Theme) =>
 
 function RenderRows(props: RenderHeaderProps): React.ReactElement {
     const classes = useStyles()
+    const { baseUrl } = useConfig()
     const { headerData, rowsData } = props;
 
-    const rowsActions: RowActionsType[] = [
-        { label: "1. Go to capture", divider: false, onClick: () => { console.log(true); }, },
-        { label: "2. Edit Student", divider: false, onClick: () => { console.log(true); } },
-    ];
+    const rowsActions = ({onOpenCapture, onEditStudent}: any) : RowActionsType[] => {
+        return [
+            { label: "1. Go to capture", divider: false, onClick: () => { onOpenCapture() }},
+            { label: "2. Edit Student", divider: false, onClick: () => { onEditStudent() }},
+        ];
+    } 
 
     if (rowsData?.length === 0) {
         return (
@@ -64,13 +67,18 @@ function RenderRows(props: RenderHeaderProps): React.ReactElement {
                         <RowCell
                             key={column.id}
                             className={classNames(classes.cell, classes.bodyCell)}
-                            // onClick={() => { console.log(row); window.open(`${baseUrl}/dhis-web-capture/index.html#/enrollment?enrollmentId=${row?.enrollmentId}&orgUnitId=${row?.orgUnitId}&programId=${row?.programId}&teiId=${row?.trackedEntity}`, "_blank") }}
                         >
                             <div>
                                 {getDisplayName({ attribute: column.id, headers: headerData, value: row[column.id] })}
                                 {
                                     (column.displayName == "Actions") ?
-                                        <RowActions options={rowsActions}/>
+                                        <RowActions 
+                                            options={
+                                              rowsActions({
+                                                onOpenCapture: () => window.open(`${baseUrl}/dhis-web-capture/index.html#/enrollment?enrollmentId=${row?.enrollmentId}&orgUnitId=${row?.orgUnitId}&programId=${row?.programId}&teiId=${row?.trackedEntity}`, "_blank"),
+                                                onEditStudent: () => console.log(0)
+                                            })}
+                                        />
                                     : null
                                 }
                             </div>
