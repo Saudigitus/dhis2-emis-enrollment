@@ -2,45 +2,23 @@ import { format } from "date-fns";
 import { useState, useEffect } from "react";
 import { useRecoilValue } from "recoil";
 import { OptionGroupsConfigState } from "../../../schema/optionGroupsSchema";
-import { FormattedPRulesType } from "../../../types/programRules/FormattedPRules";
-import { useFormatProgramRules } from "../useFormatProgramRules";
-import { useFormatProgramRulesVariables } from "../useFormatProgramRulesVariables";
 import { OrgUnitsGroupsConfigState } from "../../../schema/orgUnitsGroupSchema";
 import { compareStringByLabel } from "../../../utils/commons/sortStringsByLabel";
+import { ProgramRulesFormatedState } from "../../../schema/programRulesFormated";
 
 interface RulesEngineProps {
     variables: any[]
     values: Record<string, any>
-    type: string
+    type: "programStage" | "programStageSection" | "attributesSection"
     formatKeyValueType?: any
 }
 
 export const Dhis2RulesEngine = (props: RulesEngineProps) => {
     const { variables, values, type, formatKeyValueType } = props
-    const { programRules } = useFormatProgramRules()
-    const { programRulesVariables } = useFormatProgramRulesVariables()
     const getOptionGroups = useRecoilValue(OptionGroupsConfigState)
-    const [newProgramRules, setnewProgramRules] = useState<FormattedPRulesType[]>([])
+    const newProgramRules = useRecoilValue(ProgramRulesFormatedState)
     const [updatedVariables, setupdatedVariables] = useState([...variables])
     const orgUnitsGroups = useRecoilValue(OrgUnitsGroupsConfigState)
-
-    // console.log("programRules", programRules)
-
-    useEffect(() => {
-        if (programRules?.length > 0 && Object.keys(programRulesVariables)?.length > 0 && newProgramRules?.length === 0) {
-            const newProgramR: FormattedPRulesType[] = programRules
-                .map((programRule: FormattedPRulesType) => {
-                    return {
-                        ...programRule,
-                        functionName: getFunctionExpression(programRule.condition),
-                        condition: replaceConditionVariables(removeSpecialCharacters(programRule?.condition), programRulesVariables),
-                        data: replaceConditionVariables(removeSpecialCharacters(programRule?.data), programRulesVariables),
-                        valueType: getValueTypeVariable(variables, programRule, type)
-                    }
-                })
-            setnewProgramRules(newProgramR)
-        }
-    }, [programRules, programRulesVariables])
 
     useEffect(() => {
         if (updatedVariables.length === 0) {
@@ -296,7 +274,7 @@ export function existValue(condition: string | undefined, values: Record<string,
     return localCondition;
 }
 
-function getValueTypeVariable(variables: any, variable: any, type: string) {
+export function getValueTypeVariable(variables: any, variable: any, type: string) {
     if (type === "programStageSection") {
         let variableType = ""
         variables?.map((section: any) => {
