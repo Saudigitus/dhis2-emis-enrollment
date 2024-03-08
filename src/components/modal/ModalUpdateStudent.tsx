@@ -12,7 +12,7 @@ import { onSubmitClicked } from "../../schema/formOnSubmitClicked";
 import { ModalUpdateStudentProps } from "../../types/modal/ModalProps";
 import { useGetAttributes, useGetPatternCode, useGetUsedPProgramStages, useParams, usePostTei } from "../../hooks";
 import { getDataStoreKeys } from "../../utils/commons/dataStore/getDataStoreKeys";
-import { Dhis2RulesEngine } from "../../hooks/programRules/rules-engine/RulesEngine";
+import { CustomDhis2RulesEngine } from "../../hooks/programRules/rules-engine/RulesEngine";
 import { teiUpdateBody } from "../../utils/tei/formatUpdateBody";
 
 function ModalUpdate(props: ModalUpdateStudentProps): React.ReactElement {
@@ -36,7 +36,7 @@ function ModalUpdate(props: ModalUpdateStudentProps): React.ReactElement {
   })
   const { attributes = [] } = useGetAttributes()
   const { returnPattern, loadingCodes, generatedVariables } = useGetPatternCode()
-  const {runRulesEngine, updatedVariables } = Dhis2RulesEngine({ variables: formFields(enrollmentsData, sectionName), values, type:"programStageSection" })
+  const {runRulesEngine, updatedVariables } = CustomDhis2RulesEngine({ variables: formFields(enrollmentsData, sectionName), values, type:"programStageSection" })
  
   useEffect(() => {
     runRulesEngine()
