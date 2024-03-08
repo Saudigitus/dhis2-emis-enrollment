@@ -1,15 +1,16 @@
 import React, { useState } from 'react';
 import { useConfig } from '@dhis2/app-runtime';
 import { MenuItem, IconList24 } from "@dhis2/ui";
-import { useGetEnrollmentForm } from '../../../../hooks';
+import { useGetEnrollmentForm, useParams } from '../../../../hooks';
 import { ModalComponent, ModalUpdate } from '../../../modal';
 import { IconButton, Menu, Divider } from '@material-ui/core';
 import { RowActionsProps, RowActionsType } from '../../../../types/table/TableContentProps';
+import useGetSectionTypeLabel from '../../../../hooks/commons/useGetSectionTypeLabel';
 
 export default function RowActions(props: RowActionsProps) {
-  let sectionName = ''
   const { row } = props;
   const { baseUrl } = useConfig()
+  const { sectionName } = useGetSectionTypeLabel();
   const handleClose = () =>  setAnchorEl(null);
   const [openModal, setOpenModal] = useState<boolean>(false);
   const { enrollmentsData } = useGetEnrollmentForm()
@@ -30,7 +31,7 @@ export default function RowActions(props: RowActionsProps) {
   })
 
   return (
-    <>
+    <div>
       <IconButton  aria-controls="simple-menu" onClick={handleClick}>
         <IconList24/>
       </IconButton>
@@ -50,7 +51,7 @@ export default function RowActions(props: RowActionsProps) {
         {
           openModal && 
             <ModalComponent 
-              title={`Single ${sectionName} Enrollment`} 
+              title={`Single ${sectionName} update`} 
               open={openModal} 
               setOpen={setOpenModal}
             >
@@ -63,6 +64,6 @@ export default function RowActions(props: RowActionsProps) {
           </ModalComponent>
         }
       </Menu>
-    </>
+    </div>
   );
 }

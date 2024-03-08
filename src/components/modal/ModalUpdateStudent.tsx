@@ -13,6 +13,7 @@ import { ModalUpdateStudentProps } from "../../types/modal/ModalProps";
 import { useGetAttributes, useGetPatternCode, useGetUsedPProgramStages, useParams, usePostTei } from "../../hooks";
 import { getDataStoreKeys } from "../../utils/commons/dataStore/getDataStoreKeys";
 import { Dhis2RulesEngine } from "../../hooks/programRules/rules-engine/RulesEngine";
+import { teiUpdateBody } from "../../utils/tei/formatUpdateBody";
 
 function ModalUpdate(props: ModalUpdateStudentProps): React.ReactElement {
   const { setOpen,  sectionName, studentInitialValues, enrollmentsData } = props;
@@ -25,18 +26,18 @@ function ModalUpdate(props: ModalUpdateStudentProps): React.ReactElement {
   const [, setClicked] = useRecoilState<boolean>(onSubmitClicked);
   const [values, setValues] = useState<Record<string, string>>({})
   const { trackedEntityType } = getDataStoreKeys();
-  const [fieldsWitValue, setFieldsWitValues] = useState<any[]>([enrollmentsData])
+  const [fieldsWithValue, setFieldsWithValues] = useState<any[]>([enrollmentsData])
   const { postTei, loading, data } = usePostTei()
   const [clickedButton, setClickedButton] = useState<string>("");
   const [initialValues] = useState<object>({
     registerschoolstaticform: orgUnitName,
-    eventdatestaticform: format(new Date(), "yyyy-MM-dd"),
+    eventdatestaticform:'',
     ...studentInitialValues
   })
   const { attributes = [] } = useGetAttributes()
   const { returnPattern, loadingCodes, generatedVariables } = useGetPatternCode()
   const {runRulesEngine, updatedVariables } = Dhis2RulesEngine({ variables: formFields(enrollmentsData, sectionName), values, type:"programStageSection" })
-
+ 
   useEffect(() => {
     runRulesEngine()
   }, [values])
@@ -57,13 +58,13 @@ function ModalUpdate(props: ModalUpdateStudentProps): React.ReactElement {
   }, [data])
 
   function onSubmit() {
-    const allFields = fieldsWitValue.flat()
+    const allFields = fieldsWithValue.flat()
     if (allFields.filter((element: any) => (element?.assignedValue === undefined && element.required))?.length === 0) {
       void postTei({
-        data: teiPostBody(fieldsWitValue,
+        data: teiUpdateBody(fieldsWithValue,
           (getProgram != null) ? getProgram.id : "", orgUnit ?? "",
           values?.eventdatestaticform ?? "",
-          performanceProgramStages, trackedEntityType)
+          performanceProgramStages, trackedEntityType, initialValues['trackedEntity' as unknown as keyof typeof initialValues] as unknown as string)
       })
     }
   }
@@ -90,7 +91,7 @@ function ModalUpdate(props: ModalUpdateStudentProps): React.ReactElement {
         }
       }
     }
-    setFieldsWitValues(sections)
+    setFieldsWithValues(sections)
     setValues(e)
   }
 
@@ -101,7 +102,7 @@ function ModalUpdate(props: ModalUpdateStudentProps): React.ReactElement {
           formRef.current = form;
           return <form
             onSubmit={handleSubmit}
-            onChange={()=> onChange(values)}
+            onChange={onChange(values)}
           >
             {
               formFields(enrollmentsData, sectionName).map((field: any, index: number) => (

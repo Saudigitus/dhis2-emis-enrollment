@@ -98,7 +98,6 @@ function ModalContentComponent(props: ModalContentProps): React.ReactElement {
     setValues(e)
   }
 
-  // console.log(formFields(enrollmentsData, sectionName), enrollmentsData, sectionName);
 
   return (
     <WithPadding>

@@ -3,6 +3,7 @@ import { dataValuesProps } from "../../../types/api/WithoutRegistrationProps";
 import { FormatResponseRowsProps, RowsDataProps } from "../../../types/utils/FormatRowsDataProps";
 
 export function formatResponseRows({ eventsInstances, teiInstances }: FormatResponseRowsProps): RowsDataProps[] {
+    (eventsInstances, teiInstances, 4)
     const allRows: RowsDataProps[] = []
     for (const event of eventsInstances || []) {
         const teiDetails = teiInstances.find(tei => tei.trackedEntity === event.trackedEntity)
