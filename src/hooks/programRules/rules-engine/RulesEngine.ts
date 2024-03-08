@@ -13,7 +13,7 @@ interface RulesEngineProps {
     formatKeyValueType?: any
 }
 
-export const Dhis2RulesEngine = (props: RulesEngineProps) => {
+export const CustomDhis2RulesEngine = (props: RulesEngineProps) => {
     const { variables, values, type, formatKeyValueType } = props
     const getOptionGroups = useRecoilValue(OptionGroupsConfigState)
     const newProgramRules = useRecoilValue(ProgramRulesFormatedState)
@@ -141,11 +141,7 @@ export const Dhis2RulesEngine = (props: RulesEngineProps) => {
 
                                     if (foundOrgUnitGroup[0]?.organisationUnits.findIndex(x => x.value === values["orgUnit"]) > -1) {
                                         variable.options = { optionSet: { options: getOptionGroups?.filter((op) => op.id === programRule.optionGroup)?.[0]?.options?.slice()?.sort(compareStringByLabel) || [] } }
-                                    } else {
-                                        variable.options = { optionSet: { options: [] } }
                                     }
-                                } else {
-                                    variable.options = { optionSet: { options: [] } }
                                 }
                             }
                             break;
@@ -177,8 +173,6 @@ export function removeSpecialCharacters(text: string | undefined) {
             .replaceAll("A{", "")
             .replaceAll("V{", "")
             .replaceAll("}", "")
-            .replaceAll("falseDe", "false")
-            .replaceAll("'undefined'De", "'undefined'")
             .replaceAll("current_date", `'${format(new Date(), "yyyy-MM-dd")}'`);
     }
 }
