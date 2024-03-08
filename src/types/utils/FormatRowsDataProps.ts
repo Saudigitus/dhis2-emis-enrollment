@@ -15,6 +15,7 @@ interface FormatResponseRowsProps {
             orgUnit: string
             program: string
         }[]
+        createdAt: string
     }[]
 }
 
