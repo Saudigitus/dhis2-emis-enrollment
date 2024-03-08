@@ -16,7 +16,6 @@ export default function RowActions(props: RowActionsProps) {
   const { enrollmentsData } = useGetEnrollmentForm()
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => setAnchorEl(event.currentTarget);
-
   const rowsActions = ({onOpenCapture, onEditStudent}: any) : RowActionsType[] => {
       return [
           { label: "1. Go to capture", divider: false, onClick: () => { onOpenCapture() }},

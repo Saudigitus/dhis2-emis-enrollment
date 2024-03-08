@@ -7,13 +7,14 @@ import GroupForm from "../form/GroupForm";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { ProgramConfigState } from "../../schema/programSchema";
 import { format } from "date-fns";
-import { teiPostBody } from "../../utils/tei/formatPostBody";
 import { onSubmitClicked } from "../../schema/formOnSubmitClicked";
 import { ModalUpdateStudentProps } from "../../types/modal/ModalProps";
 import { useGetAttributes, useGetPatternCode, useGetUsedPProgramStages, useParams, usePostTei } from "../../hooks";
 import { getDataStoreKeys } from "../../utils/commons/dataStore/getDataStoreKeys";
 import { CustomDhis2RulesEngine } from "../../hooks/programRules/rules-engine/RulesEngine";
 import { teiUpdateBody } from "../../utils/tei/formatUpdateBody";
+import useUpdateStudent from "../../hooks/tei/useUpdateStudent";
+import { eventUpdateBody } from "../../utils/events/formatPostBody";
 
 function ModalUpdate(props: ModalUpdateStudentProps): React.ReactElement {
   const { setOpen,  sectionName, studentInitialValues, enrollmentsData } = props;
@@ -27,13 +28,13 @@ function ModalUpdate(props: ModalUpdateStudentProps): React.ReactElement {
   const [values, setValues] = useState<Record<string, string>>({})
   const { trackedEntityType } = getDataStoreKeys();
   const [fieldsWithValue, setFieldsWithValues] = useState<any[]>([enrollmentsData])
-  const { postTei, loading, data } = usePostTei()
   const [clickedButton, setClickedButton] = useState<string>("");
   const [initialValues] = useState<object>({
     registerschoolstaticform: orgUnitName,
-    eventdatestaticform:'',
+    eventdatestaticform:format(new Date (studentInitialValues['enrollmentDate' as unknown as keyof typeof studentInitialValues]), "yyyy-MM-dd"),
     ...studentInitialValues
   })
+  const {  updateStudent, data,  loading } = useUpdateStudent()
   const { attributes = [] } = useGetAttributes()
   const { returnPattern, loadingCodes, generatedVariables } = useGetPatternCode()
   const {runRulesEngine, updatedVariables } = CustomDhis2RulesEngine({ variables: formFields(enrollmentsData, sectionName), values, type:"programStageSection" })
@@ -50,7 +51,7 @@ function ModalUpdate(props: ModalUpdateStudentProps): React.ReactElement {
 
   // When Save and continue button clicked and data posted, close the modal
   useEffect(() => {
-    if (data && data["status" as unknown as keyof typeof data] === "OK") {
+    if (data !== undefined && data?.status === "OK") {
       setOpen(false)
       setClicked(false)
       formRef.current.restart()
@@ -60,12 +61,15 @@ function ModalUpdate(props: ModalUpdateStudentProps): React.ReactElement {
   function onSubmit() {
     const allFields = fieldsWithValue.flat()
     if (allFields.filter((element: any) => (element?.assignedValue === undefined && element.required))?.length === 0) {
-      void postTei({
-        data: teiUpdateBody(fieldsWithValue,
+      void updateStudent({
+        teiStudent: teiUpdateBody(fieldsWithValue,
           (getProgram != null) ? getProgram.id : "", orgUnit ?? "",
           values?.eventdatestaticform ?? "",
-          performanceProgramStages, trackedEntityType, initialValues['trackedEntity' as unknown as keyof typeof initialValues] as unknown as string)
-      })
+          performanceProgramStages, 
+          trackedEntityType, 
+          initialValues['trackedEntity' as unknown as keyof typeof initialValues] as unknown as string), 
+
+        dataEvents: eventUpdateBody(fieldsWithValue.flat(), studentInitialValues.event)})
     }
   }
 
@@ -102,15 +106,15 @@ function ModalUpdate(props: ModalUpdateStudentProps): React.ReactElement {
           formRef.current = form;
           return <form
             onSubmit={handleSubmit}
-            onChange={onChange(values)}
+            onChange={onChange(values) as unknown as ()=> void}
           >
             {
-              formFields(enrollmentsData, sectionName).map((field: any, index: number) => (
+              formFields(enrollmentsData, sectionName)?.map((field: any, index: number) => (
                 <GroupForm
-                  name={field.section}
-                  description={field.description}
+                  name={field?.section}
+                  description={field?.description}
                   key={index}
-                  fields={field.fields}
+                  fields={field?.fields}
                   disabled={false}
                 />
               ))

@@ -12,7 +12,6 @@ import { onSubmitClicked } from "../../schema/formOnSubmitClicked";
 import { ModalContentProps } from "../../types/modal/ModalProps";
 import { useGetAttributes, useGetEnrollmentForm, useGetPatternCode, useGetUsedPProgramStages, useParams, usePostTei } from "../../hooks";
 import { getDataStoreKeys } from "../../utils/commons/dataStore/getDataStoreKeys";
-import useGetSectionTypeLabel from "../../hooks/commons/useGetSectionTypeLabel";
 import { CustomDhis2RulesEngine } from "../../hooks/programRules/rules-engine/RulesEngine";
 import { formatKeyValueType } from "../../utils/programRules/formatKeyValueType";
 
@@ -50,7 +49,7 @@ function ModalContentComponent(props: ModalContentProps): React.ReactElement {
 
   // When Save and continue button clicked and data posted, close the modal
   useEffect(() => {
-    if (data !== undefined && data?.status === "OK") {
+    if (data && data["status" as unknown as keyof typeof data] === "OK") {
       if (clickedButton === "saveandcontinue") {
         setOpen(false)
       }
@@ -106,7 +105,7 @@ function ModalContentComponent(props: ModalContentProps): React.ReactElement {
           formRef.current = form;
           return <form
             onSubmit={handleSubmit}
-            onChange={onChange(values)}
+            onChange={onChange(values)  as unknown as ()=> void}
           >
             {
               updatedVariables?.filter(x => x.visible)?.map((field: any, index: number) => (
