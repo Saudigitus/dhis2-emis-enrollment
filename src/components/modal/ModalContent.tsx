@@ -17,7 +17,7 @@ import { CustomDhis2RulesEngine } from "../../hooks/programRules/rules-engine/Ru
 import { formatKeyValueType } from "../../utils/programRules/formatKeyValueType";
 
 function ModalContentComponent(props: ModalContentProps): React.ReactElement {
-  const { setOpen, enrollmentsData, sectionName } = props;
+  const { setOpen, enrollmentsData, sectionName, bulkUpdate = false } = props;
   const getProgram = useRecoilValue(ProgramConfigState);
   const { useQuery } = useParams();
   const formRef: React.MutableRefObject<FormApi<IForm, Partial<IForm>>> = useRef(null);
@@ -36,7 +36,7 @@ function ModalContentComponent(props: ModalContentProps): React.ReactElement {
   })
   const { attributes = [] } = useGetAttributes()
   const { returnPattern, loadingCodes, generatedVariables } = useGetPatternCode()
-  const {runRulesEngine, updatedVariables } = CustomDhis2RulesEngine({ variables: formFields(enrollmentsData, sectionName), values, type:"programStageSection", formatKeyValueType: formatKeyValueType(enrollmentsData) })
+  const { runRulesEngine, updatedVariables } = CustomDhis2RulesEngine({ variables: formFields(enrollmentsData, sectionName), values, type: "programStageSection", formatKeyValueType: formatKeyValueType(enrollmentsData) })
 
   useEffect(() => {
     runRulesEngine()
@@ -46,6 +46,7 @@ function ModalContentComponent(props: ModalContentProps): React.ReactElement {
     void returnPattern(attributes)
   }, [data])
 
+  console.log(values, 'values')
   useEffect(() => { setClicked(false) }, [])
 
   // When Save and continue button clicked and data posted, close the modal
@@ -109,27 +110,39 @@ function ModalContentComponent(props: ModalContentProps): React.ReactElement {
             onChange={onChange(values)}
           >
             {
-              updatedVariables?.filter(x => x.visible)?.map((field: any, index: number) => (
-                <GroupForm
-                  name={field.section}
-                  description={field.description}
-                  key={index}
-                  fields={field.fields}
-                  disabled={false}
-                />
-              ))
+              updatedVariables?.filter(x =>
+                bulkUpdate ? x.section.toLowerCase() == 'enrollment details' : x.visible
+              )?.map((field: any, index: number) => {
+                return (
+                  <GroupForm
+                    name={field.section}
+                    description={field.description}
+                    key={index}
+                    fields={field.fields}
+                    disabled={false}
+                    bulkUpdate={bulkUpdate}
+                  />
+                )
+              })
             }
             <br />
             <ModalActions>
               <ButtonStrip end className="mr-4">
-                {modalActions.map((action, i) => (
-                  <Button
-                    key={i}
-                    {...action}
-                  >
-                    {(loading && action.id === clickedButton) ? <CircularLoader small /> : action.label}
-                  </Button>
-                ))}
+                {modalActions.map((action, i) => {
+                  return (
+                    <>
+                      {
+                        !(bulkUpdate && action.id === 'saveandnew') &&
+                        <Button
+                          key={i}
+                          {...action}
+                        >
+                          {(loading && action.id === clickedButton) ? <CircularLoader small /> : action.label}
+                        </Button>
+                      }
+                    </>
+                  )
+                })}
               </ButtonStrip>
             </ModalActions>
           </form>
