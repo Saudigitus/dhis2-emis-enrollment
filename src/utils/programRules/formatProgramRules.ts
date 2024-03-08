@@ -6,7 +6,6 @@ import { FormattedPRulesType, PRTypes } from "../../types/programRules/Formatted
 export function formatProgramRules(programRules: ProgramRuleConfig []) {
     const programRulesResponses: FormattedPRulesType [] = [];
     for (const prules of programRules || []) {
-        // console.log(prules);
         for (const pRulesAction of prules.programRuleActions) {
             programRulesResponses.push({
                 condition: prules.condition,
