@@ -17,7 +17,7 @@ export default function SideBarSubItem(props: SideBarSubItemProps) {
 
     return (
         <a href={`${baseUrl}/api/apps/${appName}/index.html#/${route}`} className={style.subItemLink}>
-             <li className={formattedPathName === pathName ? style.SideBarSubItemContainerActive : classNames(style.SideBarSubItemContainer, (Boolean(disabled)) && style.SideBarDisabledSubItem)}>
+            <li className={formattedPathName === pathName ? style.SideBarSubItemContainerActive : classNames(style.SideBarSubItemContainer, (Boolean(disabled)) && style.SideBarDisabledSubItem)}>
                 <img src={icon} /> <span className={style.SideBarSubItemLabel}>{label}</span>
                 {showBadge ? <div className={style.BadgeContainer}><Badge value='10' /></div> : null}
                 <div className={style.TooltipContainer}>
