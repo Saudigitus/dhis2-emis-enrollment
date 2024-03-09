@@ -13,7 +13,7 @@ function sideBarData(locationParms : string, filterDataElements: filterItem[]): 
 
     return [
         {
-            title: "Students",
+            title: "Student",
             subItems: [
                 {
                     icon: listAdd,
@@ -56,7 +56,7 @@ function sideBarData(locationParms : string, filterDataElements: filterItem[]): 
                     label: "Transfer",
                     showBadge: false,
                     disabled: false,
-                    appName: "SEMIS-Student-Transfer",
+                    appName: "SEMIS-Transfer",
                     route: `transfer?${subItemRoute(locationParms.slice(1), 'student', filterDataElements, true)}`, 
                     pathName: "/transfer/student"
                 }
@@ -70,7 +70,7 @@ function sideBarData(locationParms : string, filterDataElements: filterItem[]): 
                     label: "Staff registry",
                     showBadge: false,
                     disabled: false,
-                    appName: "SEMIS-Enrollment-Staff",
+                    appName: "SEMIS-Enrollment",
                     route:`enrollment?${subItemRoute(locationParms.slice(1), 'staff', filterDataElements)}`, 
                     pathName: "/enrollment/staff"
                 },
@@ -79,7 +79,7 @@ function sideBarData(locationParms : string, filterDataElements: filterItem[]): 
                     label: "Attendance",
                     showBadge: false,
                     disabled: false,
-                    appName: "SEMIS-Attendance-Staff",
+                    appName: "SEMIS-Attendance",
                     route: `attendance?${subItemRoute(locationParms.slice(1), 'staff', filterDataElements)}`, 
                     pathName: "/attendance/staff"
                 },
@@ -88,7 +88,7 @@ function sideBarData(locationParms : string, filterDataElements: filterItem[]): 
                     label: "Transfer",
                     showBadge: false,
                     disabled: false,
-                    appName: "SEMIS-Staff-Transfer",
+                    appName: "SEMIS-Transfer",
                     route: `transfer?${subItemRoute(locationParms.slice(1), 'staff', filterDataElements, true)}`, 
                     pathName: "/transfer/staff"
                 }
