@@ -14,8 +14,13 @@ const DELETEFILERESOURCEMUTATION: any = {
     type: "delete"
 }
 
-const GETFILERESOURCEMUTATION: any = (fileId: string) => ({
-    resource: `fileResources/${fileId}/data`
+const GETFILERESOURCEQUERY: any = ({ trackedEntity, attribute }: { trackedEntity: string, attribute: string }) => ({
+    results: {
+        resource: `trackedEntityInstances/${trackedEntity}/${attribute}/image`,
+        params: {
+            dimension: "MEDIUM"
+        }
+    }
 })
 
 interface CreateFileInterface {
@@ -46,9 +51,9 @@ export const useFileResource = () => {
 
     async function createFileResource({ file }: CreateFileInterface): Promise<{ fileId: string }> {
         setloading(true)
-        const blob = new Blob([file]);
+        // const blob = new Blob([file]);
 
-        const postFile = await engine.mutate(POSTFILERESOURCEMUTATION, { variables: { data: { domain: "DOCUMENT", file: blob } } }) as unknown as CreateFileInterfaceResponse
+        const postFile = await engine.mutate(POSTFILERESOURCEMUTATION, { variables: { data: { file: file } } }) as unknown as CreateFileInterfaceResponse
 
         const fileId = postFile.response.fileResource.id
         setloading(false)
@@ -57,11 +62,11 @@ export const useFileResource = () => {
         }
     }
 
-    async function getFileResource({ fileId }: { fileId: any }) {
+    async function getFileResource({ trackedEntity, attribute }: { trackedEntity: string, attribute: string }) {
         setloading(true)
-        const file = await engine.query(GETFILERESOURCEMUTATION(fileId as unknown as string))
+        const file = await engine.query(GETFILERESOURCEQUERY({ trackedEntity, attribute }))
         setloading(false)
-        return { file }
+        return { file: file.results }
     }
 
     async function deleteFileResource(documentId: string): Promise<void> {

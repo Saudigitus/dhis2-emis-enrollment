@@ -1,5 +1,5 @@
 import React from 'react'
-import style from "../sideBar.module.css"
+import style from "./SideBar.module.css"
 import SideBarSubItem from './SideBarSubItem'
 import SideBarItemTitle from './SideBarItemTitle'
 import classNames from 'classnames'

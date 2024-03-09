@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { IconUpload24, CenteredContent, CircularLoader, IconCross24 } from "@dhis2/ui";
 import { FormFieldsProps } from '../../../types/form/GenericFieldsTypes'
 import { Button } from '@material-ui/core';
@@ -11,28 +11,42 @@ import { useFileResource } from '../../../hooks/image/useFileResource';
 function ImageField(props: FormFieldsProps) {
     const { input }: FieldRenderProps<any, HTMLElement> = useField(props.name);
     const { createFileResource, getFileResource, deleteFileResource, loading: loadingQuery } = useFileResource()
-    const [selectedFile, setSelectedFile] = useState(null);
     const [uploadedImage, setUploadedImage] = useState();
 
     const handleFileChange = async (event: any) => {
-        const file = event.target.files[0];
-        setSelectedFile(file);
+        const image = event.target.files[0];
 
         // Display the selected image
         const reader = new FileReader();
         reader.onloadend = () => {
             setUploadedImage(reader.result);
         };
-        reader.readAsDataURL(file);
+        reader.readAsDataURL(image);
 
-        await createFileResource({ file }).then((response) => {
+        await createFileResource({ file: image }).then((response) => {
             input.onChange(response?.fileId);
         })
     };
 
+    async function getImage() {
+        await getFileResource({ trackedEntity: props.trackedEntity, attribute: input.name }).then((response) => {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setUploadedImage(reader.result);
+            };
+            reader.readAsDataURL(response.file);
+        })
+    }
+
+    useEffect(() => {
+        if (input.value && !uploadedImage) {
+            getImage()
+        }
+    }, [input.value])
+
+
     const onRemove = () => {
         setUploadedImage("");
-        setSelectedFile("");
         input.onChange("");
     }
 
@@ -47,7 +61,7 @@ function ImageField(props: FormFieldsProps) {
     return (
         <Box style={{ display: "flex", justifyContent: "space-between" }}>
             {
-                selectedFile ? (
+                uploadedImage ? (
                     <span>
                         {!(loadingQuery) &&
                             <img src={uploadedImage} alt="Uploaded" style={{ maxWidth: '200px' }} />
@@ -76,7 +90,7 @@ function ImageField(props: FormFieldsProps) {
                     </span>
             }
 
-            {(selectedFile && !(loadingQuery)) &&
+            {(uploadedImage && !(loadingQuery)) &&
                 <div style={{ margin: "auto", display: "flex" }}>
                     <Button
                         className={style.customDhis2Button}
