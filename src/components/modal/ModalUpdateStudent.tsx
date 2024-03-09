@@ -9,7 +9,7 @@ import { ProgramConfigState } from "../../schema/programSchema";
 import { format } from "date-fns";
 import { onSubmitClicked } from "../../schema/formOnSubmitClicked";
 import { ModalUpdateStudentProps } from "../../types/modal/ModalProps";
-import { useGetAttributes, useGetPatternCode, useGetUsedPProgramStages, useParams, usePostTei } from "../../hooks";
+import { useGetAttributes,  useGetUsedPProgramStages, useParams } from "../../hooks";
 import { getDataStoreKeys } from "../../utils/commons/dataStore/getDataStoreKeys";
 import { CustomDhis2RulesEngine } from "../../hooks/programRules/rules-engine/RulesEngine";
 import { teiUpdateBody } from "../../utils/tei/formatUpdateBody";
@@ -36,16 +36,11 @@ function ModalUpdate(props: ModalUpdateStudentProps): React.ReactElement {
   })
   const {  updateStudent, data,  loading } = useUpdateStudent()
   const { attributes = [] } = useGetAttributes()
-  const { returnPattern, loadingCodes, generatedVariables } = useGetPatternCode()
   const {runRulesEngine, updatedVariables } = CustomDhis2RulesEngine({ variables: formFields(enrollmentsData, sectionName), values, type:"programStageSection" })
  
   useEffect(() => {
     runRulesEngine()
   }, [values])
-
-  useEffect(() => {
-    void returnPattern(attributes)
-  }, [data])
 
   useEffect(() => { setClicked(false) }, [])
 
@@ -78,7 +73,7 @@ function ModalUpdate(props: ModalUpdateStudentProps): React.ReactElement {
     { id: "save", type: "submit", label: "Update", primary: true, disabled: loading, onClick: () => { setClickedButton("save"); setClicked(true) } },
   ];
 
-  if (enrollmentsData?.length < 1 || loadingCodes) {
+  if (enrollmentsData?.length < 1) {
     return (
       <CenteredContent>
         <CircularLoader />
