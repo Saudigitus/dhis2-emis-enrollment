@@ -116,7 +116,7 @@ function ModalContentComponent(props: ModalContentProps): React.ReactElement {
           >
             {
               updatedVariables?.filter(x =>
-                bulkUpdate ? x.section.toLowerCase() == 'enrollment details' : x.visible
+                bulkUpdate ? x.section == 'Enrollment Details' : x.visible
               )?.map((field: any, index: number) => {
                 return (
                   <GroupForm

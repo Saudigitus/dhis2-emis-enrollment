@@ -28,7 +28,6 @@ export default function useBulkUpdate() {
     const updateClass = async (value: any) => {
         setLoading(true)
         let eventsToUpdate: any = []
-        
         if (selected.isAllRowsSelected) {
             eventsToUpdate = events
         } else {
@@ -37,10 +36,11 @@ export default function useBulkUpdate() {
         }
 
         const updateClass = eventsToUpdate.map((x: any) => {
+            let dataElements = Object.keys(value)
             return {
                 ...x, dataValues: x?.dataValues?.map((dataValue: any) => {
-                    if (dataValue.dataElement === 'RhABRLO2Fae') {
-                        return { dataElement: 'RhABRLO2Fae', value: value.RhABRLO2Fae }
+                    if (dataElements.indexOf(dataValue.dataElement) !== -1) {
+                        return { dataElement: dataValue.dataElement, value: value[dataValue.dataElement] }
                     } else return dataValue
                 })
             }
