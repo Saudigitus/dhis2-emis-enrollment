@@ -12,6 +12,7 @@ function GroupForm(props: GroupFormProps) {
     const { getDataStoreData } = getSelectedKey();
     const { name, fields, description, bulkUpdate, trackedEntity } = props
 
+    console.log(fields)
     return (
         <WithBorder type={"all"}>
             <WithPadding p={"16px 5px 0px 5px"}>

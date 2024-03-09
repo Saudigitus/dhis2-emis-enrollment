@@ -15,14 +15,14 @@ import { getDataStoreKeys } from "../../utils/commons/dataStore/getDataStoreKeys
 import { CustomDhis2RulesEngine } from "../../hooks/programRules/rules-engine/RulesEngine";
 import { formatKeyValueType } from "../../utils/programRules/formatKeyValueType";
 import useBulkUpdate from "../../hooks/bulkStudent/bulkUpdateStudents";
+import { getSelectedKey } from "../../utils/commons/dataStore/getSelectedKey";
 
 function ModalContentComponent(props: ModalContentProps): React.ReactElement {
   const { setOpen, enrollmentsData, sectionName, bulkUpdate = false } = props;
   const getProgram = useRecoilValue(ProgramConfigState);
-  const { useQuery } = useParams();
+  const { urlParamiters } = useParams();
   const formRef: React.MutableRefObject<FormApi<IForm, Partial<IForm>>> = useRef(null);
-  const orgUnit = useQuery().get("school");
-  const orgUnitName = useQuery().get("schoolName");
+  const { school: orgUnit, schoolName: orgUnitName, grade, academicYear } = urlParamiters()
   const performanceProgramStages = useGetUsedPProgramStages();
   const [, setClicked] = useRecoilState<boolean>(onSubmitClicked);
   const [values, setValues] = useState<Record<string, string>>({})
@@ -34,17 +34,19 @@ function ModalContentComponent(props: ModalContentProps): React.ReactElement {
     registerschoolstaticform: orgUnitName,
     eventdatestaticform: format(new Date(), "yyyy-MM-dd")
   })
-  const { updateClass, loading: loadingBulkUpdate } = useBulkUpdate()
+  const { updateClass, loading: loadingBulkUpdate } = useBulkUpdate({ setOpen })
   const { attributes = [] } = useGetAttributes()
   const { returnPattern, loadingCodes, generatedVariables } = useGetPatternCode()
   const { runRulesEngine, updatedVariables } = CustomDhis2RulesEngine({ variables: formFields(enrollmentsData, sectionName), values, type: "programStageSection", formatKeyValueType: formatKeyValueType(enrollmentsData) })
+  const { getDataStoreData } = getSelectedKey();
 
   useEffect(() => {
     runRulesEngine()
   }, [values])
 
   useEffect(() => {
-    void returnPattern(attributes)
+    if (!bulkUpdate)
+      void returnPattern(attributes)
   }, [data])
 
   useEffect(() => { setClicked(false) }, [])
@@ -103,16 +105,22 @@ function ModalContentComponent(props: ModalContentProps): React.ReactElement {
     setFieldsWitValues(sections)
     setValues(e)
   }
-  // console.log(initialValues, generatedVariables, orgUnit)
 
   return (
     <WithPadding>
-      <Form initialValues={{ ...initialValues, ...generatedVariables, orgUnit }} onSubmit={onSubmit}>
+      <Form initialValues={{
+        ...initialValues,
+        ...(bulkUpdate ? {
+          [getDataStoreData?.registration.grade]: grade,
+          [getDataStoreData?.registration.academicYear]: academicYear
+        } : generatedVariables)
+      }}
+        onSubmit={onSubmit}>
         {({ handleSubmit, values, form }) => {
           formRef.current = form;
           return <form
             onSubmit={handleSubmit}
-            onChange={onChange(values)  as unknown as ()=> void}
+            onChange={onChange(values) as unknown as () => void}
           >
             {
               updatedVariables?.filter(x =>

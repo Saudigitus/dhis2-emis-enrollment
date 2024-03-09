@@ -17,7 +17,7 @@ const BULK_UPDATE: any = {
     }
 }
 
-export default function useBulkUpdate() {
+export default function useBulkUpdate({ setOpen }) {
     const { hide, show } = useShowAlerts()
     const [refetch, setRefetch] = useRecoilState(TeiRefetch)
     const [mutate, mutateState] = useDataMutation(BULK_UPDATE)
@@ -50,8 +50,12 @@ export default function useBulkUpdate() {
             show({ message: "Update completed successfully", type: { success: true } })
             setRefetch(!refetch)
             setLoading(false)
+            setOpen(false)
         })
-            .catch((error) => show({ message: "Error", type: { success: true } }))
+            .catch((error) => {
+                show({ message: "Error", type: { success: true } })
+                setOpen(false)
+            })
     }
 
     return {

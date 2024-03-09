@@ -12,18 +12,20 @@ import { useRecoilValue } from 'recoil';
 function BuklUpdateStudents() {
   const [open, setOpen] = useState<boolean>(false);
   const [openImport, setOpenImport] = useState<boolean>(false);
-  const { useQuery } = useParams();
-  const orgUnit = useQuery().get("school")
+  const { urlParamiters } = useParams();
+  const { school, academicYear, grade } = urlParamiters()
   const { sectionName } = useGetSectionTypeLabel();
   const { enrollmentsData } = useGetEnrollmentForm();
   const selected = useRecoilValue(RowSelectionState);
 
+
   return (
     <div>
       <ButtonStrip>
-        <Tooltip title={orgUnit === null ? "Please select an organisation unit before" : ""}>
+        <Tooltip title={!!(school === null || academicYear === null || grade === null) ? "Please select an organisation unit, academic year and grade before" : ""}>
           <span style={{ marginRight: "20px" }} >
-            <Button disabled={(selected?.selectedRows?.length === 0 && !selected.isAllRowsSelected)} onClick={() => { setOpen(true); }} icon={<IconAddCircle24 />}>Bulk Update Student</Button>
+            <Button disabled={(school === null || academicYear === null || grade === null) || (selected?.selectedRows?.length === 0 && !selected.isAllRowsSelected)}
+              onClick={() => { setOpen(true); }} icon={<IconAddCircle24 />}>Bulk Update Student</Button>
           </span>
         </Tooltip>
       </ButtonStrip>
