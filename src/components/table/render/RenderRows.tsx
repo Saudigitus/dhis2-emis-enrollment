@@ -1,15 +1,16 @@
 import React from 'react'
 import i18n from '@dhis2/d2-i18n';
 import classNames from 'classnames';
-import { makeStyles, type Theme, createStyles } from '@material-ui/core/styles';
 import { RowCell, RowTable } from '../components';
-import { getDisplayName } from '../../../utils/table/rows/getDisplayNameByOption';
-import { useConfig } from '@dhis2/app-runtime';
+import RowActions from './rowsActions/RowActions';
 import { RenderHeaderProps } from '../../../types/table/TableContentProps';
 import { RowSelectionState } from '../../../schema/tableSelectedRowsSchema';
 import { useRecoilState } from 'recoil';
 import { checkIsRowSelected } from '../../../utils/commons/arrayUtils';
 import { Checkbox } from "@dhis2/ui"
+import { useConfig } from '@dhis2/app-runtime';
+import { makeStyles, type Theme, createStyles } from '@material-ui/core/styles';
+import { getDisplayName } from '../../../utils/table/rows/getDisplayNameByOption';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -36,7 +37,6 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 function RenderRows(props: RenderHeaderProps): React.ReactElement {
-    const { headerData, rowsData } = props;
     const classes = useStyles()
     const { baseUrl } = useConfig()
     const [selected, setSelected] = useRecoilState(RowSelectionState);
@@ -44,6 +44,7 @@ function RenderRows(props: RenderHeaderProps): React.ReactElement {
     const onToggle = (rawRowData: object) => {
         setSelected({ ...selected, selectedRows: checkIsRowSelected({ rawRowData: rawRowData, selected: selected }), isAllRowsSelected: (selected.rows.length > 0 && selected.rows.length === checkIsRowSelected({ rawRowData: rawRowData, selected: selected }).length) })
     }
+    const { headerData, rowsData } = props;
 
     if (rowsData?.length === 0) {
         return (
@@ -78,6 +79,7 @@ function RenderRows(props: RenderHeaderProps): React.ReactElement {
                                     onChange={() => { onToggle(row); }}
                                     value="checked"
                                 />
+
                             </div>
                         </RowCell>
                         {
@@ -85,11 +87,14 @@ function RenderRows(props: RenderHeaderProps): React.ReactElement {
                                 <RowCell
                                     key={column.id}
                                     className={classNames(classes.cell, classes.bodyCell)}
-                                    onClick={() => { window.open(`${baseUrl}/dhis-web-capture/index.html#/enrollment?enrollmentId=${row?.enrollmentId}&orgUnitId=${row?.orgUnitId}&programId=${row?.programId}&teiId=${row?.trackedEntity}`, "_blank") }}
                                 >
                                     <div>
-                                        {getDisplayName({ attribute: column.id, headers: headerData, value: row[column.id] }) ?? "---"}
-                                    </div>
+                                        {getDisplayName({ attribute: column.id, headers: headerData, value: row[column.id] })}
+                                        {
+                                            (column.displayName == "Actions") ?
+                                                <RowActions row={row} />
+                                                : null
+                                        }  </div>
                                 </RowCell>
                             ))
                         }

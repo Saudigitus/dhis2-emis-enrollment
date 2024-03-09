@@ -8,9 +8,11 @@ export function formatResponseRows({ eventsInstances, teiInstances }: FormatResp
         const teiDetails = teiInstances.find(tei => tei.trackedEntity === event.trackedEntity)
         allRows.push({
             ...dataValues(event.dataValues),
+            event: event, 
             ...(attributes((teiDetails?.attributes) ?? [])),
             trackedEntity: event.trackedEntity,
             enrollmentId: teiDetails?.enrollments?.[0]?.enrollment,
+            enrollmentDate:  teiDetails?.createdAt,
             orgUnitId: teiDetails?.enrollments?.[0]?.orgUnit,
             programId: teiDetails?.enrollments?.[0]?.program
         })

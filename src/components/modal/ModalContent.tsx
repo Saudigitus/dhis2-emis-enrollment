@@ -51,7 +51,7 @@ function ModalContentComponent(props: ModalContentProps): React.ReactElement {
 
   // When Save and continue button clicked and data posted, close the modal
   useEffect(() => {
-    if (data !== undefined && data?.status === "OK") {
+    if (data && data["status" as unknown as keyof typeof data] === "OK") {
       if (clickedButton === "saveandcontinue") {
         setOpen(false)
       }
@@ -112,7 +112,7 @@ function ModalContentComponent(props: ModalContentProps): React.ReactElement {
           formRef.current = form;
           return <form
             onSubmit={handleSubmit}
-            onChange={onChange(values)}
+            onChange={onChange(values)  as unknown as ()=> void}
           >
             {
               updatedVariables?.filter(x =>

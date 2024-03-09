@@ -5,6 +5,8 @@ import { dataStoreRecord } from "../../../types/dataStore/DataStoreConfig";
 import { CustomAttributeProps, VariablesTypes } from "../../../types/variables/AttributeColumns";
 
 export function formatResponse(data: ProgramConfig, dataStoreData: dataStoreRecord, tableColumns: CustomAttributeProps[] = []): CustomAttributeProps[] {
+    let columns = ['Actions']
+
     const headerResponse = useMemo(() => {
         const originalData = ((data?.programStages?.find(programStge => programStge.id === dataStoreData?.registration?.programStage)) ?? {} as ProgramConfig["programStages"][0])
 
@@ -50,7 +52,28 @@ export function formatResponse(data: ProgramConfig, dataStoreData: dataStoreReco
                     }
                 }) as []
                 : []
-        )
+        ).concat(
+            columns?.map((column) => {
+                return {
+                    id: column,
+                    displayName: column,
+                    header: column,
+                    required: true,
+                    name: column,
+                    labelName: column,
+                    valueType: Attribute.valueType.TEXT as unknown as CustomAttributeProps["valueType"],
+                    options: undefined,
+                    visible: true,
+                    disabled: false,
+                    pattern: '',
+                    searchable: false,
+                    error: false,
+                    content: '',
+                    key: '',
+                    type: VariablesTypes.Attribute
+                }
+            }) as []
+        ) || []
     }, [data, tableColumns]);
 
     return headerResponse;

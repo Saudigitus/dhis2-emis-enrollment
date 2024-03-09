@@ -8,7 +8,7 @@ import styles from './groupform.module.css'
 import { GroupFormProps } from "../../types/form/GroupFormProps";
 
 function GroupForm(props: GroupFormProps) {
-    const { name, fields, description, bulkUpdate } = props
+    const { name, fields, description, bulkUpdate, trackedEntity } = props
 
     return (
         <WithBorder type={"all"}>
@@ -31,7 +31,7 @@ function GroupForm(props: GroupFormProps) {
                                 <div className="col-12 col-md-6">
                                     <GenericFields
                                         attribute={
-                                            (bulkUpdate && x.displayName !== 'Class/Section') ? { ...x, required: false } : x
+                                            (bulkUpdate && x.displayName !== 'Class/Section') ? { ...x, required: false, trackedEntity } : x
                                         }
                                         disabled={
                                             bulkUpdate ? x.displayName !== 'Class/Section' : x.disabled
