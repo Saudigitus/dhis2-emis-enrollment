@@ -32,7 +32,7 @@ function GroupForm(props: GroupFormProps) {
                                 <div className="col-12 col-md-6">
                                     <GenericFields
                                         attribute={
-                                            (bulkUpdate && x.id !== getDataStoreData?.registration?.section) ? { ...x, required: false, trackedEntity } : x
+                                            (bulkUpdate && x.id !== getDataStoreData?.registration?.section) ? { ...x, required: false, trackedEntity } : { ...x, trackedEntity }
                                         }
                                         disabled={
                                             bulkUpdate ? x.id !== getDataStoreData?.registration?.section : x.disabled

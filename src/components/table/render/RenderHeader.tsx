@@ -81,9 +81,10 @@ function RenderHeader(props: RenderHeaderProps): React.ReactElement {
         <thead>
             <RowTable
                 className={classes.row}
-            > <HeaderCell
-                className={classNames(classes.cell, classes.headerCell)}
             >
+                {/* <HeaderCell
+                    className={classNames(classes.cell, classes.headerCell)}
+                >
                     <Checkbox
                         indeterminate={selected.selectedRows.length > 0 && selected.selectedRows.length !== selected.rows.length}
                         checked={selected.isAllRowsSelected}
@@ -91,7 +92,7 @@ function RenderHeader(props: RenderHeaderProps): React.ReactElement {
                         name="Ex"
                         value="checked"
                     />
-                </HeaderCell>
+                </HeaderCell> */}
                 {headerCells}
             </RowTable>
         </thead>

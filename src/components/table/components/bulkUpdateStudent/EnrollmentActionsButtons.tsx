@@ -20,6 +20,7 @@ function BuklUpdateStudents() {
 
   return (
     <div>
+      {/* 
       <ButtonStrip>
         <Tooltip title={orgUnit === null ? "Please select an organisation unit before" : ""}>
           <span style={{ marginRight: "20px" }} >
@@ -35,7 +36,8 @@ function BuklUpdateStudents() {
           setOpen={setOpen}
           bulkUpdate={true}
         />
-      </ModalComponent>}
+      </ModalComponent>} 
+      */}
       {openImport && <ModalComponent title={`Import ${sectionName}`} open={openImport} setOpen={setOpenImport}><ImportContent setOpen={setOpen} /></ModalComponent>}
     </div>
   )

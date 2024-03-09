@@ -69,6 +69,7 @@ function RenderRows(props: RenderHeaderProps): React.ReactElement {
                         key={index}
                         className={classNames(classes.row, classes.dataRow)}
                     >
+                        {/* 
                         <RowCell
                             className={classNames(classes.cell, classes.bodyCell)}
                         >
@@ -81,7 +82,9 @@ function RenderRows(props: RenderHeaderProps): React.ReactElement {
                                 />
 
                             </div>
-                        </RowCell>
+                        </RowCell> 
+                        */}
+
                         {
                             headerData?.filter(x => x.visible)?.map(column => (
                                 <RowCell
