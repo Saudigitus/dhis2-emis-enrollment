@@ -2,6 +2,7 @@ import { useSetRecoilState } from "recoil"
 import { HeaderFieldsState } from "../../schema/headersSchema"
 import { useLocation } from "react-router-dom";
 import useDataElementsParamMapping from "../dataElements/useDataElementsParamMapping";
+import { useParams } from "../commons/useQueryParams";
 
 export function useGetInitialValues() {
     const location = useLocation()
@@ -9,6 +10,7 @@ export function useGetInitialValues() {
     const setHeaderFields = useSetRecoilState(HeaderFieldsState)
     const entries = location?.search?.split('?')?.[1]?.split('&')?.map((item) => item.split('='))
     const dataElementsQuerybuilder = []
+    const {urlParamiters} = useParams()
     
     if (entries?.length > 0) {
         for (const [key, value] of entries) {
@@ -26,6 +28,7 @@ export function useGetInitialValues() {
     }
 
     return {
-        isSetSectionType: location?.search.includes("sectionType")
+        isSetSectionType: location?.search.includes("sectionType"),
+        sectionType: urlParamiters().sectionType
     }
 }
