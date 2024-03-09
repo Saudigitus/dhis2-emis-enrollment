@@ -116,6 +116,7 @@ function ModalUpdate(props: ModalUpdateStudentProps): React.ReactElement {
                   key={index}
                   fields={field?.fields}
                   disabled={false}
+                  trackedEntity={initialValues?.trackedEntity}
                 />
               ))
             }
