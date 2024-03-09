@@ -6,9 +6,11 @@ import GenericFields from "../genericFields/GenericFields";
 import Subtitle from "../text/subtitle";
 import styles from './groupform.module.css'
 import { GroupFormProps } from "../../types/form/GroupFormProps";
+import { getSelectedKey } from "../../utils/commons/dataStore/getSelectedKey";
 
 function GroupForm(props: GroupFormProps) {
-    const { name, fields, description, trackedEntity } = props
+    const { getDataStoreData } = getSelectedKey();
+    const { name, fields, description, bulkUpdate, trackedEntity } = props
 
     return (
         <WithBorder type={"all"}>
@@ -29,8 +31,12 @@ function GroupForm(props: GroupFormProps) {
                                 </div>
                                 <div className="col-12 col-md-6">
                                     <GenericFields
-                                        attribute={{...x, trackedEntity}}
-                                        disabled={x.disabled}
+                                        attribute={
+                                            (bulkUpdate && x.id !== getDataStoreData?.registration?.section) ? { ...x, required: false, trackedEntity } : x
+                                        }
+                                        disabled={
+                                            bulkUpdate ? x.id !== getDataStoreData?.registration?.section : x.disabled
+                                        }
                                         valueType={x.valueType}
                                     />
                                     <span className={styles.content}>
