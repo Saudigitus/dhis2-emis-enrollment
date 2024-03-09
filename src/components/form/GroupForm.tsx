@@ -6,8 +6,10 @@ import GenericFields from "../genericFields/GenericFields";
 import Subtitle from "../text/subtitle";
 import styles from './groupform.module.css'
 import { GroupFormProps } from "../../types/form/GroupFormProps";
+import { getSelectedKey } from "../../utils/commons/dataStore/getSelectedKey";
 
 function GroupForm(props: GroupFormProps) {
+    const { getDataStoreData } = getSelectedKey();
     const { name, fields, description, bulkUpdate, trackedEntity } = props
 
     return (
@@ -19,7 +21,6 @@ function GroupForm(props: GroupFormProps) {
                 <WithPadding p="0.2rem" />
                 <WithPadding p={"10px"}>
                     {fields?.filter(x => x.visible)?.map((x, i) => {
-                        console.log(i, x)
                         return (
                             <div className="row d-flex align-items-center" key={i}
                                 style={{ display: "flex", padding: (x.error ?? false) ? "8px 8px 8px 12px" : "8px 8px 8px 5px", backgroundColor: (x.error === true) ? "#FBEAE5" : i % 2 === 0 ? "#ebf0f6" : "#FFFF", height: (x.error ?? false) ? 102 : "auto" }}>
@@ -31,10 +32,10 @@ function GroupForm(props: GroupFormProps) {
                                 <div className="col-12 col-md-6">
                                     <GenericFields
                                         attribute={
-                                            (bulkUpdate && x.displayName !== 'Class/Section') ? { ...x, required: false, trackedEntity } : x
+                                            (bulkUpdate && x.id !== getDataStoreData?.registration?.section) ? { ...x, required: false, trackedEntity } : x
                                         }
                                         disabled={
-                                            bulkUpdate ? x.displayName !== 'Class/Section' : x.disabled
+                                            bulkUpdate ? x.id !== getDataStoreData?.registration?.section : x.disabled
                                         }
                                         valueType={x.valueType}
                                     />
