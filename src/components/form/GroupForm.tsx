@@ -29,11 +29,12 @@ function GroupForm(props: GroupFormProps) {
                                 </div>
                                 <div className="col-12 col-md-6">
                                     <GenericFields
-                                        attribute={x}
+                                        attribute={
+                                            (bulkUpdate && x.id !== 'RhABRLO2Fae') ? { ...x, required: false } : x
+                                        }
                                         disabled={
-                                            bulkUpdate ?
-                                                x.id !== 'RhABRLO2Fae'
-                                                : x.disabled}
+                                            bulkUpdate ? x.id !== 'RhABRLO2Fae' : x.disabled
+                                        }
                                         valueType={x.valueType}
                                     />
                                     <span className={styles.content}>

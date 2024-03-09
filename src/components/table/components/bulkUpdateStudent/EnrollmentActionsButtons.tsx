@@ -6,6 +6,8 @@ import ImportContent from '../../../modal/ImportContent';
 import Tooltip from '@material-ui/core/Tooltip';
 import { useGetEnrollmentForm, useParams } from '../../../../hooks';
 import useGetSectionTypeLabel from '../../../../hooks/commons/useGetSectionTypeLabel';
+import { RowSelectionState } from '../../../../schema/tableSelectedRowsSchema';
+import { useRecoilValue } from 'recoil';
 
 function BuklUpdateStudents() {
   const [open, setOpen] = useState<boolean>(false);
@@ -14,13 +16,14 @@ function BuklUpdateStudents() {
   const orgUnit = useQuery().get("school")
   const { sectionName } = useGetSectionTypeLabel();
   const { enrollmentsData } = useGetEnrollmentForm();
+  const selected = useRecoilValue(RowSelectionState);
 
   return (
     <div>
       <ButtonStrip>
         <Tooltip title={orgUnit === null ? "Please select an organisation unit before" : ""}>
-          <span>
-            <Button disabled={orgUnit == null} onClick={() => { setOpen(true); }} icon={<IconAddCircle24 />}>Bulk Update Student</Button>
+          <span style={{ marginRight: "20px" }} >
+            <Button disabled={(selected?.selectedRows?.length === 0 && !selected.isAllRowsSelected)} onClick={() => { setOpen(true); }} icon={<IconAddCircle24 />}>Bulk Update Student</Button>
           </span>
         </Tooltip>
       </ButtonStrip>

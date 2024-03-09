@@ -12,9 +12,9 @@ import { onSubmitClicked } from "../../schema/formOnSubmitClicked";
 import { ModalContentProps } from "../../types/modal/ModalProps";
 import { useGetAttributes, useGetEnrollmentForm, useGetPatternCode, useGetUsedPProgramStages, useParams, usePostTei } from "../../hooks";
 import { getDataStoreKeys } from "../../utils/commons/dataStore/getDataStoreKeys";
-import useGetSectionTypeLabel from "../../hooks/commons/useGetSectionTypeLabel";
 import { CustomDhis2RulesEngine } from "../../hooks/programRules/rules-engine/RulesEngine";
 import { formatKeyValueType } from "../../utils/programRules/formatKeyValueType";
+import useBulkUpdate from "../../hooks/bulkStudent/bulkUpdateStudents";
 
 function ModalContentComponent(props: ModalContentProps): React.ReactElement {
   const { setOpen, enrollmentsData, sectionName, bulkUpdate = false } = props;
@@ -34,6 +34,7 @@ function ModalContentComponent(props: ModalContentProps): React.ReactElement {
     registerschoolstaticform: orgUnitName,
     eventdatestaticform: format(new Date(), "yyyy-MM-dd")
   })
+  const { updateClass, loading: loadingBulkUpdate } = useBulkUpdate()
   const { attributes = [] } = useGetAttributes()
   const { returnPattern, loadingCodes, generatedVariables } = useGetPatternCode()
   const { runRulesEngine, updatedVariables } = CustomDhis2RulesEngine({ variables: formFields(enrollmentsData, sectionName), values, type: "programStageSection", formatKeyValueType: formatKeyValueType(enrollmentsData) })
@@ -46,7 +47,6 @@ function ModalContentComponent(props: ModalContentProps): React.ReactElement {
     void returnPattern(attributes)
   }, [data])
 
-  console.log(values, 'values')
   useEffect(() => { setClicked(false) }, [])
 
   // When Save and continue button clicked and data posted, close the modal
@@ -61,14 +61,18 @@ function ModalContentComponent(props: ModalContentProps): React.ReactElement {
   }, [data])
 
   function onSubmit() {
-    const allFields = fieldsWitValue.flat()
-    if (allFields.filter((element: any) => (element?.assignedValue === undefined && element.required))?.length === 0) {
-      void postTei({
-        data: teiPostBody(fieldsWitValue,
-          (getProgram != null) ? getProgram.id : "", orgUnit ?? "",
-          values?.eventdatestaticform ?? "",
-          performanceProgramStages, trackedEntityType)
-      })
+    if (bulkUpdate) {
+      updateClass(values)
+    } else {
+      const allFields = fieldsWitValue.flat()
+      if (allFields.filter((element: any) => (element?.assignedValue === undefined && element.required))?.length === 0) {
+        void postTei({
+          data: teiPostBody(fieldsWitValue,
+            (getProgram != null) ? getProgram.id : "", orgUnit ?? "",
+            values?.eventdatestaticform ?? "",
+            performanceProgramStages, trackedEntityType)
+        })
+      }
     }
   }
 
@@ -99,6 +103,7 @@ function ModalContentComponent(props: ModalContentProps): React.ReactElement {
     setFieldsWitValues(sections)
     setValues(e)
   }
+  // console.log(initialValues, generatedVariables, orgUnit)
 
   return (
     <WithPadding>
@@ -137,7 +142,7 @@ function ModalContentComponent(props: ModalContentProps): React.ReactElement {
                           key={i}
                           {...action}
                         >
-                          {(loading && action.id === clickedButton) ? <CircularLoader small /> : action.label}
+                          {(!!(loading || loadingBulkUpdate) && action.id === clickedButton) ? <CircularLoader small /> : action.label}
                         </Button>
                       }
                     </>
