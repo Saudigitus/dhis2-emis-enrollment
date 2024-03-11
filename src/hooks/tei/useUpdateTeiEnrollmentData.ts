@@ -13,10 +13,10 @@ function useUpdateTeiEnrollmentData () {
     const [ refetch, setRefetch] = useRecoilState(TeiRefetch)
     const [ loading, setLoading ] = useState<boolean>()
 
-    const updateTeiEnrollmentData = async ({teiStudent, dataEvents}: { teiStudent: any, dataEvents: any}) => {
+    const updateTeiEnrollmentData = async ({dataEnrollmentData, dataEvents}: { dataEnrollmentData: any, dataEvents: any}) => {
         setLoading(true)
         await updateTei({
-            data: teiStudent
+            data: dataEnrollmentData
         })
         
         .then(async () => {

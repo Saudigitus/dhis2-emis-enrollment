@@ -56,7 +56,7 @@ function ModalUpdate(props: ModalUpdateStudentProps): React.ReactElement {
     const allFields = fieldsWithValue.flat()
     if (allFields.filter((element: any) => (element?.assignedValue === undefined && element.required))?.length === 0) {
       void updateTeiEnrollmentData({
-        teiStudent: teiUpdateBody(fieldsWithValue,
+        dataEnrollmentData: teiUpdateBody(fieldsWithValue,
           (getProgram != null) ? getProgram.id : "", orgUnit ?? "",
           values?.eventdatestaticform ?? "",
           performanceProgramStages, 
