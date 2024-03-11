@@ -10,8 +10,7 @@ export default function FullLayout(props: LayoutProps) {
     useGetInitialValues()
     const { children } = props;
     const { isSetSectionType } = useGetInitialValues()
-    const { program } = getDataStoreKeys()
-    const { loading } = useGetProgramConfig(program);
+    const { loading } = useGetProgramConfig();
 
     if (!isSetSectionType) {
         return (

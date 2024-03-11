@@ -14,9 +14,10 @@ import { useGetAttributes, useGetEnrollmentForm, useGetPatternCode, useGetUsedPP
 import { getDataStoreKeys } from "../../utils/commons/dataStore/getDataStoreKeys";
 import { CustomDhis2RulesEngine } from "../../hooks/programRules/rules-engine/RulesEngine";
 import { formatKeyValueType } from "../../utils/programRules/formatKeyValueType";
+import useBulkUpdate from "../../hooks/bulkStudent/bulkUpdateStudents";
 
 function ModalContentComponent(props: ModalContentProps): React.ReactElement {
-  const { setOpen, enrollmentsData, sectionName } = props;
+  const { setOpen, enrollmentsData, sectionName, bulkUpdate = false } = props;
   const getProgram = useRecoilValue(ProgramConfigState);
   const { useQuery } = useParams();
   const formRef: React.MutableRefObject<FormApi<IForm, Partial<IForm>>> = useRef(null);
@@ -33,9 +34,10 @@ function ModalContentComponent(props: ModalContentProps): React.ReactElement {
     registerschoolstaticform: orgUnitName,
     eventdatestaticform: format(new Date(), "yyyy-MM-dd")
   })
+  const { updateClass, loading: loadingBulkUpdate } = useBulkUpdate()
   const { attributes = [] } = useGetAttributes()
   const { returnPattern, loadingCodes, generatedVariables } = useGetPatternCode()
-  const {runRulesEngine, updatedVariables } = CustomDhis2RulesEngine({ variables: formFields(enrollmentsData, sectionName), values, type:"programStageSection", formatKeyValueType: formatKeyValueType(enrollmentsData) })
+  const { runRulesEngine, updatedVariables } = CustomDhis2RulesEngine({ variables: formFields(enrollmentsData, sectionName), values, type: "programStageSection", formatKeyValueType: formatKeyValueType(enrollmentsData) })
 
   useEffect(() => {
     runRulesEngine()
@@ -59,14 +61,18 @@ function ModalContentComponent(props: ModalContentProps): React.ReactElement {
   }, [data])
 
   function onSubmit() {
-    const allFields = fieldsWitValue.flat()
-    if (allFields.filter((element: any) => (element?.assignedValue === undefined && element.required))?.length === 0) {
-      void postTei({
-        data: teiPostBody(fieldsWitValue,
-          (getProgram != null) ? getProgram.id : "", orgUnit ?? "",
-          values?.eventdatestaticform ?? "",
-          performanceProgramStages, trackedEntityType)
-      })
+    if (bulkUpdate) {
+      updateClass(values)
+    } else {
+      const allFields = fieldsWitValue.flat()
+      if (allFields.filter((element: any) => (element?.assignedValue === undefined && element.required))?.length === 0) {
+        void postTei({
+          data: teiPostBody(fieldsWitValue,
+            (getProgram != null) ? getProgram.id : "", orgUnit ?? "",
+            values?.eventdatestaticform ?? "",
+            performanceProgramStages, trackedEntityType)
+        })
+      }
     }
   }
 
@@ -97,6 +103,7 @@ function ModalContentComponent(props: ModalContentProps): React.ReactElement {
     setFieldsWitValues(sections)
     setValues(e)
   }
+  // console.log(initialValues, generatedVariables, orgUnit)
 
   return (
     <WithPadding>
@@ -108,27 +115,39 @@ function ModalContentComponent(props: ModalContentProps): React.ReactElement {
             onChange={onChange(values)  as unknown as ()=> void}
           >
             {
-              updatedVariables?.filter(x => x.visible)?.map((field: any, index: number) => (
-                <GroupForm
-                  name={field.section}
-                  description={field.description}
-                  key={index}
-                  fields={field.fields}
-                  disabled={false}
-                />
-              ))
+              updatedVariables?.filter(x =>
+                bulkUpdate ? x.section == 'Enrollment Details' : x.visible
+              )?.map((field: any, index: number) => {
+                return (
+                  <GroupForm
+                    name={field.section}
+                    description={field.description}
+                    key={index}
+                    fields={field.fields}
+                    disabled={false}
+                    bulkUpdate={bulkUpdate}
+                  />
+                )
+              })
             }
             <br />
             <ModalActions>
               <ButtonStrip end className="mr-4">
-                {modalActions.map((action, i) => (
-                  <Button
-                    key={i}
-                    {...action}
-                  >
-                    {(loading && action.id === clickedButton) ? <CircularLoader small /> : action.label}
-                  </Button>
-                ))}
+                {modalActions.map((action, i) => {
+                  return (
+                    <>
+                      {
+                        !(bulkUpdate && action.id === 'saveandnew') &&
+                        <Button
+                          key={i}
+                          {...action}
+                        >
+                          {(!!(loading || loadingBulkUpdate) && action.id === clickedButton) ? <CircularLoader small /> : action.label}
+                        </Button>
+                      }
+                    </>
+                  )
+                })}
               </ButtonStrip>
             </ModalActions>
           </form>

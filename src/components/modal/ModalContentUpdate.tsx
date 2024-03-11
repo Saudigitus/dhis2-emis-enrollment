@@ -110,6 +110,7 @@ function ModalContentUpdate(props: ModalContentUpdateProps): React.ReactElement 
                   key={index}
                   fields={field?.fields}
                   disabled={false}
+                  trackedEntity={initialValues?.trackedEntity}
                 />
               ))
             }
