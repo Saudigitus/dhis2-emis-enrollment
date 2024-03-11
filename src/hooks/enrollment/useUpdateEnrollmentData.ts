@@ -1,22 +1,22 @@
 import { useState } from 'react'
 import { useRecoilState } from "recoil"
-import useUpdateTei from "./useUpdateTei"
+import useUpdateTei from "../tei/useUpdateTei"
 import useShowAlerts from "../commons/useShowAlert"
 import { usePostEvent } from "../events/useCreateEvents"
 import { TeiRefetch } from "../../schema/refecthTeiSchema"
 
 
-function useUpdateStudent () {
+function useUpdateEnrollmentData () {
     const { show } = useShowAlerts()
     const { updateTei } = useUpdateTei()
     const { updateEvent, data } = usePostEvent()
     const [ refetch, setRefetch] = useRecoilState(TeiRefetch)
     const [ loading, setLoading ] = useState<boolean>()
 
-    const updateStudent = async ({teiStudent, dataEvents}: { teiStudent: any, dataEvents: any}) => {
+    const updateEnrollmentData = async ({dataEnrollmentData, dataEvents}: { dataEnrollmentData: any, dataEvents: any}) => {
         setLoading(true)
         await updateTei({
-            data: teiStudent
+            data: dataEnrollmentData
         })
         
         .then(async () => {
@@ -36,7 +36,7 @@ function useUpdateStudent () {
         })
     }
 
-    return { updateStudent, loading, data }
+    return { updateEnrollmentData, loading, data }
 }
 
-export default useUpdateStudent
+export default useUpdateEnrollmentData

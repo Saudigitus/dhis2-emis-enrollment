@@ -8,15 +8,15 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import { ProgramConfigState } from "../../schema/programSchema";
 import { format } from "date-fns";
 import { onSubmitClicked } from "../../schema/formOnSubmitClicked";
-import { ModalUpdateStudentProps } from "../../types/modal/ModalProps";
-import { useGetAttributes,  useGetUsedPProgramStages, useParams } from "../../hooks";
+import {ModalContentUpdateProps } from "../../types/modal/ModalProps";
 import { getDataStoreKeys } from "../../utils/commons/dataStore/getDataStoreKeys";
+import { useGetUsedPProgramStages, useParams, useUpdateEnrollmentData } from "../../hooks";
 import { CustomDhis2RulesEngine } from "../../hooks/programRules/rules-engine/RulesEngine";
 import { teiUpdateBody } from "../../utils/tei/formatUpdateBody";
-import useUpdateStudent from "../../hooks/tei/useUpdateStudent";
 import { eventUpdateBody } from "../../utils/events/formatPostBody";
+import { formatKeyValueType } from "../../utils/programRules/formatKeyValueType";
 
-function ModalUpdate(props: ModalUpdateStudentProps): React.ReactElement {
+function ModalContentUpdate(props: ModalContentUpdateProps): React.ReactElement {
   const { setOpen,  sectionName, studentInitialValues, enrollmentsData } = props;
   const getProgram = useRecoilValue(ProgramConfigState);
   const { useQuery } = useParams();
@@ -34,9 +34,8 @@ function ModalUpdate(props: ModalUpdateStudentProps): React.ReactElement {
     eventdatestaticform:format(new Date (studentInitialValues['enrollmentDate' as unknown as keyof typeof studentInitialValues]), "yyyy-MM-dd"),
     ...studentInitialValues
   })
-  const {  updateStudent, data,  loading } = useUpdateStudent()
-  const { attributes = [] } = useGetAttributes()
-  const {runRulesEngine, updatedVariables } = CustomDhis2RulesEngine({ variables: formFields(enrollmentsData, sectionName), values, type:"programStageSection" })
+  const { updateEnrollmentData, data,  loading } =  useUpdateEnrollmentData()
+  const {runRulesEngine, updatedVariables } = CustomDhis2RulesEngine({ variables: formFields(enrollmentsData, sectionName), values, type:"programStageSection", formatKeyValueType: formatKeyValueType(enrollmentsData) })
  
   useEffect(() => {
     runRulesEngine()
@@ -46,7 +45,7 @@ function ModalUpdate(props: ModalUpdateStudentProps): React.ReactElement {
 
   // When Save and continue button clicked and data posted, close the modal
   useEffect(() => {
-    if (data !== undefined && data?.status === "OK") {
+    if (data && data["status" as unknown as keyof typeof data] === "OK") {
       setOpen(false)
       setClicked(false)
       formRef.current.restart()
@@ -56,8 +55,8 @@ function ModalUpdate(props: ModalUpdateStudentProps): React.ReactElement {
   function onSubmit() {
     const allFields = fieldsWithValue.flat()
     if (allFields.filter((element: any) => (element?.assignedValue === undefined && element.required))?.length === 0) {
-      void updateStudent({
-        teiStudent: teiUpdateBody(fieldsWithValue,
+      void updateEnrollmentData({
+        dataEnrollmentData: teiUpdateBody(fieldsWithValue,
           (getProgram != null) ? getProgram.id : "", orgUnit ?? "",
           values?.eventdatestaticform ?? "",
           performanceProgramStages, 
@@ -96,7 +95,7 @@ function ModalUpdate(props: ModalUpdateStudentProps): React.ReactElement {
 
   return (
     <WithPadding>
-      <Form initialValues={{ ...initialValues }} onSubmit={onSubmit}>
+      <Form initialValues={{ ...initialValues, orgUnit  }} onSubmit={onSubmit}>
         {({ handleSubmit, values, form }) => {
           formRef.current = form;
           return <form
@@ -104,7 +103,7 @@ function ModalUpdate(props: ModalUpdateStudentProps): React.ReactElement {
             onChange={onChange(values) as unknown as ()=> void}
           >
             {
-              formFields(enrollmentsData, sectionName)?.map((field: any, index: number) => (
+              updatedVariables?.filter(x => x.visible)?.map((field: any, index: number) => (
                 <GroupForm
                   name={field?.section}
                   description={field?.description}
@@ -135,4 +134,4 @@ function ModalUpdate(props: ModalUpdateStudentProps): React.ReactElement {
   )
 }
 
-export default ModalUpdate;
+export default ModalContentUpdate;

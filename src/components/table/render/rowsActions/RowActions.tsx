@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useConfig } from '@dhis2/app-runtime';
 import { MenuItem, IconList24 } from "@dhis2/ui";
 import { useGetEnrollmentForm, useParams } from '../../../../hooks';
-import { ModalComponent, ModalUpdate } from '../../../modal';
+import { ModalComponent,  ModalContentUpdate } from '../../../modal';
 import { IconButton, Menu, Divider } from '@material-ui/core';
 import { RowActionsProps, RowActionsType } from '../../../../types/table/TableContentProps';
 import useGetSectionTypeLabel from '../../../../hooks/commons/useGetSectionTypeLabel';
@@ -54,7 +54,7 @@ export default function RowActions(props: RowActionsProps) {
               open={openModal} 
               setOpen={setOpenModal}
             >
-              <ModalUpdate
+              <ModalContentUpdate
                   setOpen={setOpenModal}
                   sectionName={sectionName}
                   studentInitialValues={row}
