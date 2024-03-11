@@ -15,7 +15,7 @@ export default function RowActions(props: RowActionsProps) {
   
   const rowsActions = ({onEditStudent} : any) : RowActionsType[] => {
       return [
-          { label: "Edition", onClick: () => { onEditStudent() }, icon: <IconEdit24/>},
+          { label: `${sectionName} Edition`, onClick: () => { onEditStudent() }, icon: <IconEdit24/>},
       ];
   } 
 
