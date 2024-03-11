@@ -8,15 +8,15 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import { ProgramConfigState } from "../../schema/programSchema";
 import { format } from "date-fns";
 import { onSubmitClicked } from "../../schema/formOnSubmitClicked";
-import { ModalUpdateStudentProps } from "../../types/modal/ModalProps";
-import { useGetUsedPProgramStages, useParams, useUpdateTeiEnrollmentData } from "../../hooks";
+import {ModalContentUpdateProps } from "../../types/modal/ModalProps";
 import { getDataStoreKeys } from "../../utils/commons/dataStore/getDataStoreKeys";
+import { useGetUsedPProgramStages, useParams, useUpdateEnrollmentData } from "../../hooks";
 import { CustomDhis2RulesEngine } from "../../hooks/programRules/rules-engine/RulesEngine";
 import { teiUpdateBody } from "../../utils/tei/formatUpdateBody";
 import { eventUpdateBody } from "../../utils/events/formatPostBody";
 import { formatKeyValueType } from "../../utils/programRules/formatKeyValueType";
 
-function ModalUpdate(props: ModalUpdateStudentProps): React.ReactElement {
+function ModalContentUpdate(props: ModalContentUpdateProps): React.ReactElement {
   const { setOpen,  sectionName, studentInitialValues, enrollmentsData } = props;
   const getProgram = useRecoilValue(ProgramConfigState);
   const { useQuery } = useParams();
@@ -34,7 +34,7 @@ function ModalUpdate(props: ModalUpdateStudentProps): React.ReactElement {
     eventdatestaticform:format(new Date (studentInitialValues['enrollmentDate' as unknown as keyof typeof studentInitialValues]), "yyyy-MM-dd"),
     ...studentInitialValues
   })
-  const {   updateTeiEnrollmentData, data,  loading } =  useUpdateTeiEnrollmentData()
+  const { updateEnrollmentData, data,  loading } =  useUpdateEnrollmentData()
   const {runRulesEngine, updatedVariables } = CustomDhis2RulesEngine({ variables: formFields(enrollmentsData, sectionName), values, type:"programStageSection", formatKeyValueType: formatKeyValueType(enrollmentsData) })
  
   useEffect(() => {
@@ -55,7 +55,7 @@ function ModalUpdate(props: ModalUpdateStudentProps): React.ReactElement {
   function onSubmit() {
     const allFields = fieldsWithValue.flat()
     if (allFields.filter((element: any) => (element?.assignedValue === undefined && element.required))?.length === 0) {
-      void updateTeiEnrollmentData({
+      void updateEnrollmentData({
         dataEnrollmentData: teiUpdateBody(fieldsWithValue,
           (getProgram != null) ? getProgram.id : "", orgUnit ?? "",
           values?.eventdatestaticform ?? "",
@@ -133,4 +133,4 @@ function ModalUpdate(props: ModalUpdateStudentProps): React.ReactElement {
   )
 }
 
-export default ModalUpdate;
+export default ModalContentUpdate;

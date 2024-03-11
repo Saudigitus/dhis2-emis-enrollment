@@ -13,7 +13,7 @@ import { useTableData } from "./tableData/useTableData";
 import { useHeader } from "./tableHeader/useHeader";
 import { useGetPatternCode } from "./tei/useGetPatternCode";
 import usePostTei from "./tei/usePostTei";
-import useUpdateTeiEnrollmentData from "./tei/useUpdateTeiEnrollmentData";
+import useUpdateEnrollmentData from "./enrollment/useUpdateEnrollmentData";
 
 export { useDataStore, useParams, useShowAlerts, useDataElementsParamMapping, useGetDataElements, useGetEnrollmentForm, useGetInitialValues, useGetOptionSets,
-useGetProgramConfig, useGetAttributes, useGetUsedPProgramStages, useTableData, useHeader, useGetPatternCode, usePostTei,  useUpdateTeiEnrollmentData}
+useGetProgramConfig, useGetAttributes, useGetUsedPProgramStages, useTableData, useHeader, useGetPatternCode, usePostTei,  useUpdateEnrollmentData}
