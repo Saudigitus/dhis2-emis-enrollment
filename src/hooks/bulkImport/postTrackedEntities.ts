@@ -15,7 +15,7 @@ export const usePostTrackedEntities = () => {
     const { hide, show } = useShowAlerts()
     const [refetch, setRefetch] = useRecoilState<boolean>(teiRefetch)
 
-    const [create, { loading, data }] = useDataMutation(POST_TEI, {
+    const [create, { loading, data, error }] = useDataMutation(POST_TEI, {
         onComplete: () => {
             // console.log("", data)
             show({ message: "Enrollment saved successfully", type: { success: true } })
@@ -33,6 +33,7 @@ export const usePostTrackedEntities = () => {
     return {
         loading,
         postTrackedEntities: create,
-        data: data as unknown as ApiResponse
+        data: data as unknown as ApiResponse,
+        error
     }
 }

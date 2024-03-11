@@ -80,7 +80,6 @@ export const SummaryTable = (props: SummaryTableProps): React.ReactElement => {
     const [expandedRows, setExpandedRows] = useState<string[]>([])
     const recordsName = activeTab === "new" ? "new students" : activeTab
     const expandedToggle = (rowId: string) => {
-        console.log("ROW ID", rowId)
         if (expandedRows.includes(rowId)) {
             setExpandedRows(expandedRows.filter((row) => row !== rowId))
         } else {
@@ -112,7 +111,6 @@ export const SummaryTable = (props: SummaryTableProps): React.ReactElement => {
                             mandatoryFields={mandatoryFields}
                             expandedRows={expandedRows}
                             expandedToggle={expandedToggle}
-                            // showErrorsOrConflicts={student?.errors !== undefined}
                             showErrorsOrConflicts={showErrorsOrConflicts}
                         />
                     ))

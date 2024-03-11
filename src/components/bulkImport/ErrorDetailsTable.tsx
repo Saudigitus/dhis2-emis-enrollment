@@ -19,7 +19,6 @@ interface ErrorDetailsTableProps {
 export const ErrorDetailsTable = (props: ErrorDetailsTableProps): React.ReactElement => {
     const {data, errors} = props
     const headings: Headings = useRecoilValue<Headings>(TemplateHeadingsState)
-    console.log("......!!!", errors)
     return (
         <>
             <DataTable>

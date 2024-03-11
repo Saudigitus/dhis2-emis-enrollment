@@ -1,6 +1,7 @@
-import {FieldMapping, Stats, TemplateData} from "../types/bulkImport/Interfaces";
+import {BundleReport, FieldMapping, Stats, TemplateData} from "../types/bulkImport/Interfaces";
 import {atom} from "recoil";
 import {TrackedEntity} from "./trackerSchema";
+import {TrackerReport_Stats, ValidationReport} from "../types/generated";
 
 export const UploadProcessingStatusState = atom<boolean>({
     key: "enrollment-upload-processing-status",
@@ -18,6 +19,21 @@ export const BulkImportStatsState = atom<BulkImportStats>({
         teis: {created: 0, updated: 0, deleted: 0, ignored: 0, total: 0, conflicts: 0, invalid: 0}
         // enrollments: {created: 0, updated: 0, deleted: 0, ignored: 0, total: 0},
         // events: {created: 0, updated: 0, deleted: 0, ignored: 0, total: 0}
+    }
+})
+
+export interface BulkImportResponseStats {
+    status: string
+    stats: TrackerReport_Stats
+    validationReport: ValidationReport
+    bundleReport?: BundleReport
+}
+export const BulkImportResponseStatsState = atom<BulkImportResponseStats>({
+    key: "BulkImport-Response-Stats",
+    default: {
+        status: "PENDING",
+        stats: {created: 0, updated: 0, ignored: 0, total: 0, deleted: 0},
+        validationReport: {errorReports: [], warningReports: []}
     }
 })
 

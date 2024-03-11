@@ -62,15 +62,15 @@ export interface ApiResponse {
     status: string
     validationReport: ValidationReport
     stats: Stats
-    bundleReport: BundleReport
+    bundleReport?: BundleReport
 }
 
-interface ValidationReport {
+export interface ValidationReport {
     errorReports: any[]
     warningReports: any[]
 }
 
-interface BundleReport {
+export interface BundleReport {
     status: string
     typeReportMap: TypeReportMap
     stats: Stats

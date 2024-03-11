@@ -1,24 +1,31 @@
 import React, {useEffect, useState} from "react";
 import {
     TabBar,
-    Tab,
-    Pagination
+    Tab
 } from '@dhis2/ui'
-import {type ProcessingRecords, ProcessingRecordsState} from "../../schema/bulkImportSchema";
+import {
+    BulkImportResponseStats,
+    BulkImportResponseStatsState,
+    type ProcessingRecords,
+    ProcessingRecordsState,
+    ProcessingStage
+} from "../../schema/bulkImportSchema";
 import {useRecoilValue} from "recoil";
 import {SummaryTable} from "./SummaryContent";
 import {PaginationState} from "../../types/bulkImport/Interfaces";
+import {ImportSummaryTable} from "./DryRunAndImportSummary";
+import Pagination from "../table/components/pagination/Pagination";
 
 const SummaryDetails = (): React.ReactElement => {
     const processedRecords: ProcessingRecords = useRecoilValue<ProcessingRecords>(ProcessingRecordsState)
+    const processingStage: string = useRecoilValue<string>(ProcessingStage)
+    const bulkImportResponseStats: BulkImportResponseStats = useRecoilValue<BulkImportResponseStats>(BulkImportResponseStatsState)
     const [activeTab, setActiveTab] = useState("invalids")
-    // const [page, setPage] = useState<number>(1)
-    // const pageSize = 5
     const [pagination, setPagination] = useState<PaginationState>({
-        new: {page: 1, pageSize: 5},
-        updates: {page: 1, pageSize: 5},
-        conflicts: {page: 1, pageSize: 5},
-        invalids: {page: 1, pageSize: 5}
+        new: {page: 1, pageSize: 10},
+        updates: {page: 1, pageSize: 10},
+        conflicts: {page: 1, pageSize: 10},
+        invalids: {page: 1, pageSize: 10}
     });
     useEffect(() => {
         if (activeTab === "new") {
@@ -50,7 +57,7 @@ const SummaryDetails = (): React.ReactElement => {
     const total = students.length; // Total number of records for the current tab
     const currentPage = pagination[activeTab].page;
     const tabPageSize = pagination[activeTab].pageSize;
-    const tabPageCount = Math.ceil(total / tabPageSize)
+    // const tabPageCount = Math.ceil(total / tabPageSize)
     const displayData = students.slice((currentPage - 1) * tabPageSize, currentPage * tabPageSize);
     const [showErrorsOrConflicts, setShowErrorsOrConflicts] = useState<boolean>(true)
 
@@ -61,54 +68,68 @@ const SummaryDetails = (): React.ReactElement => {
             setShowErrorsOrConflicts(false)
         }
         setActiveTab(tab);
-        console.log('>>>', tab, showErrorsOrConflicts)
     };
     const onPageSizeChange = (pageSize: number) => {
         setPagination((prev) => ({
          ...prev,
-            [activeTab]: {...prev[activeTab], pageSize: pageSize}
+            [activeTab]: {...prev[activeTab], pageSize: pageSize, page: 1}
         }));
     }
     // Calculate the slice of data to display for the current page
     // const displayData = students.slice((page - 1) * pageSize, page * pageSize);
     return (<>
-        <TabBar>
-            <Tab onClick={() => {
-                tabClick("new")
-            }} selected={activeTab === 'new'}>
-                {processedRecords.newRecords.length}<br/>
-                New Students
-            </Tab>
-            <Tab onClick={() => {
-                tabClick("updates")
-            }} selected={activeTab === 'updates'}>
-                {processedRecords.recordsToUpdate.length}
+        { (processingStage === 'template-processing') &&
+            <>
+                <TabBar>
+                    <Tab onClick={() => {
+                        tabClick("new")
+                    }} selected={activeTab === 'new'}>
+                        {processedRecords.newRecords.length}<br/>
+                        New Students
+                    </Tab>
+                    <Tab onClick={() => {
+                        tabClick("updates")
+                    }} selected={activeTab === 'updates'}>
+                        {processedRecords.recordsToUpdate.length}
+                        <br/>
+                        Potential Duplicates
+                    </Tab>
+                    <Tab onClick={() => {
+                        tabClick("invalids")
+                    }} selected={activeTab === 'invalids'}>
+                        {processedRecords.invalidRecords.length}<br/> Invalid Records
+                    </Tab>
+                </TabBar>
                 <br/>
-                Potential Duplicates
-            </Tab>
-            <Tab onClick={() => {
-                tabClick("invalids")
-            }} selected={activeTab === 'invalids'}>
-                {processedRecords.invalidRecords.length}<br/> Invalid Records
-            </Tab>
-        </TabBar>
-        <br/>
-        <SummaryTable
-            displayData={displayData}
-            mandatoryFields={processedRecords.mandatoryFields}
-            showErrorsOrConflicts={showErrorsOrConflicts}
-            activeTab={activeTab}
-        />
+                <SummaryTable
+                    displayData={displayData}
+                    mandatoryFields={processedRecords.mandatoryFields}
+                    showErrorsOrConflicts={showErrorsOrConflicts}
+                    activeTab={activeTab}
+                />
 
-        <br/>
-        {total > 0 && <Pagination
-            page={currentPage}
-            onPageChange={handlePageChange}
-            onPageSizeChange={onPageSizeChange}
-            pageSize={tabPageSize}
-            pageCount={tabPageCount}
-            total={total}
-        />}
+                <br/>
+                {total > 0 && <Pagination
+                    page={currentPage}
+                    onPageChange={handlePageChange}
+                    onRowsPerPageChange={onPageSizeChange}
+                    rowsPerPage={tabPageSize}
+                    loading={false}
+                    totalPerPage={displayData?.length}
+                />}
+            </>
+        }
+        {
+            (["dry-run", "import", "completed"].includes(processingStage)) &&
+            <>
+                <ImportSummaryTable
+                    status={bulkImportResponseStats.status}
+                    validationReport={bulkImportResponseStats.validationReport}
+                    stats={bulkImportResponseStats.stats}
+                    bundleReport={bulkImportResponseStats.bundleReport}
+                />
+            </>
+        }
     </>)
 }
 

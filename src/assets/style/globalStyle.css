@@ -29,3 +29,7 @@ body {
 .MuiOutlinedInput-root.Mui-error .MuiOutlinedInput-notchedOutline {
     border-color: var(--mui-error-color) !important;
 }
+
+.MuiDropzonePreviewList-image {
+    height: 30px !important;
+}

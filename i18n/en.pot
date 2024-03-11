@@ -5,8 +5,20 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2024-03-07T06:44:40.147Z\n"
-"PO-Revision-Date: 2024-03-07T06:44:40.147Z\n"
+"POT-Creation-Date: 2024-03-08T18:23:04.713Z\n"
+"PO-Revision-Date: 2024-03-08T18:23:04.713Z\n"
+
+msgid "Error Code"
+msgstr "Error Code"
+
+msgid "Tracker Type"
+msgstr "Tracker Type"
+
+msgid "UID"
+msgstr "UID"
+
+msgid "Message"
+msgstr "Message"
 
 msgid "Errors"
 msgstr "Errors"
