@@ -9,12 +9,12 @@ import { ProgramConfigState } from "../../schema/programSchema";
 import { format } from "date-fns";
 import { onSubmitClicked } from "../../schema/formOnSubmitClicked";
 import { ModalUpdateStudentProps } from "../../types/modal/ModalProps";
-import { useGetAttributes,  useGetUsedPProgramStages, useParams } from "../../hooks";
+import { useGetUsedPProgramStages, useParams, useUpdateTeiEnrollmentData } from "../../hooks";
 import { getDataStoreKeys } from "../../utils/commons/dataStore/getDataStoreKeys";
 import { CustomDhis2RulesEngine } from "../../hooks/programRules/rules-engine/RulesEngine";
 import { teiUpdateBody } from "../../utils/tei/formatUpdateBody";
-import useUpdateStudent from "../../hooks/tei/useUpdateStudent";
 import { eventUpdateBody } from "../../utils/events/formatPostBody";
+import { formatKeyValueType } from "../../utils/programRules/formatKeyValueType";
 
 function ModalUpdate(props: ModalUpdateStudentProps): React.ReactElement {
   const { setOpen,  sectionName, studentInitialValues, enrollmentsData } = props;
@@ -34,9 +34,8 @@ function ModalUpdate(props: ModalUpdateStudentProps): React.ReactElement {
     eventdatestaticform:format(new Date (studentInitialValues['enrollmentDate' as unknown as keyof typeof studentInitialValues]), "yyyy-MM-dd"),
     ...studentInitialValues
   })
-  const {  updateStudent, data,  loading } = useUpdateStudent()
-  const { attributes = [] } = useGetAttributes()
-  const {runRulesEngine, updatedVariables } = CustomDhis2RulesEngine({ variables: formFields(enrollmentsData, sectionName), values, type:"programStageSection" })
+  const {   updateTeiEnrollmentData, data,  loading } =  useUpdateTeiEnrollmentData()
+  const {runRulesEngine, updatedVariables } = CustomDhis2RulesEngine({ variables: formFields(enrollmentsData, sectionName), values, type:"programStageSection", formatKeyValueType: formatKeyValueType(enrollmentsData) })
  
   useEffect(() => {
     runRulesEngine()
@@ -46,7 +45,7 @@ function ModalUpdate(props: ModalUpdateStudentProps): React.ReactElement {
 
   // When Save and continue button clicked and data posted, close the modal
   useEffect(() => {
-    if (data !== undefined && data?.status === "OK") {
+    if (data && data["status" as unknown as keyof typeof data] === "OK") {
       setOpen(false)
       setClicked(false)
       formRef.current.restart()
@@ -56,7 +55,7 @@ function ModalUpdate(props: ModalUpdateStudentProps): React.ReactElement {
   function onSubmit() {
     const allFields = fieldsWithValue.flat()
     if (allFields.filter((element: any) => (element?.assignedValue === undefined && element.required))?.length === 0) {
-      void updateStudent({
+      void updateTeiEnrollmentData({
         teiStudent: teiUpdateBody(fieldsWithValue,
           (getProgram != null) ? getProgram.id : "", orgUnit ?? "",
           values?.eventdatestaticform ?? "",
@@ -96,7 +95,7 @@ function ModalUpdate(props: ModalUpdateStudentProps): React.ReactElement {
 
   return (
     <WithPadding>
-      <Form initialValues={{ ...initialValues }} onSubmit={onSubmit}>
+      <Form initialValues={{ ...initialValues, orgUnit  }} onSubmit={onSubmit}>
         {({ handleSubmit, values, form }) => {
           formRef.current = form;
           return <form
@@ -104,7 +103,7 @@ function ModalUpdate(props: ModalUpdateStudentProps): React.ReactElement {
             onChange={onChange(values) as unknown as ()=> void}
           >
             {
-              formFields(enrollmentsData, sectionName)?.map((field: any, index: number) => (
+              updatedVariables?.filter(x => x.visible)?.map((field: any, index: number) => (
                 <GroupForm
                   name={field?.section}
                   description={field?.description}

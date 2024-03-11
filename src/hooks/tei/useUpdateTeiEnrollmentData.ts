@@ -6,14 +6,14 @@ import { usePostEvent } from "../events/useCreateEvents"
 import { TeiRefetch } from "../../schema/refecthTeiSchema"
 
 
-function useUpdateStudent () {
+function useUpdateTeiEnrollmentData () {
     const { show } = useShowAlerts()
     const { updateTei } = useUpdateTei()
     const { updateEvent, data } = usePostEvent()
     const [ refetch, setRefetch] = useRecoilState(TeiRefetch)
     const [ loading, setLoading ] = useState<boolean>()
 
-    const updateStudent = async ({teiStudent, dataEvents}: { teiStudent: any, dataEvents: any}) => {
+    const updateTeiEnrollmentData = async ({teiStudent, dataEvents}: { teiStudent: any, dataEvents: any}) => {
         setLoading(true)
         await updateTei({
             data: teiStudent
@@ -36,7 +36,7 @@ function useUpdateStudent () {
         })
     }
 
-    return { updateStudent, loading, data }
+    return { updateTeiEnrollmentData, loading, data }
 }
 
-export default useUpdateStudent
+export default useUpdateTeiEnrollmentData
