@@ -1,68 +1,51 @@
 import React, { useState } from 'react';
-import { useConfig } from '@dhis2/app-runtime';
-import { MenuItem, IconList24 } from "@dhis2/ui";
-import { useGetEnrollmentForm, useParams } from '../../../../hooks';
-import { ModalComponent,  ModalContentUpdate } from '../../../modal';
-import { IconButton, Menu, Divider } from '@material-ui/core';
-import { RowActionsProps, RowActionsType } from '../../../../types/table/TableContentProps';
+import { IconEdit24 } from "@dhis2/ui";
+import style from './rowActions.module.css'
+import { IconButton,  Tooltip } from '@material-ui/core';
+import { useGetEnrollmentForm  } from '../../../../hooks';
+import { ModalComponent, ModalContentUpdate } from '../../../modal';
 import useGetSectionTypeLabel from '../../../../hooks/commons/useGetSectionTypeLabel';
+import { RowActionsProps, RowActionsType } from '../../../../types/table/TableContentProps';
 
 export default function RowActions(props: RowActionsProps) {
   const { row } = props;
-  const { baseUrl } = useConfig()
   const { sectionName } = useGetSectionTypeLabel();
-  const handleClose = () =>  setAnchorEl(null);
-  const [openModal, setOpenModal] = useState<boolean>(false);
   const { enrollmentsData } = useGetEnrollmentForm()
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => setAnchorEl(event.currentTarget);
-  const rowsActions = ({onOpenCapture, onEditStudent}: any) : RowActionsType[] => {
+  const [openModal, setOpenModal] = useState<boolean>(false);
+  
+  const rowsActions = ({onEditStudent} : any) : RowActionsType[] => {
       return [
-          { label: "1. Go to capture", divider: false, onClick: () => { onOpenCapture() }},
-          { label: "2. Edit Student", divider: false, onClick: () => { onEditStudent() }},
+          { label: `${sectionName} Edition`, onClick: () => { onEditStudent() }, icon: <IconEdit24/>},
       ];
   } 
 
-  const options = 
-    rowsActions({
-      onOpenCapture: () => window.open(`${baseUrl}/dhis-web-capture/index.html#/enrollment?enrollmentId=${row?.enrollmentId}&orgUnitId=${row?.orgUnitId}&programId=${row?.programId}&teiId=${row?.trackedEntity}`, "_blank"),
-      onEditStudent: () => setOpenModal(!openModal)
-  })
+  const options =  rowsActions({ onEditStudent: () => setOpenModal(!openModal)})
 
   return (
-    <div>
-      <IconButton  aria-controls="simple-menu" onClick={handleClick}>
-        <IconList24/>
-      </IconButton>
-      <Menu
-        keepMounted
-        id="simple-menu"
-        anchorEl={anchorEl}
-        onClose={handleClose}
-        open={Boolean(anchorEl)}
-      >
-        { options.map((option: RowActionsType, i: number) => (
-          <>
-            <MenuItem key={i} label={option.label} onClick={() => { option.onClick(); handleClose()}}/>
-            {option.divider === true && <Divider />}
-          </>
-        ))}
-        {
-          openModal && 
-            <ModalComponent 
-              title={`Single ${sectionName} update`} 
-              open={openModal} 
-              setOpen={setOpenModal}
-            >
-              <ModalContentUpdate
-                  setOpen={setOpenModal}
-                  sectionName={sectionName}
-                  studentInitialValues={row}
-                  enrollmentsData = {enrollmentsData}
-              />
-          </ModalComponent>
-        }
-      </Menu>
+    <div className={style.rowActionsContainer}>
+      { options.map((option: RowActionsType, i: number) => (
+          <Tooltip 
+            key={i} 
+            title={option.label}
+             onClick={() => { option.onClick() }}>
+            <IconButton className={style.rowActionsIcon}>{option.icon}</IconButton>
+          </Tooltip>
+      ))}
+      {
+        openModal && 
+          <ModalComponent 
+            title={`Single ${sectionName} Edition`} 
+            open={openModal} 
+            setOpen={setOpenModal}
+          >
+            <ModalContentUpdate
+                setOpen={setOpenModal}
+                sectionName={sectionName}
+                studentInitialValues={row}
+                enrollmentsData = {enrollmentsData}
+            />
+        </ModalComponent>
+      }
     </div>
   );
 }

@@ -28,8 +28,8 @@ interface RowProps {
 
 interface RowActionsType {
     label: string
-    divider: boolean
     onClick: () => void
+    icon: React.ReactNode
 }
 interface RowActionsProps {
     row: any
