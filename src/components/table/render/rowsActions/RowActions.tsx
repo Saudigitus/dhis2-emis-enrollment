@@ -3,7 +3,7 @@ import { IconEdit24 } from "@dhis2/ui";
 import style from './rowActions.module.css'
 import { IconButton,  Tooltip } from '@material-ui/core';
 import { useGetEnrollmentForm  } from '../../../../hooks';
-import { ModalComponent, ModalUpdate } from '../../../modal';
+import { ModalComponent, ModalContentUpdate } from '../../../modal';
 import useGetSectionTypeLabel from '../../../../hooks/commons/useGetSectionTypeLabel';
 import { RowActionsProps, RowActionsType } from '../../../../types/table/TableContentProps';
 
@@ -38,7 +38,7 @@ export default function RowActions(props: RowActionsProps) {
             open={openModal} 
             setOpen={setOpenModal}
           >
-            <ModalUpdate
+            <ModalContentUpdate
                 setOpen={setOpenModal}
                 sectionName={sectionName}
                 studentInitialValues={row}

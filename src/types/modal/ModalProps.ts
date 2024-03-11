@@ -13,11 +13,11 @@ interface ModalContentProps {
     bulkUpdate?: boolean
 }
 
-interface ModalUpdateStudentProps {
+interface ModalContentUpdateProps {
     setOpen: (value: boolean) => void
     sectionName?: any
     studentInitialValues?: any
     enrollmentsData?: any
 }
 
-export type { ModalProps, ModalContentProps, ModalUpdateStudentProps }
+export type { ModalProps, ModalContentProps, ModalContentUpdateProps }
