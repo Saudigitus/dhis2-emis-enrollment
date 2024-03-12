@@ -24,6 +24,7 @@ const OptionSetAutocomplete = (props: AutoCompleteProps) => {
       <Autocomplete
         {...props}
         options={options}
+        fullWidth
         closeIcon={null}
         disabled={props.disabled}
         getOptionLabel={(option) => option.label}
