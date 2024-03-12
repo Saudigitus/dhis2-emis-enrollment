@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { IconEdit24 } from "@dhis2/ui";
 import style from './rowActions.module.css'
 import { IconButton,  Tooltip } from '@material-ui/core';
@@ -6,13 +6,15 @@ import { useGetEnrollmentForm  } from '../../../../hooks';
 import { ModalComponent, ModalContentUpdate } from '../../../modal';
 import useGetSectionTypeLabel from '../../../../hooks/commons/useGetSectionTypeLabel';
 import { RowActionsProps, RowActionsType } from '../../../../types/table/TableContentProps';
+import useGetEnrollmentUpdateFormData from '../../../../hooks/form/useGetEnrollmentUpdateFormData';
 
 export default function RowActions(props: RowActionsProps) {
-  const { row } = props;
+  const { trackedEntity } = props;
   const { sectionName } = useGetSectionTypeLabel();
   const { enrollmentsData } = useGetEnrollmentForm()
   const [openModal, setOpenModal] = useState<boolean>(false);
-  
+  const { formIntialValues, loading } = useGetEnrollmentUpdateFormData (trackedEntity, openModal)
+
   const rowsActions = ({onEditStudent} : any) : RowActionsType[] => {
       return [
           { label: `${sectionName} Edition`, onClick: () => { onEditStudent() }, icon: <IconEdit24/>},
@@ -41,8 +43,9 @@ export default function RowActions(props: RowActionsProps) {
             <ModalContentUpdate
                 setOpen={setOpenModal}
                 sectionName={sectionName}
-                studentInitialValues={row}
+                loadingInitialValues={loading}
                 enrollmentsData = {enrollmentsData}
+                formInitialValues={formIntialValues}
             />
         </ModalComponent>
       }

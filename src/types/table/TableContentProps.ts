@@ -32,7 +32,7 @@ interface RowActionsType {
     icon: React.ReactNode
 }
 interface RowActionsProps {
-    row: any
+    trackedEntity: string
 }
 
 

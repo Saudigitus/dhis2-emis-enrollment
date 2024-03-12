@@ -1,10 +1,10 @@
 interface TeiQueryProps {
     program: string
-    pageSize: number
-    ouMode: string
+    pageSize?: number
+    ouMode?: string
     trackedEntity: string
     orgUnit: string
-    order: string
+    order?: string
 }
 
 interface attributesProps {

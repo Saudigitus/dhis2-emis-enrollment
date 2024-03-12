@@ -95,7 +95,7 @@ function RenderRows(props: RenderHeaderProps): React.ReactElement {
                                         {getDisplayName({ attribute: column.id, headers: headerData, value: row[column.id] })}
                                         {
                                             (column.displayName == "Actions") ?
-                                                <RowActions row={row} />
+                                                <RowActions trackedEntity={row['trackedEntity' as keyof typeof row]} />
                                                 : null
                                         }  </div>
                                 </RowCell>

@@ -10,20 +10,19 @@ import { format } from "date-fns";
 import { onSubmitClicked } from "../../schema/formOnSubmitClicked";
 import {ModalContentUpdateProps } from "../../types/modal/ModalProps";
 import { getDataStoreKeys } from "../../utils/commons/dataStore/getDataStoreKeys";
-import { useGetUsedPProgramStages, useParams, useUpdateEnrollmentData } from "../../hooks";
+import { useParams, useUpdateEnrollmentData } from "../../hooks";
 import { CustomDhis2RulesEngine } from "../../hooks/programRules/rules-engine/RulesEngine";
 import { teiUpdateBody } from "../../utils/tei/formatUpdateBody";
 import { eventUpdateBody } from "../../utils/events/formatPostBody";
 import { formatKeyValueType } from "../../utils/programRules/formatKeyValueType";
 
 function ModalContentUpdate(props: ModalContentUpdateProps): React.ReactElement {
-  const { setOpen,  sectionName, studentInitialValues, enrollmentsData } = props;
+  const { setOpen, sectionName,  enrollmentsData, formInitialValues, loadingInitialValues } = props;
   const getProgram = useRecoilValue(ProgramConfigState);
   const { useQuery } = useParams();
   const formRef: React.MutableRefObject<FormApi<IForm, Partial<IForm>>> = useRef(null);
   const orgUnit = useQuery().get("school");
   const orgUnitName = useQuery().get("schoolName");
-  const performanceProgramStages = useGetUsedPProgramStages();
   const [, setClicked] = useRecoilState<boolean>(onSubmitClicked);
   const [values, setValues] = useState<Record<string, string>>({})
   const { trackedEntityType } = getDataStoreKeys();
@@ -31,8 +30,8 @@ function ModalContentUpdate(props: ModalContentUpdateProps): React.ReactElement 
   const [clickedButton, setClickedButton] = useState<string>("");
   const [initialValues] = useState<object>({
     registerschoolstaticform: orgUnitName,
-    eventdatestaticform:format(new Date (studentInitialValues['enrollmentDate' as unknown as keyof typeof studentInitialValues]), "yyyy-MM-dd"),
-    ...studentInitialValues
+    eventdatestaticform:format(new Date (formInitialValues?.['enrollmentDate' as unknown as keyof typeof formInitialValues]), "yyyy-MM-dd"),
+    ...formInitialValues
   })
   const { updateEnrollmentData, data,  loading } =  useUpdateEnrollmentData()
   const {runRulesEngine, updatedVariables } = CustomDhis2RulesEngine({ variables: formFields(enrollmentsData, sectionName), values, type:"programStageSection", formatKeyValueType: formatKeyValueType(enrollmentsData) })
@@ -56,14 +55,21 @@ function ModalContentUpdate(props: ModalContentUpdateProps): React.ReactElement 
     const allFields = fieldsWithValue.flat()
     if (allFields.filter((element: any) => (element?.assignedValue === undefined && element.required))?.length === 0) {
       void updateEnrollmentData({
-        dataEnrollmentData: teiUpdateBody(fieldsWithValue,
+        dataEnrollmentData: teiUpdateBody(
+          fieldsWithValue,
           (getProgram != null) ? getProgram.id : "", orgUnit ?? "",
           values?.eventdatestaticform ?? "",
-          performanceProgramStages, 
           trackedEntityType, 
           initialValues['trackedEntity' as unknown as keyof typeof initialValues] as unknown as string), 
 
-        dataEvents: eventUpdateBody(fieldsWithValue.flat(), studentInitialValues.event)})
+        dataEvents: eventUpdateBody(
+          fieldsWithValue,
+          [],
+          // studentInitialValues.event,
+          formInitialValues['enrollmentDate' as unknown as keyof typeof formInitialValues],
+          (getProgram != null) ? getProgram.id : "", 
+          orgUnit ?? "",
+          )})
     }
   }
 
@@ -72,7 +78,7 @@ function ModalContentUpdate(props: ModalContentUpdateProps): React.ReactElement 
     { id: "save", type: "submit", label: "Update", primary: true, disabled: loading, onClick: () => { setClickedButton("save"); setClicked(true) } },
   ];
 
-  if (enrollmentsData?.length < 1) {
+  if (enrollmentsData?.length < 1 || loadingInitialValues) {
     return (
       <CenteredContent>
         <CircularLoader />
@@ -110,7 +116,7 @@ function ModalContentUpdate(props: ModalContentUpdateProps): React.ReactElement 
                   key={index}
                   fields={field?.fields}
                   disabled={false}
-                  trackedEntity={initialValues?.trackedEntity}
+                  trackedEntity={initialValues['trackedEntity' as unknown as keyof typeof initialValues] as unknown as string}
                 />
               ))
             }
