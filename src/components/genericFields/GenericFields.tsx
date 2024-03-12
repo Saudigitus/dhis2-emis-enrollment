@@ -9,16 +9,12 @@ import { Attribute } from "../../types/generated/models";
 import RadioButton from "./fields/RadioButton";
 import { GenericFieldsComponentProps } from "../../types/form/GenericFieldsTypes";
 import { CustomAttributeProps } from "../../types/variables/AttributeColumns";
+import ImageField from "./fields/ImageField";
 
 function GenericFields({ attribute, disabled, valueType }: GenericFieldsComponentProps) {
   switch (valueType) {
     case Attribute.valueType.BOOLEAN as unknown as CustomAttributeProps["valueType"]:
-      return (
-        <RadioButton
-          {...attribute}
-          disabled={disabled}
-        />
-      );
+      return <RadioButton {...attribute} disabled={disabled} />;
 
     case Attribute.valueType.PHONE_NUMBER as unknown as CustomAttributeProps["valueType"]:
     case Attribute.valueType.EMAIL as unknown as CustomAttributeProps["valueType"]:
@@ -39,16 +35,13 @@ function GenericFields({ attribute, disabled, valueType }: GenericFieldsComponen
       return <DateInput {...attribute} disabled={!!(disabled || attribute?.disabled)} />;
 
     case Attribute.valueType.TRUE_ONLY as unknown as CustomAttributeProps["valueType"]:
-      return (
-        <CheckInput
-          {...attribute}
-          disabled={disabled}
-         
-        />
-      );
+      return <CheckInput {...attribute} disabled={disabled} />
 
     case Attribute.valueType.LIST as unknown as CustomAttributeProps["valueType"]:
       return <SingleSelectField {...attribute} disabled={disabled || attribute.disabled} />;
+
+    case Attribute.valueType.IMAGE as unknown as CustomAttributeProps["valueType"]:
+      return <ImageField {...attribute} disabled={disabled || attribute.disabled} />;
 
     default:
       return <span>ValueType not mapped</span>;

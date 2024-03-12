@@ -1,5 +1,5 @@
 
-import { useRecoilValue } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import { useState } from "react";
 import { useDataEngine } from "@dhis2/app-runtime";
 import { formatResponseRows } from "../../utils/table/rows/formatResponseRows";
@@ -10,6 +10,7 @@ import { EventQueryProps, EventQueryResults } from "../../types/api/WithoutRegis
 import { TeiQueryProps, TeiQueryResults } from "../../types/api/WithRegistrationProps";
 import { TableDataProps } from "../../types/table/TableContentProps";
 import { getDataStoreKeys } from "../../utils/commons/dataStore/getDataStoreKeys";
+import { EventsState } from "../../schema/eventsSchema";
 
 const EVENT_QUERY = (queryProps: EventQueryProps) => ({
     results: {
@@ -36,6 +37,7 @@ export function useTableData() {
     const engine = useDataEngine();
     const { program, registration } = getDataStoreKeys()
     const headerFieldsState = useRecoilValue(HeaderFieldsState)
+    const setEvents = useSetRecoilState(EventsState)
     const { urlParamiters } = useParams()
     const [loading, setLoading] = useState<boolean>(false)
     const [tableData, setTableData] = useState<TableDataProps[]>([])
@@ -84,6 +86,7 @@ export function useTableData() {
                 }) as unknown as TeiQueryResults
                 : { results: { instances: [] } } as unknown as TeiQueryResults
 
+            setEvents(eventsResults?.results?.instances)
             setTableData(formatResponseRows({
                 eventsInstances: eventsResults?.results?.instances,
                 teiInstances: teiResults?.results?.instances

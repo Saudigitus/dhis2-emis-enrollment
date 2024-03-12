@@ -4,6 +4,9 @@ import classNames from 'classnames';
 import { makeStyles, createStyles, type Theme } from '@material-ui/core/styles';
 import { RenderHeaderProps } from '../../../types/table/TableContentProps';
 import HeaderCell from '../components/head/HeaderCell';
+import { Checkbox } from "@dhis2/ui"
+import { RowSelectionState } from '../../../schema/tableSelectedRowsSchema';
+import { useRecoilState } from 'recoil';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -42,6 +45,12 @@ const useStyles = makeStyles((theme: Theme) =>
 function RenderHeader(props: RenderHeaderProps): React.ReactElement {
     const { rowsHeader, order, orderBy, createSortHandler } = props
     const classes = useStyles()
+    const [selected, setSelected] = useRecoilState(RowSelectionState);
+
+    const onToggle = (event: { checked: boolean }) => {
+        const copySelectedState = { ...selected, isAllRowsSelected: event.checked, selectedRows: event.checked ? selected.rows : [] };
+        setSelected(copySelectedState);
+    }
 
     const headerCells = useMemo(() => {
         return rowsHeader?.filter(x => x.visible)?.map((column) => (
@@ -73,6 +82,17 @@ function RenderHeader(props: RenderHeaderProps): React.ReactElement {
             <RowTable
                 className={classes.row}
             >
+                {/* <HeaderCell
+                    className={classNames(classes.cell, classes.headerCell)}
+                >
+                    <Checkbox
+                        indeterminate={selected.selectedRows.length > 0 && selected.selectedRows.length !== selected.rows.length}
+                        checked={selected.isAllRowsSelected}
+                        onChange={onToggle}
+                        name="Ex"
+                        value="checked"
+                    />
+                </HeaderCell> */}
                 {headerCells}
             </RowTable>
         </thead>

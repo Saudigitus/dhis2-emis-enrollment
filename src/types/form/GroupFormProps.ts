@@ -5,6 +5,8 @@ interface GroupFormProps {
     description: string
     fields: CustomAttributeProps[]
     disabled: boolean
+    bulkUpdate?: boolean
+    trackedEntity?: string
 }
 
 export type { GroupFormProps }

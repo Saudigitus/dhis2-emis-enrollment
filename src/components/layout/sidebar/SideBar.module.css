@@ -56,7 +56,7 @@
     white-space: nowrap;
 }
 
-.SideBarContainerCollapsed .SideBarMenu .SideBarItemTitle {
+.SideBarContainerCollapsed .SideBarMenu .SideBarItemTitle, .SideBarMenu .SideBarHomeTitle {
     display: inline-block !important;
     opacity: 0;
     white-space: nowrap !important;
@@ -94,6 +94,10 @@
     width: 100%;
     height: auto;
     margin-bottom: 24px;
+}
+
+.SideBarHomeItem {
+    background-color: rgb(255, 255, 255);
 }
 
 .SideBarItemTitle {

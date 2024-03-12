@@ -11,6 +11,7 @@ interface FormFieldsProps {
     required: string | boolean
     type?: string
     optionSet?: CustomAttributeProps["options"]
+    trackedEntity?: string
 }
 
 interface MutlipleSelectProps {

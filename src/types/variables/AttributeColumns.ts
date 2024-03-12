@@ -30,6 +30,7 @@ export interface CustomAttributeProps {
     key?: any
     description?: string
     type: VariablesTypes
+    trackedEntity?: string
 }
 
 export interface OptionsProps {

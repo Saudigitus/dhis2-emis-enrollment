@@ -5,6 +5,8 @@ import { dataStoreRecord } from "../../../types/dataStore/DataStoreConfig";
 import { CustomAttributeProps, VariablesTypes } from "../../../types/variables/AttributeColumns";
 
 export function formatResponse(data: ProgramConfig, dataStoreData: dataStoreRecord, tableColumns: CustomAttributeProps[] = []): CustomAttributeProps[] {
+    let columns = ['Actions']
+
     const headerResponse = useMemo(() => {
         const originalData = ((data?.programStages?.find(programStge => programStge.id === dataStoreData?.registration?.programStage)) ?? {} as ProgramConfig["programStages"][0])
 
@@ -17,6 +19,7 @@ export function formatResponse(data: ProgramConfig, dataStoreData: dataStoreReco
                 name: item.trackedEntityAttribute.displayName,
                 labelName: item.trackedEntityAttribute.displayName,
                 valueType: item.trackedEntityAttribute.optionSet?.options?.length > 0 ? Attribute.valueType.LIST as unknown as CustomAttributeProps["valueType"] : item.trackedEntityAttribute.valueType as unknown as CustomAttributeProps["valueType"],
+                initialOptions: { optionSet: item.trackedEntityAttribute.optionSet },
                 options: { optionSet: item.trackedEntityAttribute.optionSet },
                 visible: item.displayInList,
                 disabled: false,
@@ -39,6 +42,7 @@ export function formatResponse(data: ProgramConfig, dataStoreData: dataStoreReco
                         labelName: programStageDataElement.dataElement.displayName,
                         valueType: programStageDataElement.dataElement.optionSet?.options?.length > 0 ? Attribute.valueType.LIST as unknown as CustomAttributeProps["valueType"] : programStageDataElement.dataElement.valueType as unknown as CustomAttributeProps["valueType"],
                         options: { optionSet: programStageDataElement.dataElement.optionSet },
+                        initialOptions: { optionSet: programStageDataElement.dataElement.optionSet },
                         visible: programStageDataElement.displayInReports,
                         disabled: false,
                         pattern: '',
@@ -50,7 +54,29 @@ export function formatResponse(data: ProgramConfig, dataStoreData: dataStoreReco
                     }
                 }) as []
                 : []
-        )
+        ).concat(
+            columns?.map((column) => {
+                return {
+                    id: column,
+                    displayName: column,
+                    header: column,
+                    required: true,
+                    name: column,
+                    labelName: column,
+                    valueType: Attribute.valueType.TEXT as unknown as CustomAttributeProps["valueType"],
+                    options: undefined,
+                    initialOptions: undefined,
+                    visible: true,
+                    disabled: false,
+                    pattern: '',
+                    searchable: false,
+                    error: false,
+                    content: '',
+                    key: '',
+                    type: VariablesTypes.Attribute
+                }
+            }) as []
+        ) || []
     }, [data, tableColumns]);
 
     return headerResponse;
