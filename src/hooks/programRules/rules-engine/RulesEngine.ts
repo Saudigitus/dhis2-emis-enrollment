@@ -5,6 +5,7 @@ import { OptionGroupsConfigState } from "../../../schema/optionGroupsSchema";
 import { OrgUnitsGroupsConfigState } from "../../../schema/orgUnitsGroupSchema";
 import { compareStringByLabel } from "../../../utils/commons/sortStringsByLabel";
 import { ProgramRulesFormatedState } from "../../../schema/programRulesFormated";
+import { ProgramConfigState } from "../../../schema/programSchema";
 
 interface RulesEngineProps {
     variables: any[]
@@ -19,6 +20,7 @@ export const CustomDhis2RulesEngine = (props: RulesEngineProps) => {
     const newProgramRules = useRecoilValue(ProgramRulesFormatedState)
     const [updatedVariables, setupdatedVariables] = useState([...variables])
     const orgUnitsGroups = useRecoilValue(OrgUnitsGroupsConfigState)
+    const programConfig = useRecoilValue(ProgramConfigState)
 
     useEffect(() => {
         if (updatedVariables.length === 0) {
@@ -140,7 +142,9 @@ export const CustomDhis2RulesEngine = (props: RulesEngineProps) => {
                                 if (foundOrgUnitGroup.length > 0) {
 
                                     if (foundOrgUnitGroup[0]?.organisationUnits.findIndex(x => x.value === values["orgUnit"]) > -1) {
-                                        variable.options = { optionSet: { options: getOptionGroups?.filter((op) => op.id === programRule.optionGroup)?.[0]?.options?.slice()?.sort(compareStringByLabel) || [] } }
+                                        const options = getOptionGroups?.filter((op) => op.id === programRule.optionGroup)?.[0]?.options?.slice()?.sort(compareStringByLabel) || []
+
+                                        variable.options = { optionSet: { options: variable?.initialOptions?.optionSet?.options?.filter(obj1 => !options.some(obj2 => obj2.value === obj1.value)) } }
                                     }
                                 }
                             }
