@@ -17,7 +17,6 @@ import { formatKeyValueType } from "../../utils/programRules/formatKeyValueType"
 
 function ModalContentUpdate(props: ModalContentUpdateProps): React.ReactElement {
   const { setOpen, sectionName,  enrollmentsData, formInitialValues, loadingInitialValues, enrollmentValues } = props;
-  console.log(setOpen, sectionName,  enrollmentsData, formInitialValues, loadingInitialValues, enrollmentValues)
   const getProgram = useRecoilValue(ProgramConfigState);
   const { useQuery } = useParams();
   const formRef: React.MutableRefObject<FormApi<IForm, Partial<IForm>>> = useRef(null);
@@ -66,7 +65,7 @@ function ModalContentUpdate(props: ModalContentUpdateProps): React.ReactElement 
         dataEvents: eventUpdateBody(
           fieldsWithValue,
           enrollmentValues['events'],
-          formInitialValues['enrollmentDate' as unknown as keyof typeof formInitialValues],
+          formInitialValues['enrollmentDate'],
           (getProgram != null) ? getProgram.id : "", 
           orgUnit ?? "",
           )})
