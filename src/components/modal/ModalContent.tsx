@@ -112,7 +112,7 @@ function ModalContentComponent(props: ModalContentProps): React.ReactElement {
           formRef.current = form;
           return <form
             onSubmit={handleSubmit}
-            onChange={onChange(values)  as unknown as ()=> void}
+            onChange={onChange(values) as unknown as () => void}
           >
             {
               updatedVariables?.filter(x =>

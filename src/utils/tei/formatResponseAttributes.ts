@@ -14,6 +14,7 @@ export function formatResponseTEI(attributes: ProgramConfig): CustomAttributePro
                 ? Attribute.valueType.LIST as unknown as  CustomAttributeProps["valueType"]
                 : trackedEntityAttribute?.trackedEntityAttribute?.valueType as unknown as  CustomAttributeProps["valueType"],
             options: { optionSet: trackedEntityAttribute?.trackedEntityAttribute?.optionSet },
+            initialOptions: { optionSet:  trackedEntityAttribute?.trackedEntityAttribute?.optionSet },
             visible: true,
             disabled: trackedEntityAttribute?.trackedEntityAttribute?.generated,
             pattern: trackedEntityAttribute?.trackedEntityAttribute?.pattern,
