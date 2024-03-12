@@ -7,7 +7,7 @@ const TEI_QUERY = (queryProps: TeiQueryProps) => ({
     results: {
         resource: "tracker/trackedEntities",
         params: {
-            fields: "trackedEntity,createdAt,orgUnit,attributes[attribute,value],enrollments[enrollment,orgUnit,program]",
+            fields: "trackedEntity,createdAt,orgUnit,attributes[attribute,value],enrollments[enrollment,orgUnit,program, events],",
             ...queryProps
         }
     }
@@ -19,6 +19,7 @@ export function useGetTei() {
 
     async function getTei(program: string, orgUnit: string, trackedEntity: string) {
         return await engine.query(TEI_QUERY({
+            pageSize:10,
             program: program,
             orgUnit: orgUnit,
             trackedEntity: trackedEntity

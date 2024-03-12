@@ -6,7 +6,6 @@ import { formFields } from "../../utils/constants/enrollmentForm/enrollmentForm"
 import GroupForm from "../form/GroupForm";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { ProgramConfigState } from "../../schema/programSchema";
-import { format } from "date-fns";
 import { onSubmitClicked } from "../../schema/formOnSubmitClicked";
 import {ModalContentUpdateProps } from "../../types/modal/ModalProps";
 import { getDataStoreKeys } from "../../utils/commons/dataStore/getDataStoreKeys";
@@ -17,7 +16,8 @@ import { eventUpdateBody } from "../../utils/events/formatPostBody";
 import { formatKeyValueType } from "../../utils/programRules/formatKeyValueType";
 
 function ModalContentUpdate(props: ModalContentUpdateProps): React.ReactElement {
-  const { setOpen, sectionName,  enrollmentsData, formInitialValues, loadingInitialValues } = props;
+  const { setOpen, sectionName,  enrollmentsData, formInitialValues, loadingInitialValues, enrollmentValues } = props;
+  console.log(setOpen, sectionName,  enrollmentsData, formInitialValues, loadingInitialValues, enrollmentValues)
   const getProgram = useRecoilValue(ProgramConfigState);
   const { useQuery } = useParams();
   const formRef: React.MutableRefObject<FormApi<IForm, Partial<IForm>>> = useRef(null);
@@ -28,9 +28,8 @@ function ModalContentUpdate(props: ModalContentUpdateProps): React.ReactElement 
   const { trackedEntityType } = getDataStoreKeys();
   const [fieldsWithValue, setFieldsWithValues] = useState<any[]>([enrollmentsData])
   const [clickedButton, setClickedButton] = useState<string>("");
-  const [initialValues] = useState<object>({
+  const [initialValues, setInitialValues] = useState<object>({
     registerschoolstaticform: orgUnitName,
-    eventdatestaticform:format(new Date (formInitialValues?.['enrollmentDate' as unknown as keyof typeof formInitialValues]), "yyyy-MM-dd"),
     ...formInitialValues
   })
   const { updateEnrollmentData, data,  loading } =  useUpdateEnrollmentData()
@@ -40,7 +39,9 @@ function ModalContentUpdate(props: ModalContentUpdateProps): React.ReactElement 
     runRulesEngine()
   }, [values])
 
-  useEffect(() => { setClicked(false) }, [])
+  useEffect(() => { 
+    setClicked(false) 
+  }, [])
 
   // When Save and continue button clicked and data posted, close the modal
   useEffect(() => {
@@ -64,8 +65,7 @@ function ModalContentUpdate(props: ModalContentUpdateProps): React.ReactElement 
 
         dataEvents: eventUpdateBody(
           fieldsWithValue,
-          [],
-          // studentInitialValues.event,
+          enrollmentValues['events'],
           formInitialValues['enrollmentDate' as unknown as keyof typeof formInitialValues],
           (getProgram != null) ? getProgram.id : "", 
           orgUnit ?? "",
@@ -78,7 +78,7 @@ function ModalContentUpdate(props: ModalContentUpdateProps): React.ReactElement 
     { id: "save", type: "submit", label: "Update", primary: true, disabled: loading, onClick: () => { setClickedButton("save"); setClicked(true) } },
   ];
 
-  if (enrollmentsData?.length < 1 || loadingInitialValues) {
+  if (enrollmentsData?.length < 1 || loadingInitialValues || !Object.keys(formInitialValues).length) {
     return (
       <CenteredContent>
         <CircularLoader />
@@ -101,8 +101,8 @@ function ModalContentUpdate(props: ModalContentUpdateProps): React.ReactElement 
 
   return (
     <WithPadding>
-      <Form initialValues={{ ...initialValues, orgUnit  }} onSubmit={onSubmit}>
-        {({ handleSubmit, values, form }) => {
+      <Form initialValues={{ ...initialValues }} onSubmit={onSubmit}>
+        {({ handleSubmit, values, form,  pristine  }) => {
           formRef.current = form;
           return <form
             onSubmit={handleSubmit}
@@ -127,6 +127,7 @@ function ModalContentUpdate(props: ModalContentUpdateProps): React.ReactElement 
                   <Button
                     key={i}
                     {...action}
+                    disabled={pristine || loadingInitialValues || loading}
                   >
                     {(loading && action.id === clickedButton) ? <CircularLoader small /> : action.label}
                   </Button>

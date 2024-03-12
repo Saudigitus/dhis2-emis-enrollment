@@ -19,6 +19,7 @@ interface ModalContentUpdateProps {
     formInitialValues?: any
     enrollmentsData?: any
     loadingInitialValues: boolean
+    enrollmentValues?: any
 }
 
 export type { ModalProps, ModalContentProps, ModalContentUpdateProps }

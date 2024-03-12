@@ -18,11 +18,9 @@ function useUpdateEnrollmentData () {
         await updateTei({
             data: dataEnrollmentData
         })
-        
+
         .then(async () => {
-            await updateEvent ({
-                data: dataEvents
-            })
+            await updateEvent ({ data: dataEvents })
 
             .then(() => { 
                 show({ message: "Enrollment saved successfully", type: { success: true } })
