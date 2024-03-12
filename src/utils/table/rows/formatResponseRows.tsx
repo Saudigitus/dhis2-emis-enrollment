@@ -20,7 +20,7 @@ export function formatResponseRows({ eventsInstances, teiInstances }: FormatResp
     return allRows;
 }
 
-function dataValues(data: dataValuesProps[]): RowsDataProps {
+export function dataValues(data: dataValuesProps[]): RowsDataProps {
     const localData: RowsDataProps = {}
     for (const dataElement of data) {
         localData[dataElement.dataElement] = dataElement.value
@@ -28,7 +28,7 @@ function dataValues(data: dataValuesProps[]): RowsDataProps {
     return localData
 }
 
-function attributes(data: attributesProps[]): RowsDataProps {
+export function attributes(data: attributesProps[]): RowsDataProps {
     const localData: RowsDataProps = {}
     for (const attribute of data) {
         localData[attribute.attribute] = attribute.value

@@ -16,8 +16,9 @@ interface ModalContentProps {
 interface ModalContentUpdateProps {
     setOpen: (value: boolean) => void
     sectionName?: any
-    studentInitialValues?: any
+    formInitialValues?: any
     enrollmentsData?: any
+    loadingInitialValues: boolean
 }
 
 export type { ModalProps, ModalContentProps, ModalContentUpdateProps }
