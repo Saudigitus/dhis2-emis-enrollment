@@ -14,15 +14,21 @@ export default function RowActions(props: RowActionsProps) {
   const { sectionName } = useGetSectionTypeLabel();
   const { enrollmentsData } = useGetEnrollmentForm()
   const [openModal, setOpenModal] = useState<boolean>(false);
-  const { initialValues, loading, buildFormData, enrollmentValues,  } = useGetEnrollmentUpdateFormData (trackedEntity)
-
+  const { initialValues, loading, buildFormData, enrollmentValues, setInitialValues  } = useGetEnrollmentUpdateFormData ()
+  
   const rowsActions = ({onEditStudent} : any) : RowActionsType[] => {
       return [
           { label: `${sectionName} Edition`, onClick: () => { onEditStudent() }, icon: <IconEdit24/>},
       ];
   } 
 
-  const options =  rowsActions({ onEditStudent: () => { buildFormData(); setOpenModal(!openModal)}})
+  const options =  rowsActions({ onEditStudent: () => { buildFormData(trackedEntity); setOpenModal(!openModal)}})
+
+ 
+  useEffect(() => {
+    if(!openModal)
+    setInitialValues({})
+  },[openModal])
 
   return (
     <div className={style.rowActionsContainer}>

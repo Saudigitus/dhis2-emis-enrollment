@@ -4,7 +4,7 @@ import { useGetTei, useGetEvent, useParams } from '../../hooks';
 import { getSelectedKey } from '../../utils/commons/dataStore/getSelectedKey';
 import { attributes, dataValues } from '../../utils/table/rows/formatResponseRows';
 
-export default function useGetEnrollmentUpdateFormData (trackedEntity: string ) {
+export default function useGetEnrollmentUpdateFormData () {
     const { getTei } = useGetTei()
     const { getEvent } = useGetEvent()
     const {  urlParamiters } = useParams()
@@ -14,12 +14,12 @@ export default function useGetEnrollmentUpdateFormData (trackedEntity: string ) 
     const [loading, setLoading] = useState<boolean>(false)
     const [initialValues, setInitialValues ] =  useState<any>({})
 
-    const buildFormData =  async () => {
+    const buildFormData =  (trackedEntity: string) => {
         setLoading(true)
         if (Object.keys(getDataStoreData)?.length) {
             const { registration, 'socio-economics': { programStage }, program } = getDataStoreData
 
-           await getTei(program, orgUnit as unknown as string, trackedEntity )
+        getTei(program, orgUnit as unknown as string, trackedEntity )
             .then( async (trackedEntityInstance: any ) => {
                 
                     await getEvent(program, registration.programStage as unknown as string, [], orgUnit as unknown as string, trackedEntity)
@@ -54,5 +54,5 @@ export default function useGetEnrollmentUpdateFormData (trackedEntity: string ) 
         }
     }
 
-    return { enrollmentValues, buildFormData, initialValues, loading }
+    return { enrollmentValues, buildFormData, initialValues, loading, setInitialValues }
 }

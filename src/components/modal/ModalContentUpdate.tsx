@@ -51,6 +51,7 @@ function ModalContentUpdate(props: ModalContentUpdateProps): React.ReactElement 
     }
   }, [data])
 
+
   function onSubmit() {
     const allFields = fieldsWithValue.flat()
     if (allFields.filter((element: any) => (element?.assignedValue === undefined && element.required))?.length === 0) {
