@@ -91,12 +91,16 @@ function ModalContentUpdate(props: ModalContentUpdateProps): React.ReactElement 
     for (const [key, value] of Object.entries(e)) {
       for (let i = 0; i < sections?.length; i++) {
         if (sections[i].find((element: any) => element.id === key) !== null && sections[i].find((element: any) => element.id === key) !== undefined) {
+          if(sections[i].find((element: any) => element.id === key).valueType === "BOOLEAN"){
+            sections[i].find((element: any) => element.id === key).value = value
+          }
           sections[i].find((element: any) => element.id === key).assignedValue = value
         }
       }
     }
     setFieldsWithValues(sections)
     setValues(e)
+    console.log(fieldsWithValue)
   }
 
   return (

@@ -7,6 +7,7 @@ interface GenericFieldsComponentProps {
 }
 
 interface FormFieldsProps {
+    name: string
     disabled: boolean
     required: string | boolean
     type?: string
