@@ -69,12 +69,20 @@ const programStageDataElementsAsInTemplate = (headers: string[]): Record<string,
  */
 const programStageDataElementsAsInSystem = (
     programConfig: ProgramConfig, enrollmentProgramStages: string[]): Record<string, string[]> => {
-    // Get DataElements for each enrollment program stage
     const des = programConfig.programStages
         .filter(s => enrollmentProgramStages.includes(s.id))
-        .map(s => s.programStageDataElements.map(x => x.dataElement.id))
-    // form key-value object of Program stage and DataElements
-    return fromPairs(des.map((d, i) => [enrollmentProgramStages[i], d]))
+        .map(s => {
+            return {
+                programStage: s.id,
+                dataElements: s.programStageDataElements
+                    .map(x => { return x.dataElement.id })
+            }
+        })
+    const ret: Record<string, string[]> = {}
+    des.forEach(de => {
+        ret[de.programStage] = de.dataElements
+    })
+    return ret
 }
 /**
  * Validates an Excel Template used for bulk upload
@@ -188,7 +196,7 @@ export const fieldsMap = (programConfig: ProgramConfig, enrollmentProgramStages:
     // Manually add ref, enrollmentDate & orgUnit, orgUnitName, system ID
     const uid: string = getProgramTEAttributeID(programConfig, "System ID")
     const systemIDTEAttributeID = uid.length > 0 ? uid : "G0B8B0AH5Ek"
-    let extraMap: Record<string, FieldMapping> = {
+    const extraMap: Record<string, FieldMapping> = {
         ref: {key: "ref", id: "ref", name: "ref", required: false, valueType: "TEXT", isTEAttribute: false},
         orgUnitName: {
             key: "orgUnitName",
@@ -221,7 +229,7 @@ export const fieldsMap = (programConfig: ProgramConfig, enrollmentProgramStages:
             required: false,
             valueType: "TEXT",
             isTEAttribute: false
-        },
+        }
     }
     extraMap[systemIDTEAttributeID] = {
         key: systemIDTEAttributeID,
