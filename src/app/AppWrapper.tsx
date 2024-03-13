@@ -6,15 +6,17 @@ import { useGetProgramRules } from '../hooks/programRules/useGetProgramRules';
 import { useGetProgramRulesVariables } from '../hooks/programRules/useGetProgramRulesVariables';
 import { useGetOptionGroups } from '../hooks/optionGroup/useGetOptionGroups';
 import { useOrgUnitsGroups } from '../hooks/orgUnitsGroup/useOrgUnitsGroups';
+import { useDataStoreBulkOperations } from '../hooks/appwrapper/useDataStoreBulkOperations';
 
 export default function AppWrapper(props: AppConfigurationsProps) {
     const { error, loading } = useDataStore()
+    const { error: errorBulkOperations, loading: loadingBulkOperations} = useDataStoreBulkOperations()
     const { loadingPRules } = useGetProgramRules();
     const { loadingPRulesVariables } = useGetProgramRulesVariables();
     const { loadingOptionGroups } = useGetOptionGroups();
     const { loadingOrgUnitsGroups } = useOrgUnitsGroups()
 
-    if (loading || loadingPRules || loadingPRulesVariables || loadingOptionGroups || loadingOrgUnitsGroups) {
+    if (loading || loadingPRules || loadingPRulesVariables || loadingOptionGroups || loadingOrgUnitsGroups || loadingBulkOperations) {
         return (
             <CenteredContent>
                 <CircularLoader />
@@ -22,7 +24,7 @@ export default function AppWrapper(props: AppConfigurationsProps) {
         )
     }
 
-    if (error != null) {
+    if (error != null || errorBulkOperations != null) {
         return (
             <CenteredContent>
                 Something went wrong wen loading the app, please check if you app is already configured
