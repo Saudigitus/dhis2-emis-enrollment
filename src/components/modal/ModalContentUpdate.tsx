@@ -58,18 +58,18 @@ function ModalContentUpdate(props: ModalContentUpdateProps): React.ReactElement 
       void updateEnrollmentData({
         dataEnrollmentData: teiUpdateBody(
           fieldsWithValue,
-          (getProgram != null) ? getProgram.id : "", orgUnit ?? "",
-          values?.eventdatestaticform ?? "",
+          orgUnit ?? "",
           trackedEntityType, 
-          initialValues['trackedEntity' as unknown as keyof typeof initialValues] as unknown as string), 
+          initialValues['trackedEntity' as unknown as keyof typeof initialValues] as unknown as string,
+          values
+        ), 
 
         dataEvents: eventUpdateBody(
           fieldsWithValue,
           enrollmentValues['events'],
           formInitialValues['enrollmentDate'],
-          (getProgram != null) ? getProgram.id : "", 
-          orgUnit ?? "",
-          )})
+          values
+        )})
     }
   }
 
@@ -85,14 +85,16 @@ function ModalContentUpdate(props: ModalContentUpdateProps): React.ReactElement 
       </CenteredContent>
     )
   }
-
+  const sections = enrollmentsData;
   function onChange(e: any): void {
-    const sections = enrollmentsData;
     for (const [key, value] of Object.entries(e)) {
       for (let i = 0; i < sections?.length; i++) {
         if (sections[i].find((element: any) => element.id === key) !== null && sections[i].find((element: any) => element.id === key) !== undefined) {
           if(sections[i].find((element: any) => element.id === key).valueType === "BOOLEAN"){
             sections[i].find((element: any) => element.id === key).value = value
+          }
+          if(sections[i].find((element: any) => element.id === key).valueType === "TRUE_ONLY" && !sections[i].find((element: any) => element.id === key).assignedValue){
+            sections[i].find((element: any) => element.id === key).assignedValue = ''
           }
           sections[i].find((element: any) => element.id === key).assignedValue = value
         }
@@ -100,7 +102,6 @@ function ModalContentUpdate(props: ModalContentUpdateProps): React.ReactElement 
     }
     setFieldsWithValues(sections)
     setValues(e)
-    console.log(fieldsWithValue)
   }
 
   return (

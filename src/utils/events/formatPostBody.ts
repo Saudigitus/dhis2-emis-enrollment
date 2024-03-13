@@ -1,6 +1,6 @@
 import { reducer } from "../commons/formatDistinctValue";
 
-export const eventUpdateBody = (enrollmentsData: any[], events: any[], enrollmentDate: any, programId: string, orgUnit: string) => {
+export const eventUpdateBody = (enrollmentsData: any[], events: any[], enrollmentDate: any, formValues:any) => {
     const form : any = []
 
     for (const enrollmentData of enrollmentsData) {
@@ -9,7 +9,13 @@ export const eventUpdateBody = (enrollmentsData: any[], events: any[], enrollmen
                 const event = events.find((event: any) => event.programStage === key)
                 form.push({
                     ...event,
-                    dataValues: value
+                    dataValues: enrollmentData?.map((dataValue: any) => {
+                        if (dataValue.assignedValue !== undefined && dataValue.assignedValue !== false && formValues.hasOwnProperty(dataValue.id))
+                            return { dataElement: dataValue.id, value: dataValue.assignedValue }
+                        
+                        else 
+                            return { dataElement: dataValue.id, value: undefined }
+                    })
                 })
             }
         }
