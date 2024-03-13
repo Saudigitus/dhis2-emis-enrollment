@@ -1,14 +1,16 @@
 import React, { useState } from 'react'
-import {IconAddCircle24, Button, ButtonStrip, IconUserGroup16} from "@dhis2/ui";
+import { IconAddCircle24, Button, ButtonStrip, IconUserGroup16 } from "@dhis2/ui";
 import ModalComponent from '../../../modal/Modal';
 import ModalContentComponent from '../../../modal/ModalContent';
 import ImportContent from '../../../modal/ImportContent';
 import Tooltip from '@material-ui/core/Tooltip';
 import { useGetEnrollmentForm, useParams } from '../../../../hooks';
 import useGetSectionTypeLabel from '../../../../hooks/commons/useGetSectionTypeLabel';
-import {FlyoutOptionsProps} from "../../../../types/buttons/FlyoutOptionsProps";
-import {BulkEnrollment} from "../../../bulkImport/BulkEnrollment";
+import { FlyoutOptionsProps } from "../../../../types/buttons/FlyoutOptionsProps";
+import { BulkEnrollment } from "../../../bulkImport/BulkEnrollment";
 import DropdownButtonComponent from "../../../buttons/DropdownButton";
+import { DataStoreBulkOperationsState } from '../../../../schema/dataStoreBulkOperationsSchema';
+import { useRecoilValue } from 'recoil';
 
 function EnrollmentActionsButtons() {
   const [open, setOpen] = useState<boolean>(false);
@@ -17,10 +19,12 @@ function EnrollmentActionsButtons() {
   const orgUnit = useQuery().get("school")
   const { sectionName } = useGetSectionTypeLabel();
   const { enrollmentsData } = useGetEnrollmentForm();
+  const dataStoreBulkOperations = useRecoilValue(DataStoreBulkOperationsState)
+  const documentId = dataStoreBulkOperations.importTemplates.find(x => x.module === "enrollment")
 
   const enrollmentOptions: FlyoutOptionsProps[] = [
-    { label: "Enroll new students", divider: true, onClick: () => { setOpenImport(true); } }
-    // { label: "Update existing students", divider: false, onClick: () => { alert("Update existing students"); } },
+    { label: "Enroll new students", divider: true, onClick: () => { setOpenImport(true); } },
+    { label: "Download template", divider: false, onClick: () => { window.open(`https://emis.dhis2.org/startracker/api/documents/${documentId?.id}/data`, "_blank"); } },
     // { label: "Export empty template", divider: false, onClick: () => { alert("Export empty"); } },
     // { label: "Export existing students", divider: false, onClick: () => { alert("Export existing students"); } }
   ];
@@ -34,10 +38,10 @@ function EnrollmentActionsButtons() {
           </span>
         </Tooltip>
         <DropdownButtonComponent
-            name="Bulk enrollment"
-            disabled={false}
-            icon={<IconUserGroup16 />}
-            options={enrollmentOptions}
+          name="Bulk enrollment"
+          disabled={false}
+          icon={<IconUserGroup16 />}
+          options={enrollmentOptions}
         />
       </ButtonStrip>
 
