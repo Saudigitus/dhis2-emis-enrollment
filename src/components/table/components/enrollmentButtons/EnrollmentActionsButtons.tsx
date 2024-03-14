@@ -11,6 +11,7 @@ import { BulkEnrollment } from "../../../bulkImport/BulkEnrollment";
 import DropdownButtonComponent from "../../../buttons/DropdownButton";
 import { DataStoreBulkOperationsState } from '../../../../schema/dataStoreBulkOperationsSchema';
 import { useRecoilValue } from 'recoil';
+import { useConfig } from '@dhis2/app-service-config';
 
 function EnrollmentActionsButtons() {
   const [open, setOpen] = useState<boolean>(false);
@@ -21,10 +22,11 @@ function EnrollmentActionsButtons() {
   const { enrollmentsData } = useGetEnrollmentForm();
   const dataStoreBulkOperations = useRecoilValue(DataStoreBulkOperationsState)
   const documentId = dataStoreBulkOperations.importTemplates.find(x => x.module === "enrollment")
+  const {baseUrl } =useConfig()
 
   const enrollmentOptions: FlyoutOptionsProps[] = [
     { label: "Enroll new students", divider: true, onClick: () => { setOpenImport(true); } },
-    { label: "Download template", divider: false, onClick: () => { window.open(`https://emis.dhis2.org/startracker/api/documents/${documentId?.id}/data`, "_blank"); } },
+    { label: "Download template", divider: false, onClick: () => { window.open(`${baseUrl}/api/documents/${documentId?.id}/data`, "_blank"); } },
     // { label: "Export empty template", divider: false, onClick: () => { alert("Export empty"); } },
     // { label: "Export existing students", divider: false, onClick: () => { alert("Export existing students"); } }
   ];
