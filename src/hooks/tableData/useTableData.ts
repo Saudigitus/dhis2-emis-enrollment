@@ -11,6 +11,7 @@ import { TeiQueryProps, TeiQueryResults } from "../../types/api/WithRegistration
 import { TableDataProps } from "../../types/table/TableContentProps";
 import { getDataStoreKeys } from "../../utils/commons/dataStore/getDataStoreKeys";
 import { EventsState } from "../../schema/eventsSchema";
+import { FormatResponseRowsProps } from "../../types/utils/FormatRowsDataProps";
 
 const EVENT_QUERY = (queryProps: EventQueryProps) => ({
     results: {
@@ -54,7 +55,6 @@ export function useTableData() {
                 pageSize,
                 program: program as unknown as string,
                 order: "createdAt:desc",
-                programStatus: "ACTIVE",
                 programStage: registration?.programStage as unknown as string,
                 filter: headerFieldsState?.dataElements,
                 filterAttributes: headerFieldsState?.attributes,
@@ -89,7 +89,7 @@ export function useTableData() {
             setEvents(eventsResults?.results?.instances)
             setTableData(formatResponseRows({
                 eventsInstances: eventsResults?.results?.instances,
-                teiInstances: teiResults?.results?.instances
+                teiInstances: teiResults?.results?.instances  as unknown as FormatResponseRowsProps['teiInstances']
             }));
 
             setLoading(false)
