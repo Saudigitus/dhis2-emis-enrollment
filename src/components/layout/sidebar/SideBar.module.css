@@ -56,7 +56,7 @@
     white-space: nowrap;
 }
 
-.SideBarContainerCollapsed .SideBarMenu .SideBarItemTitle, .SideBarMenu .SideBarHomeTitle {
+.SideBarContainerCollapsed .SideBarMenu .SideBarItemTitle {
     display: inline-block !important;
     opacity: 0;
     white-space: nowrap !important;
