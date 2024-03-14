@@ -69,6 +69,9 @@ function ModalContentUpdate(props: ModalContentUpdateProps): React.ReactElement 
           enrollmentValues['events'],
           formInitialValues['eventdatestaticform'],
           values,
+          orgUnit ?? "",
+          (getProgram != null) ? getProgram.id : "",
+          initialValues['trackedEntity' as unknown as keyof typeof initialValues] as unknown as string,
         )})
     }
   }
