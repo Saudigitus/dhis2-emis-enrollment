@@ -10,7 +10,7 @@ export function formatResponseRows({ eventsInstances, teiInstances }: FormatResp
             ...dataValues(event.dataValues),
             ...(attributes((teiDetails?.attributes) ?? [])),
             trackedEntity: event.trackedEntity,
-            enrollmentId: teiDetails?.enrollments?.[0]?.enrollment,
+            enrollmentId: event?.enrollment,
             orgUnitId: teiDetails?.enrollments?.[0]?.orgUnit,
             programId: teiDetails?.enrollments?.[0]?.program
         })

@@ -6,6 +6,7 @@ interface FormatResponseRowsProps {
     eventsInstances: {
         trackedEntity: string
         dataValues: dataValuesProps[]
+        enrollment: string
     }[]
     teiInstances: {
         trackedEntity: string

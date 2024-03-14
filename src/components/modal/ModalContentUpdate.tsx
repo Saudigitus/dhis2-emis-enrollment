@@ -67,8 +67,8 @@ function ModalContentUpdate(props: ModalContentUpdateProps): React.ReactElement 
         dataEvents: eventUpdateBody(
           fieldsWithValue,
           enrollmentValues['events'],
-          formInitialValues['enrollmentDate'],
-          values
+          formInitialValues['eventdatestaticform'],
+          values,
         )})
     }
   }

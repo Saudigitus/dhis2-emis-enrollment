@@ -2,7 +2,7 @@ import { useState, useEffect} from 'react';
 import { IconEdit24 } from "@dhis2/ui";
 import style from './rowActions.module.css'
 import { IconButton,  Tooltip } from '@material-ui/core';
-import { useGetEnrollmentForm  } from '../../../../hooks';
+import { useGetEnrollmentForm } from '../../../../hooks';
 import { CircularLoader, CenteredContent } from "@dhis2/ui";
 import { ModalComponent, ModalContentUpdate } from '../../../modal';
 import useGetSectionTypeLabel from '../../../../hooks/commons/useGetSectionTypeLabel';
@@ -10,7 +10,8 @@ import { RowActionsProps, RowActionsType } from '../../../../types/table/TableCo
 import useGetEnrollmentUpdateFormData from '../../../../hooks/form/useGetEnrollmentUpdateFormData';
 
 export default function RowActions(props: RowActionsProps) {
-  const { trackedEntity } = props;
+  const { row } = props;
+  const { enrollmentId } = row;
   const { sectionName } = useGetSectionTypeLabel();
   const { enrollmentsData } = useGetEnrollmentForm()
   const [openModal, setOpenModal] = useState<boolean>(false);
@@ -22,7 +23,7 @@ export default function RowActions(props: RowActionsProps) {
       ];
   } 
 
-  const options =  rowsActions({ onEditStudent: () => { buildFormData(trackedEntity); setOpenModal(!openModal)}})
+  const options =  rowsActions({ onEditStudent: () => { buildFormData(enrollmentId); setOpenModal(!openModal)}})
 
  
   useEffect(() => {
