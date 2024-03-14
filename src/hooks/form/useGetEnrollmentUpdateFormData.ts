@@ -52,6 +52,9 @@ export default function useGetEnrollmentUpdateFormData () {
                             })
                     })
             })
+            .catch(() => {
+                setLoading(false)
+            })
         }
     }
 
