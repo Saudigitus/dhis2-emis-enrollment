@@ -7,10 +7,13 @@ import { RenderHeaderProps } from '../../../types/table/TableContentProps';
 import { RowSelectionState } from '../../../schema/tableSelectedRowsSchema';
 import { useRecoilState } from 'recoil';
 import { checkIsRowSelected } from '../../../utils/commons/arrayUtils';
-import { Checkbox } from "@dhis2/ui"
-import { useConfig } from '@dhis2/app-runtime';
+import CropOriginal from '@material-ui/icons/CropOriginal';
 import { makeStyles, type Theme, createStyles } from '@material-ui/core/styles';
 import { getDisplayName } from '../../../utils/table/rows/getDisplayNameByOption';
+import { formatKeyValueTypeHeader } from '../../../utils/programRules/formatKeyValueType';
+import { Attribute } from '../../../types/generated/models';
+import { GetImageUrl } from '../../../utils/table/rows/getImageUrl';
+import { IconButton } from '@material-ui/core';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -38,7 +41,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 function RenderRows(props: RenderHeaderProps): React.ReactElement {
     const classes = useStyles()
-    const { baseUrl } = useConfig()
+    const { imageUrl } = GetImageUrl()
     const [selected, setSelected] = useRecoilState(RowSelectionState);
 
     const onToggle = (rawRowData: object) => {
@@ -92,12 +95,18 @@ function RenderRows(props: RenderHeaderProps): React.ReactElement {
                                     className={classNames(classes.cell, classes.bodyCell)}
                                 >
                                     <div>
-                                        {getDisplayName({ attribute: column.id, headers: headerData, value: row[column.id] })}
+                                        {
+                                            formatKeyValueTypeHeader(headerData)[column.id] === Attribute.valueType.IMAGE ?
+                                                <a href={imageUrl({ attribute: column.id, trackedEntity: row.trackedEntity })} target='_blank'>{row[column.id] && <IconButton> <CropOriginal /></IconButton>}</a>
+                                                :
+                                                getDisplayName({ attribute: column.id, headers: headerData, value: row[column.id] })
+                                        }
                                         {
                                             (column.displayName == "Actions") ?
-                                                <RowActions row={row} />
+                                                <RowActions  row={row} />
                                                 : null
-                                        }  </div>
+                                        }
+                                    </div>
                                 </RowCell>
                             ))
                         }

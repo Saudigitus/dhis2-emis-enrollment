@@ -1,22 +1,45 @@
-import { FormToPostType } from "../../types/form/FormToPostType";
 import { reducer } from "../commons/formatDistinctValue";
 
-export const eventUpdateBody = (enrollmentsData: any[], event: any[]) => {
-    const updatedEvent = {...event}; // Create a copy of event array to avoid mutating the original array
+export const eventUpdateBody = (enrollmentsData: any[], events: any[], enrollmentDate: any,  formValues:any, orgUnit: string, programId: string, trackedEntity: string) => {
+    const form : any = []
 
-    for (const dataValue of event['dataValues']) {
-        const dataValueForm = enrollmentsData.find((x: any) => x.name === dataValue?.dataElement);
-        if (dataValueForm) {
-            const updatedDataValue = { dataElement: dataValueForm.name, value: dataValueForm.assignedValue };
-            // Find the index of the dataValue in the event array and replace it with the updated dataValue
-            const index = updatedEvent['dataValues'].findIndex((x: any) => x.dataElement === dataValueForm.name);
-            if (index !== -1) {
-                updatedEvent['dataValues'][index] = updatedDataValue;
+
+    for (const enrollmentData of enrollmentsData) {
+        if (enrollmentData[0].type === "dataElement") {
+            for (const [key, value] of Object.entries(reducer(enrollmentData))) {
+                const event = events.find((event: any) => event.programStage === key)
+                if(event !== undefined)
+                    form.push({
+                        ...event,
+                        occurredAt: enrollmentDate,
+                        scheduledAt: enrollmentDate,
+                        dataValues: returnEventDataValues(enrollmentData, formValues)
+                    })
+                else 
+                    form.push({
+                        notes: [],
+                        orgUnit,
+                        status: "ACTIVE",
+                        programStage: key,
+                        program: programId,
+                        trackedEntity,
+                        occurredAt: enrollmentDate,
+                        scheduledAt: enrollmentDate,
+                        dataValues: returnEventDataValues(enrollmentData, formValues)
+                    })
             }
         }
     }
 
-    return {
-        events: [updatedEvent]
-    };
+    return { events: form }
 };
+
+const returnEventDataValues =  (enrollmentData: any[], formValues: any) => {
+    return enrollmentData?.map((dataValue: any) => {
+        if (dataValue.assignedValue !== undefined && dataValue.assignedValue !== false && formValues.hasOwnProperty(dataValue.id))
+            return { dataElement: dataValue.id, value: dataValue.assignedValue }
+        
+        else 
+            return { dataElement: dataValue.id, value: undefined }
+    })
+}
