@@ -103,7 +103,7 @@ function RenderRows(props: RenderHeaderProps): React.ReactElement {
                                         }
                                         {
                                             (column.displayName == "Actions") ?
-                                                <RowActions row={row} />
+                                                <RowActions  row={row} />
                                                 : null
                                         }
                                     </div>

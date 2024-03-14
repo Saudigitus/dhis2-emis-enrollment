@@ -8,11 +8,9 @@ export function formatResponseRows({ eventsInstances, teiInstances }: FormatResp
         const teiDetails = teiInstances.find(tei => tei.trackedEntity === event.trackedEntity)
         allRows.push({
             ...dataValues(event.dataValues),
-            event: event, 
             ...(attributes((teiDetails?.attributes) ?? [])),
             trackedEntity: event.trackedEntity,
-            enrollmentId: teiDetails?.enrollments?.[0]?.enrollment,
-            enrollmentDate:  teiDetails?.createdAt,
+            enrollmentId: event?.enrollment,
             orgUnitId: teiDetails?.enrollments?.[0]?.orgUnit,
             programId: teiDetails?.enrollments?.[0]?.program
         })
@@ -20,7 +18,7 @@ export function formatResponseRows({ eventsInstances, teiInstances }: FormatResp
     return allRows;
 }
 
-function dataValues(data: dataValuesProps[]): RowsDataProps {
+export function dataValues(data: dataValuesProps[]): RowsDataProps {
     const localData: RowsDataProps = {}
     for (const dataElement of data) {
         localData[dataElement.dataElement] = dataElement.value
@@ -28,7 +26,7 @@ function dataValues(data: dataValuesProps[]): RowsDataProps {
     return localData
 }
 
-function attributes(data: attributesProps[]): RowsDataProps {
+export function attributes(data: attributesProps[]): RowsDataProps {
     const localData: RowsDataProps = {}
     for (const attribute of data) {
         localData[attribute.attribute] = attribute.value

@@ -4,6 +4,8 @@ export const reducer = (array: any[]) => {
         if (a.id && a.assignedValue) {
             r[a.programStage].push({ dataElement: a.id, value: a.assignedValue });
         }
+        else 
+            r[a.programStage].push({ dataElement: a.id, value: undefined });
         return r;
     }, Object.create(null));
 }
