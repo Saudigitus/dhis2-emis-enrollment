@@ -1,10 +1,12 @@
 import { useRecoilValue } from "recoil"
 import { DataStoreBulkOperationsState } from "../../../schema/dataStoreBulkOperationsSchema"
+import { useConfig } from "@dhis2/app-service-config"
 
 export const GetImageUrl = () => {
+    const { baseUrl } = useConfig()
 
     function imageUrl({ trackedEntity, attribute }: { attribute: string, trackedEntity: string }) {
-        return `https://emis.dhis2.org/startracker/api/trackedEntityInstances/${trackedEntity}/${attribute}/image?dimension=MEDIUM`
+        return `${baseUrl}/api/trackedEntityInstances/${trackedEntity}/${attribute}/image?dimension=MEDIUM`
     }
 
     return {
