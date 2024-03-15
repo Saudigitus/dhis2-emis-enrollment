@@ -21,7 +21,8 @@ export function useGetTei() {
             program: program,
             orgUnit: orgUnit,
             trackedEntity: trackedEntity
-        })) as unknown as TeiQueryResults
+        })) 
+        .catch((error) => error) as unknown as TeiQueryResults;
 
     }
 
