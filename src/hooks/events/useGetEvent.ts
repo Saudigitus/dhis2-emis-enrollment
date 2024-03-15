@@ -23,8 +23,7 @@ export function useGetEvent() {
                 filter: filter,
                 orgUnit: orgUnit,
                 trackedEntity: trackedEntity
-            }))
-            .catch((error) => error ) as unknown as EventQueryResults;
+            })) as unknown as EventQueryResults;
     }
 
     return { getEvent }
