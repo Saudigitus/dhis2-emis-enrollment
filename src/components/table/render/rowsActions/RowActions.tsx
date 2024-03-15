@@ -11,7 +11,7 @@ import useGetEnrollmentUpdateFormData from '../../../../hooks/form/useGetEnrollm
 
 export default function RowActions(props: RowActionsProps) {
   const { row } = props;
-  const {trackedEntity } = row;
+  const {trackedEntity, enrollmentId  } = row;
   const { sectionName } = useGetSectionTypeLabel();
   const { enrollmentsData } = useGetEnrollmentForm()
   const [openModal, setOpenModal] = useState<boolean>(false);
@@ -23,7 +23,7 @@ export default function RowActions(props: RowActionsProps) {
       ];
   } 
 
-  const options =  rowsActions({ onEditStudent: () => { buildFormData(trackedEntity); setOpenModal(!openModal)}})
+  const options =  rowsActions({ onEditStudent: () => { buildFormData(trackedEntity, enrollmentId); setOpenModal(!openModal)}})
 
  
   useEffect(() => {
