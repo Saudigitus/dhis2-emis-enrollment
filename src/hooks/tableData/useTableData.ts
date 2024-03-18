@@ -89,7 +89,7 @@ export function useTableData() {
 
             setEvents(eventsResults?.results?.instances)
             setTableData(formatResponseRows({
-                eventsInstances: eventsResults?.results?.instances,
+                eventsInstances: eventsResults?.results?.instances as unknown as  FormatResponseRowsProps['eventsInstances'],
                 teiInstances: teiResults?.results?.instances as unknown as  FormatResponseRowsProps['teiInstances']
             }));
 
