@@ -169,7 +169,6 @@ export const fieldsMap = (programConfig: ProgramConfig, enrollmentProgramStages:
         })
     // Let's add a mapping for the program Tracked entity attributes
     const _teiMap = programConfig.programTrackedEntityAttributes.map(te => {
-        console.log()
         const mapping: FieldMapping = {
             key: `${te.trackedEntityAttribute.id}`,
             id: `${te.trackedEntityAttribute.id}`,

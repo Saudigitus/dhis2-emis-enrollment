@@ -23,10 +23,10 @@ export const ValueType: Record<string, ZodString | ZodBoolean | ZodNumber | ZodL
     INTEGER_POSITIVE: z.number().int().positive().min(1),
     INTEGER_NEGATIVE: z.number().int().negative(),
     INTEGER_ZERO_OR_POSITIVE: z.number().int().min(0),
-    TRACKER_ASSOCIATE: z.string().regex(/^[A-Z][0-9A-Za-z]{10}$/),
+    TRACKER_ASSOCIATE: z.string().regex(/^[A-Z][0-9A-Za-z]{10}$/, {message: "Invalid UID"}),
     USERNAME: z.string(),
     COORDINATE: z.string(),
-    ORGANISATION_UNIT: z.string().regex(/^[A-Za-z][0-9A-Za-z]{10}$/, {message: "Invalid UID"}),
+    ORGANISATION_UNIT: z.string().regex(/^[A-Za-z][0-9A-Za-z]{10}$/, {message: "Invalid OrgUnit UID"}),
     REFERENCE: z.string().regex(/^[A-Za-z][0-9A-Za-z]{10}$/, {message: "Invalid UID"}),
     AGE: z.string().regex(/^(\d{4})-(\d{2})-(\d{2})/),
     URL: z.string().url(),
@@ -41,7 +41,7 @@ export interface FieldMapping {
     id: string
     name: string
     required: boolean
-    valueType: keyof typeof ValueType,
+    valueType: keyof typeof ValueType
     isTEAttribute: boolean
 }
 export type TemplateData = Array<Record<string, any>>
@@ -104,4 +104,3 @@ export interface createMutationParams {
     async: boolean
     importMode: "VALIDATE" | "COMMIT"
 }
-
