@@ -22,7 +22,6 @@ function Table() {
     const classes = usetStyles()
     const { columns } = useHeader()
     const { getData, loading, tableData } = useTableData()
-    const { useQuery } = useParams()
     const headerFieldsState = useRecoilValue(HeaderFieldsState)
     const [page, setpage] = useState(1)
     const [pageSize, setpageSize] = useState(10)
