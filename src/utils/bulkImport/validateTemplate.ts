@@ -69,20 +69,12 @@ const programStageDataElementsAsInTemplate = (headers: string[]): Record<string,
  */
 const programStageDataElementsAsInSystem = (
     programConfig: ProgramConfig, enrollmentProgramStages: string[]): Record<string, string[]> => {
-    const des = programConfig.programStages
+    return programConfig.programStages
         .filter(s => enrollmentProgramStages.includes(s.id))
-        .map(s => {
-            return {
-                programStage: s.id,
-                dataElements: s.programStageDataElements
-                    .map(x => { return x.dataElement.id })
-            }
-        })
-    const ret: Record<string, string[]> = {}
-    des.forEach(de => {
-        ret[de.programStage] = de.dataElements
-    })
-    return ret
+        .reduce((acc: Record<string, string[]>, stage) => {
+            acc[stage.id] = stage.programStageDataElements.map(de => de.dataElement.id);
+            return acc;
+        }, {})
 }
 /**
  * Validates an Excel Template used for bulk upload
