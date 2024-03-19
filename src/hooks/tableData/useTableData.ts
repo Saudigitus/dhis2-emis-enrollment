@@ -72,7 +72,6 @@ export function useTableData() {
             const teiResults = trackedEntityToFetch?.length > 0
                 ? await engine.query(TEI_QUERY({
                     ouMode: school != null ? "SELECTED" : "ACCESSIBLE",
-                    order: "created:desc",
                     pageSize,
                     program: program as unknown as string,
                     orgUnit: school,
