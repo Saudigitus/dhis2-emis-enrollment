@@ -40,7 +40,7 @@ export default function useGetEnrollmentUpdateFormData () {
                                     enrollment: registration?.results?.instances[0]?.enrollment,
                                     enrollmentDate:  registration?.results?.instances[0]?.createdAt,
                                     program: trackedEntityInstance?.results?.instances[0]?.enrollments?.[0]?.program,
-                                    eventdatestaticform:format(new Date (trackedEntityInstance?.results?.instances[0]?.createdAt), "yyyy-MM-dd"),
+                                    eventdatestaticform:format(new Date (registration?.results?.instances[0]?.createdAt), "yyyy-MM-dd"),
                                 })
                                 setEnrollmentValues({
                                     // trackedEntity: trackedEntityInstance?.results?.instances[0],  

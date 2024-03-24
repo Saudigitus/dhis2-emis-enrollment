@@ -7,7 +7,7 @@ import GroupForm from "../form/GroupForm";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { ProgramConfigState } from "../../schema/programSchema";
 import { onSubmitClicked } from "../../schema/formOnSubmitClicked";
-import {ModalContentUpdateProps } from "../../types/modal/ModalProps";
+import { ModalContentUpdateProps } from "../../types/modal/ModalProps";
 import { getDataStoreKeys } from "../../utils/commons/dataStore/getDataStoreKeys";
 import { useParams, useShowAlerts } from "../../hooks";
 import { CustomDhis2RulesEngine } from "../../hooks/programRules/rules-engine/RulesEngine";
@@ -17,9 +17,10 @@ import { formatKeyValueType } from "../../utils/programRules/formatKeyValueType"
 import useUpdateTei from "../../hooks/tei/useUpdateTei";
 import { usePostEvent } from "../../hooks/events/useCreateEvents";
 import { TeiRefetch } from "../../schema/refecthTeiSchema";
+import { removeFalseKeys } from "../../utils/commons/removeFalseKeys";
 
 function ModalContentUpdate(props: ModalContentUpdateProps): React.ReactElement {
-  const { setOpen, sectionName,  enrollmentsData, formInitialValues, loadingInitialValues, enrollmentValues } = props;
+  const { setOpen, sectionName, enrollmentsData, formInitialValues, loadingInitialValues, enrollmentValues } = props;
   const getProgram = useRecoilValue(ProgramConfigState);
   const { useQuery } = useParams();
   const formRef: React.MutableRefObject<FormApi<IForm, Partial<IForm>>> = useRef(null);
@@ -39,14 +40,14 @@ function ModalContentUpdate(props: ModalContentUpdateProps): React.ReactElement 
   const [loading, setLoading] = useState(false)
   const { updateTei } = useUpdateTei()
   const { updateEvent } = usePostEvent()
-  const {runRulesEngine, updatedVariables } = CustomDhis2RulesEngine({ variables: formFields(enrollmentsData, sectionName), values, type:"programStageSection", formatKeyValueType: formatKeyValueType(enrollmentsData) })
- 
+  const { runRulesEngine, updatedVariables } = CustomDhis2RulesEngine({ variables: formFields(enrollmentsData, sectionName), values, type: "programStageSection", formatKeyValueType: formatKeyValueType(enrollmentsData) })
+
   useEffect(() => {
     runRulesEngine()
   }, [values])
 
-  useEffect(() => { 
-    setClicked(false) 
+  useEffect(() => {
+    setClicked(false)
   }, [])
 
   function onSubmit() {
@@ -54,64 +55,64 @@ function ModalContentUpdate(props: ModalContentUpdateProps): React.ReactElement 
     const events = enrollmentValues['events']
     const eventDate = formInitialValues['eventdatestaticform']
     const trackedEntity = initialValues['trackedEntity' as unknown as keyof typeof initialValues]
-    
+
     setLoading(true)
     if (allFields.filter((element: any) => (element?.assignedValue === undefined && element.required))?.length === 0) {
-        const promises = [];
-        for (let index = 0; index < fieldsWithValue.length; index++) {
-            const element = fieldsWithValue[index];
+      const promises = [];
 
-            if (element.some((field: any) => field.assignedValue !== initialValues[field.id as keyof typeof initialValues])) {
-                if (element[0].type === "dataElement") {
-                    promises.push(
-                        updateEvent({
-                            data: eventUpdateBody(
-                                [fieldsWithValue[index]],
-                                events?.filter((event: any) => event.programStage === element[0].programStage),
-                                eventDate,
-                                values,
-                                orgUnit ?? "",
-                                (getProgram != null) ? getProgram.id : "",
-                                trackedEntity
-                            )
-                        }).catch(() => { 
-                          show({ message: "Error", type: { error: true } })
-                          setLoading(false)
-                      })
-                    );
-                } else if (element[0].type === "attribute") {
-                    promises.push(
-                        updateTei({
-                            data: teiUpdateBody(
-                                [fieldsWithValue[index]],
-                                orgUnit ?? "",
-                                trackedEntityType,
-                                trackedEntity,
-                                values
-                            )
-                        }).catch(() => { 
-                          show({ message: "Error", type: { error: true } })
-                          setLoading(false)
-                      })
-                    );
-                }
-            }
+      for (let index = 0; index < fieldsWithValue.length; index++) {
+        const element = fieldsWithValue[index];
+
+        if (element.some((field: any) => field.assignedValue != initialValues[field.id as keyof typeof initialValues])) {
+          if (element[0].type === "dataElement") {
+            promises.push(
+              updateEvent({
+                data: eventUpdateBody(
+                  [fieldsWithValue[index]],
+                  events?.filter((event: any) => event.programStage === element[0].programStage),
+                  eventDate,
+                  values,
+                  orgUnit ?? "",
+                  (getProgram != null) ? getProgram.id : "",
+                  trackedEntity
+                )
+              }).catch(() => {
+                show({ message: "Error", type: { error: true } })
+                setLoading(false)
+              })
+            );
+          } else if (element[0].type === "attribute") {
+            promises.push(
+              updateTei({
+                data: teiUpdateBody(
+                  [fieldsWithValue[index]],
+                  orgUnit ?? "",
+                  trackedEntityType,
+                  trackedEntity,
+                  values
+                )
+              }).catch(() => {
+                show({ message: "Error", type: { error: true } })
+                setLoading(false)
+              })
+            );
+          }
         }
+      }
 
-        Promise.all(promises)
+      Promise.all(promises)
         .then(() => {
-            setOpen(false)
-            setClicked(false)
-            setLoading(false)
-            setRefetch(!refetch)
-            formRef.current.restart()
-            show({ message: "Enrollment saved successfully", type: { success: true } })
+          setOpen(false)
+          setClicked(false)
+          setLoading(false)
+          setRefetch(!refetch)
+          formRef.current.restart()
+          show({ message: "Enrollment updated successfully", type: { success: true } })
         })
         .catch(error => {
           setLoading(false)
           show({ message: `Error: ${error}`, type: { error: true } })
         });
-
     }
   }
 
@@ -129,31 +130,32 @@ function ModalContentUpdate(props: ModalContentUpdateProps): React.ReactElement 
   }
   function onChange(e: any): void {
     const sections = enrollmentsData;
-    for (const [key, value] of Object.entries(e)) {
-      for (let i = 0; i < sections?.length; i++) {
-        if (sections[i].find((element: any) => element.id === key) !== null && sections[i].find((element: any) => element.id === key) !== undefined) {
-          if(sections[i].find((element: any) => element.id === key).valueType === "BOOLEAN"){
-            sections[i].find((element: any) => element.id === key).value = value
-          }
-          if(sections[i].find((element: any) => element.id === key).valueType === "TRUE_ONLY" && !sections[i].find((element: any) => element.id === key).assignedValue){
-            sections[i].find((element: any) => element.id === key).assignedValue = ''
-          }
-          sections[i].find((element: any) => element.id === key).assignedValue = value
-        }
+    for (let i = 0; i < sections?.length; i++) {
+      const section = sections[i]
+
+      for (let j = 0; j < section?.length; j++) {
+        if (section[j].valueType === "TRUE_ONLY" && !section[j].assignedValue)
+          section[j].assignedValue = ''
+
+        if (section[j].valueType === "BOOLEAN")
+          section[j].value = e[section[j].id]
+
+        section[j].assignedValue = e[section[j].id]
       }
     }
+
     setFieldsWithValues(sections)
-    setValues(e)
+    setValues(removeFalseKeys(e))
   }
 
   return (
     <WithPadding>
       <Form initialValues={{ ...initialValues }} onSubmit={onSubmit}>
-        {({ handleSubmit, values, form,  pristine  }) => {
+        {({ handleSubmit, values, form, pristine }) => {
           formRef.current = form;
           return <form
             onSubmit={handleSubmit}
-            onChange={onChange(values) as unknown as ()=> void}
+            onChange={onChange(values) as unknown as () => void}
           >
             {
               updatedVariables?.filter(x => x.visible)?.map((field: any, index: number) => (
