@@ -41,9 +41,7 @@ export function useTableData() {
     const headerFieldsState = useRecoilValue(HeaderFieldsState)
     const setEvents = useSetRecoilState(EventsState)
     const { urlParamiters } = useParams()
-    // const [loading, setLoading] = useRecoilState(TableDataLoadingState)
     const setLoading = useSetRecoilState(TableDataLoadingState)
-    // const [loading, setLoading] = useState<boolean>(false)
     const [tableData, setTableData] = useState<TableDataProps[]>([])
     const { hide, show } = useShowAlerts()
     const school = urlParamiters().school as unknown as string
@@ -51,7 +49,6 @@ export function useTableData() {
     async function getData(page: number, pageSize: number) {
         if (school !== null) {
             setLoading(true)
-
             const eventsResults = await engine.query(EVENT_QUERY({
                 ouMode: school != null ? "SELECTED" : "ACCESSIBLE",
                 page,
