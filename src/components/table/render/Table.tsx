@@ -26,9 +26,12 @@ function Table() {
     const [page, setpage] = useState(1)
     const [pageSize, setpageSize] = useState(10)
     const refetch = useRecoilValue(TeiRefetch)
+    const { urlParamiters } = useParams()
+    const { academicYear } = urlParamiters()
 
     useEffect(() => {
-        void getData(page, pageSize)
+        if (academicYear)
+            void getData(page, pageSize)
     }, [headerFieldsState, page, pageSize, refetch])
 
     const onPageChange = (newPage: number) => {

@@ -16,7 +16,7 @@ export function useGetInitialValues() {
         for (const [key, value] of entries) {
             const keys = Object.entries(paramsMapping)
             for (const [dataElement, name] of keys) {
-                if (name.includes(key)) {
+                if (name.includes(key) && dataElement !== null && dataElement !== undefined) {
                     dataElementsQuerybuilder.push(`${dataElement}:in:${value.replace("+", " ")}`)
                 }
             }
