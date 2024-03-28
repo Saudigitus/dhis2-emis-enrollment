@@ -100,7 +100,7 @@ function ContentFilter(props: ContentFilterProps) {
                     } else {
                         if (variableType === "dataElement") {
                             dataElementsQuerybuilder.push([`${key}:like:${value}`])
-                        } else attributesQuerybuilder.push([`${key}:in:${value}`])
+                        } else attributesQuerybuilder.push([`${key}:like:${value}`])
                     }
             }
         }
