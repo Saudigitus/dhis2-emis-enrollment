@@ -15,6 +15,7 @@ export default function useGetEnrollmentUpdateFormData () {
     const { getDataStoreData } = getSelectedKey()
     const [enrollmentValues, setEnrollmentValues] = useState<any>({})
     const [loading, setLoading] = useState<boolean>(false)
+    const [error, setError] = useState<boolean>(false)
     const [initialValues, setInitialValues ] =  useState<any>({})
     const headerFieldsState = useRecoilValue(HeaderFieldsState)
 
@@ -25,8 +26,8 @@ export default function useGetEnrollmentUpdateFormData () {
 
         getTei(program, orgUnit as unknown as string, trackedEntity )
             .then( async (trackedEntityInstance: any ) => {
-                
-                    await getEvent(program, registration.programStage as unknown as string, headerFieldsState.dataElements, orgUnit as unknown as string, trackedEntity)
+
+                await getEvent(program, registration.programStage as unknown as string, headerFieldsState.dataElements, orgUnit as unknown as string, trackedEntity)
                     .then( async ( registration: any ) => {
                     
                         await getEvent(program, programStage as unknown as string, [], orgUnit as unknown as string, trackedEntity)
@@ -40,10 +41,9 @@ export default function useGetEnrollmentUpdateFormData () {
                                     enrollment: registration?.results?.instances[0]?.enrollment,
                                     enrollmentDate:  registration?.results?.instances[0]?.createdAt,
                                     program: trackedEntityInstance?.results?.instances[0]?.enrollments?.[0]?.program,
-                                    eventdatestaticform:format(new Date (registration?.results?.instances[0]?.createdAt), "yyyy-MM-dd"),
+                                    eventdatestaticform: registration?.results?.instances[0]?.createdAt ? format(new Date (registration?.results?.instances[0]?.createdAt), "yyyy-MM-dd") : undefined,
                                 })
                                 setEnrollmentValues({
-                                    // trackedEntity: trackedEntityInstance?.results?.instances[0],  
                                     events: [
                                         registration?.results?.instances[0] ?? 
                                         {...trackedEntityInstance?.results?.instances[0]?.enrollments?.find((enrollment: any) => enrollment.enrollment === enrollmentId).events?.find((event: any) => event.programStage === registration.programStage), enrollment: enrollmentId},
@@ -54,32 +54,19 @@ export default function useGetEnrollmentUpdateFormData () {
                                 })
                             
                                 setLoading(false)
-                            })
-                            .catch((error) => {
-                                show({
-                                    message: `${("Could not get data")}: ${error.message}`,
-                                    type: { critical: true }
-                                });
-                                setLoading(false)
-                            })
-                    })
-                    .catch((error) => {
-                        show({
-                            message: `${("Could not get data")}: ${error.message}`,
-                            type: { critical: true }
-                        });
-                        setLoading(false)
+                            })      
                     })
             })
             .catch((error) => {
+                setLoading(false)
+                setError(true)
                 show({
                     message: `${("Could not get data")}: ${error.message}`,
                     type: { critical: true }
                 });
-                setLoading(false)
             })
         }
     }
 
-    return { enrollmentValues, buildFormData, initialValues, loading, setInitialValues }
+    return { enrollmentValues, buildFormData, initialValues, loading, error, setInitialValues }
 }
