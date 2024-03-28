@@ -2,31 +2,26 @@ import React, { useState } from 'react'
 import { IconAddCircle24, Button, ButtonStrip, IconUserGroup16 } from "@dhis2/ui";
 import ModalComponent from '../../../modal/Modal';
 import ModalContentComponent from '../../../modal/ModalContent';
-import ImportContent from '../../../modal/ImportContent';
 import Tooltip from '@material-ui/core/Tooltip';
 import { useGetEnrollmentForm, useParams } from '../../../../hooks';
 import useGetSectionTypeLabel from '../../../../hooks/commons/useGetSectionTypeLabel';
 import { FlyoutOptionsProps } from "../../../../types/buttons/FlyoutOptionsProps";
 import { BulkEnrollment } from "../../../bulkImport/BulkEnrollment";
 import DropdownButtonComponent from "../../../buttons/DropdownButton";
-import { DataStoreBulkOperationsState } from '../../../../schema/dataStoreBulkOperationsSchema';
-import { useRecoilValue } from 'recoil';
-import { useConfig } from '@dhis2/app-service-config';
+import { ModalExportTemplateContent } from '../../../modal';
 
 function EnrollmentActionsButtons() {
   const [open, setOpen] = useState<boolean>(false);
+  const [openExportEmptyTemplate, setOpenExportEmptyTemplate] = useState<boolean>(false);
   const [openImport, setOpenImport] = useState<boolean>(false);
   const { useQuery } = useParams();
   const orgUnit = useQuery().get("school")
   const { sectionName } = useGetSectionTypeLabel();
   const { enrollmentsData } = useGetEnrollmentForm();
-  const dataStoreBulkOperations = useRecoilValue(DataStoreBulkOperationsState)
-  const documentId = dataStoreBulkOperations.importTemplates.find(x => x.module === "enrollment")
-  const {baseUrl } =useConfig()
 
   const enrollmentOptions: FlyoutOptionsProps[] = [
     { label: "Enroll new students", divider: true, onClick: () => { setOpenImport(true); } },
-    { label: "Download template", divider: false, onClick: () => { window.open(`${baseUrl}/api/documents/${documentId?.id}/data`, "_blank"); } },
+    { label: "Download template", divider: false, onClick: () => { setOpenExportEmptyTemplate(true) } },
     // { label: "Export empty template", divider: false, onClick: () => { alert("Export empty"); } },
     // { label: "Export existing students", divider: false, onClick: () => { alert("Export existing students"); } }
   ];
@@ -55,6 +50,13 @@ function EnrollmentActionsButtons() {
         />
       </ModalComponent>}
       {openImport && <BulkEnrollment setOpen={setOpenImport} isOpen={openImport} />}
+
+      {openExportEmptyTemplate && <ModalComponent title={`Data Import Template Export`} open={open} setOpen={setOpen}>
+        <ModalExportTemplateContent
+          sectionName={sectionName}
+          setOpen={setOpenExportEmptyTemplate}
+        />
+      </ModalComponent>}
     </div>
   )
 }

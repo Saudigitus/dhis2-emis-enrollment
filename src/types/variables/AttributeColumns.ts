@@ -31,6 +31,7 @@ export interface CustomAttributeProps {
     description?: string
     type: VariablesTypes
     trackedEntity?: string
+    placeholder?: string
 }
 
 export interface OptionsProps {
