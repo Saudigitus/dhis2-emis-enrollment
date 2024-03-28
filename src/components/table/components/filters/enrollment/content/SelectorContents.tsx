@@ -21,7 +21,7 @@ const getStyles = makeStyles((theme: Theme) =>
 
 function SelectorContents(props: SelectorContentsProps) {
     const { onClose, disabledReset, colum, onQuerySubmit, disabled: disabledUpdate, value, filled } = props;
-
+    const loading = useRecoilValue(TableDataLoadingState)
     const classes = getStyles()
 
     return (
