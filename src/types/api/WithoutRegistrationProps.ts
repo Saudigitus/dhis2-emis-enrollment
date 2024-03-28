@@ -8,7 +8,7 @@ interface EventQueryProps {
     pageSize?: number
     ouMode?: string
     program: string
-    order: string
+    order?: string
     programStatus?: string
     programStage: string
     orgUnit: string

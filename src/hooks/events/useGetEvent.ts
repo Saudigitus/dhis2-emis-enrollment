@@ -5,7 +5,7 @@ const EVENT_QUERY = (queryProps: EventQueryProps) => ({
     results: {
         resource: "tracker/events",
         params: {
-            fields: "*, event",
+            fields: "*",
             ...queryProps
         }
     }
@@ -17,7 +17,6 @@ export function useGetEvent() {
     async function getEvent(program: string, programStage: string, filter: string[], orgUnit: string, trackedEntity: string ) {
             return await engine.query(EVENT_QUERY({
                 pageSize:10,
-                programStatus: "ACTIVE",
                 program: program,
                 programStage: programStage,
                 filter: filter,
