@@ -27,4 +27,12 @@ interface ModalExportTemplateProps {
     sectionName: string
 }
 
-export type { ModalProps, ModalContentProps, ModalContentUpdateProps, ModalExportTemplateProps }
+interface useExportTemplateProps {
+    iDSrFrrVgmX: string
+    orgUnit: string
+    orgUnitName: string
+    studentsNumber: string,
+    setLoadingExport?: any
+}
+
+export type { ModalProps, ModalContentProps, ModalContentUpdateProps, ModalExportTemplateProps , useExportTemplateProps}

@@ -11,13 +11,14 @@ import { formFields } from "../../utils/constants/exportTemplateForm/exportEmpty
 import { DataStoreBulkOperationsState } from "../../schema/dataStoreBulkOperationsSchema";
 import { useConfig } from "@dhis2/app-runtime";
 import { removeFalseKeys } from "../../utils/commons/removeFalseKeys";
+import useExportTemplate from "../../hooks/exportTemplate/useExportTemplate";
 
 const loading = false;
 function ModalExportTemplateContent(props: ModalExportTemplateProps): React.ReactElement {
   const { setOpen, sectionName } = props;
   const { exportFormFields } = useGetExportTemplateForm();
   const { registration } = getDataStoreKeys()
-  
+
   const { urlParamiters } = useParams();
   const { school: orgUnit, schoolName: orgUnitName, academicYear } = urlParamiters();
 
@@ -32,23 +33,25 @@ function ModalExportTemplateContent(props: ModalExportTemplateProps): React.Reac
     orgUnitName,
     [registration?.academicYear]: academicYear
   })
+  const [loadingExport , setLoadingExport] = useState(false)
 
-  function onSubmit() {
-    downloadTemplate()
-    console.log("allfieldsData", values)
+  const { handleExportToWord } = useExportTemplate()
+
+ async function onSubmit() {
+    await handleExportToWord({iDSrFrrVgmX: values.iDSrFrrVgmX , orgUnit: values.orgUnit , orgUnitName: values.orgUnitName , studentsNumber : values.studentsNumber , setLoadingExport})
+        // window.open(`${baseUrl}/api/documents/${documentId?.id}/data`, "_blank");
+        setOpen(false)
   }
-
+ 
 
   function onChange(e: any): void {
     //object with form fields data
     setValues(removeFalseKeys(e))
   }
 
-  const downloadTemplate = () => window.open(`${baseUrl}/api/documents/${documentId?.id}/data`, "_blank");
-
   const modalActions = [
     { id: "cancel", type: "button", label: "Cancel", disabled: loading, onClick: () => { setOpen(false) } },
-    { id: "downloadTemplate", type: "submit", label: "Download template", primary: true, disabled: loading, loading }
+    { id: "downloadTemplate", type: "submit", label: "Download template", primary: true, disabled: loadingExport, loading: loadingExport }
   ];
 
   return (
@@ -56,7 +59,7 @@ function ModalExportTemplateContent(props: ModalExportTemplateProps): React.Reac
       <Tag positive icon={<IconInfo16 />} maxWidth="100%">
         This file will allow the import of new {sectionName} data into the system. Please respect the blocked fields to avoid conflicts.
       </Tag>
-      
+
       <Form initialValues={{ ...initialValues, orgUnit }} onSubmit={onSubmit}>
         {({ handleSubmit, values, form }) => {
           formRef.current = form;
