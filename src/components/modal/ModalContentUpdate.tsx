@@ -63,7 +63,8 @@ function ModalContentUpdate(props: ModalContentUpdateProps): React.ReactElement 
       for (let index = 0; index < fieldsWithValue.length; index++) {
         const element = fieldsWithValue[index];
 
-        if (element.some((field: any) => field.assignedValue != initialValues[field.id as keyof typeof initialValues])) {
+        if (element.some((field: any) => field.assignedValue != initialValues[field.id as keyof typeof initialValues] && initialValues[field.id as keyof typeof initialValues])) {
+
           if (element[0].type === "dataElement") {
             promises.push(
               updateEvent({
