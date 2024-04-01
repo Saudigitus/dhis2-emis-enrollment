@@ -18,7 +18,7 @@ export function useDataStore() {
     const { data, loading, error } = useDataQuery<{ config: any }>(DATASTORE_QUERY, {
         onError(error) {
             show({
-                message: `${("Could not get data")}: ${error.message}`,
+                message: `${("Could not load the app")}: ${error.message}`,
                 type: { critical: true }
             });
             setTimeout(hide, 5000);

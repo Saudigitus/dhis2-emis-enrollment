@@ -55,7 +55,7 @@ export default function useGetEnrollmentUpdateFormData() {
                     setLoading(false)
                     setError(true)
                     show({
-                        message: `${("Could not get data")}: ${error.message}`,
+                        message: `${("Could not get selected enrollment details")}: ${error.message}`,
                         type: { critical: true }
                     });
                 })

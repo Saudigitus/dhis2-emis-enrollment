@@ -28,7 +28,7 @@ export function useOrgUnitsGroups() {
     const { data, loading: loadingOrgUnitsGroups, refetch } = useDataQuery<OrgUnitGroupsQueryResponse>(OPTION_GROUPS_QUERY, {
         onError(error) {
             show({
-                message: `${("Could not get orgunits groups")}: ${error.message}`,
+                message: `${("Could not get organisation units groups")}: ${error.message}`,
                 type: { critical: true }
             });
             setTimeout(hide, 5000);
