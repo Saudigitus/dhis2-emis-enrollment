@@ -20,7 +20,7 @@ export default function useGetEnrollmentUpdateFormData() {
     const headerFieldsState = useRecoilValue(HeaderFieldsState)
 
     const buildFormData = (trackedEntity: string, enrollment: string) => {
-        
+
         setLoading(true)
         if (Object.keys(getDataStoreData)?.length) {
             const { registration, 'socio-economics': { programStage }, program } = getDataStoreData
@@ -45,7 +45,10 @@ export default function useGetEnrollmentUpdateFormData() {
                                         eventdatestaticform: registration?.results?.instances?.find((x: any) => x.enrollment === enrollment)?.createdAt ? format(new Date(registration?.results?.instances?.find((x: any) => x.enrollment === enrollment)?.createdAt), "yyyy-MM-dd") : undefined,
                                     })
                                     setEnrollmentValues({
-                                        events: [registration?.results?.instances?.find((x: any) => x.enrollment === enrollment), socioEconomic?.results?.instances.find((x: any) => x.enrollment === enrollment)]
+                                        events: [
+                                            registration?.results?.instances?.find((x: any) => x.enrollment === enrollment) ?? { enrollment: enrollment, programStage : registration },
+                                            socioEconomic?.results?.instances.find((x: any) => x.enrollment === enrollment) ?? { enrollment: enrollment, programStage : programStage },
+                                        ]
                                     })
 
                                     setLoading(false)

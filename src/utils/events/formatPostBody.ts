@@ -7,9 +7,9 @@ export const eventUpdateBody = (enrollmentsData: any[], events: any[], enrollmen
         if (enrollmentData[0].type === "dataElement") {
             for (const [key, value] of Object.entries(reducer(enrollmentData))) {
 
-                const event = events.find((event: any) => event.programStage === key)
+                const event = events?.find((event: any) => event.programStage === key)
 
-                if(Object.keys(event).length > 4)
+                if(event && Object.keys(event).length > 4)
                     form.push({
                         ...event,
                         occurredAt: enrollmentDate,
@@ -25,7 +25,7 @@ export const eventUpdateBody = (enrollmentsData: any[], events: any[], enrollmen
                         program: programId,
                         trackedEntity:trackedEntity,
                         enrollment: event.enrollment,
-                        event: event.event,
+                        // event: event.event,
                         occurredAt: enrollmentDate,
                         scheduledAt: enrollmentDate,
                         dataValues: returnEventDataValues(enrollmentData, formValues)
