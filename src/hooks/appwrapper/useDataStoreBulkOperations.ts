@@ -18,7 +18,7 @@ export function useDataStoreBulkOperations() {
     const { data, loading, error } = useDataQuery<{ config: any }>(DATASTORE_QUERY, {
         onError(error) {
             show({
-                message: `${("Could not get data")}: ${error.message}`,
+                message: `${("Could not load bulk operations options")}: ${error.message}`,
                 type: { critical: true }
             });
             setTimeout(hide, 5000);

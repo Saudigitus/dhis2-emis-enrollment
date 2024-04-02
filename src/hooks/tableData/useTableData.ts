@@ -61,7 +61,7 @@ export function useTableData() {
                 orgUnit: school
             })).catch((error) => {
                 show({
-                    message: `${("Could not get data")}: ${error.message}`,
+                    message: `${("Could not get events")}: ${error.message}`,
                     type: { critical: true }
                 });
                 setTimeout(hide, 5000);
@@ -78,7 +78,7 @@ export function useTableData() {
                     trackedEntity: trackedEntityToFetch
                 })).catch((error) => {
                     show({
-                        message: `${("Could not get data")}: ${error.message}`,
+                        message: `${("Could not get traked entities")}: ${error.message}`,
                         type: { critical: true }
                     });
                     setTimeout(hide, 5000);

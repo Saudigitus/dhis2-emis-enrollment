@@ -4,9 +4,7 @@ import classNames from 'classnames';
 import { RowCell, RowTable } from '../components';
 import RowActions from './rowsActions/RowActions';
 import { RenderHeaderProps } from '../../../types/table/TableContentProps';
-import { RowSelectionState } from '../../../schema/tableSelectedRowsSchema';
-import { useRecoilState } from 'recoil';
-import { checkIsRowSelected } from '../../../utils/commons/arrayUtils';
+import {useRecoilValue } from 'recoil';
 import CropOriginal from '@material-ui/icons/CropOriginal';
 import { makeStyles, type Theme, createStyles } from '@material-ui/core/styles';
 import { getDisplayName } from '../../../utils/table/rows/getDisplayNameByOption';
@@ -14,6 +12,7 @@ import { formatKeyValueTypeHeader } from '../../../utils/programRules/formatKeyV
 import { Attribute } from '../../../types/generated/models';
 import { GetImageUrl } from '../../../utils/table/rows/getImageUrl';
 import { IconButton } from '@material-ui/core';
+import { ProgramConfigState } from '../../../schema/programSchema';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -42,11 +41,7 @@ const useStyles = makeStyles((theme: Theme) =>
 function RenderRows(props: RenderHeaderProps): React.ReactElement {
     const classes = useStyles()
     const { imageUrl } = GetImageUrl()
-    const [selected, setSelected] = useRecoilState(RowSelectionState);
-
-    const onToggle = (rawRowData: object) => {
-        setSelected({ ...selected, selectedRows: checkIsRowSelected({ rawRowData: rawRowData, selected: selected }), isAllRowsSelected: (selected.rows.length > 0 && selected.rows.length === checkIsRowSelected({ rawRowData: rawRowData, selected: selected }).length) })
-    }
+    const programConfigState = useRecoilValue(ProgramConfigState);
     const { headerData, rowsData } = props;
 
     if (rowsData?.length === 0) {
@@ -67,27 +62,11 @@ function RenderRows(props: RenderHeaderProps): React.ReactElement {
     return (
         <React.Fragment>
             {
-                rowsData.map((row, index) => (
+                rowsData?.map((row, index) => (
                     <RowTable
                         key={index}
                         className={classNames(classes.row, classes.dataRow)}
                     >
-                        {/* 
-                        <RowCell
-                            className={classNames(classes.cell, classes.bodyCell)}
-                        >
-                            <div onClick={(event) => { event.stopPropagation(); }}>
-                                <Checkbox
-                                    checked={selected.isAllRowsSelected || selected.selectedRows.filter((element: any) => element?.trackedEntity === row.trackedEntity).length > 0}
-                                    name="Ex"
-                                    onChange={() => { onToggle(row); }}
-                                    value="checked"
-                                />
-
-                            </div>
-                        </RowCell> 
-                        */}
-
                         {
                             headerData?.filter(x => x.visible)?.map(column => (
                                 <RowCell
@@ -99,11 +78,11 @@ function RenderRows(props: RenderHeaderProps): React.ReactElement {
                                             formatKeyValueTypeHeader(headerData)[column.id] === Attribute.valueType.IMAGE ?
                                                 <a href={imageUrl({ attribute: column.id, trackedEntity: row.trackedEntity })} target='_blank'>{row[column.id] && <IconButton> <CropOriginal /></IconButton>}</a>
                                                 :
-                                                getDisplayName({ attribute: column.id, headers: headerData, value: row[column.id] })
+                                                getDisplayName({ metaData: column.id, value: row[column.id], program: programConfigState })
                                         }
                                         {
                                             (column.displayName == "Actions") ?
-                                                <RowActions  row={row} />
+                                                <RowActions row={row} />
                                                 : null
                                         }
                                     </div>
