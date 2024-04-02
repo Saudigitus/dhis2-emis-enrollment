@@ -10,8 +10,8 @@ export function useGetInitialValues() {
     const setHeaderFields = useSetRecoilState(HeaderFieldsState)
     const entries = location?.search?.split('?')?.[1]?.split('&')?.map((item) => item.split('=')).filter(x => x.length === 2)
     const dataElementsQuerybuilder = []
-    const {urlParamiters} = useParams()
-    
+    const { urlParamiters } = useParams()
+
     if (entries?.length > 0) {
         for (const [key, value] of entries) {
             const keys = Object.entries(paramsMapping)
@@ -21,9 +21,16 @@ export function useGetInitialValues() {
                 }
             }
         }
+
+        let copyValues = dataElementsQuerybuilder.filter(x => {
+            if (x.split(":in:")[1].replace(/\s/g, '').length > 0) {
+                return x
+            }
+        })
+
         setHeaderFields({
             attributes: [],
-            dataElements: dataElementsQuerybuilder
+            dataElements: copyValues
         })
     }
 
