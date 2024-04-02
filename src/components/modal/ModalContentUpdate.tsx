@@ -63,7 +63,8 @@ function ModalContentUpdate(props: ModalContentUpdateProps): React.ReactElement 
       for (let index = 0; index < fieldsWithValue.length; index++) {
         const element = fieldsWithValue[index];
 
-        if (element.some((field: any) => field.assignedValue != initialValues[field.id as keyof typeof initialValues])) {
+        if (element.some((field: any) => field.assignedValue != initialValues[field.id as keyof typeof initialValues] && initialValues[field.id as keyof typeof initialValues] != "")) {
+
           if (element[0].type === "dataElement") {
             promises.push(
               updateEvent({
@@ -76,9 +77,6 @@ function ModalContentUpdate(props: ModalContentUpdateProps): React.ReactElement 
                   (getProgram != null) ? getProgram.id : "",
                   trackedEntity
                 )
-              }).catch(() => {
-                show({ message: "Error", type: { error: true } })
-                setLoading(false)
               })
             );
           } else if (element[0].type === "attribute") {
@@ -91,9 +89,6 @@ function ModalContentUpdate(props: ModalContentUpdateProps): React.ReactElement 
                   trackedEntity,
                   values
                 )
-              }).catch(() => {
-                show({ message: "Error", type: { error: true } })
-                setLoading(false)
               })
             );
           }
@@ -111,7 +106,7 @@ function ModalContentUpdate(props: ModalContentUpdateProps): React.ReactElement 
         })
         .catch(error => {
           setLoading(false)
-          show({ message: `Error: ${error}`, type: { error: true } })
+          show({ message: `Could not update enrollment: ${error.message}`, type: { critical: true } })
         });
     }
   }

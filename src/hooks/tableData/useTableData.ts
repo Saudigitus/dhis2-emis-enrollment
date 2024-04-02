@@ -1,6 +1,6 @@
 
-import { useRecoilValue, useSetRecoilState } from "recoil";
 import { useState } from "react";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import { useDataEngine } from "@dhis2/app-runtime";
 import { formatResponseRows } from "../../utils/table/rows/formatResponseRows";
 import { useParams } from "../commons/useQueryParams";
@@ -48,7 +48,7 @@ export function useTableData() {
     async function getData(page: number, pageSize: number) {
         if (school !== null) {
             setLoading(true)
-
+            
             const eventsResults = await engine.query(EVENT_QUERY({
                 ouMode: school != null ? "SELECTED" : "ACCESSIBLE",
                 page,
@@ -61,7 +61,7 @@ export function useTableData() {
                 orgUnit: school
             })).catch((error) => {
                 show({
-                    message: `${("Could not get data")}: ${error.message}`,
+                    message: `${("Could not get events")}: ${error.message}`,
                     type: { critical: true }
                 });
                 setTimeout(hide, 5000);
@@ -78,7 +78,7 @@ export function useTableData() {
                     trackedEntity: trackedEntityToFetch
                 })).catch((error) => {
                     show({
-                        message: `${("Could not get data")}: ${error.message}`,
+                        message: `${("Could not get traked entities")}: ${error.message}`,
                         type: { critical: true }
                     });
                     setTimeout(hide, 5000);

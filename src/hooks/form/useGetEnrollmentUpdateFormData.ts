@@ -19,7 +19,8 @@ export default function useGetEnrollmentUpdateFormData() {
     const [initialValues, setInitialValues] = useState<any>({})
     const headerFieldsState = useRecoilValue(HeaderFieldsState)
 
-    const buildFormData = (trackedEntity: string) => {
+    const buildFormData = (trackedEntity: string, enrollment: string) => {
+
         setLoading(true)
         if (Object.keys(getDataStoreData)?.length) {
             const { registration, 'socio-economics': { programStage }, program } = getDataStoreData
@@ -34,17 +35,20 @@ export default function useGetEnrollmentUpdateFormData() {
                                 .then((socioEconomic: any) => {
                                     setInitialValues({
                                         trackedEntity: trackedEntity,
-                                        ...dataValues(registration?.results?.instances[0]?.dataValues ?? []),
-                                        ...dataValues(socioEconomic?.results?.instances[0]?.dataValues ?? []),
+                                        ...dataValues(registration?.results?.instances?.find((x: any) => x.enrollment === enrollment)?.dataValues ?? []),
+                                        ...dataValues(socioEconomic?.results?.instances.find((x: any) => x.enrollment === enrollment)?.dataValues ?? []),
                                         ...attributes(trackedEntityInstance?.results?.instances[0]?.attributes ?? []),
-                                        orgUnit: registration?.results?.instances[0]?.orgUnit,
-                                        enrollment: registration?.results?.instances[0]?.enrollment,
-                                        enrollmentDate: registration?.results?.instances[0]?.createdAt,
+                                        orgUnit: registration?.results?.instances?.find((x: any) => x.enrollment === enrollment)?.orgUnit,
+                                        enrollment: enrollment,
+                                        enrollmentDate: registration?.results?.instances?.find((x: any) => x.enrollment === enrollment)?.createdAt,
                                         program: trackedEntityInstance?.results?.instances[0]?.enrollments?.[0]?.program,
-                                        eventdatestaticform: registration?.results?.instances[0]?.createdAt ? format(new Date(registration?.results?.instances[0]?.createdAt), "yyyy-MM-dd") : undefined,
+                                        eventdatestaticform: registration?.results?.instances?.find((x: any) => x.enrollment === enrollment)?.createdAt ? format(new Date(registration?.results?.instances?.find((x: any) => x.enrollment === enrollment)?.createdAt), "yyyy-MM-dd") : undefined,
                                     })
                                     setEnrollmentValues({
-                                        events: [registration?.results?.instances[0], socioEconomic?.results?.instances[0]]
+                                        events: [
+                                            registration?.results?.instances?.find((x: any) => x.enrollment === enrollment) ?? { enrollment: enrollment, programStage : registration },
+                                            socioEconomic?.results?.instances.find((x: any) => x.enrollment === enrollment) ?? { enrollment: enrollment, programStage : programStage },
+                                        ]
                                     })
 
                                     setLoading(false)
@@ -55,7 +59,7 @@ export default function useGetEnrollmentUpdateFormData() {
                     setLoading(false)
                     setError(true)
                     show({
-                        message: `${("Could not get data")}: ${error.message}`,
+                        message: `${("Could not get selected enrollment details")}: ${error.message}`,
                         type: { critical: true }
                     });
                 })

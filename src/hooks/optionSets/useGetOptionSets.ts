@@ -22,7 +22,7 @@ function useGetOptionSets({ optionSetId }: { optionSetId: string }) {
     const { data, loading, error } = useDataQuery<{ result: any }>(OPTIONSETS_QUERY(optionSetId), {
         onError(error) {
             show({
-                message: `${("Could not get data")}: ${error.message}`,
+                message: `${("Could not get option sets")}: ${error.message}`,
                 type: { critical: true }
             });
             setTimeout(hide, 5000);

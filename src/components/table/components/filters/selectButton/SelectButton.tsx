@@ -116,6 +116,7 @@ function SelectButton(props: SelectButtonProps) {
                                         onClose={onClose}
                                         onChange={onChange}
                                         value={value}
+                                        filled={filled}
                                         onQuerySubmit={onQuerySubmit}
                                         disabled={disabled}
                                         disabledReset={disabledReset}
