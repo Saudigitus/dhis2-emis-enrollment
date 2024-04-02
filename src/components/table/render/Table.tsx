@@ -37,6 +37,10 @@ function Table() {
     }, [headerFieldsState, page, pageSize, refetch])
 
     useEffect(() => {
+        setpage(1)
+    }, [headerFieldsState])
+
+    useEffect(() => {
         setLoading(loading)
     }, [loading])
 
