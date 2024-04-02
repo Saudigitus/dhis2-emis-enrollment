@@ -7,10 +7,11 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Paper } from '@material-ui/core';
 import WithBorder from '../../template/WithBorder';
 import WithPadding from '../../template/WithPadding';
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { HeaderFieldsState } from '../../../schema/headersSchema';
 import { TeiRefetch } from '../../../schema/refecthTeiSchema';
-import { useHeader, useParams, useTableData } from '../../../hooks';
+import { useHeader, useTableData } from '../../../hooks';
+import { TableDataLoadingState } from '../../../schema/tableDataLoadingSchema';
 
 const usetStyles = makeStyles({
     tableContainer: {
@@ -21,15 +22,20 @@ const usetStyles = makeStyles({
 function Table() {
     const classes = usetStyles()
     const { columns } = useHeader()
-    const { getData, loading, tableData } = useTableData()
+    const { getData, tableData, loading } = useTableData()
     const headerFieldsState = useRecoilValue(HeaderFieldsState)
     const [page, setpage] = useState(1)
     const [pageSize, setpageSize] = useState(10)
     const refetch = useRecoilValue(TeiRefetch)
+    const setLoading = useSetRecoilState(TableDataLoadingState)
 
     useEffect(() => {
         void getData(page, pageSize)
     }, [headerFieldsState, page, pageSize, refetch])
+
+    useEffect(() => {
+        setLoading(loading)
+    }, [loading])
 
     const onPageChange = (newPage: number) => {
         setpage(newPage)
@@ -42,10 +48,11 @@ function Table() {
 
     return (
         <Paper>
-            {loading &&
+            {loading ?
                 <CenteredContent>
                     <CircularLoader />
                 </CenteredContent>
+                : null
             }
             <WorkingLists />
             <WithBorder type='bottom' />
