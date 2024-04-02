@@ -10,7 +10,7 @@ import WithPadding from '../../template/WithPadding';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { HeaderFieldsState } from '../../../schema/headersSchema';
 import { TeiRefetch } from '../../../schema/refecthTeiSchema';
-import { useHeader, useTableData } from '../../../hooks';
+import { useHeader, useTableData, useParams } from '../../../hooks';
 import { TableDataLoadingState } from '../../../schema/tableDataLoadingSchema';
 
 const usetStyles = makeStyles({
@@ -27,10 +27,13 @@ function Table() {
     const [page, setpage] = useState(1)
     const [pageSize, setpageSize] = useState(10)
     const refetch = useRecoilValue(TeiRefetch)
+    const { urlParamiters } = useParams()
+    const { academicYear } = urlParamiters()
     const setLoading = useSetRecoilState(TableDataLoadingState)
 
     useEffect(() => {
-        void getData(page, pageSize)
+        if (academicYear)
+            void getData(page, pageSize)
     }, [headerFieldsState, page, pageSize, refetch])
 
     useEffect(() => {
