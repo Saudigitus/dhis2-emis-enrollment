@@ -76,9 +76,6 @@ function ModalContentUpdate(props: ModalContentUpdateProps): React.ReactElement 
                   (getProgram != null) ? getProgram.id : "",
                   trackedEntity
                 )
-              }).catch(() => {
-                show({ message: "Error", type: { error: true } })
-                setLoading(false)
               })
             );
           } else if (element[0].type === "attribute") {
@@ -91,9 +88,6 @@ function ModalContentUpdate(props: ModalContentUpdateProps): React.ReactElement 
                   trackedEntity,
                   values
                 )
-              }).catch(() => {
-                show({ message: "Error", type: { error: true } })
-                setLoading(false)
               })
             );
           }
@@ -111,7 +105,7 @@ function ModalContentUpdate(props: ModalContentUpdateProps): React.ReactElement 
         })
         .catch(error => {
           setLoading(false)
-          show({ message: `Error: ${error}`, type: { error: true } })
+          show({ message: `Could not update enrollment: ${error.message}`, type: { critical: true } })
         });
     }
   }
