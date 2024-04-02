@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import { useRecoilValue, useSetRecoilState, useRecoilState } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import { useDataEngine } from "@dhis2/app-runtime";
 import { formatResponseRows } from "../../utils/table/rows/formatResponseRows";
 import { useParams } from "../commons/useQueryParams";
@@ -12,7 +12,6 @@ import { TableDataProps } from "../../types/table/TableContentProps";
 import { getDataStoreKeys } from "../../utils/commons/dataStore/getDataStoreKeys";
 import { EventsState } from "../../schema/eventsSchema";
 import { FormatResponseRowsProps } from "../../types/utils/FormatRowsDataProps";
-import { TableDataLoadingState } from "../../schema/tableDataLoadingSchema";
 
 const EVENT_QUERY = (queryProps: EventQueryProps) => ({
     results: {
@@ -41,7 +40,7 @@ export function useTableData() {
     const headerFieldsState = useRecoilValue(HeaderFieldsState)
     const setEvents = useSetRecoilState(EventsState)
     const { urlParamiters } = useParams()
-    const setLoading = useSetRecoilState(TableDataLoadingState)
+    const [loading, setLoading] = useState<boolean>(false)
     const [tableData, setTableData] = useState<TableDataProps[]>([])
     const { hide, show } = useShowAlerts()
     const school = urlParamiters().school as unknown as string
@@ -49,6 +48,7 @@ export function useTableData() {
     async function getData(page: number, pageSize: number) {
         if (school !== null) {
             setLoading(true)
+            
             const eventsResults = await engine.query(EVENT_QUERY({
                 ouMode: school != null ? "SELECTED" : "ACCESSIBLE",
                 page,
@@ -98,6 +98,6 @@ export function useTableData() {
     return {
         getData,
         tableData,
-        // loading
+        loading
     }
 }
