@@ -51,7 +51,6 @@ export const useFileResource = () => {
 
     async function createFileResource({ file }: CreateFileInterface): Promise<{ fileId: string }> {
         setloading(true)
-        // const blob = new Blob([file]);
 
         const postFile = await engine.mutate(POSTFILERESOURCEMUTATION, { variables: { data: { file: file } } }) as unknown as CreateFileInterfaceResponse
 
