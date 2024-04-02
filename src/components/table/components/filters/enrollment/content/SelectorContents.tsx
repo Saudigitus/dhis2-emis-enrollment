@@ -26,6 +26,7 @@ function SelectorContents(props: SelectorContentsProps) {
 
     const handleKeyDown = (event: any) => {
         if (event.key === "Enter" && !(disabledUpdate || !value?.replace(/\s/g, '').length || loading)) {
+            event.preventDefault();
             onQuerySubmit();
         }
     };
