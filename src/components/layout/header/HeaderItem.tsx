@@ -24,7 +24,6 @@ export default function HeaderItem(props: HeadBarTypes): React.ReactElement {
         disabled
     } = props;
     const {remove} = useParams()
-    const Component = (component != null) ? componentMapping[component] : null;
     const [openDropDown, setOpenDropDown] = useState<boolean>(false);
     const Component = (component != null) ? componentMapping[component] : null;
     const paramsMapping = useDataElementsParamMapping()
