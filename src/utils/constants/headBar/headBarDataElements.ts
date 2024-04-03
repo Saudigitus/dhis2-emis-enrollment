@@ -16,6 +16,7 @@ export const headBarDataElements = (selectedOptions: SelectedOptionsTypes, getDa
             if (dataElement) headBarFilterName = dataElement.displayName;
 
             headBarFilters.push({
+                disabled:!(selectedOptions.school && selectedOptions.schoolName),
                 id: filter.code,
                 label: headBarFilterName,
                 value: selectedOptions[filter.code as unknown as keyof typeof selectedOptions] ?? `Select a ${formatCamelCaseToWords(filter.code)}`,
