@@ -11,12 +11,9 @@ interface HeadBarTypes {
 
 interface SelectedOptionsTypes {
     academicYear: string | null
+    class: string | null
+    grade: string | null
     school: string | null
     schoolName: string | null
-    class?: string | null
-    grade?: string | null
-    position?: string | null
-    employmentType?: string | null
 }
-
 export type { HeadBarTypes, SelectedOptionsTypes }
