@@ -16,7 +16,7 @@ import usePostTei from "./tei/usePostTei";
 import { useGetEvent } from "./events/useGetEvent";
 import { useGetTei } from "./tei/useGetTei";
 
-export { 
+export {
     useDataStore, useParams, useShowAlerts, useDataElementsParamMapping, useGetDataElements, useGetEnrollmentForm, useGetInitialValues, useGetOptionSets,
     useGetProgramConfig, useGetAttributes, useGetUsedPProgramStages, useTableData, useHeader, useGetPatternCode, usePostTei, useGetEvent, useGetTei
 }
