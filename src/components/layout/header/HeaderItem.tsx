@@ -15,7 +15,7 @@ import { getDisplayName } from '../../../utils/table/rows/getDisplayNameByOption
 import { ProgramConfigState } from '../../../schema/programSchema'
 
 export default function HeaderItem(props: HeadBarTypes): React.ReactElement {
-    const { label, value, placeholder, component, dataElementId, id, selected } = props;
+    const { label, value, placeholder, component, dataElementId, id, selected, disabled } = props;
     const { remove } = useParams()
     const Component = (component != null) ? componentMapping[component] : null;
     const [openDropDown, setOpenDropDown] = useState<boolean>(false);
@@ -43,6 +43,7 @@ export default function HeaderItem(props: HeadBarTypes): React.ReactElement {
 
     return (
         <DropdownButton
+            disabled={disabled}
             open={openDropDown}
             onClick={onToggle}
             className={classNames(style.HeaderItemContainer, style[id])}

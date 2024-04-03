@@ -12,10 +12,11 @@ export const headBarDataElements = (selectedOptions : SelectedOptionsTypes, getD
             let headBarFilterName : string  = '';
 
             const dataElement = programStageDataElements?.find((psDataElement: any) => psDataElement?.dataElement?.id === filter?.dataElement)?.dataElement;
-            
+
             if (dataElement) headBarFilterName = dataElement.displayName;
-            
+
             headBarFilters.push({
+                disabled:!(selectedOptions.school && selectedOptions.schoolName),
                 id: filter.code,
                 label: headBarFilterName,
                 value: selectedOptions[filter.code as unknown as keyof typeof selectedOptions] ?? `Select a ${formatCamelCaseToWords(filter.code)}`,
@@ -25,7 +26,7 @@ export const headBarDataElements = (selectedOptions : SelectedOptionsTypes, getD
                 selected: Boolean(selectedOptions[filter.code as unknown as keyof typeof selectedOptions]),
             })
         }
-        
+
     })
 
     return headBarFilters
