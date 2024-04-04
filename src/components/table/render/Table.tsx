@@ -24,7 +24,9 @@ const usetStyles = makeStyles({
         justifyContent: 'space-between',
     },
     h4: {
-        margin: '0px'
+        margin: '0px',
+        fontSize:'22px',
+        fontWeigth:'500',
     }
 });
 
