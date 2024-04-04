@@ -22,9 +22,18 @@ interface ModalContentUpdateProps {
     enrollmentValues?: any
 }
 
+interface ModalDeleteContentProps {
+    setOpen: (value: boolean) => void
+    sectionName?: any
+    formInitialValues?: any
+    enrollmentsData?: any
+    loadingInitialValues: boolean
+    enrollmentValues?: any
+}
+
 interface ModalExportTemplateProps {
     setOpen: (value: boolean) => void
     sectionName: string
 }
 
-export type { ModalProps, ModalContentProps, ModalContentUpdateProps, ModalExportTemplateProps }
+export type { ModalProps, ModalContentProps, ModalContentUpdateProps, ModalDeleteContentProps, ModalExportTemplateProps }
