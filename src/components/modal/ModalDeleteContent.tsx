@@ -1,48 +1,37 @@
-import React, { useState, useEffect, useRef } from "react";
-import { format } from "date-fns";
+import React, { useState, useRef } from "react";
+import classNames from "classnames";
+import styles from "./modal.module.css";
 import { Form } from "react-final-form";
-import { ModalActions, Button, ButtonStrip, CircularLoader, CenteredContent, NoticeBox } from "@dhis2/ui";
-import { useParams, useShowAlerts } from "../../hooks";
 import WithPadding from "../template/WithPadding";
-import GroupForm from "../form/GroupForm";
+import { useParams, useShowAlerts } from "../../hooks";
+import { Divider, ListItem, ListItemText } from "@material-ui/core";
 import { ModalDeleteContentProps } from "../../types/modal/ModalProps";
+import { ModalActions, Button, ButtonStrip, CircularLoader, CenteredContent, NoticeBox, IconCross24, IconCheckmark24 } from "@dhis2/ui";
 
 
 function ModalDeleteContent(props: ModalDeleteContentProps): React.ReactElement {
-    const { setOpen } = props
-    const { useQuery } = useParams();
-    const formRef: React.MutableRefObject<FormApi<IForm, Partial<IForm>>> = useRef(null);
-    const orgUnitName = useQuery().get("schoolName");
-    const [, setValues] = useState<object>({})
-    const [fieldsWitValue, setFieldsWitValues] = useState<any[]>([])
-    const [enrollmentDate, setEnrollmentDate] = useState<any>(format(new Date(), "yyyy-MM-dd"));
+    const { setOpen, eventsList, loading, sectionName } = props
+    const { urlParamiters } = useParams();
+    const { schoolName } = urlParamiters()
+    const { show } = useShowAlerts()
+    const [initialValues] = useState<object>({})
     const [clickedButton, setClickedButton] = useState<string>("");
-    const { hide, show } = useShowAlerts()
-    const [initialValues] = useState<object>({
-        registerschoolstaticform: orgUnitName,
-        eventdatestaticform: format(new Date(), "yyyy-MM-dd")
-    })
-
-    useEffect(() => {  }, [])
-
-    function onSubmit() {
-        const allFields = fieldsWitValue.flat()
-        
-    }
-
-
-
-
+    const formRef: React.MutableRefObject<FormApi<IForm, Partial<IForm>>> = useRef(null);
     const modalActions = [
         { id: "cancel", type: "button", label: "Cancel", disabled: false, onClick: () => { setClickedButton("cancel"); setOpen(false) } },
-        { id: "saveandcontinue", type: "submit", label: "Delete enrollment", primary: true, disabled: false, loading: false, onClick: () => { setClickedButton("saveandcontinue");  } }
+        { id: "saveandcontinue", type: "submit", label: "Delete enrollment", destructive: true, disabled: false, loading: false, onClick: () => { setClickedButton("saveandcontinue"); } }
     ];
+
+    function onSubmit() { }
 
     if (0) {
         show({ message: "An unknown error occurred while deleting the student", type: { critical: true } })
     }
 
-    if (0) {
+    function onChange(e: any): void { }
+
+
+    if (loading) {
         return (
             <CenteredContent>
                 <CircularLoader />
@@ -50,27 +39,42 @@ function ModalDeleteContent(props: ModalDeleteContentProps): React.ReactElement 
         )
     }
 
-    function onChange(e: any): void {
-       
-    }
-
     return (
         <WithPadding>
             <React.Fragment>
-                < NoticeBox title={``} warning>
-                    
-                </NoticeBox>
-                <br />
+                <p>
+                    Are you sure you want to  <span className={classNames(styles.redIcon)}>delete</span> the seleted {" "}
+                    {sectionName.toLowerCase()} from <strong>{schoolName}.</strong>{" "} Enrollment Details:{" "}
+                    {
+                        eventsList?.registration?.map((x: any) =>
+                            <><strong>{x.code.toUpperCase()}: </strong><span>{x.value}.</span>{" "}</>
+                        )
+                    }
+                </p>
             </React.Fragment>
             <Form initialValues={initialValues} onSubmit={onSubmit}>
                 {({ handleSubmit, values, form }) => {
                     formRef.current = form;
                     return <form
                         onSubmit={handleSubmit}
-                        onChange={onChange(values) as unknown as ()=> void}
+                        onChange={onChange(values) as unknown as () => void}
                     >
-                        
+                        {eventsList?.events?.map((event: any, index: number) =>
+                            <>
+                                <ListItem className={classNames(styles.item)}>
+                                    <ListItemText primary={event.name} />
+                                    <span className={classNames(styles[event.class])}>
+                                        {event.repeatable ? event.value : event.value ? <IconCheckmark24 /> : <IconCross24 />}
+                                    </span>
+                                </ListItem>
+                                <Divider />
+                            </>
+                        )}
+
                         <br />
+                        < NoticeBox error>
+                            <strong>Attention:</strong> The {sectionName.toLowerCase()} will be deleted and can no longer be accessed.
+                        </NoticeBox>
                         <ModalActions>
                             <ButtonStrip end>
                                 {modalActions.map((action, i) => (

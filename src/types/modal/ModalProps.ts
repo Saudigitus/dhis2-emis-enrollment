@@ -25,10 +25,8 @@ interface ModalContentUpdateProps {
 interface ModalDeleteContentProps {
     setOpen: (value: boolean) => void
     sectionName?: any
-    formInitialValues?: any
-    enrollmentsData?: any
-    loadingInitialValues: boolean
-    enrollmentValues?: any
+    eventsList?: any
+    loading: boolean
 }
 
 interface ModalExportTemplateProps {

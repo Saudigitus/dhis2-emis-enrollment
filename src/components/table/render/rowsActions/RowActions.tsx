@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import style from './rowActions.module.css'
 import { IconEdit24, IconDelete24 } from "@dhis2/ui";
 import { IconButton, Tooltip } from '@material-ui/core';
-import { useGetEnrollmentForm } from '../../../../hooks';
+import { useGetEnrollmentDeleteFormData, useGetEnrollmentForm } from '../../../../hooks';
 import { ModalComponent, ModalContentUpdate, ModalDeleteContent } from '../../../modal';
 import useGetSectionTypeLabel from '../../../../hooks/commons/useGetSectionTypeLabel';
 import { RowActionsProps, RowActionsType } from '../../../../types/table/TableContentProps';
@@ -17,7 +17,9 @@ export default function RowActions(props: RowActionsProps) {
   const [openEditionModal, setOpenEditionModal] = useState<boolean>(false);
   const [openDeletionModal, setOpenDeletionModal] = useState<boolean>(false);
   const { initialValues, loading, error, buildFormData, enrollmentValues, setInitialValues } = useGetEnrollmentUpdateFormData()
+  const { loading: envtsLoading, buildDeleteFormData, eventsList } = useGetEnrollmentDeleteFormData()
 
+  
   useEffect(() => {
     if (error)
       setOpenEditionModal(false)
@@ -37,7 +39,7 @@ export default function RowActions(props: RowActionsProps) {
     {
       icon: <IconDelete24 />,
       label: `Delete ${sectionName}`,
-      onClick: () => { setOpenDeletionModal(!openDeletionModal) },
+      onClick: () => { buildDeleteFormData(enrollmentId); setOpenDeletionModal(!openDeletionModal) },
     }
   ];
 
@@ -60,7 +62,7 @@ export default function RowActions(props: RowActionsProps) {
       {
         openDeletionModal &&
         <ModalComponent title={`Single ${sectionName} Deletion`} open={openDeletionModal} setOpen={setOpenDeletionModal}>
-          <ModalDeleteContent setOpen={setOpenDeletionModal} sectionName={sectionName} loadingInitialValues={loading} enrollmentsData={enrollmentsData} enrollmentValues={enrollmentValues} formInitialValues={initialValues} />
+          <ModalDeleteContent setOpen={setOpenDeletionModal} sectionName={sectionName} loading={envtsLoading}  eventsList={eventsList} />
         </ModalComponent>
       }
     </div>
