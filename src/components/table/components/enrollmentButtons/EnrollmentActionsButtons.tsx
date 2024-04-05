@@ -8,11 +8,12 @@ import useGetSectionTypeLabel from '../../../../hooks/commons/useGetSectionTypeL
 import { FlyoutOptionsProps } from "../../../../types/buttons/FlyoutOptionsProps";
 import { BulkEnrollment } from "../../../bulkImport/BulkEnrollment";
 import DropdownButtonComponent from "../../../buttons/DropdownButton";
-import { ModalExportTemplateContent } from '../../../modal';
+import { ModalExportTemplateContent, ModalSearchEnrollmentContent } from '../../../modal';
 
 function EnrollmentActionsButtons() {
   const [open, setOpen] = useState<boolean>(false);
   const [openExportEmptyTemplate, setOpenExportEmptyTemplate] = useState<boolean>(false);
+  const [openSearchEnrollment, setOpenSearchEnrollment] = useState<boolean>(false);
   const [openImport, setOpenImport] = useState<boolean>(false);
   const { useQuery } = useParams();
   const orgUnit = useQuery().get("school")
@@ -20,7 +21,7 @@ function EnrollmentActionsButtons() {
   const { enrollmentsData } = useGetEnrollmentForm();
 
   const enrollmentOptions: FlyoutOptionsProps[] = [
-    { label: "Enroll new students", divider: true, onClick: () => { setOpenImport(true); } },
+    { label: "Enroll new students", divider: true, onClick: () => { setOpen(true); } },
     { label: "Download template", divider: false, onClick: () => { setOpenExportEmptyTemplate(true) } },
     // { label: "Export empty template", divider: false, onClick: () => { alert("Export empty"); } },
     // { label: "Export existing students", divider: false, onClick: () => { alert("Export existing students"); } }
@@ -31,7 +32,7 @@ function EnrollmentActionsButtons() {
       <ButtonStrip>
         <Tooltip title={orgUnit === null ? "Please select an organisation unit before" : ""}>
           <span>
-            <Button disabled={orgUnit == null} onClick={() => { setOpen(true); }} icon={<IconAddCircle24 />}>Enrol single {sectionName}</Button>
+            <Button disabled={orgUnit == null} onClick={() => { setOpenSearchEnrollment(true); }} icon={<IconAddCircle24 />}>Enrol single {sectionName}</Button>
           </span>
         </Tooltip>
         <DropdownButtonComponent
@@ -55,6 +56,13 @@ function EnrollmentActionsButtons() {
         <ModalExportTemplateContent
           sectionName={sectionName}
           setOpen={setOpenExportEmptyTemplate}
+        />
+      </ModalComponent>}
+
+      {openSearchEnrollment && <ModalComponent  title={`Single ${sectionName} Enrollment`} open={openSearchEnrollment} setOpen={setOpenSearchEnrollment}>
+        <ModalSearchEnrollmentContent
+          sectionName={sectionName}
+          setOpen={setOpenSearchEnrollment}
         />
       </ModalComponent>}
     </div>
