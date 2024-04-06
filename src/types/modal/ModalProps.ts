@@ -25,7 +25,7 @@ interface ModalContentUpdateProps {
 interface ModalDeleteContentProps {
     setOpen: (value: boolean) => void
     sectionName?: any
-    eventsList?: any
+    initialValues?: any
     loading: boolean
 }
 

@@ -8,11 +8,11 @@ export default function useGetEnrollmentDeleteFormData() {
     const { show } = useShowAlerts()
     const { getEnrollment } = useGetEnrollment()
     const { getDataStoreData } = getSelectedKey()
-    const [eventsList, setEventsList] = useState<any>({})
+    const [initialValues, setInitialValues] = useState<any>({})
     const [loading, setLoading] = useState<boolean>(false)
     const programConfig = useRecoilValue(ProgramConfigState)
 
-    const buildDeleteFormData = (enrollment: string) => {
+    const buildDeleteFormData = (trackedEntity: string, enrollment: string) => {
         const { 'socio-economics': { programStage }, registration, filters } = getDataStoreData
 
         setLoading(true)
@@ -41,9 +41,12 @@ export default function useGetEnrollmentDeleteFormData() {
                         })
                     })
 
-                    setEventsList({
+                    setInitialValues({
                         events: events,
-                        registration: registrationInfo
+                        registration: registrationInfo,
+                        trackedEntity: trackedEntity,
+                        enrollment: enrollment,
+                        eventsId: resp?.results?.events?.map((x: any) => x.event)
                     })
                     setLoading(false)
                 })
@@ -55,5 +58,5 @@ export default function useGetEnrollmentDeleteFormData() {
 
     }
 
-    return { loading, buildDeleteFormData, eventsList: eventsList }
+    return { loading, buildDeleteFormData, initialValues }
 }

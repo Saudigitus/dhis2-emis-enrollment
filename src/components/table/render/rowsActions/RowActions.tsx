@@ -17,9 +17,9 @@ export default function RowActions(props: RowActionsProps) {
   const [openEditionModal, setOpenEditionModal] = useState<boolean>(false);
   const [openDeletionModal, setOpenDeletionModal] = useState<boolean>(false);
   const { initialValues, loading, error, buildFormData, enrollmentValues, setInitialValues } = useGetEnrollmentUpdateFormData()
-  const { loading: envtsLoading, buildDeleteFormData, eventsList } = useGetEnrollmentDeleteFormData()
+  const { loading: envtsLoading, buildDeleteFormData, initialValues: deleteFormInitialValues } = useGetEnrollmentDeleteFormData()
 
-  
+
   useEffect(() => {
     if (error)
       setOpenEditionModal(false)
@@ -39,7 +39,7 @@ export default function RowActions(props: RowActionsProps) {
     {
       icon: <IconDelete24 />,
       label: `Delete ${sectionName}`,
-      onClick: () => { buildDeleteFormData(enrollmentId); setOpenDeletionModal(!openDeletionModal) },
+      onClick: () => { buildDeleteFormData(trackedEntity,enrollmentId); setOpenDeletionModal(!openDeletionModal) },
     }
   ];
 
@@ -62,7 +62,7 @@ export default function RowActions(props: RowActionsProps) {
       {
         openDeletionModal &&
         <ModalComponent title={`Single ${sectionName} Deletion`} open={openDeletionModal} setOpen={setOpenDeletionModal}>
-          <ModalDeleteContent setOpen={setOpenDeletionModal} sectionName={sectionName} loading={envtsLoading}  eventsList={eventsList} />
+          <ModalDeleteContent setOpen={setOpenDeletionModal} sectionName={sectionName} loading={envtsLoading}  initialValues={deleteFormInitialValues} />
         </ModalComponent>
       }
     </div>
