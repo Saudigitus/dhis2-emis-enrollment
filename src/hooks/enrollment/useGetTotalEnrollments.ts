@@ -24,17 +24,3 @@ export function useGetTotalEnrollments() {
 
     return { getTotalEnrollment }
 }
-
-// export function useTotalEnrollments() {
-//     const { getTotalEnrollment } = useGetTotalEnrollments()
-//     const [ totalEnrollment, setTotalEnrollment] = useState()
-
-//     function trackerTotalEnrollment(program: string, orgUnit: string, trackedEntity: string) {
-//         getTotalEnrollment(program, orgUnit, trackedEntity)
-//             .then((resp: any) => {
-//                 setTotalEnrollment(resp?.results?.instances?.length)
-//             })
-//     }
-
-//     return { trackerTotalEnrollment, totalEnrollment }
-// }
