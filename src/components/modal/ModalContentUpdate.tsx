@@ -171,7 +171,7 @@ function ModalContentUpdate(props: ModalContentUpdateProps): React.ReactElement 
                   <Button
                     key={i}
                     {...action}
-                    disabled={pristine || loadingInitialValues || loading}
+                    disabled={(action.id == "save" && pristine) || loadingInitialValues || loading}
                   >
                     {(loading && action.id === clickedButton) ? <CircularLoader small /> : action.label}
                   </Button>
