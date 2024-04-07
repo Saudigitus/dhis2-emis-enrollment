@@ -77,14 +77,14 @@
 }
 
 .headerResetItemValue {
-    margin-right:8px;
+    margin-right: 8px;
 }
 
-.headerResetItemValue svg{ 
+.headerResetItemValue svg {
     font-size: 1.1rem;
     color: rgb(160, 173, 186);
 }
 
-.headerResetItemValue svg:hover{ 
+.headerResetItemValue svg:hover {
     color: rgb(116, 118, 119);
 }
