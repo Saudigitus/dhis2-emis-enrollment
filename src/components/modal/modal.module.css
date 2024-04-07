@@ -8,6 +8,10 @@
     justify-content: center;
 }
 
+.textCapDetails {
+    text-transform: capitalize;
+}
+
 .redIcon,
 .redIcon svg {
     color: #f44336 !important;

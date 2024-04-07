@@ -3,6 +3,7 @@ import { useRecoilValue } from 'recoil';
 import { useShowAlerts, useGetEnrollment } from '../../hooks';
 import { getSelectedKey } from '../../utils/commons/dataStore/getSelectedKey';
 import { ProgramConfigState } from '../../schema/programSchema';
+import { formatCamelCaseToWords } from '../../utils/commons/formatCamelCaseToWords';
 
 export default function useGetEnrollmentDeleteFormData() {
     const { show } = useShowAlerts()
@@ -36,8 +37,8 @@ export default function useGetEnrollmentDeleteFormData() {
 
                     filters?.dataElements.map((filter: any) => {
                         registrationInfo.push({
-                            code: filter.code,
-                            value: registrationEvent?.dataValues?.find((x: any) => x.dataElement === filter.dataElement).value
+                            code: formatCamelCaseToWords(filter.code),
+                            value: registrationEvent?.dataValues?.find((x: any) => x.dataElement === filter.dataElement)?.value ?? "Not set",
                         })
                     })
 
@@ -51,6 +52,7 @@ export default function useGetEnrollmentDeleteFormData() {
                     setLoading(false)
                 })
                 .catch((error: any) => {
+                    console.log(error)
                     show({ message: `Could not load enrollment data for delete: ${error.message}`, critical: true })
                 })
         }

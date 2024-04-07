@@ -34,14 +34,14 @@ function ModalDeleteContent(props: ModalDeleteContentProps): React.ReactElement 
         setLoading(true)
         const promises = [];
         for (let index = 0; index < initialValues.eventsId.length; index++) {
-            promises.push(deleteEvent(initialValues.eventsId[index]).catch((error) => console.log(error, 1)));
+            promises.push(deleteEvent(initialValues.eventsId[index]));
         }
-        promises.push(deleteEnrollment(initialValues.enrollment).catch((error) => console.log(error, 2)))
+        promises.push(deleteEnrollment(initialValues.enrollment))
 
         await getTotalEnrollment(getProgram.id, school as unknown as string, initialValues.trackedEntity)
             .then((resp: any) => {
                 if (resp?.results?.instances?.length < 1) {
-                    promises.push(deleteTEI(initialValues.trackedEntity).catch((error) => console.log(error, 3)))
+                    promises.push(deleteTEI(initialValues.trackedEntity))
                 }
             })
 
@@ -73,10 +73,10 @@ function ModalDeleteContent(props: ModalDeleteContentProps): React.ReactElement 
             <React.Fragment>
                 <p>
                     Are you sure you want to  <span className={classNames(styles.redIcon)}>delete</span> the seleted {" "}
-                    {sectionName.toLowerCase()} from <strong>{schoolName}.</strong>{" "} Enrollment Details:{" "}
+                    {sectionName.toLowerCase()} from <strong>{schoolName}.</strong>{" "}<br/>
                     {
                         initialValues?.registration?.map((x: any) =>
-                            <><strong>{x.code.toUpperCase()}: </strong><span>{x.value}.</span>{" "}</>
+                            <><span className={classNames(styles.textCapDetails)}>{x.code}: </span><strong>{x.value}.</strong>{" "}</>
                         )
                     }
                 </p>
@@ -99,7 +99,7 @@ function ModalDeleteContent(props: ModalDeleteContentProps): React.ReactElement 
 
                         <br />
                         < NoticeBox error>
-                            <strong>Attention:</strong> The {sectionName.toLowerCase()} will be deleted and can no longer be accessed.
+                            <strong>Attention:</strong> This {sectionName.toLowerCase()} enrollment will be deleted and can no longer be accessed.
                         </NoticeBox>
                         <ModalActions>
                             <ButtonStrip end>
