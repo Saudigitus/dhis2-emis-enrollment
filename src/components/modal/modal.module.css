@@ -12,6 +12,7 @@
 
 .closeModalButton button:hover {
     background-color:  rgba(0, 0, 0, 0.04);
+}
 
 .item>span {
     width: 35px;
