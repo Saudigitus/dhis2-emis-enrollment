@@ -1,13 +1,12 @@
 import { useState, useEffect } from 'react';
 import style from './rowActions.module.css'
-import { IconEdit24, IconDelete24 } from "@dhis2/ui";
 import { IconButton, Tooltip } from '@material-ui/core';
 import { useGetEnrollmentDeleteFormData, useGetEnrollmentForm } from '../../../../hooks';
 import { ModalComponent, ModalContentUpdate, ModalDeleteContent } from '../../../modal';
 import useGetSectionTypeLabel from '../../../../hooks/commons/useGetSectionTypeLabel';
 import { RowActionsProps, RowActionsType } from '../../../../types/table/TableContentProps';
 import useGetEnrollmentUpdateFormData from '../../../../hooks/form/useGetEnrollmentUpdateFormData';
-
+import { IconEdit24, IconDelete24, CircularLoader, CenteredContent } from "@dhis2/ui";
 
 export default function RowActions(props: RowActionsProps) {
   const { row } = props;
@@ -54,14 +53,29 @@ export default function RowActions(props: RowActionsProps) {
       {
         openEditionModal &&
         <ModalComponent title={`Single ${sectionName} Edition`} open={openEditionModal} setOpen={setOpenEditionModal}>
-          <ModalContentUpdate setOpen={setOpenEditionModal} sectionName={sectionName} loadingInitialValues={loading} enrollmentsData={enrollmentsData} enrollmentValues={enrollmentValues} formInitialValues={initialValues} />
+          {
+            Object.keys(initialValues).length ?
+              <ModalContentUpdate setOpen={setOpenEditionModal} sectionName={sectionName} loadingInitialValues={loading} enrollmentsData={enrollmentsData} enrollmentValues={enrollmentValues} formInitialValues={initialValues} />
+              :
+              <CenteredContent>
+                <CircularLoader />
+              </CenteredContent>
+          }
         </ModalComponent>
       }
 
       {
         openDeletionModal &&
+
         <ModalComponent title={`Single ${sectionName} Deletion`} open={openDeletionModal} setOpen={setOpenDeletionModal}>
-          <ModalDeleteContent setOpen={setOpenDeletionModal} sectionName={sectionName} loading={envtsLoading} initialValues={deleteFormInitialValues} />
+          {
+            Object.keys(deleteFormInitialValues).length ?
+              <ModalDeleteContent setOpen={setOpenDeletionModal} sectionName={sectionName} loading={envtsLoading} initialValues={deleteFormInitialValues} />
+              :
+              <CenteredContent>
+                <CircularLoader />
+              </CenteredContent>
+          }
         </ModalComponent>
       }
     </div>
