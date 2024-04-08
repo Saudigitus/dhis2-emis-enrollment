@@ -18,6 +18,7 @@ interface ProgramStageConfig {
     autoGenerateEvent: boolean
     displayName: string
     id: string
+    repeatable:boolean,
     executionDateLabel?: string
     programStageDataElements: programStageDataElements[]
 }

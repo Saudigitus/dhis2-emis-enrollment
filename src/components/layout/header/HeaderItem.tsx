@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import style from "./MainHeader.module.css"
+import style from "./mainHeader.module.css"
 import { DropdownButton, FlyoutMenu } from "@dhis2/ui"
 import info from "../../../assets/images/headbar/info.svg"
 import { SimpleSearch } from '../../search'

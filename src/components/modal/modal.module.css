@@ -1,3 +1,23 @@
-.modalContainer{
+.modalContainer {
     min-width: 1000px !important;
+}
+
+.item>span {
+    width: 35px;
+    display: flex;
+    justify-content: center;
+}
+
+.textCapDetails {
+    text-transform: capitalize;
+}
+
+.redIcon,
+.redIcon svg {
+    color: #f44336 !important;
+}
+
+.greenIcon,
+.greenIcon svg {
+    color: #009688 !important;
 }
