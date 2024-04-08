@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import classNames from "classnames";
 import styles from "./modal.module.css";
 import { Form } from "react-final-form";
@@ -16,6 +16,7 @@ function ModalDeleteContent(props: ModalDeleteContentProps): React.ReactElement 
     const { urlParamiters } = useParams();
     const { schoolName } = urlParamiters()
     const { show } = useShowAlerts()
+    const formRef: React.MutableRefObject<FormApi<IForm, Partial<IForm>>> = useRef(null);
     const [clicked, setClicked] = useState<string>("");
     const getProgram = useRecoilValue(ProgramConfigState);
     const [refetch, setRefetch] = useRecoilState(TeiRefetch)
@@ -66,7 +67,8 @@ function ModalDeleteContent(props: ModalDeleteContentProps): React.ReactElement 
                 </p>
             </React.Fragment>
             <Form initialValues={initialValues} onSubmit={onSubmit}>
-                {({ handleSubmit }) => {
+                {({ handleSubmit, form }) => {
+                     formRef.current = form;
                     return <form onSubmit={handleSubmit}>
 
                         {initialValues?.events?.map((event: any, index: number) =>
