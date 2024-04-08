@@ -2,6 +2,17 @@
     min-width: 1000px !important;
 }
 
+.closeModalButton button{
+    top: 0;
+    right: 0;
+    position: absolute;
+    border: 8px !important;
+    background-color: transparent;
+}
+
+.closeModalButton button:hover {
+    background-color:  rgba(0, 0, 0, 0.04);
+
 .item>span {
     width: 35px;
     display: flex;
