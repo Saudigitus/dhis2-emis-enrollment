@@ -27,7 +27,7 @@ const TEI_QUERY = (queryProps: TeiQueryProps) => ({
     results: {
         resource: "tracker/trackedEntities",
         params: {
-            fields: "trackedEntity,createdAt,orgUnit,attributes[attribute,value],enrollments[enrollment,orgUnit,program]",
+            fields: "trackedEntity,createdAt,orgUnit,attributes[attribute,value],enrollments[enrollment,orgUnit,program,status]"
             ...queryProps
         }
     }
@@ -48,7 +48,7 @@ export function useTableData() {
     async function getData(page: number, pageSize: number) {
         if (school !== null) {
             setLoading(true)
-            
+
             const eventsResults = await engine.query(EVENT_QUERY({
                 ouMode: school != null ? "SELECTED" : "ACCESSIBLE",
                 page,
@@ -87,8 +87,8 @@ export function useTableData() {
 
             setEvents(eventsResults?.results?.instances)
             setTableData(formatResponseRows({
-                eventsInstances: eventsResults?.results?.instances as unknown as  FormatResponseRowsProps['eventsInstances'],
-                teiInstances: teiResults?.results?.instances as unknown as  FormatResponseRowsProps['teiInstances']
+                eventsInstances: eventsResults?.results?.instances as unknown as FormatResponseRowsProps['eventsInstances'],
+                teiInstances: teiResults?.results?.instances as unknown as FormatResponseRowsProps['teiInstances']
             }));
 
             setLoading(false)
