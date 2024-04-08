@@ -3,7 +3,7 @@ import classNames from "classnames";
 import styles from "./modal.module.css";
 import { Form } from "react-final-form";
 import WithPadding from "../template/WithPadding";
-import { useParams, useShowAlerts, useDeleteEvent, useDeleteEnrollment, useGetTotalEnrollments, useDeleteTEI } from "../../hooks";
+import { useParams, useShowAlerts, useDeleteSelectedEnrollment } from "../../hooks";
 import { Divider, ListItem, ListItemText } from "@material-ui/core";
 import { ModalDeleteContentProps } from "../../types/modal/ModalProps";
 import { ModalActions, Button, ButtonStrip, CircularLoader, CenteredContent, NoticeBox, IconCross24, IconCheckmark24 } from "@dhis2/ui";
@@ -14,16 +14,13 @@ import { TeiRefetch } from "../../schema/refecthTeiSchema";
 function ModalDeleteContent(props: ModalDeleteContentProps): React.ReactElement {
     const { setOpen, initialValues, loading: loadingInitialValues, sectionName } = props
     const { urlParamiters } = useParams();
-    const { schoolName, school } = urlParamiters()
+    const { schoolName } = urlParamiters()
     const { show } = useShowAlerts()
     const [clicked, setClicked] = useState<string>("");
     const getProgram = useRecoilValue(ProgramConfigState);
-    const { deleteEvent } = useDeleteEvent()
-    const { deleteEnrollment } = useDeleteEnrollment()
-    const { getTotalEnrollment } = useGetTotalEnrollments()
-    const { deleteTEI } = useDeleteTEI()
     const [refetch, setRefetch] = useRecoilState(TeiRefetch)
     const [loading, setLoading] = useState(false)
+    const { deleteSelectedEnrollment } = useDeleteSelectedEnrollment()
 
     const modalActions = [
         { id: "cancel", type: "button", label: "Cancel", disabled: loading || loadingInitialValues, onClick: () => { setClicked("cancel"); setOpen(false) } },
@@ -32,20 +29,7 @@ function ModalDeleteContent(props: ModalDeleteContentProps): React.ReactElement 
 
     async function onSubmit() {
         setLoading(true)
-        const promises = [];
-        for (let index = 0; index < initialValues.eventsId.length; index++) {
-            promises.push(deleteEvent(initialValues.eventsId[index]));
-        }
-        promises.push(deleteEnrollment(initialValues.enrollment))
-
-        await getTotalEnrollment(getProgram.id, school as unknown as string, initialValues.trackedEntity)
-            .then((resp: any) => {
-                if (resp?.results?.instances?.length < 1) {
-                    promises.push(deleteTEI(initialValues.trackedEntity))
-                }
-            })
-
-        await Promise.all(promises)
+        deleteSelectedEnrollment(initialValues, getProgram.id)
             .then(() => {
                 setLoading(false)
                 setRefetch(!refetch)
@@ -73,7 +57,7 @@ function ModalDeleteContent(props: ModalDeleteContentProps): React.ReactElement 
             <React.Fragment>
                 <p>
                     Are you sure you want to  <span className={classNames(styles.redIcon)}>delete</span> the seleted {" "}
-                    {sectionName.toLowerCase()} from <strong>{schoolName}.</strong>{" "}<br/>
+                    {sectionName.toLowerCase()} from <strong>{schoolName}.</strong>{" "}<br />
                     {
                         initialValues?.registration?.map((x: any) =>
                             <><span className={classNames(styles.textCapDetails)}>{x.code}: </span><strong>{x.value}.</strong>{" "}</>
