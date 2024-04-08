@@ -1,7 +1,6 @@
 import { attributesProps } from "../api/WithRegistrationProps"
 import { dataValuesProps } from "../api/WithoutRegistrationProps"
 import { ProgramConfig } from "../programConfig/ProgramConfig"
-import { CustomAttributeProps } from "../variables/AttributeColumns"
 
 interface FormatResponseRowsProps {
     eventsInstances: {
@@ -16,6 +15,7 @@ interface FormatResponseRowsProps {
             enrollment: string
             orgUnit: string
             program: string
+            status: string
         }[]
         createdAt: string
     }[]

@@ -7,10 +7,12 @@ import useGetSectionTypeLabel from '../../../../hooks/commons/useGetSectionTypeL
 import { RowActionsProps, RowActionsType } from '../../../../types/table/TableContentProps';
 import useGetEnrollmentUpdateFormData from '../../../../hooks/form/useGetEnrollmentUpdateFormData';
 import { IconEdit24, IconDelete24, CircularLoader, CenteredContent } from "@dhis2/ui";
+import { EnrollmentStatus } from '../../../../types/api/WithRegistrationProps';
+
 
 export default function RowActions(props: RowActionsProps) {
   const { row } = props;
-  const { trackedEntity, enrollmentId } = row;
+  const { trackedEntity, enrollmentId, status } = row;
   const { sectionName } = useGetSectionTypeLabel();
   const { enrollmentsData } = useGetEnrollmentForm()
   const [openEditionModal, setOpenEditionModal] = useState<boolean>(false);
@@ -45,7 +47,12 @@ export default function RowActions(props: RowActionsProps) {
     <div className={style.rowActionsContainer}>
 
       {rowsActions.map((option: RowActionsType, i: number) => (
-        <Tooltip key={i} title={option.label} onClick={() => { option.onClick() }}>
+        <Tooltip
+          key={i}
+          title={option.label}
+          disabled={status === EnrollmentStatus.CANCELLED}
+          onClick={() => { option.onClick() }}
+        >
           <IconButton className={style.rowActionsIcon}>{option.icon}</IconButton>
         </Tooltip>
       ))}

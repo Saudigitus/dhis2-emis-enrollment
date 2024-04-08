@@ -13,6 +13,7 @@ import { Attribute } from '../../../types/generated/models';
 import { GetImageUrl } from '../../../utils/table/rows/getImageUrl';
 import { IconButton } from '@material-ui/core';
 import { ProgramConfigState } from '../../../schema/programSchema';
+import { checkCanceled } from '../../../utils/table/rows/checkCanceled';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -54,7 +55,7 @@ function RenderRows(props: RenderHeaderProps): React.ReactElement {
             >
                 <RowCell
                     className={classNames(classes.cell, classes.bodyCell)}
-                    colspan={headerData?.filter(x => x.visible)?.length + 1}
+                    colspan={headerData?.filter(x => x.visible)?.length as unknown as number + 1}
                 >
                     {i18n.t('No data to display')}
                 </RowCell>
@@ -68,9 +69,11 @@ function RenderRows(props: RenderHeaderProps): React.ReactElement {
                 rowsData?.map((row, index) => (
                     <RowTable
                         key={index}
+                        inactive={checkCanceled(row.status)}
                         className={classNames(classes.row, classes.dataRow)}
                     >
                         {
+
                             headerData?.filter(x => x.visible)?.map(column => (
                                 <RowCell
                                     key={column.id}

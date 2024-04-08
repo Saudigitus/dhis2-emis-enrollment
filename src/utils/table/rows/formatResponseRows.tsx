@@ -12,7 +12,8 @@ export function formatResponseRows({ eventsInstances, teiInstances }: FormatResp
             trackedEntity: event.trackedEntity,
             enrollmentId: event?.enrollment,
             orgUnitId: teiDetails?.enrollments?.[0]?.orgUnit,
-            programId: teiDetails?.enrollments?.[0]?.program
+            programId: teiDetails?.enrollments?.[0]?.program,
+            status: teiDetails?.enrollments?.[0]?.status,
         })
     }
     return allRows;
