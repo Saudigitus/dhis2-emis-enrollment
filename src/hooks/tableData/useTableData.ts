@@ -1,6 +1,6 @@
 
-import { useRecoilValue, useSetRecoilState } from "recoil";
 import { useState } from "react";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import { useDataEngine } from "@dhis2/app-runtime";
 import { formatResponseRows } from "../../utils/table/rows/formatResponseRows";
 import { useParams } from "../commons/useQueryParams";
@@ -27,7 +27,7 @@ const TEI_QUERY = (queryProps: TeiQueryProps) => ({
     results: {
         resource: "tracker/trackedEntities",
         params: {
-            fields: "trackedEntity,createdAt,orgUnit,attributes[attribute,value],enrollments[enrollment,orgUnit,program]",
+            fields: "trackedEntity,createdAt,orgUnit,attributes[attribute,value],enrollments[enrollment,orgUnit,program,status]",
             ...queryProps
         }
     }
@@ -61,7 +61,7 @@ export function useTableData() {
                 orgUnit: school
             })).catch((error) => {
                 show({
-                    message: `${("Could not get data")}: ${error.message}`,
+                    message: `${("Could not get events")}: ${error.message}`,
                     type: { critical: true }
                 });
                 setTimeout(hide, 5000);
@@ -78,7 +78,7 @@ export function useTableData() {
                     trackedEntity: trackedEntityToFetch
                 })).catch((error) => {
                     show({
-                        message: `${("Could not get data")}: ${error.message}`,
+                        message: `${("Could not get traked entities")}: ${error.message}`,
                         type: { critical: true }
                     });
                     setTimeout(hide, 5000);
@@ -87,8 +87,8 @@ export function useTableData() {
 
             setEvents(eventsResults?.results?.instances)
             setTableData(formatResponseRows({
-                eventsInstances: eventsResults?.results?.instances as unknown as  FormatResponseRowsProps['eventsInstances'],
-                teiInstances: teiResults?.results?.instances as unknown as  FormatResponseRowsProps['teiInstances']
+                eventsInstances: eventsResults?.results?.instances as unknown as FormatResponseRowsProps['eventsInstances'],
+                teiInstances: teiResults?.results?.instances as unknown as FormatResponseRowsProps['teiInstances']
             }));
 
             setLoading(false)

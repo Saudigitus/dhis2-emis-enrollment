@@ -24,6 +24,7 @@ interface RowProps {
     className?: string
     passOnProps?: object
     table?: TableProps
+    inactive?: boolean
 }
 
 interface RowActionsType {

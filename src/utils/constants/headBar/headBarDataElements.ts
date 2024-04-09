@@ -1,21 +1,22 @@
-import { HeadBarTypes, SelectedOptionsTypes } from "../../../types/headBar/HeadBarTypes";
-import { filterItem, dataStoreRecord } from "../../../types/dataStore/DataStoreConfig";
-import { programStageDataElements } from "../../../types/programStageConfig/ProgramStageConfig";
-import { formatCamelCaseToWords } from "../../commons/formatCamelCaseToWords";
+import {HeadBarTypes, SelectedOptionsTypes} from "../../../types/headBar/HeadBarTypes";
+import {filterItem, dataStoreRecord} from "../../../types/dataStore/DataStoreConfig";
+import {programStageDataElements} from "../../../types/programStageConfig/ProgramStageConfig";
+import {formatCamelCaseToWords} from "../../commons/formatCamelCaseToWords";
 
-export const headBarDataElements = (selectedOptions : SelectedOptionsTypes, getDataStoreData: dataStoreRecord, programStageDataElements: programStageDataElements[]) : HeadBarTypes[] => {
-    const headBarFilters : HeadBarTypes[] = []
+export const headBarDataElements = (selectedOptions: SelectedOptionsTypes, getDataStoreData: dataStoreRecord, programStageDataElements: programStageDataElements[]): HeadBarTypes[] => {
+    const headBarFilters: HeadBarTypes[] = []
 
-    getDataStoreData?.filters?.dataElements.map((filter : filterItem) => {
+    getDataStoreData?.filters?.dataElements.map((filter: filterItem) => {
 
-        if(programStageDataElements){
-            let headBarFilterName : string  = '';
+        if (programStageDataElements) {
+            let headBarFilterName: string = '';
 
             const dataElement = programStageDataElements?.find((psDataElement: any) => psDataElement?.dataElement?.id === filter?.dataElement)?.dataElement;
-            
+
             if (dataElement) headBarFilterName = dataElement.displayName;
-            
+
             headBarFilters.push({
+                disabled:!(selectedOptions.school && selectedOptions.schoolName),
                 id: filter.code,
                 label: headBarFilterName,
                 value: selectedOptions[filter.code as unknown as keyof typeof selectedOptions] ?? `Select a ${formatCamelCaseToWords(filter.code)}`,
@@ -25,7 +26,6 @@ export const headBarDataElements = (selectedOptions : SelectedOptionsTypes, getD
                 selected: Boolean(selectedOptions[filter.code as unknown as keyof typeof selectedOptions]),
             })
         }
-        
     })
 
     return headBarFilters

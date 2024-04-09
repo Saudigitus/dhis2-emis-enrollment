@@ -22,6 +22,13 @@ interface ModalContentUpdateProps {
     enrollmentValues?: any
 }
 
+interface ModalDeleteContentProps {
+    setOpen: (value: boolean) => void
+    sectionName?: any
+    initialValues?: any
+    loading: boolean
+}
+
 interface ModalExportTemplateProps {
     setOpen: (value: boolean) => void
     sectionName: string
@@ -35,4 +42,4 @@ interface useExportTemplateProps {
     setLoadingExport?: any
 }
 
-export type { ModalProps, ModalContentProps, ModalContentUpdateProps, ModalExportTemplateProps , useExportTemplateProps}
+export type { ModalProps, ModalContentProps, ModalContentUpdateProps, ModalExportTemplateProps, ModalExportTemplateProps, useExportTemplateProps}

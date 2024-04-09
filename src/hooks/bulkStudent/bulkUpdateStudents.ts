@@ -5,7 +5,6 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import { TeiRefetch } from "../../schema/refecthTeiSchema";
 import { EventsState } from '../../schema/eventsSchema';
 import { RowSelectionState } from '../../schema/tableSelectedRowsSchema';
-import { format } from 'date-fns';
 
 const BULK_UPDATE: any = {
     resource: 'tracker',
@@ -18,9 +17,9 @@ const BULK_UPDATE: any = {
 }
 
 export default function useBulkUpdate() {
-    const { hide, show } = useShowAlerts()
+    const { show } = useShowAlerts()
     const [refetch, setRefetch] = useRecoilState(TeiRefetch)
-    const [mutate, mutateState] = useDataMutation(BULK_UPDATE)
+    const [mutate] = useDataMutation(BULK_UPDATE)
     const [loading, setLoading] = useState(false)
     const events = useRecoilValue(EventsState)
     const selected = useRecoilValue(RowSelectionState);
@@ -47,11 +46,11 @@ export default function useBulkUpdate() {
         })
 
         await mutate({ data: { events: updateClass } }).then(() => {
-            show({ message: "Update completed successfully", type: { success: true } })
+            show({ message: "Enrollments update completed successfully", type: { success: true } })
             setRefetch(!refetch)
             setLoading(false)
         })
-            .catch((error) => show({ message: "Error", type: { success: true } }))
+            .catch((error) => show({ message: `${("Could not update the enrollments")}: ${error.message}`, type: { critical: true } }))
     }
 
     return {

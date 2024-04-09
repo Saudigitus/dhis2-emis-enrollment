@@ -6,7 +6,7 @@ const TEI_QUERY = (queryProps: TeiQueryProps) => ({
     results: {
         resource: "tracker/trackedEntities",
         params: {
-            fields: "trackedEntity,createdAt,orgUnit,attributes[attribute,value], enrollments[enrollment, events[event, programStage]]",
+            fields: "trackedEntity,createdAt,orgUnit,attributes[attribute,value]",
             ...queryProps
         }
     }

@@ -1,3 +1,35 @@
-.modalContainer{
+.modalContainer {
     min-width: 1000px !important;
+}
+
+.closeModalButton button{
+    top: 0;
+    right: 0;
+    position: absolute;
+    border: 8px !important;
+    background-color: transparent;
+}
+
+.closeModalButton button:hover {
+    background-color:  rgba(0, 0, 0, 0.04);
+}
+
+.item>span {
+    width: 35px;
+    display: flex;
+    justify-content: center;
+}
+
+.textCapDetails {
+    text-transform: capitalize;
+}
+
+.redIcon,
+.redIcon svg {
+    color: #f44336 !important;
+}
+
+.greenIcon,
+.greenIcon svg {
+    color: #009688 !important;
 }

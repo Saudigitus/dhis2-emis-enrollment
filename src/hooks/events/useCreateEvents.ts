@@ -5,7 +5,7 @@ const POST_EVENT: any = {
     type: 'create',
     data: ({ data }: any) => data,
     params: {
-        importStrategy: 'UPDATE',
+        importStrategy: 'CREATE_AND_UPDATE',
         async: false
     }
 }
