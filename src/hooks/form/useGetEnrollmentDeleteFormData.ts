@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useRecoilValue } from 'recoil';
-import { useShowAlerts, useGetEnrollment } from '../../hooks';
+import { useShowAlerts, useGetEnrollment, useHeader } from '../../hooks';
 import { getSelectedKey } from '../../utils/commons/dataStore/getSelectedKey';
 import { ProgramConfigState } from '../../schema/programSchema';
 import { formatCamelCaseToWords } from '../../utils/commons/formatCamelCaseToWords';
@@ -12,6 +12,8 @@ export default function useGetEnrollmentDeleteFormData() {
     const [initialValues, setInitialValues] = useState<any>({})
     const [loading, setLoading] = useState<boolean>(false)
     const programConfig = useRecoilValue(ProgramConfigState)
+    const { columns } = useHeader()
+
 
     const buildDeleteFormData = (trackedEntity: string, enrollment: string) => {
         const { 'socio-economics': { programStage }, registration, filters } = getDataStoreData
@@ -47,7 +49,8 @@ export default function useGetEnrollmentDeleteFormData() {
                         registration: registrationInfo,
                         trackedEntity: trackedEntity,
                         enrollment: enrollment,
-                        eventsId: resp?.results?.events?.map((x: any) => x.event)
+                        eventsId: resp?.results?.events?.map((x: any) => x.event),
+                        attributes: resp?.results?.attributes?.filter((attribute: any) => columns.find((column: any) => column.id == attribute.attribute && column.visible)),
                     })
                     setLoading(false)
                 })

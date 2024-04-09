@@ -10,6 +10,7 @@ import { ModalActions, Button, ButtonStrip, CircularLoader, CenteredContent, Not
 import { useRecoilState, useRecoilValue } from "recoil";
 import { ProgramConfigState } from "../../schema/programSchema";
 import { TeiRefetch } from "../../schema/refecthTeiSchema";
+import { getDisplayName } from "../../utils/table/rows/getDisplayNameByOption";
 
 function ModalDeleteContent(props: ModalDeleteContentProps): React.ReactElement {
     const { setOpen, initialValues, loading: loadingInitialValues, sectionName } = props
@@ -58,17 +59,30 @@ function ModalDeleteContent(props: ModalDeleteContentProps): React.ReactElement 
             <React.Fragment>
                 <p>
                     Are you sure you want to  <span className={classNames(styles.redIcon)}>delete</span> the seleted {" "}
-                    {sectionName.toLowerCase()} from <strong>{schoolName}.</strong>{" "}<br />
-                    {
+                    {sectionName.toLowerCase()} from <strong>{schoolName}.</strong>{" "}<br /><br />
+
+                    <strong>{sectionName} Details:</strong><br />{
+                        initialValues?.attributes?.map((x: any) => {
+                            return (
+                                <>
+                                    <span className={classNames(styles.textCapDetails)}>{x.displayName}: </span><strong> {getDisplayName({ metaData: x.attribute, value: x.value, program: getProgram })}.</strong>{" "}
+                                    <br />
+                                </>
+                            )
+                        })
+                    }
+                    <br />
+                    <strong>Enrollment Details:</strong><br />{
                         initialValues?.registration?.map((x: any) =>
                             <><span className={classNames(styles.textCapDetails)}>{x.code}: </span><strong>{x.value}.</strong>{" "}</>
                         )
                     }
+                    <br />
                 </p>
             </React.Fragment>
             <Form initialValues={initialValues} onSubmit={onSubmit}>
                 {({ handleSubmit, form }) => {
-                     formRef.current = form;
+                    formRef.current = form;
                     return <form onSubmit={handleSubmit}>
 
                         {initialValues?.events?.map((event: any, index: number) =>
