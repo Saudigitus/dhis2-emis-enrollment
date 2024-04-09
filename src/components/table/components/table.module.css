@@ -19,6 +19,10 @@
     cursor: not-allowed !important;
 }
 
+.disabledRow .tableCell {
+    color: rgba(0, 0, 0, 0.6) !important;
+}
+
 .tableRowBody {
     height: 48px;
 }
