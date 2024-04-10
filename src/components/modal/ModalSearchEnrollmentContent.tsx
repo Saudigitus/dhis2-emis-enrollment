@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { ModalActions, Button, ButtonStrip, Label, Divider, NoticeBox } from "@dhis2/ui";
 import { Form } from "react-final-form";
 import GroupForm from "../form/GroupForm";
@@ -30,13 +30,14 @@ const usetStyles = makeStyles({
 function ModalSearchEnrollmentContent(props: ModalSearchTemplateProps): React.ReactElement {
   const { setOpen, sectionName, setOpenNewEnrollment } = props;
   const classes = usetStyles()
-  const { searchEnrollmentFields } = useGetSearchEnrollmentForm();
+  const { searchEnrollmentFields, buildSearhForm } = useGetSearchEnrollmentForm();
   const { registration } = getDataStoreKeys()
   const [showResults, setShowResults] = useState<boolean>(false)
   const { columns } = useEnrollmentsHeader();
   const { teiAttributes, attributesToDisplay } = useGetProgramsAttributes();
   const  { enrollmentValues, setEnrollmentValues, loading, getEnrollmentsData } = useSearchEnrollments()
   const [, setInitialValues] = useRecoilState(SearchInitialValues)
+  const [attributeKey, setAttributeKey] = useState<string>("unique")
   
   const { urlParamiters } = useParams();
   const { school: orgUnit, schoolName: orgUnitName, academicYear } = urlParamiters();
@@ -50,15 +51,20 @@ function ModalSearchEnrollmentContent(props: ModalSearchTemplateProps): React.Re
 
   const [queryForm, setQueryForm] = useState<any>({});
 
-  const onHandleChange = ({ target: { value, name }, }: { target: { value: any; name: any }; }) => {
+  useEffect(() => {
+    buildSearhForm({ attributeKey });
+  }, [attributeKey]);
+
+  const onHandleChange = ({ target: { value, name } }: { target: { value: any; name: any } }) => {
     if (value.length === 0 || value === null || value === undefined) {
-      delete queryForm[name];
-      setQueryForm(queryForm);
+      const updatedForm = { ...queryForm };
+      delete updatedForm[name];
+      setQueryForm(updatedForm);
     } else {
-      setQueryForm({
-        ...queryForm,
+      setQueryForm((prevQueryForm: any) => ({
+        ...prevQueryForm,
         [name]: value,
-      });
+      }));
     }
   };
 
@@ -99,6 +105,7 @@ function ModalSearchEnrollmentContent(props: ModalSearchTemplateProps): React.Re
 
   const searchActions = [
     { id: "cancel", type: "button", label: showResults ? "Reset" : "Cancel", small: true, disabled: loading, onClick: () => { Object.entries(queryForm).length ? onReset() : setOpen(false) } },
+    //{ id: "searchMore", label:  "Search by other attributes", small: true, disabled: loading || !Object.entries(queryForm).length, onClick: () => { setQueryForm({}), setAttributeKey("searchable") } },
     { id: "search", type: "submit", label:  "Search", small: true, primary: true, disabled: loading || !Object.entries(queryForm).length, loading }
   ];
 
@@ -206,17 +213,14 @@ function ModalSearchEnrollmentContent(props: ModalSearchTemplateProps): React.Re
                 : !loading ?
                 <NoticeBox title={`No ${sectionName} found`}>
                   Click <strong>'Register new'</strong> if you want to register as a new <strong>{sectionName}</strong>.
+                  {attributeKey === "unique" ? <>  <br /> <br /> <Button small onClick={() => { setQueryForm({}), setAttributeKey("searchable"), setShowResults(false) }} disabled={loading} style={{marginTop: 50}}>Search by more attributes</Button></> : null}
                 </NoticeBox> : null
               }
-
-              
-              
             </Collapse>
-    
           </form>
         }}
       </Form>
-      {showResults ? 
+      {(showResults && attributeKey === "searchable") || enrollmentValues?.length ? 
         <ModalActions>
           <div className="d-flex justify-content-between align-items-center w-100">
             {enrollmentValues?.length ? <small>If none of the matches above is the {sectionName} you are searching for, click 'Register new'.</small> : <small></small>}

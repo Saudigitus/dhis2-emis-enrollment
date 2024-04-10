@@ -10,23 +10,19 @@ export default function useGetSearchEnrollmentForm() {
     const [searchEnrollmentFields, setSearchEnrollmentFields] = useState<any[]>([])
     const getProgram = useRecoilValue(ProgramConfigState);
     const { getDataStoreData } = getSelectedKey()
+    const { registration } = getDataStoreData
+    const { programStages } = getProgram
 
-    const buildForm = () => {
+    const buildSearhForm = ({ attributeKey }: { attributeKey: string}) => {
         if (Object.keys(getDataStoreData)?.length && getProgram !== undefined) {
-            const { registration } = getDataStoreData
-            const { programStages } = getProgram
-            
             const enrollmentDetailProgramStage = programStages.find((element: ProgramStageConfig) => element.id === registration.programStage) as unknown as ProgramStageConfig
             const formDataElements = formatResponseEvents(enrollmentDetailProgramStage).filter((element) => element.id === registration.academicYear).map((el) => { return { ...el, disabled: true}})
-            const formSearchableAttributes = formatResponseTEI(getProgram).filter((element) => element.unique === true || element.searchable === true).map((el) => { return { ...el, disabled: false, required: false}})
-  
-            //console.log("formatResponseTEI(getProgram)", formatResponseTEI(getProgram))
-            setSearchEnrollmentFields([formDataElements, formSearchableAttributes])
+
+            const formSearchableAttributes = formatResponseTEI(getProgram).filter((element) => element[attributeKey] === true).map((el) => { return { ...el, disabled: false, required: false}})
+
+        setSearchEnrollmentFields([formDataElements, formSearchableAttributes])
         }
     }
-    useEffect(() => {
-        buildForm()
-    }, [])
 
-    return { searchEnrollmentFields }
+    return { searchEnrollmentFields, buildSearhForm }
 }
