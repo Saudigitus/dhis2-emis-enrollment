@@ -23,7 +23,7 @@ export default function useGetEnrollmentDeleteFormData() {
             const events: any[] = []
             const registrationInfo: any[] = []
 
-            getEnrollment(enrollment)
+            getEnrollment(enrollment, { fields: "*" })
                 .then((resp: any) => {
                     programConfig.programStages?.filter(x => x.id !== programStage && x.id !== registration.programStage).map((value) => {
                         const event = resp?.results?.events?.filter((x: any) => x.programStage === value.id && x.dataValues.length)
@@ -55,7 +55,6 @@ export default function useGetEnrollmentDeleteFormData() {
                     setLoading(false)
                 })
                 .catch((error: any) => {
-                    console.log(error)
                     show({ message: `Could not load enrollment data for delete: ${error.message}`, critical: true })
                 })
         }

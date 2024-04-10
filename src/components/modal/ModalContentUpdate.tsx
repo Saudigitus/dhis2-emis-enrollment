@@ -45,12 +45,11 @@ function ModalContentUpdate(props: ModalContentUpdateProps): React.ReactElement 
   function onSubmit() {
     const allFields = fieldsWithValue.flat()
     const events = enrollmentValues['events']
-    const eventDate = formInitialValues['eventdatestaticform']
 
     setLoading(true)
     if (allFields.filter((element: any) => (element?.assignedValue === undefined && element.required))?.length === 0) {
 
-      updateSelectedEnrollment(fieldsWithValue, events, eventDate, initialValues, values, getProgram.id)
+      updateSelectedEnrollment(fieldsWithValue, events, initialValues, values, getProgram.id)
         .then(() => {
           setClicked(false)
           setLoading(false)

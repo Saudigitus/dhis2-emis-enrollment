@@ -1,6 +1,6 @@
 import { reducer } from "../commons/formatDistinctValue";
 
-export const eventUpdateBody = (enrollmentsData: any[], events: any[], enrollmentDate: any,  formValues:any, orgUnit: string, programId: string, trackedEntity: string) => {
+export const eventUpdateBody = (enrollmentsData: any[], events: any[], eventDate: any,  formValues:any, orgUnit: string, programId: string, trackedEntity: string) => {
     const form : any = []
 
     for (const enrollmentData of enrollmentsData) {
@@ -12,8 +12,8 @@ export const eventUpdateBody = (enrollmentsData: any[], events: any[], enrollmen
                 if(event && Object.keys(event).length > 4)
                     form.push({
                         ...event,
-                        occurredAt: enrollmentDate,
-                        scheduledAt: enrollmentDate,
+                        occurredAt: eventDate,
+                        scheduledAt: eventDate,
                         dataValues: returnEventDataValues(enrollmentData, formValues)
                     })
                 else 
@@ -25,9 +25,8 @@ export const eventUpdateBody = (enrollmentsData: any[], events: any[], enrollmen
                         program: programId,
                         trackedEntity:trackedEntity,
                         enrollment: event.enrollment,
-                        // event: event.event,
-                        occurredAt: enrollmentDate,
-                        scheduledAt: enrollmentDate,
+                        occurredAt: eventDate,
+                        scheduledAt: eventDate,
                         dataValues: returnEventDataValues(enrollmentData, formValues)
                     })
             }
