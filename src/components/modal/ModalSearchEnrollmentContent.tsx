@@ -93,6 +93,7 @@ function ModalSearchEnrollmentContent(props: ModalSearchTemplateProps): React.Re
 
   const onHandleRegisterNew = async () => {
     setInitialValues(queryForm);
+    setOpen(false);
     setOpenNewEnrollment(true);
   };
 
@@ -179,7 +180,7 @@ function ModalSearchEnrollmentContent(props: ModalSearchTemplateProps): React.Re
                       <div className="col-12 col-md-9">
                         <div className="mb-1 d-flex justify-content-between align-items-center">
                           <Subtitle label={`Enrollments (${enrollment?.registrationEvents?.length})`} />
-                          <Button small onClick={() => { onSelectTei(enrollment); setOpenNewEnrollment(true)}} disabled={loading} style={{marginTop: 50}}>Select {sectionName}</Button>
+                          <Button small onClick={() => { onSelectTei(enrollment); setOpen(false); setOpenNewEnrollment(true)}} disabled={loading} style={{marginTop: 50}}>Select {sectionName}</Button>
                         </div>
                         
                         {enrollment?.registrationEvents?.length ?
