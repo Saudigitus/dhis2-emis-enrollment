@@ -28,6 +28,7 @@ export function formatResponse(data: ProgramConfig, dataStoreData: dataStoreReco
                 error: false,
                 content: '',
                 key: item.trackedEntityAttribute.id,
+                unique: item.trackedEntityAttribute.unique,
                 type: VariablesTypes.Attribute
             }
         }).concat(

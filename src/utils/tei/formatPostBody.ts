@@ -53,13 +53,13 @@ export const teiPostBody = (enrollmentsData: any[], programId: string, orgUnit: 
                         program: programId,
                         orgUnit,
                         attributes: form.attributes,
-                        status: "ACTIVE",
+                        status: "COMPLETED",
                         events: form.events
                     }
                 ],
                 orgUnit,
                 trackedEntityType,
-                ...(trackedEntity ? [{ trackedEntity}] : [] ),
+                ...(trackedEntity ? { trackedEntity} : {} )
             }
         ]
     }

@@ -54,7 +54,7 @@ function formFields(apiFormData: any[], sectionName: string): FormSectionProps[]
   return [
     {
         section: "Enrollment Details",
-        description: "Details related to the enrollment process",
+        description: "Details related to the enrollment process. Fill in at least 1 attribute to search.",
         visible: true,
         fields: [
             staticForm().registeringSchool,

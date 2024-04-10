@@ -11,7 +11,7 @@ export function useEnrollmentsHeader() {
     const programConfigState = useRecoilValue(ProgramConfigState);
     const enrollmentDetailProgramStage = programConfigState.programStages.find((element: ProgramStageConfig) => element.id === registration.programStage) as unknown as ProgramStageConfig
 
-    const staticHeaders = [{
+    const staticHeaders: CustomAttributeProps[] = [{
         id: "orgUnitName",
         displayName: "orgUnitName",
         header: "School",
@@ -19,7 +19,7 @@ export function useEnrollmentsHeader() {
         name: "orgUnitName",
         labelName: "School",
         valueType: Attribute.valueType.TEXT as unknown as CustomAttributeProps["valueType"],
-        options: undefined,
+        options: undefined as unknown as CustomAttributeProps["options"],
         visible: true,
         disabled: false,
         pattern: '',

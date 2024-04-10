@@ -18,7 +18,7 @@ export default function useGetSearchEnrollmentForm() {
             
             const enrollmentDetailProgramStage = programStages.find((element: ProgramStageConfig) => element.id === registration.programStage) as unknown as ProgramStageConfig
             const formDataElements = formatResponseEvents(enrollmentDetailProgramStage).filter((element) => element.id === registration.academicYear).map((el) => { return { ...el, disabled: true}})
-            const formSearchableAttributes = formatResponseTEI(getProgram).filter((element) => element.searchable === true).map((el) => { return { ...el, disabled: false}})
+            const formSearchableAttributes = formatResponseTEI(getProgram).filter((element) => element.unique === true || element.searchable === true).map((el) => { return { ...el, disabled: false, required: false}})
   
             //console.log("formatResponseTEI(getProgram)", formatResponseTEI(getProgram))
             setSearchEnrollmentFields([formDataElements, formSearchableAttributes])

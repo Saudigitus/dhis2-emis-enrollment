@@ -22,7 +22,8 @@ export function useGetEvent() {
                 programStage: programStage,
                 filter: filter,
                 orgUnit: orgUnit,
-                trackedEntity: trackedEntity
+                trackedEntity: trackedEntity,
+                order: "createdAt:desc"
             })) as unknown as EventQueryResults;
     }
 
