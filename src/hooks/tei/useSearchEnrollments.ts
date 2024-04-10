@@ -19,7 +19,7 @@ export default function useSearchEnrollments() {
     const getEnrollmentsData = (filters: string, setShowResults: any) => {
         const teisWithRegistrationEvents: any[] = [];
         setLoading(true)
-            getTeiSearch(program, orgUnit as unknown as string, filters)
+            getTeiSearch(program, filters)
                 .then(async (teiResponse: any) => {
 
                     for (const tei of teiResponse?.results?.instances) {

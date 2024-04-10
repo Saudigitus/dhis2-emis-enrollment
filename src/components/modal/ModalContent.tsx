@@ -10,7 +10,7 @@ import { format } from "date-fns";
 import { teiPostBody } from "../../utils/tei/formatPostBody";
 import { onSubmitClicked } from "../../schema/formOnSubmitClicked";
 import { ModalContentProps } from "../../types/modal/ModalProps";
-import { useGetAttributes, useGetEnrollmentForm, useGetPatternCode, useGetUsedPProgramStages, useParams, usePostTei } from "../../hooks";
+import { useGetAttributes, useGetPatternCode, useGetUsedPProgramStages, useParams, usePostTei } from "../../hooks";
 import { getDataStoreKeys } from "../../utils/commons/dataStore/getDataStoreKeys";
 import { CustomDhis2RulesEngine } from "../../hooks/programRules/rules-engine/RulesEngine";
 import { formatKeyValueType } from "../../utils/programRules/formatKeyValueType";
@@ -146,9 +146,10 @@ function ModalContentComponent(props: ModalContentProps): React.ReactElement {
                         !(bulkUpdate && action.id === 'saveandnew') &&
                         <Button
                           key={i}
+                          loading={(!!(loading || loadingBulkUpdate) && action.id === clickedButton)}
                           {...action}
                         >
-                          {(!!(loading || loadingBulkUpdate) && action.id === clickedButton) ? <CircularLoader small /> : action.label}
+                          {action.label}
                         </Button>
                       }
                     </>

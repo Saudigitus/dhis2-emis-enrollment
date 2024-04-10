@@ -92,7 +92,7 @@ function ModalSearchEnrollmentContent(props: ModalSearchTemplateProps): React.Re
   };
 
   const onHandleRegisterNew = async () => {
-    setInitialValues(queryForm);
+    setInitialValues(attributeKey === "unique" ? {} : queryForm);
     setOpen(false);
     setOpenNewEnrollment(true);
   };

@@ -12,7 +12,7 @@ interface TeiSearchQueryProps {
     page?: number
     pageSize?: number
     ouMode?: string
-    orgUnit: string
+    orgUnit?: string
     order?: string
     filter?: string
 }
