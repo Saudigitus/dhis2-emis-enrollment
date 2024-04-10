@@ -8,7 +8,8 @@ const POST_TEI: any = {
     type: 'create',
     data: ({ data }: any) => data,
     params: {
-        async: false
+        async: false,
+        importStrategy: 'CREATE_AND_UPDATE'
     }
 }
 

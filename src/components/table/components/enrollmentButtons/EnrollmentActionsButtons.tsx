@@ -63,6 +63,7 @@ function EnrollmentActionsButtons() {
         <ModalSearchEnrollmentContent
           sectionName={sectionName}
           setOpen={setOpenSearchEnrollment}
+          setOpenNewEnrollment={setOpen}
         />
       </ModalComponent>}
     </div>

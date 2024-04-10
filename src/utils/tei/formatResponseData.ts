@@ -5,6 +5,7 @@ function formatDataElementsEvents(data: any) {
         columnObj["id"] = dataValues.event
         columnObj["trackedEntity"] = dataValues.trackedEntity
         columnObj["active"] = dataValues.active
+        columnObj["enrollment"] = dataValues.enrollment
         columnObj["orgUnitName"] = dataValues.orgUnitName
         for (const dataElement of dataValues.dataValues || []) {
             columnObj[dataElement?.dataElement] = dataElement?.value

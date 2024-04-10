@@ -5,6 +5,7 @@
     font-size: 18px;
     line-height: 23px;
     color: var(--dark-label-color-secondary);
+    margin-bottom: 0px !important;
 }
 
 .title {

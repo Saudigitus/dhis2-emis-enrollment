@@ -1,8 +1,8 @@
 import React, { useState, useRef, useEffect } from "react";
-import { ModalActions, Button, ButtonStrip, Label, Divider } from "@dhis2/ui";
+import { ModalActions, Button, ButtonStrip, Label, Divider, NoticeBox } from "@dhis2/ui";
 import { Form } from "react-final-form";
 import GroupForm from "../form/GroupForm";
-import { ModalExportTemplateProps } from "../../types/modal/ModalProps";
+import { ModalExportTemplateProps, ModalSearchTemplateProps } from "../../types/modal/ModalProps";
 import { useParams, useSearchEnrollments } from "../../hooks";
 import { getDataStoreKeys } from "../../utils/commons/dataStore/getDataStoreKeys";
 import { removeFalseKeys } from "../../utils/commons/removeFalseKeys";
@@ -18,6 +18,9 @@ import RenderRows from "../table/render/RenderRows";
 import { useGetProgramsAttributes } from "../../hooks/tei/useGetProgramsAttributes";
 import { useEnrollmentsHeader } from "../../hooks/tableHeader/useEnrollmentsHeader";
 import { makeStyles } from "@material-ui/core";
+import { useRecoilState } from "recoil";
+import { SearchInitialValues } from "../../schema/searchInitialValues";
+import { getRecentEnrollment } from "../../utils/tei/getRecentEnrollment";
 
 const usetStyles = makeStyles({
   tableContainer: {
@@ -25,18 +28,18 @@ const usetStyles = makeStyles({
   }
 });
 
-function ModalSearchEnrollmentContent(props: ModalExportTemplateProps): React.ReactElement {
-  const { setOpen, sectionName } = props;
+function ModalSearchEnrollmentContent(props: ModalSearchTemplateProps): React.ReactElement {
+  const { setOpen, sectionName, setOpenNewEnrollment } = props;
     const classes = usetStyles()
     const { searchEnrollmentFields } = useGetSearchEnrollmentForm();
   const { registration, program } = getDataStoreKeys()
   const [showResults, setShowResults] = useState<boolean>(false)
   const { columns } = useEnrollmentsHeader();
   const { teiAttributes } = useGetProgramsAttributes();
-  const  { enrollmentValues, error, loading, getEnrollmentsData, totalResults } = useSearchEnrollments()
+  const  { enrollmentValues, setEnrollmentValues, loading, getEnrollmentsData } = useSearchEnrollments()
+  const [, setInitialValues] = useRecoilState(SearchInitialValues)
   
   console.log("enrollmentValues", enrollmentValues)
-  console.log("teiAttributes", teiAttributes)
 
   const { urlParamiters } = useParams();
   const { school: orgUnit, schoolName: orgUnitName, academicYear } = urlParamiters();
@@ -68,7 +71,6 @@ function ModalSearchEnrollmentContent(props: ModalExportTemplateProps): React.Re
   }
 
   function onSubmit() {
-    console.log("allfieldsData", values)
     setShowResults(!showResults);
   }
 
@@ -103,18 +105,41 @@ function ModalSearchEnrollmentContent(props: ModalExportTemplateProps): React.Re
   }
 
   const onHandleSubmit = async () => {
-    console.log("formattedQuery", formattedQuery())
-    console.log("formattedFormattedQuery", formattedQuery().slice(0, -1))
-    if (formattedQuery().length > 0) {
-      getEnrollmentsData(formattedQuery(), setShowResults)
-      setShowResults(!showResults);
+    if(enrollmentValues.length && Object.entries(queryForm).length){
+      setInitialValues(queryForm);
+      setOpenNewEnrollment(true);
+    } else {
+      if (formattedQuery().length > 0) {
+        getEnrollmentsData(formattedQuery(), setShowResults)
+        setShowResults(!showResults);
+      }
     }
+  };
+
+  const onReset = () => {
+    setQueryForm({});
+    setEnrollmentValues([]);
+    setInitialValues({})
   };
 
   const modalActions = [
     { id: "cancel", type: "button", label: "Cancel", disabled: loading, onClick: () => { setOpen(false) } },
-    { id: "continue", type: "submit", label: "Continue", primary: true, disabled: loading, loading }
+    //{ id: "reset", label: "Reset", disabled: loading || !Object.entries(queryForm).length, loading, onClick: () => { setQueryForm({}) } },
+    { id: "continue", type: "submit", label: enrollmentValues.length && Object.entries(queryForm).length ? "Register new" : "Search", primary: true, disabled: loading || !Object.entries(queryForm).length, loading }
   ];
+
+  const onSelectTei = (teiData: any) => {
+    const recentEnrollment = getRecentEnrollment(teiData.enrollments).enrollment
+    const recentRegistration = teiData.registrationEvents?.find((event: any) => event.enrollment === recentEnrollment)
+    const recentSocioEconomics = teiData.socioEconomicsEvents?.find((event: any) => event.enrollment === recentEnrollment)
+
+    setInitialValues({
+      trackedEntity: teiData.trackedEntity,
+      ...teiData?.mainAttributesFormatted,
+      ...recentRegistration,
+      ...recentSocioEconomics
+    })
+  }
 
   return (
     <div>
@@ -140,56 +165,71 @@ function ModalSearchEnrollmentContent(props: ModalExportTemplateProps): React.Re
             }
             <br />
             <Divider />
-            <Collapse in={showResults} style={{maxHeight: 250, overflowY: "auto"}}>
-
-              {enrollmentValues?.map((enrollment: any, index: number) => (
-                <>
-                  <div className="row w-100" key={index}>
-                    <div className="col-12 col-md-3">
-                      <Subtitle label={"Enrollment details"} />
-                      {teiAttributes?.filter((el) => el.searchable === true)?.map((attribute, key) =>(
-                        <div key={key} className={styles.detailsCard}>
-                          <strong className={styles.detailsCardVariable}>{attribute?.displayName}</strong>
-                          <Label className={styles.detailsCardLabel}> {enrollment?.mainAttributesFormatted[attribute?.id]} </Label>
+            <Collapse in={showResults} style={{}}>
+              {enrollmentValues.length ? 
+                enrollmentValues?.map((enrollment: any, index: number) => (
+                  <>
+                    <div className="row w-100" key={index}>
+                      <div className="col-12 col-md-3">
+                        <div style={{marginBottom: 10}}>
+                          <Subtitle label={"Enrollment details"} />
                         </div>
-                      ))}
-                    </div>
-                    <div className="col-12 col-md-9">
-                      <Subtitle label={`Enrollments (${enrollment?.registrationEvents?.length})`} />
+                        
+                        {teiAttributes?.filter((el) => el.searchable === true)?.map((attribute, key) =>(
+                          <div key={key} className={styles.detailsCard}>
+                            <strong className={styles.detailsCardVariable}>{attribute?.displayName}</strong>
+                            <Label className={styles.detailsCardLabel}> {enrollment?.mainAttributesFormatted[attribute?.id]} </Label>
+                          </div>
+                        ))}
+                      </div>
+                      <div className="col-12 col-md-9">
+                        <div className="mb-1 d-flex justify-content-between align-items-center">
+                          <Subtitle label={`Enrollments (${enrollment?.registrationEvents?.length})`} />
+                          <Button small onClick={() => { onSelectTei(enrollment); setOpenNewEnrollment(true)}} style={{marginTop: 50}}>Select {sectionName}</Button>
+                        </div>
+                        
+                        {enrollment?.registrationEvents?.length ?
+                          <WithBorder type="all">
+                            <div
+                          className={classes.tableContainer}
+                      >
+                            <TableComponent>
+                              <RenderHeader
+                                createSortHandler={() => {}}
+                                order="asc"
+                                orderBy="desc"
+                                rowsHeader={columns}
+                              />
+                              <RenderRows
+                                headerData={columns}
+                                rowsData={enrollment?.registrationEvents}
+                              />
+                            </TableComponent></div>                      
+                          </WithBorder>
+                          : <small>No enrollments found.</small>
+                        }
+                      </div>
                       
-                      {enrollment?.registrationEvents?.length ?
-                        <WithBorder type="all">
-                          <div
-                        className={classes.tableContainer}
-                    >
-                          <TableComponent>
-                            <RenderHeader
-                              createSortHandler={() => {}}
-                              order="asc"
-                              orderBy="desc"
-                              rowsHeader={columns}
-                            />
-                            <RenderRows
-                              headerData={columns}
-                              rowsData={enrollment?.registrationEvents}
-                            />
-                          </TableComponent></div>                      
-                        </WithBorder>
-                        : null
-                      }
                     </div>
-                    
-                  </div>
-              <br />
-                  <Divider />
-                </>
-                
-              ))}
+                <br />
+                    <Divider />
+                  </>
+                  
+                ))
+                : !loading ?
+                <NoticeBox title={`No ${sectionName} found`}>
+                  Click <strong>'Continue'</strong> if you want to register as a new <strong>{sectionName}</strong>.
+                </NoticeBox> : null
+              }
+
+              
               
             </Collapse>
       
           <ModalActions>
-            <ButtonStrip end>
+            <div className="d-flex justify-content-between align-items-center w-100">
+              {enrollmentValues?.length ? <small>If none of the matches above is the {sectionName} you are searching for, click 'Register new'.</small> : <small></small>}
+              <ButtonStrip end>
               {modalActions.map((action, i) => {
                 return (
                   <Button key={i} {...action} >
@@ -198,6 +238,8 @@ function ModalSearchEnrollmentContent(props: ModalExportTemplateProps): React.Re
                 )
               })}
             </ButtonStrip>
+          </div>
+          
           </ModalActions>
           </form>
         }}

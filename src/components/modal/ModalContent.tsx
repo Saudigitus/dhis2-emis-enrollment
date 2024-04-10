@@ -15,6 +15,7 @@ import { getDataStoreKeys } from "../../utils/commons/dataStore/getDataStoreKeys
 import { CustomDhis2RulesEngine } from "../../hooks/programRules/rules-engine/RulesEngine";
 import { formatKeyValueType } from "../../utils/programRules/formatKeyValueType";
 import useBulkUpdate from "../../hooks/bulkStudent/bulkUpdateStudents";
+import { SearchInitialValues } from "../../schema/searchInitialValues";
 
 function ModalContentComponent(props: ModalContentProps): React.ReactElement {
   const { setOpen, enrollmentsData, sectionName, bulkUpdate = false } = props;
@@ -30,9 +31,12 @@ function ModalContentComponent(props: ModalContentProps): React.ReactElement {
   const [fieldsWitValue, setFieldsWitValues] = useState<any[]>([enrollmentsData])
   const { postTei, loading, data } = usePostTei()
   const [clickedButton, setClickedButton] = useState<string>("");
+  const [searchInitialValues, setSearchInitialValues] = useRecoilState(SearchInitialValues)
+
   const [initialValues] = useState<object>({
     registerschoolstaticform: orgUnitName,
-    eventdatestaticform: format(new Date(), "yyyy-MM-dd")
+    eventdatestaticform: format(new Date(), "yyyy-MM-dd"),
+    ...searchInitialValues
   })
   const { updateClass, loading: loadingBulkUpdate } = useBulkUpdate()
   const { attributes = [] } = useGetAttributes()
@@ -70,7 +74,7 @@ function ModalContentComponent(props: ModalContentProps): React.ReactElement {
           data: teiPostBody(fieldsWitValue,
             (getProgram != null) ? getProgram.id : "", orgUnit ?? "",
             values?.eventdatestaticform ?? "",
-            performanceProgramStages, trackedEntityType)
+            performanceProgramStages, trackedEntityType, initialValues['trackedEntity' as unknown as keyof typeof initialValues])
         })
       }
     }
@@ -126,6 +130,7 @@ function ModalContentComponent(props: ModalContentProps): React.ReactElement {
                     fields={field.fields}
                     disabled={false}
                     bulkUpdate={bulkUpdate}
+                    trackedEntity={initialValues['trackedEntity' as unknown as keyof typeof initialValues]}
                   />
                 )
               })
