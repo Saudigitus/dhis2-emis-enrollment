@@ -48,6 +48,7 @@ function ModalContentComponent(props: ModalContentProps): React.ReactElement {
   }, [values])
 
   useEffect(() => {
+    if(!initialValues['trackedEntity' as unknown as keyof typeof initialValues])
     void returnPattern(attributes)
   }, [data])
 
