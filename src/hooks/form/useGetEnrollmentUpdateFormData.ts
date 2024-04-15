@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { format } from 'date-fns';
 import { useRecoilValue } from 'recoil';
-import { useGetTei, useGetEvent, useParams, useShowAlerts, useGetEnrollment } from '../../hooks';
+import { useGetTei, useGetEvent, useParams, useShowAlerts } from '../../hooks';
 import { getSelectedKey } from '../../utils/commons/dataStore/getSelectedKey';
 import { attributes, dataValues } from '../../utils/table/rows/formatResponseRows';
 import { HeaderFieldsState } from '../../schema/headersSchema';
@@ -12,7 +12,6 @@ export default function useGetEnrollmentUpdateFormData() {
     const { urlParamiters } = useParams()
     const { show } = useShowAlerts()
     const { school: orgUnit } = urlParamiters()
-    const { getEnrollment } = useGetEnrollment()
     const { getDataStoreData } = getSelectedKey()
     const [enrollmentValues, setEnrollmentValues] = useState<any>({})
     const [loading, setLoading] = useState<boolean>(false)
@@ -20,7 +19,7 @@ export default function useGetEnrollmentUpdateFormData() {
     const [initialValues, setInitialValues] = useState<any>({})
     const headerFieldsState = useRecoilValue(HeaderFieldsState)
 
-    const buildFormData = (trackedEntity: string, enrollmentId: string) => {
+    const buildFormData = (trackedEntity: string, enrollment: string) => {
 
         setLoading(true)
         if (Object.keys(getDataStoreData)?.length) {
@@ -29,34 +28,30 @@ export default function useGetEnrollmentUpdateFormData() {
             getTei(program, orgUnit as unknown as string, trackedEntity)
                 .then(async (trackedEntityInstance: any) => {
 
-                    await getEnrollment(enrollmentId, {})
-                        .then(async (enrollment: any) => {
+                    await getEvent(program, registration.programStage as unknown as string, headerFieldsState.dataElements, orgUnit as unknown as string, trackedEntity)
+                        .then(async (registration: any) => {
 
-                            await getEvent(program, registration.programStage as unknown as string, headerFieldsState.dataElements, orgUnit as unknown as string, trackedEntity)
-                                .then(async (registration: any) => {
+                            await getEvent(program, programStage as unknown as string, [], orgUnit as unknown as string, trackedEntity)
+                                .then((socioEconomic: any) => {
+                                    setInitialValues({
+                                        trackedEntity: trackedEntity,
+                                        ...dataValues(registration?.results?.instances?.find((x: any) => x.enrollment === enrollment)?.dataValues ?? []),
+                                        ...dataValues(socioEconomic?.results?.instances.find((x: any) => x.enrollment === enrollment)?.dataValues ?? []),
+                                        ...attributes(trackedEntityInstance?.results?.instances[0]?.attributes ?? []),
+                                        orgUnit: registration?.results?.instances?.find((x: any) => x.enrollment === enrollment)?.orgUnit,
+                                        enrollment: enrollment,
+                                        enrollmentDate: registration?.results?.instances?.find((x: any) => x.enrollment === enrollment)?.occurredAt,
+                                        program: trackedEntityInstance?.results?.instances[0]?.enrollments?.[0]?.program,
+                                        eventdatestaticform: registration?.results?.instances?.find((x: any) => x.enrollment === enrollment)?.occurredAt ? format(new Date(registration?.results?.instances?.find((x: any) => x.enrollment === enrollment)?.occurredAt), "yyyy-MM-dd") : undefined,
+                                    })
+                                    setEnrollmentValues({
+                                        events: [
+                                            registration?.results?.instances?.find((x: any) => x.enrollment === enrollment) ?? { enrollment: enrollment, programStage: registration },
+                                            socioEconomic?.results?.instances.find((x: any) => x.enrollment === enrollment) ?? { enrollment: enrollment, programStage: programStage },
+                                        ]
+                                    })
 
-                                    await getEvent(program, programStage as unknown as string, [], orgUnit as unknown as string, trackedEntity)
-                                        .then((socioEconomic: any) => {
-                                            setInitialValues({
-                                                trackedEntity: trackedEntity,
-                                                ...dataValues(registration?.results?.instances?.find((x: any) => x.enrollment === enrollmentId)?.dataValues ?? []),
-                                                ...dataValues(socioEconomic?.results?.instances.find((x: any) => x.enrollment === enrollmentId)?.dataValues ?? []),
-                                                ...attributes(trackedEntityInstance?.results?.instances[0]?.attributes ?? []),
-                                                orgUnit: registration?.results?.instances?.find((x: any) => x.enrollment === enrollmentId)?.orgUnit,
-                                                enrollment: enrollment.results,
-                                                enrollmentDate: registration?.results?.instances?.find((x: any) => x.enrollment === enrollmentId)?.occurredAt,
-                                                program: trackedEntityInstance?.results?.instances[0]?.enrollments?.[0]?.program,
-                                                eventdatestaticform: registration?.results?.instances?.find((x: any) => x.enrollment === enrollmentId)?.occurredAt ? format(new Date(registration?.results?.instances?.find((x: any) => x.enrollment === enrollmentId)?.occurredAt), "yyyy-MM-dd") : undefined,
-                                            })
-                                            setEnrollmentValues({
-                                                events: [
-                                                    registration?.results?.instances?.find((x: any) => x.enrollment === enrollmentId) ?? { enrollment: enrollmentId, programStage: registration },
-                                                    socioEconomic?.results?.instances.find((x: any) => x.enrollment === enrollmentId) ?? { enrollment: enrollmentId, programStage: programStage },
-                                                ]
-                                            })
-
-                                            setLoading(false)
-                                        })
+                                    setLoading(false)
                                 })
                         })
                 })
