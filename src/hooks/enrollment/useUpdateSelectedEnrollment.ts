@@ -5,7 +5,7 @@ import { getDataStoreKeys } from "../../utils/commons/dataStore/getDataStoreKeys
 export function useUpdateSelectedEnrollment() {
     const { urlParamiters } = useParams();
     const { school: orgUnit } = urlParamiters()
-    const { updateTei, data, loading } = useUpdateTei()
+    const { updateTei, data, loading, error } = useUpdateTei()
     const { trackedEntityType } = getDataStoreKeys();
 
     const updateSelectedEnrollment = async (fieldsWithValue: any, events: any, initialValues: any, values: any, program: string) => {
@@ -27,5 +27,5 @@ export function useUpdateSelectedEnrollment() {
         })
     }
 
-    return { updateSelectedEnrollment, data, loading }
+    return { updateSelectedEnrollment, data, loading, error }
 }

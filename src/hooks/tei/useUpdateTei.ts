@@ -17,23 +17,26 @@ export default function useUpdateTei() {
     const { hide, show } = useShowAlerts()
     const [refetch, setRefetch] = useRecoilState(TeiRefetch)
 
-    const [create, { loading, data }] = useDataMutation(UPDATE_TEI, {
+    const [create, { loading, data, error }] = useDataMutation(UPDATE_TEI, {
         onComplete: () => {
             show({ message: "Enrollment updated successfully", type: { success: true } })
             setRefetch(!refetch)
         },
         onError: (error) => {
-            show({
-                message: `Could not update the enrollment details: ${error.message}`,
-                type: { critical: true }
+            error?.details?.validationReport?.errorReports?.map((x : any) => {
+                show({
+                    message: `Could not update the enrollment details: ${x.message}`,
+                    type: { critical: true }
+                });
+                setTimeout(hide, 5000);
             });
-            setTimeout(hide, 5000);
-        }
+        }        
     });
 
     return {
         loading,
         updateTei: create,
-        data
+        data,
+        error
     }
 }
