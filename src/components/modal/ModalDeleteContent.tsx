@@ -46,7 +46,7 @@ function ModalDeleteContent(props: ModalDeleteContentProps): React.ReactElement 
     }
 
 
-    if (loading || loadingInitialValues) {
+    if (loadingInitialValues) {
         return (
             <CenteredContent>
                 <CircularLoader />
