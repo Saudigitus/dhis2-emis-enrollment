@@ -18,15 +18,15 @@ function ModalDeleteContent(props: ModalDeleteContentProps): React.ReactElement 
     const { schoolName } = urlParamiters()
     const { show } = useShowAlerts()
     const formRef: React.MutableRefObject<FormApi<IForm, Partial<IForm>>> = useRef(null);
-    const [clicked, setClicked] = useState<string>("");
+    const [clickedButton, setClickedButton] = useState<string>("");
     const getProgram = useRecoilValue(ProgramConfigState);
     const [refetch, setRefetch] = useRecoilState(TeiRefetch)
     const [loading, setLoading] = useState(false)
     const { deleteSelectedEnrollment } = useDeleteSelectedEnrollment()
 
     const modalActions = [
-        { id: "cancel", type: "button", label: "Cancel", disabled: loading || loadingInitialValues, onClick: () => { setClicked("cancel"); setOpen(false) } },
-        { id: "saveandcontinue", type: "submit", label: "Delete enrollment", destructive: true, disabled: loading || loadingInitialValues, loading: loading || loadingInitialValues, onClick: () => { setClicked("saveandcontinue"); } }
+        { id: "cancel", type: "button", label: "Cancel", disabled: loading || loadingInitialValues, onClick: () => { setClickedButton("cancel"); setOpen(false) } },
+        { id: "save", type: "submit", label: "Delete enrollment", destructive: true, disabled: loading || loadingInitialValues, loading: loading || loadingInitialValues, onClick: () => { setClickedButton("save"); } }
     ];
 
     async function onSubmit() {
@@ -36,6 +36,7 @@ function ModalDeleteContent(props: ModalDeleteContentProps): React.ReactElement 
                 setLoading(false)
                 setRefetch(!refetch)
                 setOpen(false)
+                show({ message: "Enrollment deleted successfully.", type: { success: true } })
             })
             .catch((error) => {
                 setLoading(false)
@@ -46,7 +47,7 @@ function ModalDeleteContent(props: ModalDeleteContentProps): React.ReactElement 
     }
 
 
-    if (loading || loadingInitialValues) {
+    if (loadingInitialValues) {
         return (
             <CenteredContent>
                 <CircularLoader />
@@ -108,7 +109,6 @@ function ModalDeleteContent(props: ModalDeleteContentProps): React.ReactElement 
                                         key={i}
                                         {...action}
                                     >
-                                        {action.label}
                                     </Button>
                                 ))}
                             </ButtonStrip>

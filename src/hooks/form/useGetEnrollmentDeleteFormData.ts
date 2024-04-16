@@ -49,7 +49,6 @@ export default function useGetEnrollmentDeleteFormData() {
                         registration: registrationInfo,
                         trackedEntity: trackedEntity,
                         enrollment: enrollment,
-                        eventsId: resp?.results?.events?.map((x: any) => x.event),
                         attributes: resp?.results?.attributes?.filter((attribute: any) => columns.find((column: any) => column.id == attribute.attribute && column.visible)),
                     })
                     setLoading(false)
