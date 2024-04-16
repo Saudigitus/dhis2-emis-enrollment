@@ -7,7 +7,7 @@ import useGetSectionTypeLabel from "../../../../hooks/commons/useGetSectionTypeL
 
 function RowTable(props: RowProps): React.ReactElement {
     const { children, className, table, inactive = false, ...passOnProps } = props;
-    const {sectionName} = useGetSectionTypeLabel()
+    const { sectionName } = useGetSectionTypeLabel()
 
     const classes = classNames(
         defaultClasses.tableRow,
@@ -21,7 +21,7 @@ function RowTable(props: RowProps): React.ReactElement {
     );
 
     return (
-        <Tooltip arrow={true} disableHoverListener={!inactive}
+        <Tooltip arrow={true} disableHoverListener={!inactive} disableFocusListener
             title={inactive && 'This ' + sectionName + ' enrollment is inactive'}>
             <tr
                 className={classes}
