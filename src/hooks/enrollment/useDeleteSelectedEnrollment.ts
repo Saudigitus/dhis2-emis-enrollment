@@ -1,21 +1,19 @@
-import { useParams, useDeleteEnrollment, useGetTotalEnrollments, useDeleteTEI } from "../../hooks";
+import { useDeleteEnrollment, useGetTotalEnrollments, useDeleteTEI } from "../../hooks";
 
 
 export function useDeleteSelectedEnrollment() {
-    const { urlParamiters } = useParams();
-    const { school } = urlParamiters()
     const { deleteTEI } = useDeleteTEI()
     const { deleteEnrollment } = useDeleteEnrollment()
     const { getTotalEnrollment } = useGetTotalEnrollments()
 
-    const deleteSelectedEnrollment = async (initialValues: any, program: string) => {
+    const deleteSelectedEnrollment = async (initialValues: any) => {
         const promises = [];
         
         promises.push(deleteEnrollment(initialValues.enrollment))
 
-        await getTotalEnrollment(program, school as unknown as string, initialValues.trackedEntity)
+        await getTotalEnrollment(initialValues.trackedEntity)
             .then((resp: any) => {
-                if (resp?.results?.instances?.length <= 1) {
+                if (resp?.results?.enrollments?.length <= 1) {
                     promises.push(deleteTEI(initialValues.trackedEntity))
                 }
             })

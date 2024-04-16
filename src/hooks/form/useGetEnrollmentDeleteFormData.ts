@@ -46,9 +46,9 @@ export default function useGetEnrollmentDeleteFormData() {
 
                     setInitialValues({
                         events: events,
-                        registration: registrationInfo,
-                        trackedEntity: trackedEntity,
                         enrollment: enrollment,
+                        trackedEntity: trackedEntity,
+                        registration: registrationInfo,
                         attributes: resp?.results?.attributes?.filter((attribute: any) => columns.find((column: any) => column.id == attribute.attribute && column.visible)),
                     })
                     setLoading(false)
