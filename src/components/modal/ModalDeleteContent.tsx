@@ -31,7 +31,7 @@ function ModalDeleteContent(props: ModalDeleteContentProps): React.ReactElement 
 
     async function onSubmit() {
         setLoading(true)
-        deleteSelectedEnrollment(initialValues, getProgram.id)
+        deleteSelectedEnrollment(initialValues)
             .then(() => {
                 setLoading(false)
                 setRefetch(!refetch)
@@ -46,7 +46,7 @@ function ModalDeleteContent(props: ModalDeleteContentProps): React.ReactElement 
     }
 
 
-    if (loading || loadingInitialValues) {
+    if (loadingInitialValues) {
         return (
             <CenteredContent>
                 <CircularLoader />

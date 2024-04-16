@@ -19,7 +19,6 @@ import { useGetEnrollment } from "./enrollment/useGetEnrollment";
 import useGetEnrollmentDeleteFormData from "./form/useGetEnrollmentDeleteFormData";
 import useGetEnrollmentUpdateFormData from "./form/useGetEnrollmentUpdateFormData";
 import { useDeleteTEI } from "./tei/useDeleteTei";
-import { useDeleteEvent } from "./events/useDeleteEvent";
 import { useDeleteEnrollment } from "./enrollment/useDeleteEnrollment";
 import { useGetTotalEnrollments } from "./enrollment/useGetTotalEnrollments";
 import { useDeleteSelectedEnrollment } from "./enrollment/useDeleteSelectedEnrollment";
@@ -31,6 +30,5 @@ export {
     useDataStore, useParams, useShowAlerts, useDataElementsParamMapping, useGetDataElements, useGetEnrollmentForm, useGetInitialValues,
     useGetOptionSets, useGetProgramConfig, useGetAttributes, useGetUsedPProgramStages, useTableData, useHeader, useGetPatternCode,
     usePostTei, useGetEvent, useGetTei, useGetEnrollment, useGetEnrollmentDeleteFormData, useGetEnrollmentUpdateFormData, useDeleteTEI, 
-    useDeleteEvent, useDeleteEnrollment, useGetTotalEnrollments, useDeleteSelectedEnrollment, useUpdateSelectedEnrollment, usePostEvent,
-    useUpdateTei
+    useDeleteEnrollment, useGetTotalEnrollments, useDeleteSelectedEnrollment, useUpdateSelectedEnrollment, usePostEvent, useUpdateTei
 }
