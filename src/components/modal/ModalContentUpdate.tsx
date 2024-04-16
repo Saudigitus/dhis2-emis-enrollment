@@ -8,10 +8,9 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import { ProgramConfigState } from "../../schema/programSchema";
 import { onSubmitClicked } from "../../schema/formOnSubmitClicked";
 import { ModalContentUpdateProps } from "../../types/modal/ModalProps";
-import { useParams, useShowAlerts, useUpdateSelectedEnrollment } from "../../hooks";
+import { useParams, useUpdateSelectedEnrollment } from "../../hooks";
 import { CustomDhis2RulesEngine } from "../../hooks/programRules/rules-engine/RulesEngine";
 import { formatKeyValueType } from "../../utils/programRules/formatKeyValueType";
-import { TeiRefetch } from "../../schema/refecthTeiSchema";
 import { removeFalseKeys } from "../../utils/commons/removeFalseKeys";
 
 function ModalContentUpdate(props: ModalContentUpdateProps): React.ReactElement {
@@ -28,10 +27,7 @@ function ModalContentUpdate(props: ModalContentUpdateProps): React.ReactElement 
     registerschoolstaticform: orgUnitName,
     ...formInitialValues
   })
-  const { show } = useShowAlerts()
-  const [refetch, setRefetch] = useRecoilState(TeiRefetch)
-  const [loading, setLoading] = useState(false)
-  const { updateSelectedEnrollment } = useUpdateSelectedEnrollment()
+  const { updateSelectedEnrollment, data, loading, error } = useUpdateSelectedEnrollment()
   const { runRulesEngine, updatedVariables } = CustomDhis2RulesEngine({ variables: formFields(enrollmentsData, sectionName), values, type: "programStageSection", formatKeyValueType: formatKeyValueType(enrollmentsData) })
 
   useEffect(() => {
@@ -42,29 +38,25 @@ function ModalContentUpdate(props: ModalContentUpdateProps): React.ReactElement 
     setClicked(false)
   }, [])
 
+  useEffect(() => {
+    if (data && data["status" as unknown as keyof typeof data] === "OK") {
+      if (clickedButton === "save") {
+        setOpen(false)
+      }
+      setClicked(false)
+      formRef.current.restart()
+    }
+  }, [data])
+
   function onSubmit() {
     const allFields = fieldsWithValue.flat()
     const events = enrollmentValues['events']
-    const eventDate = formInitialValues['eventdatestaticform']
 
-    setLoading(true)
     if (allFields.filter((element: any) => (element?.assignedValue === undefined && element.required))?.length === 0) {
-
-      updateSelectedEnrollment(fieldsWithValue, events, eventDate, initialValues, values, getProgram.id)
-        .then(() => {
-          setClicked(false)
-          setLoading(false)
-          setRefetch(!refetch)
-          formRef.current.restart()
-          show({ message: "Enrollment updated successfully", type: { success: true } })
-          setOpen(false)
-        })
-        .catch(error => {
-          setLoading(false)
-          show({ message: `Could not update enrollment: ${error.message}`, type: { critical: true } })
-          setOpen(false)
-        });
+      // if ((allFields.some((field: any) => field.assignedValue != initialValues[field.id as keyof typeof initialValues] && initialValues[field.id as keyof typeof initialValues])) || (initialValues['eventdatestaticform' as keyof typeof initialValues] != values['eventdatestaticform'])) {
+        updateSelectedEnrollment(fieldsWithValue, events, initialValues, values, getProgram.id)
     }
+
   }
 
   const modalActions = [
@@ -116,7 +108,6 @@ function ModalContentUpdate(props: ModalContentUpdateProps): React.ReactElement 
                   key={index}
                   fields={field?.fields}
                   disabled={false}
-                  trackedEntity={initialValues['trackedEntity' as unknown as keyof typeof initialValues]}
                 />
               ))
             }

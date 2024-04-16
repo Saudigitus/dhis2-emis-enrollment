@@ -55,7 +55,6 @@ export default function useGetEnrollmentDeleteFormData() {
                     setLoading(false)
                 })
                 .catch((error: any) => {
-                    console.log(error)
                     show({ message: `Could not load enrollment data for delete: ${error.message}`, critical: true })
                 })
         }

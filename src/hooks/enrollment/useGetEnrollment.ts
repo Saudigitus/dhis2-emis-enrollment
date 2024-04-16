@@ -3,10 +3,8 @@ import { useDataEngine } from "@dhis2/app-runtime";
 const ENROLLMENT_QUERY = {
     results: {
         resource: "tracker/enrollments",
-        id:  ({ id } : any) => id,
-        params: {
-            fields: "*",
-        }
+        id: ({ id }: any) => id,
+        params: { fields: "*" },
     }
 }
 
