@@ -13,7 +13,7 @@ export function useEnrollmentsHeader() {
 
     const staticHeaders: CustomAttributeProps[] = [{
         id: "orgUnitName",
-        displayName: "orgUnitName",
+        displayName: "School",
         header: "School",
         required: false,
         name: "orgUnitName",

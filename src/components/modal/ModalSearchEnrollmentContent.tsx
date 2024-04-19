@@ -29,8 +29,9 @@ const usetStyles = makeStyles({
 
 function ModalSearchEnrollmentContent(props: ModalSearchTemplateProps): React.ReactElement {
   const { setOpen, sectionName, setOpenNewEnrollment } = props;
-  const classes = usetStyles()
-  const { searchEnrollmentFields, buildSearhForm } = useGetSearchEnrollmentForm();
+var attributeCounter = useRef(0)
+const classes = usetStyles()
+  const { searchEnrollmentFields, buildSearhForm, isSearchable } = useGetSearchEnrollmentForm();
   const { registration } = getDataStoreKeys()
   const [showResults, setShowResults] = useState<boolean>(false)
   const { columns } = useEnrollmentsHeader();
@@ -52,8 +53,8 @@ function ModalSearchEnrollmentContent(props: ModalSearchTemplateProps): React.Re
   const [queryForm, setQueryForm] = useState<any>({});
 
   useEffect(() => {
-    buildSearhForm({ attributeKey });
-  }, [attributeKey]);
+    buildSearhForm({ attributeKey, position: attributeCounter.current });
+  }, [attributeKey, attributeCounter.current]);
 
   const onHandleChange = ({ target: { value, name } }: { target: { value: any; name: any } }) => {
     if (value.length === 0 || value === null || value === undefined) {
@@ -105,8 +106,7 @@ function ModalSearchEnrollmentContent(props: ModalSearchTemplateProps): React.Re
   };
 
   const searchActions = [
-    { id: "cancel", type: "button", label: showResults ? "Reset" : "Cancel", small: true, disabled: loading, onClick: () => { Object.entries(queryForm).length ? onReset() : setOpen(false) } },
-    //{ id: "searchMore", label:  "Search by other attributes", small: true, disabled: loading || !Object.entries(queryForm).length, onClick: () => { setQueryForm({}), setAttributeKey("searchable") } },
+    { id: "cancel", type: "button", label: showResults ? "Reset" : "Cancel", small: true, disabled: loading, onClick: () => { Object.entries(queryForm).length ? onReset() : setOpen(false)  } },
     { id: "search", type: "submit", label:  "Search", small: true, primary: true, disabled: loading || !Object.entries(queryForm).length, loading }
   ];
 
@@ -127,6 +127,17 @@ function ModalSearchEnrollmentContent(props: ModalSearchTemplateProps): React.Re
       ...recentSocioEconomics
     })
   }
+
+
+  const onAddMoreAttributes = () => {
+    attributeCounter.current++
+    setQueryForm({});
+    if(isSearchable){
+      setAttributeKey("searchable");
+    }
+    setShowResults(false)
+  }
+  
 
   return (
     <div>
@@ -213,8 +224,9 @@ function ModalSearchEnrollmentContent(props: ModalSearchTemplateProps): React.Re
                 ))
                 : !loading ?
                 <NoticeBox title={`No ${sectionName} found`}>
-                  Click <strong>'Register new'</strong> if you want to register as a new <strong>{sectionName}</strong>.
-                  {attributeKey === "unique" ? <>  <br /> <br /> <Button small onClick={() => { setQueryForm({}), setAttributeKey("searchable"), setShowResults(false) }} disabled={loading} style={{marginTop: 50}}>Search by more attributes</Button></> : null}
+                  {attributeKey === "searchable" ? <>Click <strong>'Register new'</strong> if you want to register as a new <strong>{sectionName}</strong>.</> : <>Click the bottom below to continue searching for a <strong>{sectionName}</strong>.</>}
+                  
+                  {attributeKey === "unique" ? <>  <br /> <br /> <Button small onClick={() => { onAddMoreAttributes() }} disabled={loading} style={{marginTop: 50}}>Search by more attributes</Button></> : null}
                 </NoticeBox> : null
               }
             </Collapse>
