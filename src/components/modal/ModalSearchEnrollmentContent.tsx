@@ -23,23 +23,23 @@ import { getRecentEnrollment } from "../../utils/tei/getRecentEnrollment";
 
 const usetStyles = makeStyles({
   tableContainer: {
-      overflowX: 'auto'
+    overflowX: 'auto'
   }
 });
 
 function ModalSearchEnrollmentContent(props: ModalSearchTemplateProps): React.ReactElement {
   const { setOpen, sectionName, setOpenNewEnrollment } = props;
-var attributeCounter = useRef(0)
-const classes = usetStyles()
+  var attributeCounter = useRef(0)
+  const classes = usetStyles()
   const { searchEnrollmentFields, buildSearhForm, isSearchable } = useGetSearchEnrollmentForm();
   const { registration } = getDataStoreKeys()
   const [showResults, setShowResults] = useState<boolean>(false)
   const { columns } = useEnrollmentsHeader();
   const { teiAttributes, attributesToDisplay } = useGetProgramsAttributes();
-  const  { enrollmentValues, setEnrollmentValues, loading, getEnrollmentsData } = useSearchEnrollments()
+  const { enrollmentValues, setEnrollmentValues, loading, getEnrollmentsData } = useSearchEnrollments()
   const [, setInitialValues] = useRecoilState(SearchInitialValues)
   const [attributeKey, setAttributeKey] = useState<string>("unique")
-  
+
   const { urlParamiters } = useParams();
   const { school: orgUnit, schoolName: orgUnitName, academicYear } = urlParamiters();
 
@@ -69,7 +69,7 @@ const classes = usetStyles()
     }
   };
 
-  const formattedQuery = ()=> {
+  const formattedQuery = () => {
     var query = "";
 
     for (const [key, value] of Object.entries(queryForm)) {
@@ -87,9 +87,9 @@ const classes = usetStyles()
   }
 
   const onHandleSubmit = async () => {
-      if (formattedQuery().length > 0) {
-        getEnrollmentsData(formattedQuery(), setShowResults)
-      }
+    if (formattedQuery().length > 0) {
+      getEnrollmentsData(formattedQuery(), setShowResults)
+    }
   };
 
   const onHandleRegisterNew = async () => {
@@ -106,8 +106,9 @@ const classes = usetStyles()
   };
 
   const searchActions = [
-    { id: "cancel", type: "button", label: showResults ? "Reset" : "Cancel", small: true, disabled: loading, onClick: () => { Object.entries(queryForm).length ? onReset() : setOpen(false)  } },
-    { id: "search", type: "submit", label:  "Search", small: true, primary: true, disabled: loading || !Object.entries(queryForm).length, loading }
+    { id: "cancel", type: "button", label: showResults ? "Reset" : "Cancel", small: true, disabled: loading, onClick: () => { Object.entries(queryForm).length ? onReset() : setOpen(false) }, display:true },
+    { id: "continue", type: "button", label: "Register new", small: true, primary: true, disabled: loading, onClick: () => { setOpenNewEnrollment(true); setOpen(false) }, display: !enrollmentValues?.length },
+    { id: "search", type: "submit", label: "Search", small: true, primary: true, disabled: loading || !Object.entries(queryForm).length, loading, display:true },
   ];
 
   const modalActions = [
@@ -132,12 +133,12 @@ const classes = usetStyles()
   const onAddMoreAttributes = () => {
     attributeCounter.current++
     setQueryForm({});
-    if(isSearchable){
+    if (isSearchable) {
       setAttributeKey("searchable");
     }
     setShowResults(false)
   }
-  
+
 
   return (
     <div>
@@ -164,24 +165,26 @@ const classes = usetStyles()
             <ButtonStrip className="ml-3">
               {searchActions.map((action, i) => {
                 return (
-                  <Button key={i} {...action} >
-                    {action.label}
-                  </Button>
+                  (action.display) ?
+                    <Button key={i} {...action} >
+                      {action.label}
+                    </Button>
+                    : null
                 )
               })}
             </ButtonStrip>
             <Divider />
             <Collapse in={showResults} style={{}}>
-              {enrollmentValues.length ? 
+              {enrollmentValues.length ?
                 enrollmentValues?.map((enrollment: any, index: number) => (
                   <>
                     <div className="row w-100" key={index}>
                       <div className="col-12 col-md-3">
-                        <div style={{marginBottom: 10}}>
+                        <div style={{ marginBottom: 10 }}>
                           <Subtitle label={"Enrollment details"} />
                         </div>
-                        
-                        {attributesToDisplay?.map((attribute, key) =>(
+
+                        {attributesToDisplay?.map((attribute, key) => (
                           <div key={key} className={styles.detailsCard}>
                             <strong className={styles.detailsCardVariable}>{attribute?.displayName}</strong>
                             <Label className={styles.detailsCardLabel}> {enrollment?.mainAttributesFormatted[attribute?.id]} </Label>
@@ -191,49 +194,49 @@ const classes = usetStyles()
                       <div className="col-12 col-md-9">
                         <div className="mb-1 d-flex justify-content-between align-items-center">
                           <Subtitle label={`Enrollments (${enrollment?.registrationEvents?.length})`} />
-                          <Button small onClick={() => { onSelectTei(enrollment); setOpen(false); setOpenNewEnrollment(true)}} disabled={loading} style={{marginTop: 50}}>Select {sectionName}</Button>
+                          <Button small onClick={() => { onSelectTei(enrollment); setOpen(false); setOpenNewEnrollment(true) }} disabled={loading} style={{ marginTop: 50 }}>Select {sectionName}</Button>
                         </div>
-                        
+
                         {enrollment?.registrationEvents?.length ?
                           <WithBorder type="all">
                             <div
-                          className={classes.tableContainer}
-                      >
-                            <TableComponent>
-                              <RenderHeader
-                                createSortHandler={() => {}}
-                                order="asc"
-                                orderBy="desc"
-                                rowsHeader={columns}
-                              />
-                              <RenderRows
-                                headerData={columns}
-                                rowsData={enrollment?.registrationEvents}
-                              />
-                            </TableComponent></div>                      
+                              className={classes.tableContainer}
+                            >
+                              <TableComponent>
+                                <RenderHeader
+                                  createSortHandler={() => { }}
+                                  order="asc"
+                                  orderBy="desc"
+                                  rowsHeader={columns}
+                                />
+                                <RenderRows
+                                  headerData={columns}
+                                  rowsData={enrollment?.registrationEvents}
+                                />
+                              </TableComponent></div>
                           </WithBorder>
                           : <small>No enrollments found.</small>
                         }
                       </div>
-                      
+
                     </div>
-                <br />
+                    <br />
                     <Divider />
                   </>
-                  
+
                 ))
                 : !loading ?
-                <NoticeBox title={`No ${sectionName} found`}>
-                  {attributeKey === "searchable" ? <>Click <strong>'Register new'</strong> if you want to register as a new <strong>{sectionName}</strong>.</> : <>Click the bottom below to continue searching for a <strong>{sectionName}</strong>.</>}
-                  
-                  {attributeKey === "unique" ? <>  <br /> <br /> <Button small onClick={() => { onAddMoreAttributes() }} disabled={loading} style={{marginTop: 50}}>Search by more attributes</Button></> : null}
-                </NoticeBox> : null
+                  <NoticeBox title={`No ${sectionName} found`}>
+                    {attributeKey === "searchable" ? <>Click <strong>'Register new'</strong> if you want to register as a new <strong>{sectionName}</strong>.</> : <>Click the bottom below to continue searching for a <strong>{sectionName}</strong>.</>}
+
+                    {attributeKey === "unique" ? <>  <br /> <br /> <Button small onClick={() => { onAddMoreAttributes() }} disabled={loading} style={{ marginTop: 50 }}>Search by more attributes</Button></> : null}
+                  </NoticeBox> : null
               }
             </Collapse>
           </form>
         }}
       </Form>
-      {(showResults && attributeKey === "searchable") || enrollmentValues?.length ? 
+      {(showResults && attributeKey === "searchable") || enrollmentValues?.length ?
         <ModalActions>
           <div className="d-flex justify-content-between align-items-center w-100">
             {enrollmentValues?.length ? <small>If none of the matches above is the {sectionName} you are searching for, click 'Register new'.</small> : <small></small>}

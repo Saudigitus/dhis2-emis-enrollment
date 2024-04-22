@@ -8,7 +8,7 @@
     padding: 6px 15px;
     gap: 0px;
     opacity: 0px;
-    border: 1px solid #E8EDF2;    
+    border: 1px solid #E8EDF2;
 }
 
 .detailsCardVariable {
@@ -16,7 +16,7 @@
     font-size: 14px;
     font-weight: 700;
     line-height: 15.23px;
-    text-align: left;    
+    text-align: left;
     color: #404B5A;
 }
 
@@ -27,5 +27,5 @@
     line-height: 23.44px;
     text-align: left;
     color: #404B5A;
-    
+
 }
