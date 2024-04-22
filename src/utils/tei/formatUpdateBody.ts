@@ -35,7 +35,7 @@ export const teiUpdateBody = (enrollmentData: any[], orgUnit: string, trackedEnt
                     createdAt: format(new Date(enrollmentDate), "yyyy-MM-dd'T'HH:mm:ss.SSS"),
                     occurredAt: format(new Date(enrollmentDate), "yyyy-MM-dd'T'HH:mm:ss.SSS"),
                     enrolledAt: format(new Date(enrollmentDate), "yyyy-MM-dd'T'HH:mm:ss.SSS"),
-                    ...eventUpdateBody(enrollmentData, events, enrollmentDate, formValues, orgUnit, program, trackedEntity)
+                    events: eventUpdateBody(enrollmentData, events, enrollmentDate, formValues, orgUnit, program, trackedEntity)
                 }
             ]
         }
