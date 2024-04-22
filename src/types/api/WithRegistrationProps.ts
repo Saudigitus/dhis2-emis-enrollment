@@ -36,4 +36,10 @@ interface TeiQueryResults {
     }
 }
 
-export type { TeiQueryProps, TeiSearchQueryProps, TeiQueryResults, attributesProps }
+export enum EnrollmentStatus {
+    ACTIVE = 'ACTIVE',
+    COMPLETED = 'COMPLETED',
+    CANCELLED = 'CANCELLED'
+}
+
+export type { TeiQueryProps, TeiSearchQueryProps, TeiQueryResults, attributesProps, EnrollmentStatus }

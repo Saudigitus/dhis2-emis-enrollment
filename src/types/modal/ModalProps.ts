@@ -28,9 +28,16 @@ interface ModalSearchTemplateProps {
     setOpenNewEnrollment: (value: boolean) => void
 }
 
+interface ModalDeleteContentProps {
+    setOpen: (value: boolean) => void
+    sectionName?: any
+    initialValues?: any
+    loading: boolean
+}
+
 interface ModalExportTemplateProps {
     setOpen: (value: boolean) => void
     sectionName: string
 }
 
-export type { ModalProps, ModalContentProps, ModalContentUpdateProps, ModalSearchTemplateProps, ModalExportTemplateProps }
+export type { ModalProps, ModalContentProps, ModalContentUpdateProps, ModalSearchTemplateProps, ModalDeleteContentProps, ModalExportTemplateProps }
