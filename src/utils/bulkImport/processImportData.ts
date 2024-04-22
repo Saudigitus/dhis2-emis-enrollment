@@ -115,7 +115,7 @@ const checkTEI = async (engine: any, programId: string, ouID: string, filterPara
                 orgUnit: ouID,
                 filter: filterParams
             },
-            fields: ['trackedEntity', 'attributes']
+            fields: ['trackedEntity', 'attributes', 'enrollments']
         }
     });
     if (queryResult?.trackedEntities?.instances.length > 0) {
@@ -303,7 +303,6 @@ export const createTrackedEntityPayload = (
                     dataValues
                 }
                 return [event]
-
             })
 
         const programEvents: ProgramEvent[] = []

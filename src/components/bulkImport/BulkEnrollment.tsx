@@ -49,7 +49,6 @@ export const BulkEnrollment = ({setOpen, isOpen}: BulkEnrollmentProps): React.Re
     const resetProcessingStage = useResetRecoilState(ProcessingStage);
     const [isValidTemplate, setIsValidTemplate] = useState(false)
 
-
     const useStyles = makeStyles(() => createStyles({
         previewChip: {
             minWidth: 160,
@@ -57,7 +56,7 @@ export const BulkEnrollment = ({setOpen, isOpen}: BulkEnrollmentProps): React.Re
         }
     }));
     const theme = createTheme({
-        overrides: {},
+        overrides: {}
     });
 
     const resetUploadStats = () => {
@@ -115,7 +114,9 @@ export const BulkEnrollment = ({setOpen, isOpen}: BulkEnrollmentProps): React.Re
             setIsValidTemplate(true)
             const headings: string[] = rawData[0] as string[] // headings seen by user
             const headers: string[] = rawData[1] as string[] // hidden header in template
-            const templateHeadings = fromPairs(headers.map((val, idx) => {return [val, headings[idx] ?? ""]}))
+            const templateHeadings = fromPairs(headers.map((val, idx) => {
+                return [val, headings[idx] ?? ""]
+            }))
             setExcelTemplateHeaders(templateHeadings)
             console.log("templateHeadings", templateHeadings)
             const dataWithHeaders: Array<Record<string, any>> = generateData(headers, rawData.slice(2))
@@ -146,7 +147,7 @@ export const BulkEnrollment = ({setOpen, isOpen}: BulkEnrollmentProps): React.Re
             // create update tracked entity payloads for existing records
             const updateTrackedEntities = createTrackedEntityPayload(
                 recordsToUpdate, fieldMapping, programConfig, enrollmentStages, performanceStages, true)
-            console.log("trackedEntities=>", newTrackedEntities.slice(0, 1))
+            console.log("trackedEntities: NEW=>", newTrackedEntities.slice(0, 1), "UPDATE=>", updateTrackedEntities.slice(0, 2))
             const mandatoryFields = getMandatoryFields(fieldMapping)
             // update ProcessedRecords state variable for reference in summaries and more actions
             setProcessedRecords((r) => ({
@@ -171,7 +172,7 @@ export const BulkEnrollment = ({setOpen, isOpen}: BulkEnrollmentProps): React.Re
     }
     return (
         <>
-            { ((!isProcessing && !summaryOpen) || !isValidTemplate) &&
+            {((!isProcessing && !summaryOpen) || !isValidTemplate) &&
                 <MuiThemeProvider theme={theme}>
                     <DropzoneDialog
                         dialogTitle={"Bulk Enrollment"}
@@ -201,7 +202,7 @@ export const BulkEnrollment = ({setOpen, isOpen}: BulkEnrollmentProps): React.Re
                     />
                 </MuiThemeProvider>
             }
-            { (summaryOpen && isValidTemplate) &&
+            {(summaryOpen && isValidTemplate) &&
                 <Modal fluid>
                     <ModalTitle>{isProcessing ? "Processing Bulk Enrolment" : "Bulk Enrolment Summary"}</ModalTitle>
                     <ModalContent>
