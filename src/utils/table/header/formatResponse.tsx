@@ -3,6 +3,7 @@ import { useMemo } from "react";
 import { ProgramConfig } from "../../../types/programConfig/ProgramConfig";
 import { dataStoreRecord } from "../../../types/dataStore/DataStoreConfig";
 import { CustomAttributeProps, VariablesTypes } from "../../../types/variables/AttributeColumns";
+import { any } from "zod";
 
 export function formatResponse(data: ProgramConfig, dataStoreData: dataStoreRecord, tableColumns: CustomAttributeProps[] = []): CustomAttributeProps[] {
     let columns = ['Actions']
@@ -28,6 +29,7 @@ export function formatResponse(data: ProgramConfig, dataStoreData: dataStoreReco
                 error: false,
                 content: '',
                 key: item.trackedEntityAttribute.id,
+                displayInFilters: true,
                 type: VariablesTypes.Attribute
             }
         }).concat(
@@ -50,6 +52,7 @@ export function formatResponse(data: ProgramConfig, dataStoreData: dataStoreReco
                         error: false,
                         content: '',
                         key: programStageDataElement.dataElement.id,
+                        displayInFilters: false,
                         type: VariablesTypes.DataElement
                     }
                 }) as []
@@ -63,7 +66,7 @@ export function formatResponse(data: ProgramConfig, dataStoreData: dataStoreReco
                     required: true,
                     name: column,
                     labelName: column,
-                    valueType: Attribute.valueType.TEXT as unknown as CustomAttributeProps["valueType"],
+                    valueType: any,
                     options: undefined,
                     initialOptions: undefined,
                     visible: true,
@@ -73,7 +76,8 @@ export function formatResponse(data: ProgramConfig, dataStoreData: dataStoreReco
                     error: false,
                     content: '',
                     key: '',
-                    type: VariablesTypes.Attribute
+                    displayInFilters: false,
+                    type: VariablesTypes.Custom
                 }
             }) as []
         ) || []
