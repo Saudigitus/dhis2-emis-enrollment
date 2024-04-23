@@ -6,4 +6,4 @@ import ModalDeleteContent from './ModalDeleteContent';
 import ModalExportTemplateContent from "./ModalExportTemplateContent"
 import ModalSearchEnrollmentContent from "./ModalSearchEnrollmentContent"
 
-export { ModalComponent, ModalContentComponent, ImportContent,  ModalContentUpdate, ModalExportTemplateContent, ModalSearchEnrollmentContent }
+export { ModalComponent, ModalContentComponent, ImportContent,  ModalContentUpdate, ModalExportTemplateContent, ModalSearchEnrollmentContent, ModalDeleteContent }

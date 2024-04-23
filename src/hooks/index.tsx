@@ -32,5 +32,5 @@ export {
     useDataStore, useParams, useShowAlerts, useDataElementsParamMapping, useGetDataElements, useGetEnrollmentForm, useGetInitialValues, useGetOptionSets,
     useGetProgramConfig, useGetAttributes, useGetUsedPProgramStages, useTableData, useHeader, useGetPatternCode, usePostTei, useGetEvent, useGetTei, 
     useGetEnrollmentDeleteFormData, useGetEnrollmentUpdateFormData, useDeleteTEI, useDeleteEnrollment, useGetTotalEnrollments, useDeleteSelectedEnrollment, 
-    useUpdateSelectedEnrollment, usePostEvent, useUpdateTei, useSearchTei, useSearchEnrollments
+    useUpdateSelectedEnrollment, usePostEvent, useUpdateTei, useSearchTei, useSearchEnrollments, useGetEnrollment
 }
