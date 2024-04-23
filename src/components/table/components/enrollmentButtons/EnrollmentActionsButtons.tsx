@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { IconAddCircle24, Button, ButtonStrip, IconUserGroup16 } from "@dhis2/ui";
+import { IconAddCircle24, Button, ButtonStrip, IconUserGroup16, IconSearch24 } from "@dhis2/ui";
 import ModalComponent from '../../../modal/Modal';
 import ModalContentComponent from '../../../modal/ModalContent';
 import Tooltip from '@material-ui/core/Tooltip';
@@ -9,6 +9,7 @@ import { FlyoutOptionsProps } from "../../../../types/buttons/FlyoutOptionsProps
 import { BulkEnrollment } from "../../../bulkImport/BulkEnrollment";
 import DropdownButtonComponent from "../../../buttons/DropdownButton";
 import { ModalExportTemplateContent, ModalSearchEnrollmentContent } from '../../../modal';
+import { getDataStoreKeys } from '../../../../utils/commons/dataStore/getDataStoreKeys';
 
 function EnrollmentActionsButtons() {
   const [open, setOpen] = useState<boolean>(false);
@@ -16,6 +17,7 @@ function EnrollmentActionsButtons() {
   const [openSearchEnrollment, setOpenSearchEnrollment] = useState<boolean>(false);
   const [openImport, setOpenImport] = useState<boolean>(false);
   const { useQuery } = useParams();
+  const { allowSearching } = getDataStoreKeys();
   const orgUnit = useQuery().get("school")
   const { sectionName } = useGetSectionTypeLabel();
   const { enrollmentsData } = useGetEnrollmentForm();
@@ -30,9 +32,18 @@ function EnrollmentActionsButtons() {
   return (
     <div>
       <ButtonStrip>
+        { allowSearching ?
+          <Tooltip title={orgUnit === null ? "Please select an organisation unit before" : ""}>
+            <span>
+              <Button disabled={orgUnit == null} onClick={() => { setOpenSearchEnrollment(true); }} icon={<IconSearch24 />}>Search and enroll</Button>
+            </span>
+          </Tooltip> : null
+        }
+
+
         <Tooltip title={orgUnit === null ? "Please select an organisation unit before" : ""}>
           <span>
-            <Button disabled={orgUnit == null} onClick={() => { setOpenSearchEnrollment(true); }} icon={<IconAddCircle24 />}>Enrol single {sectionName}</Button>
+            <Button disabled={orgUnit == null} onClick={() => { setOpen(true); }} icon={<IconAddCircle24 />}>Enroll single {sectionName}</Button>
           </span>
         </Tooltip>
         <DropdownButtonComponent

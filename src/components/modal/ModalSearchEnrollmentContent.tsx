@@ -107,7 +107,7 @@ function ModalSearchEnrollmentContent(props: ModalSearchTemplateProps): React.Re
 
   const searchActions = [
     { id: "cancel", type: "button", label: showResults ? "Reset" : "Cancel", small: true, disabled: loading, onClick: () => { Object.entries(queryForm).length ? onReset() : setOpen(false) }, display:true },
-    { id: "continue", type: "button", label: "Register new", small: true, primary: true, disabled: loading, onClick: () => { setOpenNewEnrollment(true); setOpen(false) }, display: !enrollmentValues?.length },
+    //{ id: "continue", type: "button", label: "Register new", small: true, primary: true, disabled: loading, onClick: () => { setOpenNewEnrollment(true); setOpen(false) }, display: !enrollmentValues?.length },
     { id: "search", type: "submit", label: "Search", small: true, primary: true, disabled: loading || !Object.entries(queryForm).length, loading, display:true },
   ];
 
@@ -165,11 +165,9 @@ function ModalSearchEnrollmentContent(props: ModalSearchTemplateProps): React.Re
             <ButtonStrip className="ml-3">
               {searchActions.map((action, i) => {
                 return (
-                  (action.display) ?
-                    <Button key={i} {...action} >
-                      {action.label}
-                    </Button>
-                    : null
+                  <Button key={i} {...action} >
+                    {action.label}
+                  </Button>
                 )
               })}
             </ButtonStrip>
