@@ -17,7 +17,7 @@ const EVENT_QUERY = (queryProps: EventQueryProps) => ({
     results: {
         resource: "tracker/events",
         params: {
-            fields: "*",
+            fields: queryProps?.fields ?? "*",
             ...queryProps
         }
     }

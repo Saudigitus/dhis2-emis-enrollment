@@ -15,6 +15,7 @@ interface EventQueryProps {
     filter?: string[]
     filterAttributes?: string[]
     trackedEntity?: string
+    fields?: string
 }
 
 interface GeTDataElementsProps {

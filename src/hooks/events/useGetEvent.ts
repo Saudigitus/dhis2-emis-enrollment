@@ -5,7 +5,6 @@ const EVENT_QUERY = (queryProps: EventQueryProps) => ({
     results: {
         resource: "tracker/events",
         params: {
-            fields: "event,trackedEntity,enrollment,dataValues[dataElement,value],orgUnitName,orgUnit",
             ...queryProps
         }
     }
@@ -14,7 +13,7 @@ const EVENT_QUERY = (queryProps: EventQueryProps) => ({
 export function useGetEvent() {
     const engine = useDataEngine();
 
-    async function getEvent(program: string, programStage: string, filter: string[], orgUnit: string, trackedEntity: string ) {
+    async function getEvent(program: string, programStage: string, filter: string[], orgUnit: string, trackedEntity: string, fields: string ) {
         console.log("trackedEntity", trackedEntity)
             return await engine.query(EVENT_QUERY({
                 pageSize:10,
@@ -23,7 +22,8 @@ export function useGetEvent() {
                 filter: filter,
                 orgUnit: orgUnit,
                 trackedEntity: trackedEntity,
-                order: "createdAt:desc"
+                order: "createdAt:desc",
+                fields,
             })) as unknown as EventQueryResults;
     }
 
