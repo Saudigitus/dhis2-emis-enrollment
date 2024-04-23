@@ -8,7 +8,7 @@ import { HeaderFieldsState } from '../../../../../schema/headersSchema';
 import { convertArrayToObject } from '../../../../../utils/table/filter/formatArrayToObject';
 import styles from './ContentFilter.module.css'
 import { ContentFilterProps } from '../../../../../types/table/ContentFiltersProps';
-import { CustomAttributeProps } from '../../../../../types/variables/AttributeColumns';
+import { CustomAttributeProps, VariablesTypes } from '../../../../../types/variables/AttributeColumns';
 
 
 type FiltersValuesProps = Record<string, any | { endDate: string } | { startDate: string }>;
@@ -129,7 +129,7 @@ function ContentFilter(props: ContentFilterProps) {
     return (
         <div className={styles.container}>
             {
-                localFilters.map((colums, index) => (
+                localFilters.filter(x => x.displayInFilters === true).map((colums, index) => (
                     <SelectButton key={index}
                         tooltipContent=''
                         title={colums.displayName}
@@ -155,7 +155,7 @@ function ContentFilter(props: ContentFilterProps) {
                 ))
             }
             <div className={styles.moreFiltersContainer}>
-                {headers?.filter(x => !localFilters.includes(x))?.length > 0 &&
+                {headers?.filter(x => !localFilters.includes(x) && x.displayInFilters).length > 0 &&
                     <Button className={styles.moreFilters}
                         variant='outlined'
                         onClick={handleClick}
@@ -166,7 +166,7 @@ function ContentFilter(props: ContentFilterProps) {
                 <MenuFilters
                     anchorEl={anchorEl}
                     setAnchorEl={setAnchorEl}
-                    options={headers?.filter(x => !localFilters.includes(x))}
+                    options={headers?.filter(x => !localFilters.includes(x) && x.displayInFilters)}
                     addSearchableHeaders={addSearchableHeaders}
                 />
             </div>

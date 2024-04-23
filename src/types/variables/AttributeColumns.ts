@@ -2,7 +2,8 @@ import { type Attribute } from '../generated/models';
 
 export enum VariablesTypes {
     DataElement = "dataElement",
-    Attribute = "attribute"
+    Attribute = "attribute",
+    Custom = "custom"
 }
 
 export interface CustomAttributeProps {
@@ -29,6 +30,7 @@ export interface CustomAttributeProps {
     content?: string
     key?: any
     description?: string
+    displayInFilters?: boolean
     type: VariablesTypes
     trackedEntity?: string
     placeholder?: string
