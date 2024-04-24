@@ -31,6 +31,7 @@ interface RowActionsType {
     label: string
     onClick: () => void
     icon: React.ReactNode
+    disabled: boolean
 }
 interface RowActionsProps {
     row: any

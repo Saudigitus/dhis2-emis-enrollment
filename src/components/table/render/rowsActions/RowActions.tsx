@@ -34,11 +34,13 @@ export default function RowActions(props: RowActionsProps) {
     {
       icon: <IconEdit24 />,
       label: `${sectionName} Edition`,
+      disabled: status === EnrollmentStatus.CANCELLED,
       onClick: () => { buildFormData(trackedEntity, enrollmentId); setOpenEditionModal(!openEditionModal) },
     },
     {
       icon: <IconDelete24 />,
       label: `Delete ${sectionName}`,
+      disabled: false,
       onClick: () => { buildDeleteFormData(trackedEntity, enrollmentId); setOpenDeletionModal(!openDeletionModal) },
     }
   ];
@@ -50,7 +52,7 @@ export default function RowActions(props: RowActionsProps) {
         <Tooltip
           key={i}
           title={option.label}
-          disabled={status === EnrollmentStatus.CANCELLED}
+          disabled={option?.disabled}
           onClick={() => { option.onClick() }}
         >
           <IconButton className={style.rowActionsIcon}>{option.icon}</IconButton>

@@ -42,4 +42,4 @@ export enum EnrollmentStatus {
     CANCELLED = 'CANCELLED'
 }
 
-export type { TeiQueryProps, TeiSearchQueryProps, TeiQueryResults, attributesProps, EnrollmentStatus }
+export type { TeiQueryProps, TeiSearchQueryProps, TeiQueryResults, attributesProps }
