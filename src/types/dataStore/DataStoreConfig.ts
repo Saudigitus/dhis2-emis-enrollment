@@ -32,6 +32,7 @@ interface transfer {
 
 interface defaults {
     currentAcademicYear: string
+    allowSearching: boolean
 }
 
 interface filterItem {

@@ -7,6 +7,16 @@ interface TeiQueryProps {
     order?: string
 }
 
+interface TeiSearchQueryProps {
+    program: string
+    page?: number
+    pageSize?: number
+    ouMode?: string
+    orgUnit?: string
+    order?: string
+    filter?: string
+}
+
 interface attributesProps {
     attribute: string
     value: string
@@ -32,4 +42,4 @@ export enum EnrollmentStatus {
     CANCELLED = 'CANCELLED'
 }
 
-export type { TeiQueryProps, TeiQueryResults, attributesProps }
+export type { TeiQueryProps, TeiSearchQueryProps, TeiQueryResults, attributesProps, EnrollmentStatus }

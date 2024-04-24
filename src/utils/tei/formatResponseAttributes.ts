@@ -26,6 +26,7 @@ export function formatResponseTEI(attributes: ProgramConfig): CustomAttributePro
             header: trackedEntityAttribute?.trackedEntityAttribute?.displayName,
             type: VariablesTypes.Attribute,
             programStage: "",
+            unique: trackedEntityAttribute?.trackedEntityAttribute?.unique,
             assignedValue: undefined
         }
     ));

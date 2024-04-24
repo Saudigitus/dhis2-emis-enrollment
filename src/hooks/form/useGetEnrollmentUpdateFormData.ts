@@ -28,10 +28,10 @@ export default function useGetEnrollmentUpdateFormData() {
             getTei(program, orgUnit as unknown as string, trackedEntity)
                 .then(async (trackedEntityInstance: any) => {
 
-                    await getEvent(program, registration.programStage as unknown as string, headerFieldsState.dataElements, orgUnit as unknown as string, trackedEntity)
+                    await getEvent(program, registration.programStage as unknown as string, headerFieldsState.dataElements, orgUnit as unknown as string, trackedEntity, "*")
                         .then(async (registration: any) => {
 
-                            await getEvent(program, programStage as unknown as string, [], orgUnit as unknown as string, trackedEntity)
+                            await getEvent(program, programStage as unknown as string, [], orgUnit as unknown as string, trackedEntity, "*")
                                 .then((socioEconomic: any) => {
                                     setInitialValues({
                                         trackedEntity: trackedEntity,

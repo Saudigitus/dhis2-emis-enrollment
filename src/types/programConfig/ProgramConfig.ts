@@ -16,6 +16,7 @@ interface ProgramConfig {
                 displayName: string
                 id: string
                 valueType: string
+                unique: boolean
                 optionSet: { id: string, options: OptionsProps[] }
             }
             searchable: boolean

@@ -34,6 +34,7 @@ export interface CustomAttributeProps {
     type: VariablesTypes
     trackedEntity?: string
     placeholder?: string
+    unique?: boolean
 }
 
 export interface OptionsProps {

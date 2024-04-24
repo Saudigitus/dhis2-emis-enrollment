@@ -29,6 +29,7 @@ export function formatResponse(data: ProgramConfig, dataStoreData: dataStoreReco
                 error: false,
                 content: '',
                 key: item.trackedEntityAttribute.id,
+                unique: item.trackedEntityAttribute.unique,
                 displayInFilters: true,
                 type: VariablesTypes.Attribute
             }
