@@ -15,8 +15,8 @@
 }
 
 .disabledRow {
-    background: rgba(218, 52, 77, 0.18) !important;
-    cursor: not-allowed !important;
+    background: rgba(251, 236, 239) !important;
+    cursor: default !important;
 }
 
 .disabledRow .tableCell {
