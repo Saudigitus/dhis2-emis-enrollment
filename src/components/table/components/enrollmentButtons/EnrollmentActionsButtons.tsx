@@ -35,7 +35,7 @@ function EnrollmentActionsButtons() {
         { allowSearching ?
           <Tooltip title={orgUnit === null ? "Please select an organisation unit before" : ""}>
             <span>
-              <Button disabled={orgUnit == null} onClick={() => { setOpenSearchEnrollment(true); }} icon={<IconSearch24 />}>Search and enroll</Button>
+              <Button disabled={orgUnit == null} onClick={() => { setOpenSearchEnrollment(true); }} icon={<IconSearch24 />}>Search and enroll {sectionName}</Button>
             </span>
           </Tooltip> : null
         }
