@@ -32,10 +32,10 @@ function EnrollmentActionsButtons() {
   return (
     <div>
       <ButtonStrip>
-        { allowSearching ?
+        { !allowSearching ?
           <Tooltip title={orgUnit === null ? "Please select an organisation unit before" : ""}>
             <span>
-              <Button disabled={orgUnit == null} onClick={() => { setOpenSearchEnrollment(true); }} icon={<IconSearch24 />}>Search and enroll {sectionName}</Button>
+              <Button disabled={orgUnit == null} onClick={() => { setOpenSearchEnrollment(true); }} icon={<IconSearch24 />}>Search {sectionName.toLocaleLowerCase()}</Button>
             </span>
           </Tooltip> : null
         }
@@ -43,7 +43,7 @@ function EnrollmentActionsButtons() {
 
         <Tooltip title={orgUnit === null ? "Please select an organisation unit before" : ""}>
           <span>
-            <Button disabled={orgUnit == null} onClick={() => { setOpen(true); }} icon={<IconAddCircle24 />}>Enroll single {sectionName}</Button>
+            <Button disabled={orgUnit == null} onClick={() => { setOpen(true); }} icon={<IconAddCircle24 />}>Enroll {sectionName.toLocaleLowerCase()}</Button>
           </span>
         </Tooltip>
         <DropdownButtonComponent

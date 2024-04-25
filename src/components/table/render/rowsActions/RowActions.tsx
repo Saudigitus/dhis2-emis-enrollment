@@ -33,12 +33,14 @@ export default function RowActions(props: RowActionsProps) {
   const rowsActions: RowActionsType[] = [
     {
       icon: <IconEdit24 />,
+      color: '#277314',
       label: `${sectionName} Edition`,
       disabled: status === EnrollmentStatus.CANCELLED,
       onClick: () => { buildFormData(trackedEntity, enrollmentId); setOpenEditionModal(!openEditionModal) },
     },
     {
       icon: <IconDelete24 />,
+      color: '#d64d4d',
       label: `Delete ${sectionName}`,
       disabled: false,
       onClick: () => { buildDeleteFormData(trackedEntity, enrollmentId); setOpenDeletionModal(!openDeletionModal) },
@@ -55,7 +57,7 @@ export default function RowActions(props: RowActionsProps) {
           disabled={option?.disabled}
           onClick={() => { option.onClick() }}
         >
-          <IconButton className={style.rowActionsIcon}>{option.icon}</IconButton>
+          <IconButton style={{color: option.color}}className={style.rowActionsIcon}>{option.icon}</IconButton>
         </Tooltip>
       ))}
 
