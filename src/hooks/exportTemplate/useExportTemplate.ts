@@ -7,7 +7,6 @@ import { format } from "date-fns";
 
 const DATA_STORE_NAME : string = "semis"
 const DATA_STORE_VALUE_KEY: string = "values"
-const SYSTEM_ID: string = "G0B8B0AH5Ek"
 
 
 const oneProgramQuery : any = {
