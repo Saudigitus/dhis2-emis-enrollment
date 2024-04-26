@@ -59,3 +59,18 @@
 .greenIcon svg {
     color: #009688 !important;
 }
+
+.accordionHeaderContainer {
+    display: flex;
+    justify-content: space-between;
+    align-content: center !important;
+    padding: 5px 10px 3px 10px;
+}
+
+.accordionHeader {
+    color: rgba(0, 0, 0, 0.87);
+    font-size: 14px;
+    font-weight: 500;
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+    margin: 0px !important;
+}

@@ -20,6 +20,9 @@ import { makeStyles } from "@material-ui/core";
 import { useRecoilState } from "recoil";
 import { SearchInitialValues } from "../../schema/searchInitialValues";
 import { getRecentEnrollment } from "../../utils/tei/getRecentEnrollment";
+import WithPadding from "../template/WithPadding";
+import { IconButton } from "@material-ui/core";
+import { ExpandLess, ExpandMore } from "@material-ui/icons";
 
 const usetStyles = makeStyles({
   tableContainer: {
@@ -31,7 +34,7 @@ function ModalSearchEnrollmentContent(props: ModalSearchTemplateProps): React.Re
   const { setOpen, sectionName, setOpenNewEnrollment } = props;
   var attributeCounter = useRef(0)
   const classes = usetStyles()
-  const { searchEnrollmentFields, buildSearhForm, isSearchable } = useGetSearchEnrollmentForm();
+  const { searchEnrollmentFields, isSearchable } = useGetSearchEnrollmentForm();
   const { registration } = getDataStoreKeys()
   const [showResults, setShowResults] = useState<boolean>(false)
   const { columns } = useEnrollmentsHeader();
@@ -39,6 +42,7 @@ function ModalSearchEnrollmentContent(props: ModalSearchTemplateProps): React.Re
   const { enrollmentValues, setEnrollmentValues, loading, getEnrollmentsData } = useSearchEnrollments()
   const [, setInitialValues] = useRecoilState(SearchInitialValues)
   const [attributeKey, setAttributeKey] = useState<string>("unique")
+  const [collapseAttributes, setCollapseAttributes] = useState(`id-${0}`)
 
   const { urlParamiters } = useParams();
   const { school: orgUnit, schoolName: orgUnitName, academicYear } = urlParamiters();
@@ -51,10 +55,6 @@ function ModalSearchEnrollmentContent(props: ModalSearchTemplateProps): React.Re
   })
 
   const [queryForm, setQueryForm] = useState<any>({});
-
-  useEffect(() => {
-    buildSearhForm({ attributeKey, position: attributeCounter.current });
-  }, [attributeKey, attributeCounter.current]);
 
   const onHandleChange = ({ target: { value, name } }: { target: { value: any; name: any } }) => {
     if (value.length === 0 || value === null || value === undefined) {
@@ -106,9 +106,9 @@ function ModalSearchEnrollmentContent(props: ModalSearchTemplateProps): React.Re
   };
 
   const searchActions = [
-    { id: "cancel", type: "button", label: showResults ? "Reset" : "Cancel", small: true, disabled: loading, onClick: () => { Object.entries(queryForm).length ? onReset() : setOpen(false) }, display:true },
+    //{ id: "cancel", type: "button", label: showResults ? "Reset" : "Cancel", small: true, disabled: loading, onClick: () => { Object.entries(queryForm).length ? onReset() : setOpen(false) }, display:true },
     //{ id: "continue", type: "button", label: "Register new", small: true, primary: true, disabled: loading, onClick: () => { setOpenNewEnrollment(true); setOpen(false) }, display: !enrollmentValues?.length },
-    { id: "search", type: "submit", label: "Search", small: true, primary: true, disabled: loading || !Object.entries(queryForm).length, loading, display:true },
+    { id: "search", type: "submit", label: `Search ${sectionName}`, small: true, disabled: loading || !Object.entries(queryForm).length, loading, display:true },
   ];
 
   const modalActions = [
@@ -142,98 +142,121 @@ function ModalSearchEnrollmentContent(props: ModalSearchTemplateProps): React.Re
 
   return (
     <div>
-      <Form initialValues={{ ...initialValues, orgUnit, ...queryForm }} onSubmit={onHandleSubmit}>
-        {({ handleSubmit, values, form }) => {
-          formRef.current = form;
-          return <form
-            onSubmit={handleSubmit}
-            onChange={(event: any) => onHandleChange(event)}
-          >
-            {
-              formFields(searchEnrollmentFields, sectionName)?.map((field: any, index: number) => {
-                return (
-                  <GroupForm
-                    name={field.section}
-                    description={field.description}
-                    key={index}
-                    fields={field.fields}
-                    disabled={false}
-                  />
-                )
-              })
-            }
-            <ButtonStrip className="ml-3">
-              {searchActions.map((action, i) => {
-                return (
-                  <Button key={i} {...action} >
-                    {action.label}
-                  </Button>
-                )
-              })}
-            </ButtonStrip>
-            <Divider />
-            <Collapse in={showResults} style={{}}>
-              {enrollmentValues.length ?
-                enrollmentValues?.map((enrollment: any, index: number) => (
-                  <>
-                    <div className="row w-100" key={index}>
-                      <div className="col-12 col-md-3">
-                        <div style={{ marginBottom: 10 }}>
-                          <Subtitle label={"Enrollment details"} />
-                        </div>
+      <Label>Fill in at least 1 attribute to search.</Label>
+      <br />
 
-                        {attributesToDisplay?.map((attribute, key) => (
-                          <div key={key} className={styles.detailsCard}>
-                            <strong className={styles.detailsCardVariable}>{attribute?.displayName}</strong>
-                            <Label className={styles.detailsCardLabel}> {enrollment?.mainAttributesFormatted[attribute?.id]} </Label>
-                          </div>
-                        ))}
-                      </div>
-                      <div className="col-12 col-md-9">
-                        <div className="mb-1 d-flex justify-content-between align-items-center">
-                          <Subtitle label={`Enrollments (${enrollment?.registrationEvents?.length})`} />
-                          <Button small onClick={() => { onSelectTei(enrollment); setOpen(false); setOpenNewEnrollment(true) }} disabled={loading} style={{ marginTop: 50 }}>Select {sectionName}</Button>
-                        </div>
+      {searchEnrollmentFields?.map((group, index) => (
+        <div className="mb-3">
+          <WithBorder type="all">
+            <div className={styles.accordionHeaderContainer} onClick={()=> setCollapseAttributes(`id-${index}`)}>
+              <label className={styles.accordionHeader}>Search by {group?.name}</label>
+              <IconButton size="small" onClick={()=> setCollapseAttributes(`id-${index}`)} disabled={collapseAttributes === `id-${index}`}> {collapseAttributes === `id-${index}` ? <ExpandLess /> : <ExpandMore />}  </IconButton>
+            </div>
 
-                        {enrollment?.registrationEvents?.length ?
-                          <WithBorder type="all">
-                            <div
-                              className={classes.tableContainer}
-                            >
-                              <TableComponent>
-                                <RenderHeader
-                                  createSortHandler={() => { }}
-                                  order="asc"
-                                  orderBy="desc"
-                                  rowsHeader={columns}
-                                />
-                                <RenderRows
-                                  headerData={columns}
-                                  rowsData={enrollment?.registrationEvents}
-                                />
-                              </TableComponent></div>
-                          </WithBorder>
-                          : <small>No enrollments found.</small>
+            <Collapse in={collapseAttributes === `id-${index}`}>
+              <WithBorder type="top">
+                <WithPadding>
+                  <Form initialValues={{ ...initialValues, orgUnit, ...queryForm }} onSubmit={onHandleSubmit}>
+                    {({ handleSubmit, values, form }) => {
+                      formRef.current = form;
+                      return <form
+                        onSubmit={handleSubmit}
+                        onChange={(event: any) => onHandleChange(event)}
+                      >
+                        {
+                          formFields(group?.variables, sectionName)?.map((field: any, index: number) => {
+                            return (
+                              <GroupForm
+                                name={field.section}
+                                description={field.description}
+                                key={index}
+                                fields={field.fields}
+                                disabled={false}
+                              />
+                            )
+                          })
                         }
-                      </div>
+                        <ButtonStrip className="mr-2" end>
+                          {searchActions.map((action, i) => {
+                            return (
+                              <Button key={i} {...action} >
+                                {action.label}
+                              </Button>
+                            )
+                          })}
+                        </ButtonStrip>
 
-                    </div>
-                    <br />
-                    <Divider />
-                  </>
+                        <Collapse in={showResults} style={{}}>
+                          {enrollmentValues.length ?
+                            enrollmentValues?.map((enrollment: any, index: number) => (
+                              <>
+                                <div className="row w-100" key={index}>
+                                  <div className="col-12 col-md-3">
+                                    <div style={{ marginBottom: 10 }}>
+                                      <Subtitle label={"Enrollment details"} />
+                                    </div>
 
-                ))
-                : !loading ?
-                  <NoticeBox title={`No ${sectionName} found`}>
-                    {attributeKey === "searchable" ? <>Click <strong>'Register new'</strong> if you want to register as a new <strong>{sectionName}</strong>.</> : <>Click the bottom below to continue searching for a <strong>{sectionName}</strong>.</>}
+                                    {attributesToDisplay?.map((attribute, key) => (
+                                      <div key={key} className={styles.detailsCard}>
+                                        <strong className={styles.detailsCardVariable}>{attribute?.displayName}</strong>
+                                        <Label className={styles.detailsCardLabel}> {enrollment?.mainAttributesFormatted[attribute?.id]} </Label>
+                                      </div>
+                                    ))}
+                                  </div>
+                                  <div className="col-12 col-md-9">
+                                    <div className="mb-1 d-flex justify-content-between align-items-center">
+                                      <Subtitle label={`Enrollments (${enrollment?.registrationEvents?.length})`} />
+                                      <Button small onClick={() => { onSelectTei(enrollment); setOpen(false); setOpenNewEnrollment(true) }} disabled={loading} style={{ marginTop: 50 }}>Select {sectionName}</Button>
+                                    </div>
 
-                    {attributeKey === "unique" ? <>  <br /> <br /> <Button small onClick={() => { onAddMoreAttributes() }} disabled={loading} style={{ marginTop: 50 }}>Search by more attributes</Button></> : null}
-                  </NoticeBox> : null
-              }
+                                    {enrollment?.registrationEvents?.length ?
+                                      <WithBorder type="all">
+                                        <div
+                                          className={classes.tableContainer}
+                                        >
+                                          <TableComponent>
+                                            <RenderHeader
+                                              createSortHandler={() => { }}
+                                              order="asc"
+                                              orderBy="desc"
+                                              rowsHeader={columns}
+                                            />
+                                            <RenderRows
+                                              headerData={columns}
+                                              rowsData={enrollment?.registrationEvents}
+                                            />
+                                          </TableComponent></div>
+                                      </WithBorder>
+                                      : <small>No enrollments found.</small>
+                                    }
+                                  </div>
+
+                                </div>
+                                <br />
+                                <Divider />
+                              </>
+
+                            ))
+                            : !loading ?
+                              <NoticeBox title={`No ${sectionName} found`}>
+                                {attributeKey === "searchable" ? <>Click <strong>'Register new'</strong> if you want to register as a new <strong>{sectionName}</strong>.</> : <>Click the bottom below to continue searching for a <strong>{sectionName}</strong>.</>}
+
+                                {attributeKey === "unique" ? <>  <br /> <br /> <Button small onClick={() => { onAddMoreAttributes() }} disabled={loading} style={{ marginTop: 50 }}>Search by more attributes</Button></> : null}
+                              </NoticeBox> : null
+                          }
+                        </Collapse>
+                      </form>
+                    }}
+                  </Form>
+                </WithPadding>
+              </WithBorder>
             </Collapse>
-          </form>
-        }}
-      </Form>
+          </WithBorder>
+        </div>
+        
+      ))}
+      
+      
       {(showResults && attributeKey === "searchable") || enrollmentValues?.length ?
         <ModalActions>
           <div className="d-flex justify-content-between align-items-center w-100">
