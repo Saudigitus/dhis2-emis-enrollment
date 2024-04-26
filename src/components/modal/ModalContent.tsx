@@ -138,7 +138,7 @@ function ModalContentComponent(props: ModalContentProps): React.ReactElement {
             }
             <br />
             <ModalActions>
-              <ButtonStrip end className="mr-4">
+              <ButtonStrip end className="mr-3">
                 {modalActions.map((action, i) => {
                   return (
                     <>

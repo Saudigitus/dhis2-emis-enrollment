@@ -23,6 +23,7 @@ import { getRecentEnrollment } from "../../utils/tei/getRecentEnrollment";
 import WithPadding from "../template/WithPadding";
 import { IconButton } from "@material-ui/core";
 import { ExpandLess, ExpandMore } from "@material-ui/icons";
+import { CustomAttributeProps } from "../../types/variables/AttributeColumns";
 
 const usetStyles = makeStyles({
   tableContainer: {
@@ -42,7 +43,7 @@ function ModalSearchEnrollmentContent(props: ModalSearchTemplateProps): React.Re
   const { enrollmentValues, setEnrollmentValues, loading, getEnrollmentsData } = useSearchEnrollments()
   const [, setInitialValues] = useRecoilState(SearchInitialValues)
   const [attributeKey, setAttributeKey] = useState<string>("unique")
-  const [collapseAttributes, setCollapseAttributes] = useState(`id-${0}`)
+  const [collapseAttributes, setCollapseAttributes] = useState(0)
 
   const { urlParamiters } = useParams();
   const { school: orgUnit, schoolName: orgUnitName, academicYear } = urlParamiters();
@@ -72,7 +73,17 @@ function ModalSearchEnrollmentContent(props: ModalSearchTemplateProps): React.Re
   const formattedQuery = () => {
     var query = "";
 
-    for (const [key, value] of Object.entries(queryForm)) {
+    // filter collapsed attributes from filled fields
+    const selectedObjectIDs: string[] = searchEnrollmentFields[collapseAttributes]?.variables.map((obj: CustomAttributeProps) => obj.id);
+    const filteredQueryForm: { [id: string]: string } = {};
+
+    Object.keys(queryForm).forEach(key => {
+      if (selectedObjectIDs.includes(key as unknown as string)) {
+        filteredQueryForm[key] = queryForm[key];
+      }
+    });
+
+    for (const [key, value] of Object.entries(filteredQueryForm)) {
       if (key && value) {
         const id = teiAttributes?.filter((element) => {
           return element.name == key;
@@ -148,12 +159,12 @@ function ModalSearchEnrollmentContent(props: ModalSearchTemplateProps): React.Re
       {searchEnrollmentFields?.map((group, index) => (
         <div className="mb-3">
           <WithBorder type="all">
-            <div className={styles.accordionHeaderContainer} onClick={()=> setCollapseAttributes(`id-${index}`)}>
+            <div className={styles.accordionHeaderContainer} onClick={()=> setCollapseAttributes(index)}>
               <label className={styles.accordionHeader}>Search by {group?.name}</label>
-              <IconButton size="small" onClick={()=> setCollapseAttributes(`id-${index}`)} disabled={collapseAttributes === `id-${index}`}> {collapseAttributes === `id-${index}` ? <ExpandLess /> : <ExpandMore />}  </IconButton>
+              <IconButton size="small" onClick={()=> setCollapseAttributes(index)} disabled={collapseAttributes === index}> {collapseAttributes === index ? <ExpandLess /> : <ExpandMore />}  </IconButton>
             </div>
 
-            <Collapse in={collapseAttributes === `id-${index}`}>
+            <Collapse in={collapseAttributes === index}>
               <WithBorder type="top">
                 <WithPadding>
                   <Form initialValues={{ ...initialValues, orgUnit, ...queryForm }} onSubmit={onHandleSubmit}>
@@ -179,7 +190,7 @@ function ModalSearchEnrollmentContent(props: ModalSearchTemplateProps): React.Re
                         <ButtonStrip className="mr-2" end>
                           {searchActions.map((action, i) => {
                             return (
-                              <Button key={i} {...action} >
+                              <Button key={i} {...action}>
                                 {action.label}
                               </Button>
                             )
