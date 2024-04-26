@@ -14,6 +14,7 @@ import { GetImageUrl } from '../../../utils/table/rows/getImageUrl';
 import { IconButton } from '@material-ui/core';
 import { ProgramConfigState } from '../../../schema/programSchema';
 import { checkCanceled } from '../../../utils/table/rows/checkCanceled';
+import SearchRowActions from './rowsActions/SearchRowActions';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -46,7 +47,7 @@ function RenderRows(props: RenderHeaderProps): React.ReactElement {
     const classes = useStyles()
     const { imageUrl } = GetImageUrl()
     const programConfigState = useRecoilValue(ProgramConfigState);
-    const { headerData, rowsData } = props;
+    const { headerData, rowsData, searchActions } = props;
 
     if (rowsData?.length === 0) {
         return (
@@ -88,6 +89,7 @@ function RenderRows(props: RenderHeaderProps): React.ReactElement {
                                         }
                                         {
                                             (column.displayName == "Actions") ?
+                                            searchActions ? <SearchRowActions row={row} rowsActions={searchActions} /> :
                                                 <RowActions row={row} />
                                                 : null
                                         }

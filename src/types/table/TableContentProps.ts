@@ -29,12 +29,13 @@ interface RowProps {
 
 interface RowActionsType {
     label: string
-    onClick: () => void
+    onClick: (arg?: any) => void
     icon: React.ReactNode
     disabled: boolean
 }
 interface RowActionsProps {
     row: any
+    rowsActions?: RowActionsType[]
 }
 
 
@@ -46,6 +47,7 @@ interface RenderHeaderProps {
     createSortHandler?: (property: string) => any
     rowsData?: any[]
     headerData?: CustomAttributeProps[]
+    searchActions?: RowActionsType[]
 }
 
 interface TableSortProps {

@@ -74,3 +74,20 @@
     font-family: "Roboto", "Helvetica", "Arial", sans-serif;
     margin: 0px !important;
 }
+
+.rowActionsContainer {
+    display: flex;
+}
+
+.rowActionsIcon svg {
+    width: 20px !important;
+    height: 20px !important;
+}
+
+.rowActionsIcon svg:nth-child(1) {
+    color: greenyellow !important
+}
+
+.rowActionsIcon svg:nth-child(2) {
+    color: blue !important
+}

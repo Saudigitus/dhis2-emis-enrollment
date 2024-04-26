@@ -28,7 +28,7 @@ export default function useSearchEnrollments() {
                             .then( async (registrationResponse: any) => {
                                 await getEvent(program, socioEconomics.programStage as unknown as string, [], orgUnit as unknown as string, tei?.trackedEntity, fields)
                                     .then((socioEconomicsResponse: any) => {
-                                        teisWithRegistrationEvents.push({...tei, enrollmentsNumber: tei?.enrollments?.length, registrationEvents: formatResponseData("WITHOUT_REGISTRATION", registrationResponse?.results?.instances), socioEconomicsEvents: formatResponseData("WITHOUT_REGISTRATION", socioEconomicsResponse?.results?.instances), mainAttributesFormatted: attributes(tei?.attributes), ...attributes(tei?.attributes)})
+                                        teisWithRegistrationEvents.push({...tei, registrationEvents: formatResponseData("WITHOUT_REGISTRATION", registrationResponse?.results?.instances), socioEconomicsEvents: formatResponseData("WITHOUT_REGISTRATION", socioEconomicsResponse?.results?.instances), mainAttributesFormatted: attributes(tei?.attributes)})
                                     })
                             })
                     }

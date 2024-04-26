@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { ModalActions, Button, ButtonStrip, Label, Divider, NoticeBox } from "@dhis2/ui";
+import { ModalActions, Button, ButtonStrip, Label, Divider, NoticeBox, IconCheckmarkCircle24, IconInfo24 } from "@dhis2/ui";
 import { Form } from "react-final-form";
 import GroupForm from "../form/GroupForm";
 import { ModalSearchTemplateProps } from "../../types/modal/ModalProps";
@@ -24,6 +24,10 @@ import WithPadding from "../template/WithPadding";
 import { IconButton } from "@material-ui/core";
 import { ExpandLess, ExpandMore } from "@material-ui/icons";
 import { CustomAttributeProps } from "../../types/variables/AttributeColumns";
+import { RowActionsType } from "../../types/table/TableContentProps";
+import style from "./modal.module.css"
+import { Tooltip } from "@material-ui/core";
+import SearchRowActions from "../table/render/rowsActions/SearchRowActions";
 
 const usetStyles = makeStyles({
   tableContainer: {
@@ -39,7 +43,7 @@ function ModalSearchEnrollmentContent(props: ModalSearchTemplateProps): React.Re
   const { registration } = getDataStoreKeys()
   const [showResults, setShowResults] = useState<boolean>(false)
   const { columns } = useEnrollmentsHeader();
-  const { teiAttributes, attributesToDisplay } = useGetProgramsAttributes();
+  const { teiAttributes, attributesToDisplay, searchableAttributes } = useGetProgramsAttributes();
   const { enrollmentValues, setEnrollmentValues, loading, getEnrollmentsData } = useSearchEnrollments()
   const [, setInitialValues] = useRecoilState(SearchInitialValues)
   const [attributeKey, setAttributeKey] = useState<string>("unique")
@@ -119,7 +123,7 @@ function ModalSearchEnrollmentContent(props: ModalSearchTemplateProps): React.Re
   const searchActions = [
     //{ id: "cancel", type: "button", label: showResults ? "Reset" : "Cancel", small: true, disabled: loading, onClick: () => { Object.entries(queryForm).length ? onReset() : setOpen(false) }, display:true },
     //{ id: "continue", type: "button", label: "Register new", small: true, primary: true, disabled: loading, onClick: () => { setOpenNewEnrollment(true); setOpen(false) }, display: !enrollmentValues?.length },
-    { id: "search", type: "submit", label: `Search ${sectionName}`, small: true, disabled: loading || !Object.entries(queryForm).length, loading, display:true },
+    { id: "search", type: "submit", label: `Search ${sectionName.toLocaleLowerCase()}`, small: true, disabled: loading || !Object.entries(queryForm).length, loading, display:true },
   ];
 
   const modalActions = [
@@ -149,12 +153,36 @@ function ModalSearchEnrollmentContent(props: ModalSearchTemplateProps): React.Re
     }
     setShowResults(false)
   }
-
+  const rowsActions: RowActionsType[] = [
+    {
+      icon: <IconCheckmarkCircle24 style={{ color: "green"}} />,
+      label: `Select ${sectionName}`,
+      disabled: false,
+      onClick: (tei) => {  console.log("tei", tei)  },
+    },
+    {
+      icon: <IconInfo24 style={{ color: "blue"}} />,
+      label: `${sectionName} history`,
+      disabled: false,
+      onClick: (tei) => { console.log("tei", tei) },
+    }
+  ];
 
   return (
     <div>
       <Label>Fill in at least 1 attribute to search.</Label>
       <br />
+
+      <Collapse in={showResults} style={{}}>
+        {!enrollmentValues.length && !loading ?
+          <NoticeBox title={`No ${sectionName} found`}>
+            {attributeKey === "searchable" ? <>Click <strong>'Register new'</strong> if you want to register as a new <strong>{sectionName}</strong>.</> : <>Click the bottom below to continue searching for a <strong>{sectionName}</strong>.</>}
+
+            {attributeKey === "unique" ? <>  <br /> <br /> <Button small onClick={() => { onAddMoreAttributes() }} disabled={loading} style={{ marginTop: 50 }}>Search by more attributes</Button></> : null}
+          </NoticeBox> : null
+        }
+
+      </Collapse>
 
       {searchEnrollmentFields?.map((group, index) => (
         <div className="mb-3">
@@ -197,65 +225,7 @@ function ModalSearchEnrollmentContent(props: ModalSearchTemplateProps): React.Re
                           })}
                         </ButtonStrip>
 
-                        <Collapse in={showResults} style={{}}>
-                          {enrollmentValues.length ?
-                            enrollmentValues?.map((enrollment: any, index: number) => (
-                              <>
-                                <div className="row w-100" key={index}>
-                                  <div className="col-12 col-md-3">
-                                    <div style={{ marginBottom: 10 }}>
-                                      <Subtitle label={"Enrollment details"} />
-                                    </div>
 
-                                    {attributesToDisplay?.map((attribute, key) => (
-                                      <div key={key} className={styles.detailsCard}>
-                                        <strong className={styles.detailsCardVariable}>{attribute?.displayName}</strong>
-                                        <Label className={styles.detailsCardLabel}> {enrollment?.mainAttributesFormatted[attribute?.id]} </Label>
-                                      </div>
-                                    ))}
-                                  </div>
-                                  <div className="col-12 col-md-9">
-                                    <div className="mb-1 d-flex justify-content-between align-items-center">
-                                      <Subtitle label={`Enrollments (${enrollment?.registrationEvents?.length})`} />
-                                      <Button small onClick={() => { onSelectTei(enrollment); setOpen(false); setOpenNewEnrollment(true) }} disabled={loading} style={{ marginTop: 50 }}>Select {sectionName}</Button>
-                                    </div>
-
-                                    {enrollment?.registrationEvents?.length ?
-                                      <WithBorder type="all">
-                                        <div
-                                          className={classes.tableContainer}
-                                        >
-                                          <TableComponent>
-                                            <RenderHeader
-                                              createSortHandler={() => { }}
-                                              order="asc"
-                                              orderBy="desc"
-                                              rowsHeader={columns}
-                                            />
-                                            <RenderRows
-                                              headerData={columns}
-                                              rowsData={enrollment?.registrationEvents}
-                                            />
-                                          </TableComponent></div>
-                                      </WithBorder>
-                                      : <small>No enrollments found.</small>
-                                    }
-                                  </div>
-
-                                </div>
-                                <br />
-                                <Divider />
-                              </>
-
-                            ))
-                            : !loading ?
-                              <NoticeBox title={`No ${sectionName} found`}>
-                                {attributeKey === "searchable" ? <>Click <strong>'Register new'</strong> if you want to register as a new <strong>{sectionName}</strong>.</> : <>Click the bottom below to continue searching for a <strong>{sectionName}</strong>.</>}
-
-                                {attributeKey === "unique" ? <>  <br /> <br /> <Button small onClick={() => { onAddMoreAttributes() }} disabled={loading} style={{ marginTop: 50 }}>Search by more attributes</Button></> : null}
-                              </NoticeBox> : null
-                          }
-                        </Collapse>
                       </form>
                     }}
                   </Form>
@@ -267,7 +237,38 @@ function ModalSearchEnrollmentContent(props: ModalSearchTemplateProps): React.Re
         
       ))}
       
-      
+      <Collapse in={showResults} style={{}}>
+        <>
+        {enrollmentValues?.length ?
+          <div className="">
+            {/* <div className="mb-1 d-flex justify-content-between align-items-center">
+              <Subtitle label={`Results (${enrollmentValues?.length})`} />
+              <Button small onClick={() => { onSelectTei(enrollment); setOpen(false); setOpenNewEnrollment(true) }} disabled={loading} style={{ marginTop: 50 }}>Select {sectionName}</Button>
+            </div> */}
+
+            
+            <WithBorder type="all">
+              <div
+                className={classes.tableContainer}
+              >
+                <TableComponent>
+                  <RenderHeader
+                    createSortHandler={() => { }}
+                    order="asc"
+                    orderBy="desc"
+                    rowsHeader={searchableAttributes}
+                  />
+                  <RenderRows
+                    headerData={searchableAttributes}
+                    rowsData={enrollmentValues}
+                    searchActions={rowsActions}
+                  />
+                </TableComponent></div>
+            </WithBorder>
+            <Divider />
+          </div> : null }
+        </>
+      </Collapse>
       {(showResults && attributeKey === "searchable") || enrollmentValues?.length ?
         <ModalActions>
           <div className="d-flex justify-content-between align-items-center w-100">
