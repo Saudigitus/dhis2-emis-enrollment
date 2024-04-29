@@ -127,3 +127,32 @@
     display: flex;
     align-items: center;
 }
+
+.detailsCard {
+    min-height: 45px;
+    padding: 6px 15px;
+    border: 1px solid #E8EDF2;
+    background-color: #F1FBFF;
+    margin: 5px;
+}
+
+.detailsCardVariable {
+    font-family: Roboto;
+    font-size: 12px !important;
+    font-weight: 400;
+    line-height: 15.23px;
+    text-align: left;
+    color: #404B5A;
+    margin: 0px !important;
+}
+
+.detailsCardLabel {
+    font-family: Roboto;
+    font-size: 12px !important;
+    font-weight: 600;
+    line-height: 15.23px;
+    text-align: left;
+    color: #404B5A;
+    margin: 0px !important;
+    margin-left: 5px !important;
+}

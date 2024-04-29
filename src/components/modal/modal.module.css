@@ -63,31 +63,28 @@
 .accordionHeaderContainer {
     display: flex;
     justify-content: space-between;
-    align-content: center !important;
+    align-items: center !important;
     padding: 5px 10px 3px 10px;
 }
 
 .accordionHeader {
-    color: rgba(0, 0, 0, 0.87);
+    /* color: rgba(0, 0, 0, 0.87); */
+    color: #404B5A;
     font-size: 14px;
     font-weight: 500;
     font-family: "Roboto", "Helvetica", "Arial", sans-serif;
     margin: 0px !important;
 }
 
-.rowActionsContainer {
-    display: flex;
+.resultsHeaderContainer{
+    /* background-color: #E8F5E9; */
+    background-color: rgb(240, 242, 244, 0.7);
+    border: 1px solid #ECEFF1 !important;
+    border-bottom: none !important;
+    padding: 10px 10px;
 }
 
-.rowActionsIcon svg {
-    width: 20px !important;
-    height: 20px !important;
-}
-
-.rowActionsIcon svg:nth-child(1) {
-    color: greenyellow !important
-}
-
-.rowActionsIcon svg:nth-child(2) {
-    color: blue !important
+.resultsHeaderContainer label{
+    color: #404B5A !important;
+    /* color: #0A683A !important; */
 }

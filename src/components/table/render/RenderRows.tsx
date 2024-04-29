@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import i18n from '@dhis2/d2-i18n';
 import classNames from 'classnames';
 import { RowCell, RowTable } from '../components';
@@ -15,10 +15,12 @@ import { IconButton } from '@material-ui/core';
 import { ProgramConfigState } from '../../../schema/programSchema';
 import { checkCanceled } from '../../../utils/table/rows/checkCanceled';
 import SearchRowActions from './rowsActions/SearchRowActions';
+import EnrollmentDetailsCards from './enrollmentDetailsComponent/EnrollmentDetailsComponent';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         row: { width: "100%" },
+        historyRow: { backgroundColor: "#FFFF" },
         dataRow: {
             cursor: 'pointer',
             '&:hover': {
@@ -47,7 +49,9 @@ function RenderRows(props: RenderHeaderProps): React.ReactElement {
     const classes = useStyles()
     const { imageUrl } = GetImageUrl()
     const programConfigState = useRecoilValue(ProgramConfigState);
-    const { headerData, rowsData, searchActions } = props;
+    const { headerData, rowsData, searchActions, onSelectTei } = props;
+    const [showEnrollments, setShowEnrollments] = useState<string>();
+    console.log("rowsData", rowsData)
 
     if (rowsData?.length === 0) {
         return (
@@ -68,36 +72,52 @@ function RenderRows(props: RenderHeaderProps): React.ReactElement {
         <React.Fragment>
             {
                 rowsData?.map((row, index) => (
-                    <RowTable
-                        key={index}
-                        inactive={checkCanceled(row.status)}
-                        className={classNames(classes.row, classes.dataRow)}
-                    >
-                        {
+                    <>
+                        <RowTable
+                            key={index}
+                            inactive={checkCanceled(row.status)}
+                            className={classNames(classes.row, classes.dataRow)}
+                        >
+                            {
 
-                            headerData?.filter(x => x.visible)?.map(column => (
-                                <RowCell
-                                    key={column.id}
-                                    className={classNames(classes.cell, classes.bodyCell, (column.displayName == "Actions") ? classes.actionsCell : null)}
-                                >
-                                    <div>
-                                        {
-                                            formatKeyValueTypeHeader(headerData)[column.id] === Attribute.valueType.IMAGE ?
-                                                <a href={imageUrl({ attribute: column.id, trackedEntity: row.trackedEntity })} target='_blank'>{row[column.id] && <IconButton> <CropOriginal /></IconButton>}</a>
-                                                :
-                                                getDisplayName({ metaData: column.id, value: row[column.id], program: programConfigState })
-                                        }
-                                        {
-                                            (column.displayName == "Actions") ?
-                                            searchActions ? <SearchRowActions row={row} rowsActions={searchActions} /> :
-                                                <RowActions row={row} />
-                                                : null
-                                        }
-                                    </div>
-                                </RowCell>
-                            ))
+                                headerData?.filter(x => x.visible)?.map(column => (
+                                    <RowCell
+                                        key={column.id}
+                                        className={classNames(classes.cell, classes.bodyCell, (column.displayName == "Actions") ? classes.actionsCell : null)}
+                                    >
+                                        <div>
+                                            {
+                                                formatKeyValueTypeHeader(headerData)[column.id] === Attribute.valueType.IMAGE ?
+                                                    <a href={imageUrl({ attribute: column.id, trackedEntity: row.trackedEntity })} target='_blank'>{row[column.id] && <IconButton> <CropOriginal /></IconButton>}</a>
+                                                    :
+                                                    getDisplayName({ metaData: column.id, value: row[column.id], program: programConfigState })
+                                            }
+                                            {
+                                                (column.displayName == "Actions") ?
+                                                searchActions ? <SearchRowActions row={row} onSelectTei={onSelectTei ? () => onSelectTei(row) : undefined} onShowHistory={() => setShowEnrollments(showEnrollments === row.trackedEntity ? "" : row.trackedEntity)} /> :
+                                                    <RowActions row={row} />
+                                                    : null
+                                            }
+                                        </div>
+                                    </RowCell>
+                                ))
+                            }
+                            
+                        </RowTable>
+                        {console.log("row", row)}
+                        {searchActions && showEnrollments === row.trackedEntity ?
+                                <RowTable className={classNames(classes.row, classes.historyRow)}>
+                                    <RowCell 
+                                        className={classNames(classes.cell, classes.bodyCell)} 
+                                        colspan={headerData?.filter(x => x.visible)?.length as unknown as number + 1}
+                                    >
+                                        <EnrollmentDetailsCards enrollmentsData={row.registrationEvents} />
+                                    </RowCell>
+                                </RowTable>
+                            : null
                         }
-                    </RowTable>
+                    </>
+                    
                 ))
             }
         </React.Fragment>

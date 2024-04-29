@@ -35,7 +35,8 @@ interface RowActionsType {
 }
 interface RowActionsProps {
     row: any
-    rowsActions?: RowActionsType[]
+    onSelectTei?: (arg: any) => void
+    onShowHistory?: () => void
 }
 
 
@@ -47,7 +48,12 @@ interface RenderHeaderProps {
     createSortHandler?: (property: string) => any
     rowsData?: any[]
     headerData?: CustomAttributeProps[]
-    searchActions?: RowActionsType[]
+    searchActions?: boolean
+    onSelectTei?: (arg: any) => void
+}
+
+interface EnrollmentDetailsComponentProps {
+    enrollmentsData: any
 }
 
 interface TableSortProps {
@@ -61,4 +67,4 @@ interface TableSortProps {
 type TableDataProps = Record<string, string>;
 
 
-export type { TableComponentProps, HeaderCellProps, RowProps,RowActionsType,  RowActionsProps, RenderHeaderProps, TableSortProps, TableDataProps }
+export type { TableComponentProps, HeaderCellProps, RowProps,RowActionsType,  RowActionsProps, RenderHeaderProps, EnrollmentDetailsComponentProps, TableSortProps, TableDataProps }
