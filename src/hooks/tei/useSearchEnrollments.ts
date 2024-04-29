@@ -18,7 +18,7 @@ export default function useSearchEnrollments() {
 
     const getEnrollmentsData = (filters: string, setShowResults: any) => {
         const teisWithRegistrationEvents: any[] = [];
-        const fields: string = "event,trackedEntity,enrollment,dataValues[dataElement,value],orgUnitName,orgUnit"
+        const fields: string = "event,trackedEntity,enrollment,occurredAt,dataValues[dataElement,value],orgUnitName,orgUnit"
         setLoading(true)
             getTeiSearch(program, filters)
                 .then(async (teiResponse: any) => {

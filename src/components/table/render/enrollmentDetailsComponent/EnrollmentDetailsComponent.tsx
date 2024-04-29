@@ -17,7 +17,7 @@ function EnrollmentDetailsComponent(props: EnrollmentDetailsComponentProps): Rea
         </div>
         {enrollmentsData.length ?
           enrollmentsData?.map((enrollment: any) => (
-            <div className="col-12 col-md-3 p-0">
+            <div className="col-12 col-sm-6 col-md-3 p-0">
               <div className={styles.detailsCard}>
                 {dataElements?.map((dataElement: any, key: number) => (
                   <div className="d-flex align-items-center" key={key}>

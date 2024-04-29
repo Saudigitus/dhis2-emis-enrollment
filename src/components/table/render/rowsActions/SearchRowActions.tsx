@@ -9,17 +9,17 @@ export default function SearchRowActions(props: RowActionsProps) {
   const { row, onSelectTei, onShowHistory } = props;
 
   const rowsActions: RowActionsType[] = [
-    {
+    /* {
       icon: <CheckBoxOutlined />,
       label: `Select for new enrollment`,
       disabled: false,
       onClick: (tei) => { onSelectTei ? () => onSelectTei(row) : undefined  },
-    },
+    }, */
     {
       icon: <IconInfo24 />,
       label: `View history`,
       disabled: false,
-      onClick: () => { onShowHistory ? () => onShowHistory() : undefined },
+      onClick: () => { onShowHistory() },
     }
   ];
 

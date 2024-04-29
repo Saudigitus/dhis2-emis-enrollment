@@ -54,7 +54,7 @@ export function useTableData() {
                 page,
                 pageSize,
                 program: program as unknown as string,
-                order: "occurreddAt:desc",
+                order: "occurredAt:desc",
                 programStage: registration?.programStage as unknown as string,
                 filter: headerFieldsState?.dataElements,
                 filterAttributes: headerFieldsState?.attributes,

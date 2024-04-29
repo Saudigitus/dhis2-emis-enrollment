@@ -48,8 +48,7 @@ const staticForm = () => {
 }
 
 function formFields(variablesData: any[], sectionName: string): FormSectionProps[] {
-  console.log("variablesData", variablesData)  
-  //console.log("studentProfile", studentsProfile)
+
   return [
     {
         section: "",

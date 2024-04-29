@@ -1,5 +1,6 @@
 .rowActionsContainer {
   display: flex;
+  justify-content: center;
 }
 
 .rowActionsIcon svg , .rowSearchActionsIcon svg{
@@ -9,9 +10,9 @@
 
 
 .rowSearchActionsIcon.icon0 {
-  color: #0F9D58 !important
+  color: #28AFEA !important
 }
 
 .rowSearchActionsIcon.icon1 {
-  color: #28AFEA !important
+  color: #0F9D58 !important
 }
