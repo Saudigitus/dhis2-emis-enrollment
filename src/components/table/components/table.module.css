@@ -179,6 +179,9 @@
 
 .detailsButtonCard svg {
     fill: #554437 !important;
-    font-size: 21px !important;
-    margin-bottom: 7px !important;
+    font-size: 14px !important;
+}
+
+.enrolledAlertLabel {
+    color: #753800;
 }

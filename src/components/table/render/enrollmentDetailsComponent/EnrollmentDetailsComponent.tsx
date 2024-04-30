@@ -1,5 +1,5 @@
 import React from "react";
-import { Label, IconAddCircle24 } from "@dhis2/ui";
+import { Label, Button } from "@dhis2/ui";
 import styles from "../../components/table.module.css";
 import { useEnrollmentsHeader } from "../../../../hooks/tableHeader/useEnrollmentsHeader";
 import { EnrollmentDetailsComponentProps } from "../../../../types/table/TableContentProps";
@@ -13,11 +13,21 @@ function EnrollmentDetailsComponent(props: EnrollmentDetailsComponentProps): Rea
 
   return (
     <React.Fragment>
-      <div className="row w-100 pb-2">
-        <div className="col-12 px-1 pt-2">
-         <h6 style={{fontSize: 13}}>Enrollment History</h6> 
+      <div className="row w-100 pb-2 d-flex justify-content-end align-items-center">
+      <div className="col-12 col-md-8 px-1 pt-2">
+         <h6 className="mb-0" style={{fontSize: 13}}>Enrollment History</h6> 
         </div>
-        <div className="col-12 col-sm-6 col-md-3 p-0" onClick={onSelectTei}>
+        <div className="col-12 col-md-4 px-1 pt-2 d-flex justify-content-end">
+        {existingAcademicYear ? 
+          <i className={styles.enrolledAlertLabel}>Already enrolled for this year</i> 
+          :  
+          <Button small onClick={onSelectTei}>New Enrollment</Button>
+        }
+        </div>
+      </div>
+      <div className="row w-100 pb-2">
+
+  {/*         <div className="col-12 col-sm-6 col-md-3 p-0" onClick={onSelectTei}>
           <div className={classNames(styles.detailsCard, styles.detailsButtonCard)}>
             {existingAcademicYear ? 
             <div className="text-center">
@@ -31,7 +41,7 @@ function EnrollmentDetailsComponent(props: EnrollmentDetailsComponentProps): Rea
             </div>
           }
           </div>
-      </div>
+      </div> */}
         {enrollmentsData.length ?
           enrollmentsData?.map((enrollment: any) => (
             <div className="col-12 col-sm-6 col-md-3 p-0">

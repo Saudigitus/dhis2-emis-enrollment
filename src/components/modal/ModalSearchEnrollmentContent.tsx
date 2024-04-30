@@ -123,7 +123,7 @@ function ModalSearchEnrollmentContent(props: ModalSearchTemplateProps): React.Re
 
   const modalActions = [
     { id: "cancel", type: "button", label: "Cancel", small: true, disabled: false, onClick: () => { setOpen(false) } },
-    ...(enrollmentValues?.length ? [{ id: "continue", label: "Register new", primary: true, small: true, disabled: loading, onClick: () => { onHandleRegisterNew() } }] : [] )
+    { id: "continue", label: "Register new", primary: true, small: true, disabled: loading, onClick: () => { onHandleRegisterNew() }}
   ];
 
   const onSelectTei = (teiData: any) => {

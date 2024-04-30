@@ -13,7 +13,7 @@ const EVENT_QUERY = (queryProps: EventQueryProps) => ({
 export function useGetEvent() {
     const engine = useDataEngine();
 
-    async function getEvent(program: string, programStage: string, filter: string[], orgUnit: string, trackedEntity: string, fields: string ) {
+    async function getEvent(program: string, programStage: string, filter: string[], trackedEntity: string, fields: string, orgUnit?: string ) {
             return await engine.query(EVENT_QUERY({
                 pageSize:10,
                 program: program,
