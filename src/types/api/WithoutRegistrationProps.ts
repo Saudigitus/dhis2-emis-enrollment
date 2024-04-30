@@ -11,7 +11,7 @@ interface EventQueryProps {
     order?: string
     programStatus?: string
     programStage: string
-    orgUnit: string
+    orgUnit?: string
     filter?: string[]
     filterAttributes?: string[]
     trackedEntity?: string

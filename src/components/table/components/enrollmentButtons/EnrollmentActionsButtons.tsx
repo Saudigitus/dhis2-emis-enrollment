@@ -35,7 +35,7 @@ function EnrollmentActionsButtons() {
         { allowSearching ?
           <Tooltip title={orgUnit === null ? "Please select an organisation unit before" : ""}>
             <span>
-              <Button disabled={orgUnit == null} onClick={() => { setOpenSearchEnrollment(true); }} icon={<IconSearch24 />}>Search {sectionName.toLocaleLowerCase()}</Button>
+              <Button disabled={orgUnit == null} onClick={() => { setOpenSearchEnrollment(true); }} icon={<IconSearch24 />}>Search {sectionName}</Button>
             </span>
           </Tooltip> : null
         }
@@ -70,7 +70,7 @@ function EnrollmentActionsButtons() {
         />
       </ModalComponent>}
 
-      {openSearchEnrollment && <ModalComponent  title={`Single ${sectionName} Enrollment`} open={openSearchEnrollment} setOpen={setOpenSearchEnrollment}>
+      {openSearchEnrollment && <ModalComponent  title={`Search for enrolled ${sectionName}`} open={openSearchEnrollment} setOpen={setOpenSearchEnrollment}>
         <ModalSearchEnrollmentContent
           sectionName={sectionName}
           setOpen={setOpenSearchEnrollment}

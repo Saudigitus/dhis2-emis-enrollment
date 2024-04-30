@@ -47,20 +47,14 @@ const staticForm = () => {
   }
 }
 
-function formFields(apiFormData: any[], sectionName: string): FormSectionProps[] {
-  const [enrollmentDetails = [], studentsProfile = []] = apiFormData;
-  
-  //console.log("studentProfile", studentsProfile)
+function formFields(variablesData: any[], sectionName: string): FormSectionProps[] {
+
   return [
     {
-        section: "Enrollment Details",
-        description: "Details related to the enrollment process. Fill in at least 1 attribute to search.",
+        section: "",
+        description: "",
         visible: true,
-        fields: [
-            staticForm().registeringSchool,
-            ...enrollmentDetails,
-            ...studentsProfile,
-        ]
+        fields: variablesData
     }
   ];
 }
