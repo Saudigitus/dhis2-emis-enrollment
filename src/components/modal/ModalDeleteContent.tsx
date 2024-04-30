@@ -11,6 +11,7 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import { ProgramConfigState } from "../../schema/programSchema";
 import { TeiRefetch } from "../../schema/refecthTeiSchema";
 import { getDisplayName } from "../../utils/table/rows/getDisplayNameByOption";
+import GroupForm from "../form/GroupForm";
 
 function ModalDeleteContent(props: ModalDeleteContentProps): React.ReactElement {
     const { setOpen, initialValues, loading: loadingInitialValues, sectionName } = props
@@ -26,7 +27,7 @@ function ModalDeleteContent(props: ModalDeleteContentProps): React.ReactElement 
 
     const modalActions = [
         { id: "cancel", type: "button", label: "Cancel", disabled: loading || loadingInitialValues, onClick: () => { setClicked("cancel"); setOpen(false) } },
-        { id: "saveandcontinue", type: "submit", label: "Delete enrollment", destructive: true, disabled: loading || loadingInitialValues, loading: loading || loadingInitialValues, onClick: () => { setClicked("saveandcontinue"); } }
+        { id: "saveandcontinue", type: "submit", label: "Delete", destructive: true, disabled: loading || loadingInitialValues, loading: loading || loadingInitialValues, onClick: () => { setClicked("saveandcontinue"); } }
     ];
 
     async function onSubmit() {
@@ -53,53 +54,65 @@ function ModalDeleteContent(props: ModalDeleteContentProps): React.ReactElement 
             </CenteredContent>
         )
     }
-
+    console.log(initialValues)
     return (
         <WithPadding>
-            <React.Fragment>
-                <p>
-                    Are you sure you want to  <span className={classNames(styles.redIcon)}>delete</span> the seleted {" "}
-                    {sectionName.toLowerCase()} from <strong>{schoolName}.</strong>{" "}<br /><br />
-
-                    <strong>{sectionName} Details:</strong><br />{
-                        initialValues?.attributes?.map((x: any) => {
-                            return (
-                                <>
-                                    <span className={classNames(styles.textCapDetails)}>{x.displayName}: </span><strong> {getDisplayName({ metaData: x.attribute, value: x.value, program: getProgram })}.</strong>{" "}
-                                    <br />
-                                </>
-                            )
-                        })
-                    }
-                    <br />
-                    <strong>Enrollment Details:</strong><br />{
-                        initialValues?.registration?.map((x: any) =>
-                            <><span className={classNames(styles.textCapDetails)}>{x.code}: </span><strong>{x.value}.</strong>{" "}</>
-                        )
-                    }
-                    <br />
-                </p>
-            </React.Fragment>
             <Form initialValues={initialValues} onSubmit={onSubmit}>
                 {({ handleSubmit, form }) => {
                     formRef.current = form;
                     return <form onSubmit={handleSubmit}>
-
-                        {initialValues?.events?.map((event: any, index: number) =>
+                        <React.Fragment>
+                            <div className={styles.detailsTableGroup}>
+                                <div>
+                                    <th colSpan={2}><strong>{sectionName} details</strong></th>
+                                    {
+                                        initialValues?.attributes?.map((x: any) => {
+                                            return (
+                                                <tr>
+                                                    <td className={styles.leftCell}><span className={classNames(styles.textCapDetails)}>{x.displayName}: </span></td>
+                                                    <td><strong> {getDisplayName({ metaData: x.attribute, value: x.value, program: getProgram })}</strong></td>
+                                                </tr>
+                                            )
+                                        })
+                                    }
+                                </div>
+                                <div>
+                                    <th colSpan={2}> <strong>Enrollment details</strong></th>
+                                    {
+                                        initialValues?.registration?.map((x: any) =>
+                                            <tr>
+                                                <td className={styles.leftCell}><span className={classNames(styles.textCapDetails)}>{x.code}: </span></td>
+                                                <td><strong>{x.value}</strong></td>
+                                            </tr>
+                                        )
+                                    }
+                                </div>
+                            </div>
+                        </React.Fragment>
+                        <strong>Enrollment summary</strong>
+                        {initialValues?.events?.map((event: any) =>
                             <>
-                                <ListItem className={classNames(styles.item)}>
+                                <ListItem className={classNames(styles.listItem)}>
                                     <ListItemText primary={event.name} />
-                                    <span className={classNames(styles[event.class])}>
-                                        {event.repeatable ? event.value : event.value ? <IconCheckmark24 /> : <IconCross24 />}
-                                    </span>
+                                    <div className={classNames(styles.valuesFlex)}>
+                                        <span className={classNames(styles[event.class])}>
+                                            {event.repeatable ? event.value : event.value ? <IconCheckmark24 /> : <IconCross24 />}
+                                        </span>
+                                        <span className={classNames(styles[event.class], styles.iconLabel)}>
+                                            {event.label}
+                                        </span>
+                                    </div>
                                 </ListItem>
                                 <Divider />
                             </>
                         )}
 
                         <br />
-                        < NoticeBox error>
-                            <strong>Attention:</strong> This {sectionName.toLowerCase()} enrollment will be deleted and can no longer be accessed.
+                        < NoticeBox
+                            warning
+                            title={<p className={styles.noticeBoxTitle}>Are you sure you want to <span className={classNames(styles.redIcon)}>delete</span> the selected {sectionName.toLowerCase()} from <strong>{schoolName}.</strong></p>}
+                        >
+                            This {sectionName.toLowerCase()} enrollment will be deleted and can no longer be accessed.
                         </NoticeBox>
                         <ModalActions>
                             <ButtonStrip end>

@@ -89,7 +89,7 @@ function ModalContentComponent(props: ModalContentProps): React.ReactElement {
 
   if (enrollmentsData?.length < 1 || loadingCodes) {
     return (
-      <CenteredContent>
+      <CenteredContent> 
         <CircularLoader />
       </CenteredContent>
     )

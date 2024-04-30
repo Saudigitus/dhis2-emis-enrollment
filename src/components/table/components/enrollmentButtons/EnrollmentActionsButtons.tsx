@@ -23,7 +23,7 @@ function EnrollmentActionsButtons() {
   const { enrollmentsData } = useGetEnrollmentForm();
 
   const enrollmentOptions: FlyoutOptionsProps[] = [
-    { label: "Enroll new students", divider: true, onClick: () => { setOpen(true); } },
+    { label: "Enroll new students", divider: true, onClick: () => { setOpenImport(true); } },
     { label: "Download template", divider: false, onClick: () => { setOpenExportEmptyTemplate(true) } },
     // { label: "Export empty template", divider: false, onClick: () => { alert("Export empty"); } },
     // { label: "Export existing students", divider: false, onClick: () => { alert("Export existing students"); } }
@@ -32,7 +32,7 @@ function EnrollmentActionsButtons() {
   return (
     <div>
       <ButtonStrip>
-        { !allowSearching ?
+        { allowSearching ?
           <Tooltip title={orgUnit === null ? "Please select an organisation unit before" : ""}>
             <span>
               <Button disabled={orgUnit == null} onClick={() => { setOpenSearchEnrollment(true); }} icon={<IconSearch24 />}>Search {sectionName.toLocaleLowerCase()}</Button>

@@ -78,7 +78,7 @@ export default function RowActions(props: RowActionsProps) {
       {
         openDeletionModal &&
 
-        <ModalComponent title={`Single ${sectionName} Deletion`} open={openDeletionModal} setOpen={setOpenDeletionModal}>
+        <ModalComponent title={`Enrollment Deletion`} open={openDeletionModal} setOpen={setOpenDeletionModal}>
           {
             Object.keys(deleteFormInitialValues).length ?
               <ModalDeleteContent setOpen={setOpenDeletionModal} sectionName={sectionName} loading={envtsLoading} initialValues={deleteFormInitialValues} />

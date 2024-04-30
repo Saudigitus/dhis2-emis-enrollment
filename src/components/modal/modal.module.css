@@ -28,7 +28,8 @@
     text-align: left;
     color: #404B5A;
 }
-.closeModalButton button{
+
+.closeModalButton button {
     top: 0;
     right: 0;
     position: absolute;
@@ -37,13 +38,17 @@
 }
 
 .closeModalButton button:hover {
-    background-color:  rgba(0, 0, 0, 0.04);
+    background-color: rgba(0, 0, 0, 0.04);
 }
 
-.item>span {
+.listItem>span {
     width: 35px;
     display: flex;
     justify-content: center;
+}
+
+.listItem {
+    /* padding: 4px 4px!important; */
 }
 
 .textCapDetails {
@@ -52,10 +57,51 @@
 
 .redIcon,
 .redIcon svg {
-    color: #f44336 !important;
+    color: #d64d4d !important;
 }
 
 .greenIcon,
 .greenIcon svg {
-    color: #009688 !important;
+    color: #277314 !important;
+}
+
+.redIcon:first-child,
+.greenIcon:first-child {
+    text-align: center;
+    height: 24px !important;
+    width: 24px !important;
+}
+
+.noticeBoxTitle {
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+.leftCell {
+    width: 90px !important;
+}
+
+.detailsTableGroup {
+    width: 50%;
+    display: flex;
+    margin-bottom: 40px;
+    justify-content: space-between;
+}
+
+.detailsTableGroup td, .detailsTableGroup th {
+    height: 25px !important;
+}
+
+
+.valuesFlex {
+    display: flex;
+    width: 100px;
+    align-items: center;
+    column-gap: 15px !important;
+
+}
+
+.iconLabel {
+    font-size: 12px;
+    font-style: italic;
 }

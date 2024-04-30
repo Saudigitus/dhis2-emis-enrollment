@@ -31,7 +31,9 @@ export default function useGetEnrollmentDeleteFormData() {
                             name: value.displayName,
                             value: event?.length,
                             repeatable: value.repeatable,
-                            class: event?.length ? 'greenIcon' : 'redIcon'
+                            class: event?.length ? 'greenIcon' : 'redIcon',
+                            label: value.repeatable ? `${value.displayName.toLowerCase() + "s"}` : event?.length ? "value assigned" : 'no value assigned'
+
                         })
                     })
 
