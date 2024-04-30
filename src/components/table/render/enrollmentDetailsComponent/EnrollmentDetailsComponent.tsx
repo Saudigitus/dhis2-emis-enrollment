@@ -6,10 +6,12 @@ import { EnrollmentDetailsComponentProps } from "../../../../types/table/TableCo
 import Subtitle from "../../../text/subtitle";
 import classNames from "classnames";
 import { AddCircleOutlineOutlined } from "@material-ui/icons";
+import useGetSectionTypeLabel from "../../../../hooks/commons/useGetSectionTypeLabel";
 
 function EnrollmentDetailsComponent(props: EnrollmentDetailsComponentProps): React.ReactElement {
   const { enrollmentsData, existingAcademicYear, onSelectTei } = props;
   const { columns: dataElements } = useEnrollmentsHeader();
+  const { sectionName } = useGetSectionTypeLabel();
 
   return (
     <React.Fragment>
@@ -19,7 +21,7 @@ function EnrollmentDetailsComponent(props: EnrollmentDetailsComponentProps): Rea
         </div>
         <div className="col-12 col-md-4 px-1 pt-2 d-flex justify-content-end">
         {existingAcademicYear ? 
-          <i className={styles.enrolledAlertLabel}>Already enrolled for this year</i> 
+          <i className={styles.enrolledAlertLabel}>This {sectionName} is already enrolled for this year.</i> 
           :  
           <Button small onClick={onSelectTei}>New Enrollment</Button>
         }
