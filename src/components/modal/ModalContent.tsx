@@ -42,6 +42,7 @@ function ModalContentComponent(props: ModalContentProps): React.ReactElement {
   const { attributes = [] } = useGetAttributes()
   const { returnPattern, loadingCodes, generatedVariables } = useGetPatternCode()
   const { runRulesEngine, updatedVariables } = CustomDhis2RulesEngine({ variables: formFields(enrollmentsData, sectionName), values, type: "programStageSection", formatKeyValueType: formatKeyValueType(enrollmentsData) })
+  console.log("initial values", searchInitialValues)
 
   useEffect(() => {
     runRulesEngine()

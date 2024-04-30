@@ -7,13 +7,6 @@ import { Attribute } from "../../types/generated/models";
 function useGetProgramsAttributes() {
     const programConfigState = useRecoilValue(ProgramConfigState);
 
-    const getAttributesToDisplay = (attributes: CustomAttributeProps[]) => {
-        const uniqueAttributes = attributes.filter(attr => attr?.unique === true);
-        const searchableAttributes = attributes.filter(attr => attr?.searchable === true);
-    
-        return [...uniqueAttributes.slice(0, 1), ...searchableAttributes.slice(0, 2)];
-    }
-
     const staticHeaders: CustomAttributeProps[] = [
         {
             id: "enrollmentsNumber",
@@ -56,7 +49,6 @@ function useGetProgramsAttributes() {
     return {
         teiAttributes: formatResponseTEI(programConfigState),
         searchableAttributes: formatResponseTEI(programConfigState)?.filter((attr) => attr?.unique === true || attr.searchable === true).concat(staticHeaders),
-        attributesToDisplay: getAttributesToDisplay(formatResponseTEI(programConfigState))
     }
 }
 export { useGetProgramsAttributes }

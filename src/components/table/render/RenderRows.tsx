@@ -61,7 +61,6 @@ function RenderRows(props: RenderHeaderProps): React.ReactElement {
     const programConfigState = useRecoilValue(ProgramConfigState);
     const { headerData, rowsData, searchActions, onSelectTei } = props;
     const [showEnrollments, setShowEnrollments] = useState<string>();
-    console.log("rowsData", rowsData)
 
     if (rowsData?.length === 0) {
         return (
@@ -114,7 +113,6 @@ function RenderRows(props: RenderHeaderProps): React.ReactElement {
                             }
                             
                         </RowTable>
-                        {console.log("row", row)}
                         {searchActions && showEnrollments === row.trackedEntity ?
                                 <RowTable className={classNames(classes.row, classes.historyRow)}>
                                     <RowCell 

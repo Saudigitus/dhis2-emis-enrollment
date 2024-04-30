@@ -32,18 +32,16 @@ const usetStyles = makeStyles({
 
 function ModalSearchEnrollmentContent(props: ModalSearchTemplateProps): React.ReactElement {
   const { setOpen, sectionName, setOpenNewEnrollment } = props;
-  var attributeCounter = useRef(0)
   const classes = usetStyles()
-  const { searchEnrollmentFields, isSearchable } = useGetSearchEnrollmentForm();
+  const { searchEnrollmentFields } = useGetSearchEnrollmentForm();
   const { registration } = getDataStoreKeys()
   const [showResults, setShowResults] = useState<boolean>(false)
-  const { teiAttributes, attributesToDisplay, searchableAttributes } = useGetProgramsAttributes();
+  const { teiAttributes, searchableAttributes } = useGetProgramsAttributes();
   const { enrollmentValues, setEnrollmentValues, loading, getEnrollmentsData } = useSearchEnrollments()
   const [, setInitialValues] = useRecoilState(SearchInitialValues)
   const [attributeKey, setAttributeKey] = useState<string>("unique")
   const [collapseAttributes, setCollapseAttributes] = useState(0)
 
-  console.log("enrollmentsValues", enrollmentValues)
   const { urlParamiters } = useParams();
   const { school: orgUnit, schoolName: orgUnitName, academicYear } = urlParamiters();
 
@@ -102,6 +100,7 @@ function ModalSearchEnrollmentContent(props: ModalSearchTemplateProps): React.Re
     }
   };
 
+
   const onHandleRegisterNew = async () => {
     setInitialValues(attributeKey === "unique" ? {} : queryForm);
     setOpen(false);
@@ -135,21 +134,12 @@ function ModalSearchEnrollmentContent(props: ModalSearchTemplateProps): React.Re
       trackedEntity: teiData.trackedEntity,
       ...teiData?.mainAttributesFormatted,
       ...recentRegistration,
-      ...recentSocioEconomics
+      ...recentSocioEconomics,
+      [registration.academicYear]: academicYear
     })
 
     setOpenNewEnrollment(true)
-    //setOpen(false); 
-  }
-
-
-  const onAddMoreAttributes = () => {
-    attributeCounter.current++
-    setQueryForm({});
-    if (isSearchable) {
-      setAttributeKey("searchable");
-    }
-    setShowResults(false)
+    setOpen(false); 
   }
 
   return (
