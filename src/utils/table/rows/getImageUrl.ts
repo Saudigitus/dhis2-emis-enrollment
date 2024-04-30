@@ -1,5 +1,3 @@
-import { useRecoilValue } from "recoil"
-import { DataStoreBulkOperationsState } from "../../../schema/dataStoreBulkOperationsSchema"
 import { useConfig } from "@dhis2/app-service-config"
 
 export const GetImageUrl = () => {

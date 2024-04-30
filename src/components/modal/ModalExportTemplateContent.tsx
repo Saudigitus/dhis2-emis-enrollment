@@ -2,14 +2,11 @@ import React, { useState, useRef } from "react";
 import { ModalActions, Button, ButtonStrip, Tag, IconInfo16 } from "@dhis2/ui";
 import { Form } from "react-final-form";
 import GroupForm from "../form/GroupForm";
-import { useRecoilValue } from "recoil";
 import { ModalExportTemplateProps } from "../../types/modal/ModalProps";
 import { useParams } from "../../hooks";
 import { getDataStoreKeys } from "../../utils/commons/dataStore/getDataStoreKeys";
 import useGetExportTemplateForm from "../../hooks/form/useGetExportTemplateForm";
 import { formFields } from "../../utils/constants/exportTemplateForm/exportEmptyTemplateForm";
-import { DataStoreBulkOperationsState } from "../../schema/dataStoreBulkOperationsSchema";
-import { useConfig } from "@dhis2/app-runtime";
 import { removeFalseKeys } from "../../utils/commons/removeFalseKeys";
 import useExportTemplate from "../../hooks/exportTemplate/useExportTemplate";
 
@@ -21,10 +18,6 @@ function ModalExportTemplateContent(props: ModalExportTemplateProps): React.Reac
 
   const { urlParamiters } = useParams();
   const { school: orgUnit, schoolName: orgUnitName, academicYear } = urlParamiters();
-
-  const { baseUrl } = useConfig()
-  const dataStoreBulkOperations = useRecoilValue(DataStoreBulkOperationsState)
-  const documentId = dataStoreBulkOperations.importTemplates.find(x => x.module === "enrollment")
 
   const formRef: React.MutableRefObject<FormApi<IForm, Partial<IForm>>> = useRef(null);
 
