@@ -150,9 +150,9 @@ function ModalSearchEnrollmentContent(props: ModalSearchTemplateProps): React.Re
       {searchEnrollmentFields?.map((group, index) => (
         <div className="mb-3">
           <WithBorder type="all">
-            <div className={styles.accordionHeaderContainer} onClick={()=> setCollapseAttributes(index)}>
+            <div className={styles.accordionHeaderContainer} onClick={()=> setCollapseAttributes(index === collapseAttributes ? -1 : index)}>
               <label className={styles.accordionHeader}>Search by {group?.name}</label>
-              <IconButton size="small" onClick={()=> setCollapseAttributes(index)} disabled={collapseAttributes === index}> {collapseAttributes === index ? <ExpandLess /> : <ExpandMore />}  </IconButton>
+              <IconButton size="small" onClick={()=> setCollapseAttributes(index)} /* disabled={collapseAttributes === index} */> {collapseAttributes === index ? <ExpandLess /> : <ExpandMore />}  </IconButton>
             </div>
 
             <Collapse in={collapseAttributes === index}>
@@ -231,14 +231,13 @@ function ModalSearchEnrollmentContent(props: ModalSearchTemplateProps): React.Re
             </WithBorder>
           </div> : 
           <NoticeBox title={`No ${sectionName} found`}>
-            Continue serching or click <strong>'Register new'</strong> if you want to register as a new <strong>{sectionName}</strong>. <br /> <br />
-            <Button small primary onClick={() => { onHandleRegisterNew() }} disabled={loading} style={{ marginTop: 50 }}>Register new</Button>
+            Continue serching or click <strong>'Register new'</strong> if you want to register as a new <strong>{sectionName}</strong>.
           </NoticeBox> }
         </>
       </Collapse>
-      {enrollmentValues?.length ?<ModalActions>
+      {showResults ?<ModalActions>
         <div className="d-flex justify-content-between align-items-center w-100">
-          {enrollmentValues?.length ? <small>If none of the matches above is the {sectionName} you are searching for, click 'Register new'.</small> : <small></small>}
+          {enrollmentValues.length ? <small>If none of the matches above is the {sectionName} you are searching for, click 'Register new'.</small> : <small></small>}
           <ButtonStrip end>
             {modalActions.map((action, i) => {
               return (
