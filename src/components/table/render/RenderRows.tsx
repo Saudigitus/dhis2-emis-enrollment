@@ -16,6 +16,9 @@ import { ProgramConfigState } from '../../../schema/programSchema';
 import { checkCanceled } from '../../../utils/table/rows/checkCanceled';
 import SearchRowActions from './rowsActions/SearchRowActions';
 import EnrollmentDetailsCards from './enrollmentDetailsComponent/EnrollmentDetailsComponent';
+import { checkEnrolledAcademicYear } from '../../../utils/table/rows/checkEnrolledAcademicYear';
+import { useParams } from '../../../hooks';
+import { getDataStoreKeys } from '../../../utils/commons/dataStore/getDataStoreKeys';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -26,6 +29,9 @@ const useStyles = makeStyles((theme: Theme) =>
             '&:hover': {
                 backgroundColor: '#F1FBFF'
             }
+        },
+        dataRowCollapsed: {
+            backgroundColor: '#F1FBFF'
         },
         cell: {
             padding: `${theme.spacing(1) / 2}px ${theme.spacing(1) * 7}px ${theme.spacing(1) /
@@ -48,6 +54,10 @@ const useStyles = makeStyles((theme: Theme) =>
 function RenderRows(props: RenderHeaderProps): React.ReactElement {
     const classes = useStyles()
     const { imageUrl } = GetImageUrl()
+    const { urlParamiters } = useParams()
+    const { academicYear } = urlParamiters()
+
+    const { registration } = getDataStoreKeys()
     const programConfigState = useRecoilValue(ProgramConfigState);
     const { headerData, rowsData, searchActions, onSelectTei } = props;
     const [showEnrollments, setShowEnrollments] = useState<string>();
@@ -76,7 +86,7 @@ function RenderRows(props: RenderHeaderProps): React.ReactElement {
                         <RowTable
                             key={index}
                             inactive={checkCanceled(row.status)}
-                            className={classNames(classes.row, classes.dataRow)}
+                            className={classNames(classes.row, classes.dataRow, (searchActions && row.trackedEntity ===  showEnrollments) ? classes.dataRowCollapsed : null)}
                         >
                             {
 
@@ -111,7 +121,7 @@ function RenderRows(props: RenderHeaderProps): React.ReactElement {
                                         className={classNames(classes.cell, classes.bodyCell)} 
                                         colspan={headerData?.filter(x => x.visible)?.length as unknown as number + 1}
                                     >
-                                        <EnrollmentDetailsCards enrollmentsData={row.registrationEvents} />
+                                        <EnrollmentDetailsCards existingAcademicYear={checkEnrolledAcademicYear(row?.registrationEvents, academicYear as unknown as string, registration.academicYear)} onSelectTei={onSelectTei ? () => onSelectTei(row) : undefined} enrollmentsData={row.registrationEvents} />
                                     </RowCell>
                                 </RowTable>
                             : null

@@ -54,6 +54,8 @@ interface RenderHeaderProps {
 
 interface EnrollmentDetailsComponentProps {
     enrollmentsData: any
+    existingAcademicYear: boolean
+    onSelectTei?: (arg: any) => void
 }
 
 interface TableSortProps {

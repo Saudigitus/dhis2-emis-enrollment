@@ -241,9 +241,8 @@ function ModalSearchEnrollmentContent(props: ModalSearchTemplateProps): React.Re
             </WithBorder>
           </div> : 
           <NoticeBox title={`No ${sectionName} found`}>
-            {attributeKey === "searchable" ? <>Click <strong>'Register new'</strong> if you want to register as a new <strong>{sectionName}</strong>.</> : <>Click the bottom below to continue searching for a <strong>{sectionName}</strong>.</>}
-
-            {attributeKey === "unique" ? <>  <br /> <br /> <Button small onClick={() => { onAddMoreAttributes() }} disabled={loading} style={{ marginTop: 50 }}>Search by more attributes</Button></> : null}
+            Continue serching or click <strong>'Register new'</strong> if you want to register as a new <strong>{sectionName}</strong>. <br /> <br />
+            <Button small primary onClick={() => { onHandleRegisterNew() }} disabled={loading} style={{ marginTop: 50 }}>Register new</Button>
           </NoticeBox> }
         </>
       </Collapse>
