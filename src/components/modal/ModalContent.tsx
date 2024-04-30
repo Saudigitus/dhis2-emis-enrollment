@@ -42,6 +42,7 @@ function ModalContentComponent(props: ModalContentProps): React.ReactElement {
   const { attributes = [] } = useGetAttributes()
   const { returnPattern, loadingCodes, generatedVariables } = useGetPatternCode()
   const { runRulesEngine, updatedVariables } = CustomDhis2RulesEngine({ variables: formFields(enrollmentsData, sectionName), values, type: "programStageSection", formatKeyValueType: formatKeyValueType(enrollmentsData) })
+  console.log("initial values", searchInitialValues)
 
   useEffect(() => {
     runRulesEngine()
@@ -138,7 +139,7 @@ function ModalContentComponent(props: ModalContentProps): React.ReactElement {
             }
             <br />
             <ModalActions>
-              <ButtonStrip end className="mr-4">
+              <ButtonStrip end className="mr-3">
                 {modalActions.map((action, i) => {
                   return (
                     <>

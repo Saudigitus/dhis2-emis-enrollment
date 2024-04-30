@@ -29,12 +29,14 @@ interface RowProps {
 
 interface RowActionsType {
     label: string
-    onClick: () => void
+    onClick: (arg?: any) => void
     icon: React.ReactNode
     disabled: boolean
 }
 interface RowActionsProps {
     row: any
+    onSelectTei?: (arg: any) => void
+    onShowHistory?: () => void
 }
 
 
@@ -46,6 +48,14 @@ interface RenderHeaderProps {
     createSortHandler?: (property: string) => any
     rowsData?: any[]
     headerData?: CustomAttributeProps[]
+    searchActions?: boolean
+    onSelectTei?: (arg: any) => void
+}
+
+interface EnrollmentDetailsComponentProps {
+    enrollmentsData: any
+    existingAcademicYear: boolean
+    onSelectTei?: (arg: any) => void
 }
 
 interface TableSortProps {
@@ -59,4 +69,4 @@ interface TableSortProps {
 type TableDataProps = Record<string, string>;
 
 
-export type { TableComponentProps, HeaderCellProps, RowProps,RowActionsType,  RowActionsProps, RenderHeaderProps, TableSortProps, TableDataProps }
+export type { TableComponentProps, HeaderCellProps, RowProps,RowActionsType,  RowActionsProps, RenderHeaderProps, EnrollmentDetailsComponentProps, TableSortProps, TableDataProps }

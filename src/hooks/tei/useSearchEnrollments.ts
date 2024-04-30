@@ -18,17 +18,23 @@ export default function useSearchEnrollments() {
 
     const getEnrollmentsData = (filters: string, setShowResults: any) => {
         const teisWithRegistrationEvents: any[] = [];
-        const fields: string = "event,trackedEntity,enrollment,dataValues[dataElement,value],orgUnitName,orgUnit"
+        const fields: string = "event,trackedEntity,enrollment,occurredAt,dataValues[dataElement,value],orgUnitName,orgUnit"
         setLoading(true)
             getTeiSearch(program, filters)
                 .then(async (teiResponse: any) => {
 
                     for (const tei of teiResponse?.results?.instances) {
-                        await getEvent(program, registration.programStage as unknown as string, [], orgUnit as unknown as string, tei?.trackedEntity, fields)
+                        await getEvent(program, registration.programStage as unknown as string, [], tei?.trackedEntity, fields)
                             .then( async (registrationResponse: any) => {
-                                await getEvent(program, socioEconomics.programStage as unknown as string, [], orgUnit as unknown as string, tei?.trackedEntity, fields)
+                                
+                                const registrationEvents = formatResponseData("WITHOUT_REGISTRATION", registrationResponse?.results?.instances)
+                                
+                                await getEvent(program, socioEconomics.programStage as unknown as string, [], tei?.trackedEntity, fields)
                                     .then((socioEconomicsResponse: any) => {
-                                        teisWithRegistrationEvents.push({...tei, registrationEvents: formatResponseData("WITHOUT_REGISTRATION", registrationResponse?.results?.instances), socioEconomicsEvents: formatResponseData("WITHOUT_REGISTRATION", socioEconomicsResponse?.results?.instances), mainAttributesFormatted: attributes(tei?.attributes)})
+
+                                        const socioEconomicsEvents = formatResponseData("WITHOUT_REGISTRATION", socioEconomicsResponse?.results?.instances)
+                                        teisWithRegistrationEvents.push({...tei, enrollmentsNumber: registrationEvents?.length, registrationEvents, socioEconomicsEvents, mainAttributesFormatted: attributes(tei?.attributes), ...attributes(tei?.attributes)})
+                                    
                                     })
                             })
                     }
