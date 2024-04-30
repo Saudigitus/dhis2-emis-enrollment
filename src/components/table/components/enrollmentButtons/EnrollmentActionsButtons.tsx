@@ -14,7 +14,7 @@ import { getDataStoreKeys } from '../../../../utils/commons/dataStore/getDataSto
 function EnrollmentActionsButtons() {
   const [open, setOpen] = useState<boolean>(false);
   const [openExportEmptyTemplate, setOpenExportEmptyTemplate] = useState<boolean>(false);
-  const [openSearchEnrollment, setOpenSearchEnrollment] = useState<boolean>(true);
+  const [openSearchEnrollment, setOpenSearchEnrollment] = useState<boolean>(false);
   const [openImport, setOpenImport] = useState<boolean>(false);
   const { useQuery } = useParams();
   const { allowSearching } = getDataStoreKeys();
