@@ -6,7 +6,7 @@ export const ValueType: Record<string, ZodString | ZodBoolean | ZodNumber | ZodL
     LETTER: z.string().length(1),
     PHONE_NUMBER: z.string(),
     EMAIL: z.string().email(),
-    BOOLEAN: z.boolean(),
+    BOOLEAN: z.string().regex(/^(True|False|Yes|No)$/i),
     TRUE_ONLY: z.literal(true),
     DATE: z.string().regex(/^(\d{4})-(\d{2})-(\d{2})/, {message: "Invalid date"}),
     DATETIME: z
