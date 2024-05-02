@@ -18,7 +18,7 @@ export default function RowActions(props: RowActionsProps) {
   const [openEditionModal, setOpenEditionModal] = useState<boolean>(false);
   const [openDeletionModal, setOpenDeletionModal] = useState<boolean>(false);
   const { initialValues, loading, error, buildFormData, enrollmentValues, setInitialValues } = useGetEnrollmentUpdateFormData()
-  const { loading: envtsLoading, buildDeleteFormData, initialValues: deleteFormInitialValues } = useGetEnrollmentDeleteFormData()
+  const { loading: eventsLoading, buildDeleteFormData, initialValues: deleteFormInitialValues } = useGetEnrollmentDeleteFormData()
 
   useEffect(() => {
     if (error)
@@ -81,7 +81,7 @@ export default function RowActions(props: RowActionsProps) {
         <ModalComponent title={`Enrollment Deletion`} open={openDeletionModal} setOpen={setOpenDeletionModal}>
           {
             Object.keys(deleteFormInitialValues).length ?
-              <ModalDeleteContent setOpen={setOpenDeletionModal} sectionName={sectionName} loading={envtsLoading} initialValues={deleteFormInitialValues} />
+              <ModalDeleteContent setOpen={setOpenDeletionModal} sectionName={sectionName} loading={eventsLoading} initialValues={deleteFormInitialValues} />
               :
               <CenteredContent>
                 <CircularLoader />

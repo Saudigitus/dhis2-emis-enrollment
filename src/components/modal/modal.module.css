@@ -82,10 +82,8 @@
 }
 
 .detailsTableGroup {
-    width: 50%;
-    display: flex;
-    margin-bottom: 40px;
-    justify-content: space-between;
+    width: 100%;
+    margin:0 0 15px 0;
 }
 
 .detailsTableGroup td, .detailsTableGroup th {

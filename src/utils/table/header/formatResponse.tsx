@@ -64,7 +64,7 @@ export function formatResponse(data: ProgramConfig, dataStoreData: dataStoreReco
                     id: column,
                     displayName: column,
                     header: column,
-                    required: true,
+                    required: false,
                     name: column,
                     labelName: column,
                     valueType: any,

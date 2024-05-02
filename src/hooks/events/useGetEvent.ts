@@ -14,7 +14,6 @@ export function useGetEvent() {
     const engine = useDataEngine();
 
     async function getEvent(program: string, programStage: string, filter: string[], orgUnit: string, trackedEntity: string, fields: string ) {
-        console.log("trackedEntity", trackedEntity)
             return await engine.query(EVENT_QUERY({
                 pageSize:10,
                 program: program,

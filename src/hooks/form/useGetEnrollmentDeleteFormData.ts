@@ -1,27 +1,28 @@
 import { useState } from 'react'
 import { useRecoilValue } from 'recoil';
-import { useShowAlerts, useGetEnrollment, useHeader } from '../../hooks';
-import { getSelectedKey } from '../../utils/commons/dataStore/getSelectedKey';
 import { ProgramConfigState } from '../../schema/programSchema';
-import { formatCamelCaseToWords } from '../../utils/commons/formatCamelCaseToWords';
+import { VariablesTypes } from '../../types/variables/AttributeColumns';
+import { getSelectedKey } from '../../utils/commons/dataStore/getSelectedKey';
+import { useShowAlerts, useGetEnrollment, useHeader, useGetDataElements } from '../../hooks';
+import { formatFormSection, getinitialValuesDisplayName } from '../../utils/constants/enrollmentForm/deleteEnrollmentForm';
 
 export default function useGetEnrollmentDeleteFormData() {
     const { show } = useShowAlerts()
+    const { columns } = useHeader()
     const { getEnrollment } = useGetEnrollment()
     const { getDataStoreData } = getSelectedKey()
-    const [initialValues, setInitialValues] = useState<any>({})
     const [loading, setLoading] = useState<boolean>(false)
     const programConfig = useRecoilValue(ProgramConfigState)
-    const { columns } = useHeader()
+    const [initialValues, setInitialValues] = useState<any>({})
+    const { dataElements } = useGetDataElements({ programStageId: getDataStoreData.registration.programStage })
 
 
     const buildDeleteFormData = (trackedEntity: string, enrollment: string) => {
-        const { 'socio-economics': { programStage }, registration, filters } = getDataStoreData
+        const { 'socio-economics': { programStage }, registration } = getDataStoreData
 
         setLoading(true)
         if (Object.keys(getDataStoreData)?.length) {
             const events: any[] = []
-            const registrationInfo: any[] = []
 
             getEnrollment(enrollment)
                 .then((resp: any) => {
@@ -37,22 +38,17 @@ export default function useGetEnrollmentDeleteFormData() {
                         })
                     })
 
-                    const registrationEvent = resp?.results?.events?.find((x: any) => x.programStage == registration.programStage)
-
-                    filters?.dataElements.map((filter: any) => {
-                        registrationInfo.push({
-                            code: formatCamelCaseToWords(filter.code),
-                            value: registrationEvent?.dataValues?.find((x: any) => x.dataElement === filter.dataElement)?.value ?? "Not set",
-                        })
-                    })
+                    const registrationValues = resp?.results?.events?.find((x: any) => x.programStage == registration.programStage)
 
                     setInitialValues({
                         events: events,
                         enrollment: enrollment,
                         trackedEntity: trackedEntity,
-                        registration: registrationInfo,
-                        attributes: resp?.results?.attributes?.filter((attribute: any) => columns.find((column: any) => column.id == attribute.attribute && column.visible)),
+                        registration: formatFormSection(dataElements),
+                        initialValues: getinitialValuesDisplayName(registrationValues?.dataValues, resp?.results?.attributes, programConfig),
+                        attributes: formatFormSection(columns.filter((column) => (column?.searchable || column?.unique || column?.required) && column?.type == VariablesTypes.Attribute)),
                     })
+
                     setLoading(false)
                 })
                 .catch((error: any) => {
