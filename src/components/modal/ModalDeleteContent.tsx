@@ -71,7 +71,9 @@ function ModalDeleteContent(props: ModalDeleteContentProps): React.ReactElement 
 
                             <WithPadding p={'0 0.8em'}>
                                 <ButtonStrip end>
-                                    <Button small secondary onClick={() => setCollapse(!collapse)} icon={collapse ? <ExpandLess /> : <ExpandMore />}>Enrollment details</Button>
+                                    <div dir="rtl">
+                                        <Button small secondary onClick={() => setCollapse(!collapse)} icon={collapse ? <ExpandLess /> : <ExpandMore />}>Enrollment details</Button>
+                                    </div>
                                 </ButtonStrip>
                             </WithPadding>
 
