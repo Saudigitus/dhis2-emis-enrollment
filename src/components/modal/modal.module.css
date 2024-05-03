@@ -54,21 +54,25 @@
     text-transform: capitalize;
 }
 
-.redIcon,
-.redIcon svg {
-    color: #d64d4d !important;
+.noValuesColor,
+.noValuesColor svg {
+    color: #6C7787 !important;
 }
 
-.greenIcon,
-.greenIcon svg {
-    color: #277314 !important;
+.hasValuesColor,
+.hasValuesColor svg {
+    color: #0d47a1!important;
 }
 
-.redIcon:first-child,
-.greenIcon:first-child {
+.noValuesColor:first-child,
+.hasValuesColor:first-child {
     text-align: center;
     height: 24px !important;
     width: 24px !important;
+}
+
+.redText{
+   color: #d64d4d;
 }
 
 .noticeBoxTitle {
@@ -102,8 +106,6 @@
 .iconLabel {
     font-size: 12px;
     font-style: italic;
-    /* color: #009688 !important; */
-    color: #277314 !important;
 }
 
 .accordionHeaderContainer {

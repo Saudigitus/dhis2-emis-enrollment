@@ -108,7 +108,7 @@ function ModalDeleteContent(props: ModalDeleteContentProps): React.ReactElement 
                             < NoticeBox
                                 warning
                                 title={<p className={styles.noticeBoxTitle}>Are you sure you want
-                                    to <span className={classNames(styles.redIcon)}>delete</span> the
+                                    to <span className={classNames(styles.redText)}>delete</span> the
                                     selected {sectionName.toLowerCase()} from <strong>{schoolName}?</strong></p>
                                 }
                             >
