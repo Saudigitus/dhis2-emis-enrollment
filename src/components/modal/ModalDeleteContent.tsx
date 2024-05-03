@@ -12,6 +12,8 @@ import { TeiRefetch } from "../../schema/refecthTeiSchema";
 import GroupForm from "../form/GroupForm";
 import Subtitle from "../text/subtitle";
 import { Collapse } from "@material-ui/core";
+import WithBorder from "../template/WithBorder";
+import { ExpandLess, ExpandMore } from "@material-ui/icons";
 
 function ModalDeleteContent(props: ModalDeleteContentProps): React.ReactElement {
     const { setOpen, initialValues, loading: loadingInitialValues, sectionName } = props
@@ -67,9 +69,9 @@ function ModalDeleteContent(props: ModalDeleteContentProps): React.ReactElement 
                                 fields={initialValues?.attributes}
                             />
 
-                            <WithPadding p={'0 22px'}>
+                            <WithPadding p={'0 0.8em'}>
                                 <ButtonStrip end>
-                                    <Button small secondary onClick={() => setCollapse(!collapse)}>Enrollment details</Button>
+                                    <Button small secondary onClick={() => setCollapse(!collapse)} icon={collapse ? <ExpandLess /> : <ExpandMore />}>Enrollment details</Button>
                                 </ButtonStrip>
                             </WithPadding>
 
@@ -81,10 +83,13 @@ function ModalDeleteContent(props: ModalDeleteContentProps): React.ReactElement 
                                 />
                             </Collapse>
                         </div>
-                        <Subtitle label="Enrollment summary" />
-                        <WithPadding p={'0 22px 10px 22px'}>
-                            {initialValues?.events?.map((event: any) =>
-                                <>
+                        <WithPadding p={'0 0.4em'}>
+                            <Subtitle label="Enrollment summary" />
+                        </WithPadding>
+                        <br />
+                        <WithPadding p={'0 0.8em'}>
+                            <WithBorder type="all">
+                                {initialValues?.events?.map((event: any) =>
                                     <ListItem className={classNames(styles.listItem)}>
                                         <ListItemText primary={event.name} />
                                         <div className={classNames(styles.valuesFlex)}>
@@ -96,9 +101,8 @@ function ModalDeleteContent(props: ModalDeleteContentProps): React.ReactElement 
                                             </span>
                                         </div>
                                     </ListItem>
-                                    <Divider />
-                                </>
-                            )}
+                                )}
+                            </WithBorder>
 
                             <br />
                             < NoticeBox
