@@ -1,8 +1,18 @@
 .rowActionsContainer {
   display: flex;
+  justify-content: center;
 }
 
-.rowActionsIcon  svg{
+.rowActionsIcon svg , .rowSearchActionsIcon svg{
   width: 20px !important;
   height: 20px !important;
+}
+
+
+.rowSearchActionsIcon.icon0 {
+  color: #28AFEA !important
+}
+
+.rowSearchActionsIcon.icon1 {
+  color: #0F9D58 !important
 }
