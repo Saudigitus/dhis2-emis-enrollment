@@ -39,7 +39,6 @@ function ModalSearchEnrollmentContent(props: ModalSearchTemplateProps): React.Re
   const { teiAttributes, searchableAttributes } = useGetProgramsAttributes();
   const { enrollmentValues, setEnrollmentValues, loading, getEnrollmentsData } = useSearchEnrollments()
   const [, setInitialValues] = useRecoilState(SearchInitialValues)
-  const [attributeKey, setAttributeKey] = useState<string>("unique")
   const [collapseAttributes, setCollapseAttributes] = useState(0)
 
   const { urlParamiters } = useParams();
@@ -67,9 +66,7 @@ function ModalSearchEnrollmentContent(props: ModalSearchTemplateProps): React.Re
     }
   };
 
-  const formattedQuery = () => {
-    var query = "";
-
+  const filterCollapsedAttributes = () => {
     // filter collapsed attributes from filled fields
     const selectedObjectIDs: string[] = searchEnrollmentFields[collapseAttributes]?.variables.map((obj: CustomAttributeProps) => obj.id);
     const filteredQueryForm: { [id: string]: string } = {};
@@ -79,8 +76,12 @@ function ModalSearchEnrollmentContent(props: ModalSearchTemplateProps): React.Re
         filteredQueryForm[key] = queryForm[key];
       }
     });
+    return filteredQueryForm;
+  }
 
-    for (const [key, value] of Object.entries(filteredQueryForm)) {
+  const formattedQuery = () => {
+    var query = "";
+    for (const [key, value] of Object.entries(filterCollapsedAttributes())) {
       if (key && value) {
         const id = teiAttributes?.filter((element) => {
           return element.name == key;
@@ -100,30 +101,22 @@ function ModalSearchEnrollmentContent(props: ModalSearchTemplateProps): React.Re
     }
   };
 
+  function filterUniqueVariables() {
+    // When click on REGISTER NEW, ignore the unique attributes, these will be generated when open the form
+    const uniqueVariableIDsToRemove: string[] = searchableAttributes.filter(attribute => attribute.unique).map(attribute => attribute.id);
+
+    const filteredOriginalObject = Object.fromEntries(
+      Object.entries(queryForm).filter(([id]) => !uniqueVariableIDsToRemove.includes(id))
+    );
+    
+    return filteredOriginalObject;
+  }
 
   const onHandleRegisterNew = async () => {
-    setInitialValues(attributeKey === "unique" ? {} : queryForm);
+    setInitialValues(filterUniqueVariables());
     setOpen(false);
     setOpenNewEnrollment(true);
   };
-
-  const onReset = () => {
-    setQueryForm({});
-    setEnrollmentValues([]);
-    setInitialValues({})
-    setShowResults(false);
-  };
-
-  const searchActions = [
-    { id: "cancel", type: "button", label: "Reset", small: true, disabled: loading || !Object.entries(queryForm).length, onClick: () => { onReset()}, display:true },
-    //{ id: "continue", type: "button", label: "Register new", small: true, primary: true, disabled: loading, onClick: () => { setOpenNewEnrollment(true); setOpen(false) }, display: !enrollmentValues?.length },
-    { id: "search", type: "submit", label: `Search ${sectionName.toLocaleLowerCase()}`, primary: true, small: true, disabled: loading || !Object.entries(queryForm).length, loading, display:true },
-  ];
-
-  const modalActions = [
-    { id: "cancel", type: "button", label: "Cancel", small: true, disabled: false, onClick: () => { setOpen(false) } },
-    { id: "continue", label: "Register new", primary: true, small: true, disabled: loading, onClick: () => { onHandleRegisterNew() }}
-  ];
 
   const onSelectTei = (teiData: any) => {
     const recentEnrollment = getRecentEnrollment(teiData.enrollments).enrollment
@@ -142,6 +135,23 @@ function ModalSearchEnrollmentContent(props: ModalSearchTemplateProps): React.Re
     setOpen(false); 
   }
 
+  const onReset = () => {
+    setQueryForm({});
+    setEnrollmentValues([]);
+    setInitialValues({})
+    setShowResults(false);
+  };
+
+  const searchActions = [
+    { id: "cancel", type: "button", label: "Reset", small: true, disabled: loading || !Object.entries(queryForm).length, onClick: () => { onReset()}, display:true },
+    { id: "search", type: "submit", label: `Search ${sectionName.toLocaleLowerCase()}`, primary: true, small: true, disabled: loading || !Object.entries(queryForm).length, loading, display:true },
+  ];
+
+  const modalActions = [
+    { id: "cancel", type: "button", label: "Cancel", small: true, disabled: false, onClick: () => { setOpen(false) } },
+    { id: "continue", label: "Register new", primary: true, small: true, disabled: loading, onClick: () => { onHandleRegisterNew() }}
+  ];
+
   return (
     <div>
       <Label>Fill in at least 1 attribute to search.</Label>
@@ -152,14 +162,14 @@ function ModalSearchEnrollmentContent(props: ModalSearchTemplateProps): React.Re
           <WithBorder type="all">
             <div className={styles.accordionHeaderContainer} onClick={()=> setCollapseAttributes(index === collapseAttributes ? -1 : index)}>
               <label className={styles.accordionHeader}>Search by {group?.name}</label>
-              <IconButton size="small" onClick={()=> setCollapseAttributes(index)} /* disabled={collapseAttributes === index} */> {collapseAttributes === index ? <ExpandLess /> : <ExpandMore />}  </IconButton>
+              <IconButton size="small" onClick={()=> setCollapseAttributes(index)}> {collapseAttributes === index ? <ExpandLess /> : <ExpandMore />}  </IconButton>
             </div>
 
             <Collapse in={collapseAttributes === index}>
               <WithBorder type="top">
                 <WithPadding>
                   <Form initialValues={{ ...initialValues, orgUnit, ...queryForm }} onSubmit={onHandleSubmit}>
-                    {({ handleSubmit, values, form }) => {
+                    {({ handleSubmit, form }) => {
                       formRef.current = form;
                       return <form
                         onSubmit={handleSubmit}
@@ -187,8 +197,6 @@ function ModalSearchEnrollmentContent(props: ModalSearchTemplateProps): React.Re
                             )
                           })}
                         </ButtonStrip>
-
-
                       </form>
                     }}
                   </Form>
@@ -204,11 +212,9 @@ function ModalSearchEnrollmentContent(props: ModalSearchTemplateProps): React.Re
         <>
         {enrollmentValues?.length ?
           <div className="">
-              <div className={classNames(styles.accordionHeaderContainer, styles.resultsHeaderContainer)}>
-                <label className={styles.accordionHeader}>Results found for {sectionName} search</label>
-              </div>
-            
-
+            <div className={classNames(styles.accordionHeaderContainer, styles.resultsHeaderContainer)}>
+              <label className={styles.accordionHeader}>Results found for {sectionName} search</label>
+            </div>
             
             <WithBorder type="all">
               <div
