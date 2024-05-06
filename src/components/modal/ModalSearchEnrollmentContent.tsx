@@ -119,6 +119,23 @@ function ModalSearchEnrollmentContent(props: ModalSearchTemplateProps): React.Re
     setOpenNewEnrollment(true);
   };
 
+  const onReset = () => {
+    setQueryForm({});
+    setEnrollmentValues([]);
+    setInitialValues({})
+    setShowResults(false);
+  };
+
+  const searchActions = [
+    { id: "cancel", type: "button", label: "Reset", small: true, disabled: loading || !Object.entries(queryForm).length, onClick: () => { onReset() }, display: true },
+    { id: "search", type: "submit", label: `Search ${sectionName.toLocaleLowerCase()}`, primary: true, small: true, disabled: loading || !Object.entries(queryForm).length, loading, display: true },
+  ];
+
+  const modalActions = [
+    { id: "cancel", type: "button", label: "Cancel", small: true, disabled: false, onClick: () => { setOpen(false) } },
+    { id: "continue", label: "Register new", success: "success", small: true, disabled: loading, onClick: () => { onHandleRegisterNew() }, icon:<IconAddCircle16/> }
+  ];
+
   const onSelectTei = (teiData: any) => {
     const recentEnrollment = getRecentEnrollment(teiData.enrollments).enrollment
     const recentRegistration = teiData.registrationEvents?.find((event: any) => event.enrollment === recentEnrollment)
@@ -135,23 +152,6 @@ function ModalSearchEnrollmentContent(props: ModalSearchTemplateProps): React.Re
     setOpenNewEnrollment(true)
     setOpen(false);
   }
-
-  const onReset = () => {
-    setQueryForm({});
-    setEnrollmentValues([]);
-    setInitialValues({})
-    setShowResults(false);
-  };
-
-  const searchActions = [
-    { id: "cancel", type: "button", label: "Reset", small: true, disabled: loading || !Object.entries(queryForm).length, onClick: () => { onReset()}, display:true },
-    { id: "search", type: "submit", label: `Search ${sectionName.toLocaleLowerCase()}`, primary: true, small: true, disabled: loading || !Object.entries(queryForm).length, loading, display:true },
-  ];
-
-  const modalActions = [
-    { id: "cancel", type: "button", label: "Cancel", small: true, disabled: false, onClick: () => { setOpen(false) } },
-    { id: "continue", label: "Register new", primary: true, small: true, disabled: loading, onClick: () => { onHandleRegisterNew() }}
-  ];
 
   return (
     <div>
