@@ -31,7 +31,7 @@ function ModalExportTemplateContent(props: ModalExportTemplateProps): React.Reac
   const { handleExportToWord } = useExportTemplate()
 
  async function onSubmit() {
-    await handleExportToWord({iDSrFrrVgmX: values.iDSrFrrVgmX , orgUnit: values.orgUnit , orgUnitName: values.orgUnitName , studentsNumber : values.studentsNumber , setLoadingExport})
+    await handleExportToWord({academicYearId: values[registration.academicYear], orgUnit: values.orgUnit , orgUnitName: values.orgUnitName , studentsNumber : values.studentsNumber , setLoadingExport})
         // window.open(`${baseUrl}/api/documents/${documentId?.id}/data`, "_blank");
         setOpen(false)
   }
