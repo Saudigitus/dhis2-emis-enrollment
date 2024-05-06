@@ -14,19 +14,24 @@ function GroupForm(props: GroupFormProps) {
 
     return (
         <>
-            <WithPadding p={ name ? "16px 5px 0px 5px" : "0px"}>
-                {name ? 
+            <WithPadding p={name ? "16px 5px 0px 5px" : "0px"}>
+                {name ?
                     <>
                         <Subtitle label={name} />
-                        <WithPadding />
-                        <Label>{description}</Label>
-                        <WithPadding p="0.2rem" />
+                        {description ?
+                            <>
+                                <WithPadding />
+                                <Label>{description}</Label>
+                                <WithPadding p="0.2rem" />
+                            </>
+                            : null
+                        }
                     </>
                     : null
                 }
-                
-                
-                <WithPadding p={"10px"}>
+
+
+                <WithPadding p={"5px 10px"}>
                     {fields?.filter(x => x.visible)?.map((x, i) => {
                         return (
                             <div className="row d-flex align-items-center" key={i}

@@ -18,7 +18,7 @@ export default function RowActions(props: RowActionsProps) {
   const [openEditionModal, setOpenEditionModal] = useState<boolean>(false);
   const [openDeletionModal, setOpenDeletionModal] = useState<boolean>(false);
   const { initialValues, loading, error, buildFormData, enrollmentValues, setInitialValues } = useGetEnrollmentUpdateFormData()
-  const { loading: envtsLoading, buildDeleteFormData, initialValues: deleteFormInitialValues } = useGetEnrollmentDeleteFormData()
+  const { loading: eventsLoading, buildDeleteFormData, initialValues: deleteFormInitialValues } = useGetEnrollmentDeleteFormData()
 
   useEffect(() => {
     if (error)
@@ -33,12 +33,14 @@ export default function RowActions(props: RowActionsProps) {
   const rowsActions: RowActionsType[] = [
     {
       icon: <IconEdit24 />,
+      color: '#277314',
       label: `${sectionName} Edition`,
       disabled: status === EnrollmentStatus.CANCELLED,
       onClick: () => { buildFormData(trackedEntity, enrollmentId); setOpenEditionModal(!openEditionModal) },
     },
     {
       icon: <IconDelete24 />,
+      color: '#d64d4d',
       label: `Delete ${sectionName}`,
       disabled: false,
       onClick: () => { buildDeleteFormData(trackedEntity, enrollmentId); setOpenDeletionModal(!openDeletionModal) },
@@ -55,7 +57,7 @@ export default function RowActions(props: RowActionsProps) {
           disabled={option?.disabled}
           onClick={() => { option.onClick() }}
         >
-          <IconButton className={style.rowActionsIcon}>{option.icon}</IconButton>
+          <IconButton style={{color: option.color}}className={style.rowActionsIcon}>{option.icon}</IconButton>
         </Tooltip>
       ))}
 
@@ -76,10 +78,10 @@ export default function RowActions(props: RowActionsProps) {
       {
         openDeletionModal &&
 
-        <ModalComponent title={`Single ${sectionName} Deletion`} open={openDeletionModal} setOpen={setOpenDeletionModal}>
+        <ModalComponent title={`Enrollment Deletion`} open={openDeletionModal} setOpen={setOpenDeletionModal}>
           {
             Object.keys(deleteFormInitialValues).length ?
-              <ModalDeleteContent setOpen={setOpenDeletionModal} sectionName={sectionName} loading={envtsLoading} initialValues={deleteFormInitialValues} />
+              <ModalDeleteContent setOpen={setOpenDeletionModal} sectionName={sectionName} loading={eventsLoading} initialValues={deleteFormInitialValues} />
               :
               <CenteredContent>
                 <CircularLoader />

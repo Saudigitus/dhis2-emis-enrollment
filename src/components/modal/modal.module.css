@@ -28,7 +28,8 @@
     text-align: left;
     color: #404B5A;
 }
-.closeModalButton button{
+
+.closeModalButton button {
     top: 0;
     right: 0;
     position: absolute;
@@ -37,27 +38,74 @@
 }
 
 .closeModalButton button:hover {
-    background-color:  rgba(0, 0, 0, 0.04);
+    background-color: rgba(0, 0, 0, 0.04);
 }
 
-.item>span {
-    width: 35px;
-    display: flex;
-    justify-content: center;
+.listItem {
+    padding: 6px 16px !important;
+    border-bottom: 0.5px solid  rgba(0, 0, 0, 0.10);
+}
+
+.listItem span:first-child {
+    font-size: 14px !important;
 }
 
 .textCapDetails {
     text-transform: capitalize;
 }
 
-.redIcon,
-.redIcon svg {
-    color: #f44336 !important;
+.noValuesColor,
+.noValuesColor svg {
+    color: #6C7787 !important;
 }
 
-.greenIcon,
-.greenIcon svg {
-    color: #009688 !important;
+.hasValuesColor,
+.hasValuesColor svg {
+    color: #0d47a1!important;
+}
+
+.noValuesColor:first-child,
+.hasValuesColor:first-child {
+    text-align: center;
+    height: 24px !important;
+    width: 24px !important;
+}
+
+.redText{
+   color: #d64d4d;
+}
+
+.noticeBoxTitle {
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+.leftCell {
+    width: 90px !important;
+}
+
+.detailsTableGroup {
+    width: 100%;
+    margin: 0 0 15px 0;
+}
+
+.detailsTableGroup td,
+.detailsTableGroup th {
+    height: 25px !important;
+}
+
+
+.valuesFlex {
+    display: flex;
+    width: 100px;
+    align-items: center;
+    column-gap: 15px !important;
+
+}
+
+.iconLabel {
+    font-size: 12px;
+    font-style: italic;
 }
 
 .accordionHeaderContainer {
@@ -76,7 +124,7 @@
     margin: 0px !important;
 }
 
-.resultsHeaderContainer{
+.resultsHeaderContainer {
     /* background-color: #E8F5E9; */
     background-color: rgb(240, 242, 244, 0.7);
     border: 1px solid #ECEFF1 !important;
@@ -84,7 +132,7 @@
     padding: 10px 10px;
 }
 
-.resultsHeaderContainer label{
+.resultsHeaderContainer label {
     color: #404B5A !important;
     /* color: #0A683A !important; */
 }

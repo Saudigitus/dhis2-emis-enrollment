@@ -23,7 +23,7 @@ function EnrollmentActionsButtons() {
   const { enrollmentsData } = useGetEnrollmentForm();
 
   const enrollmentOptions: FlyoutOptionsProps[] = [
-    { label: "Enroll new students", divider: true, onClick: () => { setOpen(true); } },
+    { label: "Enroll new students", divider: true, onClick: () => { setOpenImport(true); } },
     { label: "Download template", divider: false, onClick: () => { setOpenExportEmptyTemplate(true) } },
     // { label: "Export empty template", divider: false, onClick: () => { alert("Export empty"); } },
     // { label: "Export existing students", divider: false, onClick: () => { alert("Export existing students"); } }
@@ -43,7 +43,7 @@ function EnrollmentActionsButtons() {
 
         <Tooltip title={orgUnit === null ? "Please select an organisation unit before" : ""}>
           <span>
-            <Button disabled={orgUnit == null} onClick={() => { setOpen(true); }} icon={<IconAddCircle24 />}>Enroll single {sectionName}</Button>
+            <Button disabled={orgUnit == null} onClick={() => { setOpen(true); }} icon={<IconAddCircle24 />}>Enroll {sectionName.toLocaleLowerCase()}</Button>
           </span>
         </Tooltip>
         <DropdownButtonComponent
@@ -63,7 +63,7 @@ function EnrollmentActionsButtons() {
       </ModalComponent>}
       {openImport && <BulkEnrollment setOpen={setOpenImport} isOpen={openImport} />}
 
-      {openExportEmptyTemplate && <ModalComponent title={`Data Import Template Export`} open={open} setOpen={setOpen}>
+      {openExportEmptyTemplate && <ModalComponent title={`Data Import Template Export`} open={openExportEmptyTemplate} setOpen={setOpenExportEmptyTemplate}>
         <ModalExportTemplateContent
           sectionName={sectionName}
           setOpen={setOpenExportEmptyTemplate}
