@@ -24,9 +24,7 @@ function EnrollmentActionsButtons() {
 
   const enrollmentOptions: FlyoutOptionsProps[] = [
     { label: "Enroll new students", divider: true, onClick: () => { setOpenImport(true); } },
-    { label: "Download template", divider: false, onClick: () => { setOpenExportEmptyTemplate(true) } },
-    // { label: "Export empty template", divider: false, onClick: () => { alert("Export empty"); } },
-    // { label: "Export existing students", divider: false, onClick: () => { alert("Export existing students"); } }
+    { label: "Download template", divider: false, onClick: () => { setOpenExportEmptyTemplate(true) } }
   ];
 
   return (
@@ -35,7 +33,7 @@ function EnrollmentActionsButtons() {
         { allowSearching ?
           <Tooltip title={orgUnit === null ? "Please select an organisation unit before" : ""}>
             <span>
-              <Button disabled={orgUnit == null} onClick={() => { setOpenSearchEnrollment(true); }} icon={<IconSearch24 />}>Search {sectionName}</Button>
+              <Button disabled={orgUnit == null} onClick={() => { setOpenSearchEnrollment(true); }} icon={<IconSearch24 />}>Search {sectionName.toLowerCase()}</Button>
             </span>
           </Tooltip> : null
         }
@@ -70,7 +68,7 @@ function EnrollmentActionsButtons() {
         />
       </ModalComponent>}
 
-      {openSearchEnrollment && <ModalComponent  title={`Search for enrolled ${sectionName}`} open={openSearchEnrollment} setOpen={setOpenSearchEnrollment}>
+      {openSearchEnrollment && <ModalComponent  title={`Search for enrolled ${sectionName.toLowerCase()}`} open={openSearchEnrollment} setOpen={setOpenSearchEnrollment}>
         <ModalSearchEnrollmentContent
           sectionName={sectionName}
           setOpen={setOpenSearchEnrollment}

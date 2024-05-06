@@ -37,7 +37,7 @@ export default function useGetSearchEnrollmentForm() {
             }
         });
 
-        const resultArray: GroupedSearchableAttributesTypes[] = uniqueObjectGroups.concat([{ name: "Attributes", id: "attributes", variables: searchableObjects }]);
+        const resultArray: GroupedSearchableAttributesTypes[] = uniqueObjectGroups.concat([{ name: "attributes", id: "attributes", variables: searchableObjects }]);
         return resultArray;
 
     }
