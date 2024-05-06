@@ -4,9 +4,10 @@ import { ProgramConfigState } from '../../schema/programSchema';
 import { getSelectedKey } from '../../utils/commons/dataStore/getSelectedKey';
 import { formatResponseTEI } from '../../utils/tei/formatResponseAttributes';
 import { CustomAttributeProps } from '../../types/variables/AttributeColumns';
+import { GroupedSearchableAttributesTypes } from '../../types/variables/GroupedSearchableAttributesTypes';
 
 export default function useGetSearchEnrollmentForm() {
-    const [searchEnrollmentFields, setSearchEnrollmentFields] = useState<any[]>([])
+    const [searchEnrollmentFields, setSearchEnrollmentFields] = useState<GroupedSearchableAttributesTypes[]>([])
     const getProgram = useRecoilValue(ProgramConfigState);
     const { getDataStoreData } = getSelectedKey()
 
@@ -20,7 +21,7 @@ export default function useGetSearchEnrollmentForm() {
     }
 
     const groupAttributes = (variables: CustomAttributeProps[]) => {
-        const uniqueObjectGroups: { name: string, id: string, variables: CustomAttributeProps[] }[] = [];
+        const uniqueObjectGroups: GroupedSearchableAttributesTypes[] = [];
         const searchableObjects: CustomAttributeProps[] = [];
 
         variables.forEach(variable => {
@@ -36,7 +37,7 @@ export default function useGetSearchEnrollmentForm() {
             }
         });
 
-        const resultArray: { name: string, id: string, variables: CustomAttributeProps[] }[] = uniqueObjectGroups.concat([{ name: "Attributes", id: "attributes", variables: searchableObjects }]);
+        const resultArray: GroupedSearchableAttributesTypes[] = uniqueObjectGroups.concat([{ name: "Attributes", id: "attributes", variables: searchableObjects }]);
         return resultArray;
 
     }

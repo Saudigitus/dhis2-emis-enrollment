@@ -114,7 +114,7 @@ function ModalSearchEnrollmentContent(props: ModalSearchTemplateProps): React.Re
 
   const onHandleRegisterNew = async () => {
     setInitialValues(filterUniqueVariables());
-    //setOpen(false);
+    setOpen(false);
     setOpenNewEnrollment(true);
   };
 
@@ -132,7 +132,7 @@ function ModalSearchEnrollmentContent(props: ModalSearchTemplateProps): React.Re
     })
 
     setOpenNewEnrollment(true)
-    //setOpen(false); 
+    setOpen(false); 
   }
 
   const onReset = () => {
@@ -144,7 +144,6 @@ function ModalSearchEnrollmentContent(props: ModalSearchTemplateProps): React.Re
 
   const searchActions = [
     { id: "cancel", type: "button", label: "Reset", small: true, disabled: loading || !Object.entries(queryForm).length, onClick: () => { onReset()}, display:true },
-    //{ id: "continue", type: "button", label: "Register new", small: true, primary: true, disabled: loading, onClick: () => { setOpenNewEnrollment(true); setOpen(false) }, display: !enrollmentValues?.length },
     { id: "search", type: "submit", label: `Search ${sectionName.toLocaleLowerCase()}`, primary: true, small: true, disabled: loading || !Object.entries(queryForm).length, loading, display:true },
   ];
 
@@ -163,14 +162,14 @@ function ModalSearchEnrollmentContent(props: ModalSearchTemplateProps): React.Re
           <WithBorder type="all">
             <div className={styles.accordionHeaderContainer} onClick={()=> setCollapseAttributes(index === collapseAttributes ? -1 : index)}>
               <label className={styles.accordionHeader}>Search by {group?.name}</label>
-              <IconButton size="small" onClick={()=> setCollapseAttributes(index)} /* disabled={collapseAttributes === index} */> {collapseAttributes === index ? <ExpandLess /> : <ExpandMore />}  </IconButton>
+              <IconButton size="small" onClick={()=> setCollapseAttributes(index)}> {collapseAttributes === index ? <ExpandLess /> : <ExpandMore />}  </IconButton>
             </div>
 
             <Collapse in={collapseAttributes === index}>
               <WithBorder type="top">
                 <WithPadding>
                   <Form initialValues={{ ...initialValues, orgUnit, ...queryForm }} onSubmit={onHandleSubmit}>
-                    {({ handleSubmit, values, form }) => {
+                    {({ handleSubmit, form }) => {
                       formRef.current = form;
                       return <form
                         onSubmit={handleSubmit}
@@ -198,8 +197,6 @@ function ModalSearchEnrollmentContent(props: ModalSearchTemplateProps): React.Re
                             )
                           })}
                         </ButtonStrip>
-
-
                       </form>
                     }}
                   </Form>
@@ -215,11 +212,9 @@ function ModalSearchEnrollmentContent(props: ModalSearchTemplateProps): React.Re
         <>
         {enrollmentValues?.length ?
           <div className="">
-              <div className={classNames(styles.accordionHeaderContainer, styles.resultsHeaderContainer)}>
-                <label className={styles.accordionHeader}>Results found for {sectionName} search</label>
-              </div>
-            
-
+            <div className={classNames(styles.accordionHeaderContainer, styles.resultsHeaderContainer)}>
+              <label className={styles.accordionHeader}>Results found for {sectionName} search</label>
+            </div>
             
             <WithBorder type="all">
               <div
