@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import { ModalActions, Button, ButtonStrip, Label, NoticeBox } from "@dhis2/ui";
+import { ModalActions, Button, ButtonStrip, Label, NoticeBox, IconAddCircle16 } from "@dhis2/ui";
 import { Form } from "react-final-form";
 import GroupForm from "../form/GroupForm";
 import { ModalSearchTemplateProps } from "../../types/modal/ModalProps";
@@ -23,6 +23,7 @@ import { IconButton } from "@material-ui/core";
 import { ExpandLess, ExpandMore } from "@material-ui/icons";
 import { CustomAttributeProps } from "../../types/variables/AttributeColumns";
 import classNames from "classnames";
+import ButtonComponent from "../buttons/Button";
 
 const usetStyles = makeStyles({
   tableContainer: {
@@ -115,14 +116,14 @@ function ModalSearchEnrollmentContent(props: ModalSearchTemplateProps): React.Re
   };
 
   const searchActions = [
-    { id: "cancel", type: "button", label: "Reset", small: true, disabled: loading || !Object.entries(queryForm).length, onClick: () => { onReset()}, display:true },
+    { id: "cancel", type: "button", label: "Reset", small: true, disabled: loading || !Object.entries(queryForm).length, onClick: () => { onReset() }, display: true },
     //{ id: "continue", type: "button", label: "Register new", small: true, primary: true, disabled: loading, onClick: () => { setOpenNewEnrollment(true); setOpen(false) }, display: !enrollmentValues?.length },
-    { id: "search", type: "submit", label: `Search ${sectionName.toLocaleLowerCase()}`, primary: true, small: true, disabled: loading || !Object.entries(queryForm).length, loading, display:true },
+    { id: "search", type: "submit", label: `Search ${sectionName.toLocaleLowerCase()}`, primary: true, small: true, disabled: loading || !Object.entries(queryForm).length, loading, display: true },
   ];
 
   const modalActions = [
     { id: "cancel", type: "button", label: "Cancel", small: true, disabled: false, onClick: () => { setOpen(false) } },
-    { id: "continue", label: "Register new", primary: true, small: true, disabled: loading, onClick: () => { onHandleRegisterNew() }}
+    { id: "continue", label: "Register new", success: "success", small: true, disabled: loading, onClick: () => { onHandleRegisterNew() }, icon:<IconAddCircle16/> }
   ];
 
   const onSelectTei = (teiData: any) => {
@@ -139,7 +140,7 @@ function ModalSearchEnrollmentContent(props: ModalSearchTemplateProps): React.Re
     })
 
     setOpenNewEnrollment(true)
-    setOpen(false); 
+    setOpen(false);
   }
 
   return (
@@ -150,9 +151,9 @@ function ModalSearchEnrollmentContent(props: ModalSearchTemplateProps): React.Re
       {searchEnrollmentFields?.map((group, index) => (
         <div className="mb-3">
           <WithBorder type="all">
-            <div className={styles.accordionHeaderContainer} onClick={()=> setCollapseAttributes(index === collapseAttributes ? -1 : index)}>
+            <div className={styles.accordionHeaderContainer} onClick={() => setCollapseAttributes(index === collapseAttributes ? -1 : index)}>
               <label className={styles.accordionHeader}>Search by {group?.name}</label>
-              <IconButton size="small" onClick={()=> setCollapseAttributes(index)} /* disabled={collapseAttributes === index} */> {collapseAttributes === index ? <ExpandLess /> : <ExpandMore />}  </IconButton>
+              <IconButton size="small" onClick={() => setCollapseAttributes(index)} /* disabled={collapseAttributes === index} */> {collapseAttributes === index ? <ExpandLess /> : <ExpandMore />}  </IconButton>
             </div>
 
             <Collapse in={collapseAttributes === index}>
@@ -197,58 +198,56 @@ function ModalSearchEnrollmentContent(props: ModalSearchTemplateProps): React.Re
             </Collapse>
           </WithBorder>
         </div>
-        
+
       ))}
-      
+
       <Collapse in={showResults} style={{}}>
         <>
-        {enrollmentValues?.length ?
-          <div className="">
+          {enrollmentValues?.length ?
+            <div className="">
               <div className={classNames(styles.accordionHeaderContainer, styles.resultsHeaderContainer)}>
                 <label className={styles.accordionHeader}>Results found for {sectionName} search</label>
               </div>
-            
 
-            
-            <WithBorder type="all">
-              <div
-                className={classes.tableContainer}
-              >
-                <TableComponent>
-                  <RenderHeader
-                    createSortHandler={() => { }}
-                    order="asc"
-                    orderBy="desc"
-                    rowsHeader={searchableAttributes}
-                  />
-                  <RenderRows
-                    headerData={searchableAttributes}
-                    rowsData={enrollmentValues}
-                    searchActions={true}
-                    onSelectTei={onSelectTei}
-                  />
-                </TableComponent></div>
-            </WithBorder>
-          </div> : 
-          <NoticeBox title={`No ${sectionName} found`}>
-            Continue serching or click <strong>'Register new'</strong> if you want to register as a new <strong>{sectionName}</strong>.
-          </NoticeBox> }
+
+
+              <WithBorder type="all">
+                <div
+                  className={classes.tableContainer}
+                >
+                  <TableComponent>
+                    <RenderHeader
+                      createSortHandler={() => { }}
+                      order="asc"
+                      orderBy="desc"
+                      rowsHeader={searchableAttributes}
+                    />
+                    <RenderRows
+                      headerData={searchableAttributes}
+                      rowsData={enrollmentValues}
+                      searchActions={true}
+                      onSelectTei={onSelectTei}
+                    />
+                  </TableComponent></div>
+              </WithBorder>
+            </div> :
+            <NoticeBox title={`No ${sectionName} found`}>
+              Continue serching or click <strong>'Register new'</strong> if you want to register as a new <strong>{sectionName}</strong>.
+            </NoticeBox>}
         </>
       </Collapse>
-      {showResults ?<ModalActions>
+      {showResults ? <ModalActions>
         <div className="d-flex justify-content-between align-items-center w-100">
           {enrollmentValues.length ? <small>If none of the matches above is the {sectionName} you are searching for, click 'Register new'.</small> : <small></small>}
           <ButtonStrip end>
             {modalActions.map((action, i) => {
               return (
-                <Button key={i} {...action} >
-                  {action.label}
-                </Button>
+                <ButtonComponent key={i} {...action}/>
               )
             })}
           </ButtonStrip>
         </div>
-      </ModalActions>: null}
+      </ModalActions> : null}
     </div >
   )
 }

@@ -43,7 +43,7 @@
 
 .listItem {
     padding: 6px 16px !important;
-    border-bottom: 0.5px solid  rgba(0, 0, 0, 0.10);
+    border-bottom: 0.5px solid rgba(0, 0, 0, 0.10);
 }
 
 .listItem span:first-child {
@@ -61,7 +61,7 @@
 
 .hasValuesColor,
 .hasValuesColor svg {
-    color: #0d47a1!important;
+    color: #0d47a1 !important;
 }
 
 .noValuesColor:first-child,
@@ -71,8 +71,8 @@
     width: 24px !important;
 }
 
-.redText{
-   color: #d64d4d;
+.redText {
+    color: #d64d4d;
 }
 
 .noticeBoxTitle {
@@ -135,4 +135,8 @@
 .resultsHeaderContainer label {
     color: #404B5A !important;
     /* color: #0A683A !important; */
+}
+
+.success {
+    background-color: #388e3c !important;
 }
