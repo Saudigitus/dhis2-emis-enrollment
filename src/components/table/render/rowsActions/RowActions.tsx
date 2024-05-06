@@ -33,7 +33,7 @@ export default function RowActions(props: RowActionsProps) {
   const rowsActions: RowActionsType[] = [
     {
       icon: <IconEdit24 />,
-      color: '#277314',
+      color:  status === EnrollmentStatus.CANCELLED? 'rgba(39, 115, 20, .35)' :'#277314',
       label: `${sectionName} Edition`,
       disabled: status === EnrollmentStatus.CANCELLED,
       onClick: () => { buildFormData(trackedEntity, enrollmentId); setOpenEditionModal(!openEditionModal) },
