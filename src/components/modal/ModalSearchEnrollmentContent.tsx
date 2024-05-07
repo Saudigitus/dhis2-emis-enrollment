@@ -109,7 +109,7 @@ function ModalSearchEnrollmentContent(props: ModalSearchTemplateProps): React.Re
     const filteredOriginalObject = Object.fromEntries(
       Object.entries(queryForm).filter(([id]) => !uniqueVariableIDsToRemove.includes(id))
     );
-    
+
     return filteredOriginalObject;
   }
 
@@ -133,7 +133,7 @@ function ModalSearchEnrollmentContent(props: ModalSearchTemplateProps): React.Re
 
   const modalActions = [
     { id: "cancel", type: "button", label: "Cancel", small: true, disabled: false, onClick: () => { setOpen(false) } },
-    { id: "continue", label: "Register new", success: "success", small: true, disabled: loading, onClick: () => { onHandleRegisterNew() }, icon:<IconAddCircle16/> }
+    { id: "continue", label: "Register new", success: "success", small: true, disabled: loading, onClick: () => { onHandleRegisterNew() } }
   ];
 
   const onSelectTei = (teiData: any) => {
@@ -163,7 +163,7 @@ function ModalSearchEnrollmentContent(props: ModalSearchTemplateProps): React.Re
           <WithBorder type="all">
             <div className={styles.accordionHeaderContainer} onClick={() => setCollapseAttributes(index === collapseAttributes ? -1 : index)}>
               <label className={styles.accordionHeader}>Search by {group?.name}</label>
-              <IconButton size="small" onClick={()=> setCollapseAttributes(index)}> {collapseAttributes === index ? <ExpandLess /> : <ExpandMore />}  </IconButton>
+              <IconButton size="small" onClick={() => setCollapseAttributes(index)}> {collapseAttributes === index ? <ExpandLess /> : <ExpandMore />}  </IconButton>
             </div>
 
             <Collapse in={collapseAttributes === index}>
@@ -211,35 +211,35 @@ function ModalSearchEnrollmentContent(props: ModalSearchTemplateProps): React.Re
 
       <Collapse in={showResults} style={{}}>
         <>
-        {enrollmentValues?.length ?
-          <div className="">
-            <div className={classNames(styles.accordionHeaderContainer, styles.resultsHeaderContainer)}>
-              <label className={styles.accordionHeader}>Results found for {sectionName} search</label>
-            </div>
-            
-            <WithBorder type="all">
-              <div
-                className={classes.tableContainer}
-              >
-                <TableComponent>
-                  <RenderHeader
-                    createSortHandler={() => { }}
-                    order="asc"
-                    orderBy="desc"
-                    rowsHeader={searchableAttributes}
-                  />
-                  <RenderRows
-                    headerData={searchableAttributes}
-                    rowsData={enrollmentValues}
-                    searchActions={true}
-                    onSelectTei={onSelectTei}
-                  />
-                </TableComponent></div>
-            </WithBorder>
-          </div> : 
-          <NoticeBox title={`No ${sectionName} found`}>
-            Continue serching or click <strong>'Register new'</strong> if you want to register as a new <strong>{sectionName}</strong>.
-          </NoticeBox> }
+          {enrollmentValues?.length ?
+            <div className="">
+              <div className={classNames(styles.accordionHeaderContainer, styles.resultsHeaderContainer)}>
+                <label className={styles.accordionHeader}>Results found for {sectionName} search</label>
+              </div>
+
+              <WithBorder type="all">
+                <div
+                  className={classes.tableContainer}
+                >
+                  <TableComponent>
+                    <RenderHeader
+                      createSortHandler={() => { }}
+                      order="asc"
+                      orderBy="desc"
+                      rowsHeader={searchableAttributes}
+                    />
+                    <RenderRows
+                      headerData={searchableAttributes}
+                      rowsData={enrollmentValues}
+                      searchActions={true}
+                      onSelectTei={onSelectTei}
+                    />
+                  </TableComponent></div>
+              </WithBorder>
+            </div> :
+            <NoticeBox title={`No ${sectionName} found`}>
+              Continue serching or click <strong>'Register new'</strong> if you want to register as a new <strong>{sectionName}</strong>.
+            </NoticeBox>}
         </>
       </Collapse>
       {showResults ? <ModalActions>
@@ -248,7 +248,9 @@ function ModalSearchEnrollmentContent(props: ModalSearchTemplateProps): React.Re
           <ButtonStrip end>
             {modalActions.map((action, i) => {
               return (
-                <ButtonComponent key={i} {...action}/>
+                <Button key={i} {...action}>
+                  {action.label}
+                </Button>
               )
             })}
           </ButtonStrip>
