@@ -1,0 +1,136 @@
+/* Success Button */
+.success {
+    color: #fff !important;
+    border-color: #1B5E20 !important;
+    background-color: #1B5E20 !important;
+    box-shadow: none !important;
+}
+
+.success:hover {
+    background-color: rgb(14, 121, 69) !important;
+    border-color: #1B5E20 !important;
+    /* box-shadow: 0 5px 15px rgb(0 0 0 / 5%), 0 4px 10px rgb(23 198 113 / 25%) !important; */
+}
+
+.success:active {
+    color: #fff !important;
+    background-color: #1B5E20 !important;
+    border-color: #1B5E20 !important;
+    background-image: none !important;
+    box-shadow: inset 0 3px 5px rgba(0, 0, 0, .125) !important;
+}
+
+
+/* White Button */
+
+.white {
+    color: #212529 !important;
+    border-color: #fff !important;
+    background-color: #fff !important;
+    box-shadow: none !important;
+}
+
+.white:hover {
+    background: #fff !important;
+    border-color: #fff !important;
+    box-shadow: 0 5px 15px rgb(0 0 0 / 5%), 0 4px 10px rgb(23 198 113 / 25%) !important;
+}
+
+.white:active {
+    box-shadow: none !important;
+    background-color: #007bff !important;
+    border-color: #007bff !important;
+    color: #fff !important;
+}
+
+/* Error Button */
+.error {
+    color: #fff !important;
+    border-color: #891515 !important;
+    background-color: #891515 !important;
+    box-shadow: none !important;
+}
+
+.error:hover {
+    color: #fff !important;
+    background-color: #B81515 !important;
+    border-color: #B81515 !important;
+    box-shadow: 0 5px 15px rgb(0 0 0 / 5%), 0 4px 10px rgb(23 198 113 / 25%) !important;
+}
+
+.error:active {
+    color: #fff !important;
+    background-color: #B81515 !important;
+    border-color: #97122e !important;
+    background-image: none !important;
+    box-shadow: inset 0 3px 5px rgba(0, 0, 0, .125) !important;
+}
+
+/* Warning Button */
+.warning {
+    color: rgb(111, 50, 5) !important;
+    border-color: #FFC324 !important;
+    background-color: #FFC324 !important;
+    box-shadow: none !important;
+}
+
+.warning:hover {
+    color: rgb(111, 50, 5) !important;
+    background-color: #e6a200 !important;
+    border-color: #e6a200 !important;
+    box-shadow: 0 5px 15px rgb(0 0 0 / 5%), 0 4px 10px rgb(23 198 113 / 25%) !important;
+}
+
+.warning:active {
+    color: rgb(111, 50, 5);
+    background-color: #e6a200 !important;
+    border-color: #cc9000 !important;
+    background-image: none !important;
+    box-shadow: inset 0 3px 5px rgba(0, 0, 0, .125) !important;
+}
+
+/* Info Button */
+.info {
+    color: #fff !important;
+    border-color: #00b8d8 !important;
+    background-color: #00b8d8 !important;
+    box-shadow: none !important;
+}
+
+.info:hover {
+    color: #fff !important;
+    background-color: #00a2bf !important;
+    border-color: #00a2bf !important;
+    box-shadow: 0 5px 15px rgb(0 0 0 / 5%), 0 4px 10px rgb(23 198 113 / 25%) !important;
+}
+
+.info:active {
+    color: #fff !important;
+    background-color: #00a2bf !important;
+    border-color: #008da5 !important;
+    background-image: none !important;
+    box-shadow: inset 0 3px 5px rgba(0, 0, 0, .125) !important;
+}
+
+/* Dark Button */
+.dark {
+    color: #fff !important;
+    border-color: #212529 !important;
+    background-color: #212529 !important;
+    box-shadow: none !important;
+}
+
+.dark:hover {
+    color: #fff !important;
+    background-color: #16181b !important;
+    border-color: #16181b !important;
+    box-shadow: 0 5px 15px rgb(0 0 0 / 5%), 0 4px 10px rgb(23 198 113 / 25%) !important;
+}
+
+.dark:active {
+    color: #fff !important;
+    background-color: #16181b !important;
+    border-color: #0a0c0d !important;
+    background-image: none !important;
+    box-shadow: inset 0 3px 5px rgba(0, 0, 0, .125) !important;
+}
