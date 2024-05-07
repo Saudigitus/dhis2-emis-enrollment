@@ -16,7 +16,7 @@ function EnrollmentDetailsComponent(props: EnrollmentDetailsComponentProps): Rea
 
   return (
     <React.Fragment>
-      <div className="row w-100 pb-2 d-flex justify-content-end align-items-center">
+      <div className="row pb-2 px-1 d-flex justify-content-end align-items-center">
         <div className="col-12 col-md-8 px-1 pt-2">
           <h6 className="mb-0" style={{ fontSize: 13 }}>Enrollment History</h6>
         </div>
@@ -24,7 +24,7 @@ function EnrollmentDetailsComponent(props: EnrollmentDetailsComponentProps): Rea
           {existingAcademicYear ?
             <i className={styles.enrolledAlertLabel}>This {sectionName} is already enrolled for this year.</i>
             :
-            <ButtonComponent {...{ small: true, success: "success", onClick: onSelectTei, label: "New Enrollment", icon: <IconAddCircle16 /> }} />
+            <ButtonComponent {...{ small: true, success: "success", onClick: onSelectTei, label: "New enrollment", icon: <IconAddCircle16 /> }} />
 
           }
         </div>
