@@ -1,9 +1,12 @@
-.rowActionsContainer {
-  /* display: flex;
-  justify-content: center; */
+@media screen and (max-width: 1131px) {
+  .rowActionsContainer {
+    display: flex;
+    justify-content: center;
+  }
 }
 
-.rowActionsIcon svg , .rowSearchActionsIcon svg{
+.rowActionsIcon svg,
+.rowSearchActionsIcon svg {
   width: 20px !important;
   height: 20px !important;
 }
