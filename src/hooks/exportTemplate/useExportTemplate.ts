@@ -3,6 +3,8 @@ import { useExportTemplateProps } from "../../types/modal/ModalProps";
 import useShowAlerts from "../commons/useShowAlert";
 import { useSearchParams } from "react-router-dom";
 import { format } from "date-fns";
+import { validationSheetConstructor } from "./validationSheetConstructor";
+import { convertNumberToLetter } from "../../utils/commons/convertNumberToLetter";
 
 
 const DATA_STORE_NAME : string = "semis"
@@ -196,11 +198,14 @@ export default function useExportTemplate ( ) {
             const workbook = new window.ExcelJS.Workbook();
             const dataSheet = workbook.addWorksheet("Data");
             const metaDataSheet = workbook.addWorksheet("Metadata");
+            const validationSheet = workbook.addWorksheet("Validation", { state: 'veryHidden' });
 
             const { headers , datas , currentProgram }  = await generateInformations(values)
 
+          // Generating validation data
+          validationSheetConstructor(validationSheet, headers)
+            
             // generation des données du metadatas
-
             metaDataSheet.columns = [
                 {
                     header: "programId",
@@ -293,14 +298,16 @@ export default function useExportTemplate ( ) {
                         const currentCell = currentRow.getCell(j + 1);
 
                         if (currentCell && headers[j]?.optionSetValue) {
-                            const formulae_string = `${headers[j]?.options
-                                ?.map((option: any) => option.code)
-                                ?.join(",")}`;
+                          // Get the column letter from the number
+                          const columnLetter = convertNumberToLetter(validationSheet.getColumn(headers[j].id).number);
+
+                          // Formula composition for dataValidation
+                          const formula = `'${validationSheet.name}'!$${columnLetter}$2:$${columnLetter}$${headers[j].options.length+1}`;
 
                             currentCell.dataValidation = {
                                 type: "list",
                                 allowBlank: true,
-                                formulae: ['"' + formulae_string + '"'] || [],
+                                formulae: [formula]
                             };
                         }
 
