@@ -86,6 +86,7 @@ export default function useExportTemplate ( ) {
             label: attribute.displayName,
             optionSetValue: attribute.optionSetValue || false,
             options: attribute.optionSet?.options || [],
+            optionSetId: attribute.optionSet?.id || null,
           }));
         }
         
@@ -112,6 +113,7 @@ export default function useExportTemplate ( ) {
                     valueType: dxCurr.dataElement?.valueType,
                     optionSetValue: dxCurr.dataElement?.optionSetValue || false,
                     options: dxCurr.dataElement?.optionSet?.options || [],
+                    optionSetId: dxCurr.dataElement?.optionSet?.id || null,
                   });
                   return dxPrev;
                 }, []) || [];
@@ -135,6 +137,7 @@ export default function useExportTemplate ( ) {
                     valueType: dxCurr.dataElement?.valueType,
                     optionSetValue: dxCurr.dataElement?.optionSetValue || false,
                     options: dxCurr.dataElement?.optionSet?.options || [],
+                    optionSetId: dxCurr.dataElement?.optionSet?.id || null,
                   });
                   return dxPrev;
                 }, []) || [];
@@ -147,10 +150,10 @@ export default function useExportTemplate ( ) {
           }, []) || [];
 
         const newBeginHeaders = [
-         {key: `ref`,id: `ref`,label:'Ref',  valueType: 'TEXT', optionSetValue: false, options: [] },
-         {key: `orgUnitName`,id: `orgUnitName`,label:'School Name',  valueType: 'TEXT', optionSetValue: false, options: [] },
-         {key: `orgUnit`,id: `orgUnit`,label:'School UID', valueType: 'TEXT', optionSetValue: false, options: [] },
-         {key: `enrollmentDate`,id: `enrollmentDate`,label:'Enrollment date', valueType: 'DATE', optionSetValue: false, options: [] },
+         {key: `ref`,id: `ref`,label:'Ref',  valueType: 'TEXT', optionSetValue: false, options: [], optionSetId: null },
+         {key: `orgUnitName`,id: `orgUnitName`,label:'School Name',  valueType: 'TEXT', optionSetValue: false, options: [], optionSetId: null },
+         {key: `orgUnit`,id: `orgUnit`,label:'School UID', valueType: 'TEXT', optionSetValue: false, options: [], optionSetId: null },
+         {key: `enrollmentDate`,id: `enrollmentDate`,label:'Enrollment date', valueType: 'DATE', optionSetValue: false, options: [], optionSetId: null },
         ]
     
         newHeaders = [...newBeginHeaders , ...registrationProgramStageDataElements, ...newHeaders , ...socioEconomicProgramStageDataElements];
@@ -299,7 +302,7 @@ export default function useExportTemplate ( ) {
 
                         if (currentCell && headers[j]?.optionSetValue) {
                           // Get the column letter from the number
-                          const columnLetter = convertNumberToLetter(validationSheet.getColumn(headers[j].id).number);
+                          const columnLetter = convertNumberToLetter(validationSheet.getColumn(headers[j].optionSetId).number);
 
                           // Formula composition for dataValidation
                           const formula = `'${validationSheet.name}'!$${columnLetter}$2:$${columnLetter}$${headers[j].options.length+1}`;
