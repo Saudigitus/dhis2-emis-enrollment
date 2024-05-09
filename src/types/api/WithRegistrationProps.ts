@@ -3,7 +3,7 @@ interface TeiQueryProps {
     pageSize?: number
     ouMode?: string
     trackedEntity: string
-    orgUnit: string
+    orgUnit?: string
     order?: string
 }
 

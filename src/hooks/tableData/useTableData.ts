@@ -74,7 +74,7 @@ export function useTableData() {
                     ouMode: school != null ? "SELECTED" : "ACCESSIBLE",
                     pageSize,
                     program: program as unknown as string,
-                    orgUnit: school,
+                    //orgUnit: school,
                     trackedEntity: trackedEntityToFetch
                 })).catch((error) => {
                     show({
