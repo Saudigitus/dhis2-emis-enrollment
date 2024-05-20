@@ -3,6 +3,8 @@ import { useExportTemplateProps } from "../../types/modal/ModalProps";
 import useShowAlerts from "../commons/useShowAlert";
 import { useSearchParams } from "react-router-dom";
 import { format } from "date-fns";
+import { validationSheetConstructor } from "./validationSheetConstructor";
+import { convertNumberToLetter } from "../../utils/commons/convertNumberToLetter";
 
 
 const DATA_STORE_NAME : string = "semis"
@@ -84,6 +86,7 @@ export default function useExportTemplate ( ) {
             label: attribute.displayName,
             optionSetValue: attribute.optionSetValue || false,
             options: attribute.optionSet?.options || [],
+            optionSetId: attribute.optionSet?.id || null,
           }));
         }
         
@@ -110,6 +113,7 @@ export default function useExportTemplate ( ) {
                     valueType: dxCurr.dataElement?.valueType,
                     optionSetValue: dxCurr.dataElement?.optionSetValue || false,
                     options: dxCurr.dataElement?.optionSet?.options || [],
+                    optionSetId: dxCurr.dataElement?.optionSet?.id || null,
                   });
                   return dxPrev;
                 }, []) || [];
@@ -133,6 +137,7 @@ export default function useExportTemplate ( ) {
                     valueType: dxCurr.dataElement?.valueType,
                     optionSetValue: dxCurr.dataElement?.optionSetValue || false,
                     options: dxCurr.dataElement?.optionSet?.options || [],
+                    optionSetId: dxCurr.dataElement?.optionSet?.id || null,
                   });
                   return dxPrev;
                 }, []) || [];
@@ -145,10 +150,10 @@ export default function useExportTemplate ( ) {
           }, []) || [];
 
         const newBeginHeaders = [
-         {key: `ref`,id: `ref`,label:'Ref',  valueType: 'TEXT', optionSetValue: false, options: [] },
-         {key: `orgUnitName`,id: `orgUnitName`,label:'School Name',  valueType: 'TEXT', optionSetValue: false, options: [] },
-         {key: `orgUnit`,id: `orgUnit`,label:'School UID', valueType: 'TEXT', optionSetValue: false, options: [] },
-         {key: `enrollmentDate`,id: `enrollmentDate`,label:'Enrollment date', valueType: 'DATE', optionSetValue: false, options: [] },
+         {key: `ref`,id: `ref`,label:'Ref',  valueType: 'TEXT', optionSetValue: false, options: [], optionSetId: null },
+         {key: `orgUnitName`,id: `orgUnitName`,label:'School Name',  valueType: 'TEXT', optionSetValue: false, options: [], optionSetId: null },
+         {key: `orgUnit`,id: `orgUnit`,label:'School UID', valueType: 'TEXT', optionSetValue: false, options: [], optionSetId: null },
+         {key: `enrollmentDate`,id: `enrollmentDate`,label:'Enrollment date', valueType: 'DATE', optionSetValue: false, options: [], optionSetId: null },
         ]
     
         newHeaders = [...newBeginHeaders , ...registrationProgramStageDataElements, ...newHeaders , ...socioEconomicProgramStageDataElements];
@@ -196,11 +201,14 @@ export default function useExportTemplate ( ) {
             const workbook = new window.ExcelJS.Workbook();
             const dataSheet = workbook.addWorksheet("Data");
             const metaDataSheet = workbook.addWorksheet("Metadata");
+            const validationSheet = workbook.addWorksheet("Validation", { state: 'veryHidden' });
 
             const { headers , datas , currentProgram }  = await generateInformations(values)
 
+          // Generating validation data
+          validationSheetConstructor(validationSheet, headers)
+            
             // generation des données du metadatas
-
             metaDataSheet.columns = [
                 {
                     header: "programId",
@@ -293,14 +301,16 @@ export default function useExportTemplate ( ) {
                         const currentCell = currentRow.getCell(j + 1);
 
                         if (currentCell && headers[j]?.optionSetValue) {
-                            const formulae_string = `${headers[j]?.options
-                                ?.map((option: any) => option.code)
-                                ?.join(",")}`;
+                          // Get the column letter from the number
+                          const columnLetter = convertNumberToLetter(validationSheet.getColumn(headers[j].optionSetId).number);
+
+                          // Formula composition for dataValidation
+                          const formula = `'${validationSheet.name}'!$${columnLetter}$2:$${columnLetter}$${headers[j].options.length+1}`;
 
                             currentCell.dataValidation = {
                                 type: "list",
                                 allowBlank: true,
-                                formulae: ['"' + formulae_string + '"'] || [],
+                                formulae: [formula]
                             };
                         }
 
