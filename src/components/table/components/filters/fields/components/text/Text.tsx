@@ -12,7 +12,7 @@ function TextFilter(props: TextFilterProps) {
                 onChange={(e: any) => {
                     onChange(e.target.value, id)
                 }}
-                placeholder={"Digitar texto"}
+                placeholder={"Enter text"}
             />
         </div>
     )

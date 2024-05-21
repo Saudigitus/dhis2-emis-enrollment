@@ -59,10 +59,10 @@ function RenderRows(props: RenderHeaderProps): React.ReactElement {
 
     const { registration } = getDataStoreKeys()
     const programConfigState = useRecoilValue(ProgramConfigState);
-    const { headerData, rowsData, searchActions, onSelectTei } = props;
+    const { headerData, rowsData, searchActions, onSelectTei, loading } = props;
     const [showEnrollments, setShowEnrollments] = useState<string>();
 
-    if (rowsData?.length === 0) {
+    if (rowsData?.length === 0 && !loading) {
         return (
             <RowTable
                 className={classes.row}

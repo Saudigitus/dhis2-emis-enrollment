@@ -25,8 +25,8 @@ const usetStyles = makeStyles({
     },
     h4: {
         margin: '0px',
-        fontSize:'22px',
-        fontWeigth:'500',
+        fontSize: '22px',
+        fontWeigth: '500',
     }
 });
 
@@ -66,12 +66,6 @@ function Table() {
 
     return (
         <Paper>
-            {loading ?
-                <CenteredContent>
-                    <CircularLoader />
-                </CenteredContent>
-                : null
-            }
             <div className={classes.workingListsContainer}>
                 <h4 className={classes.h4}>Enrollments</h4>
                 <WorkingLists />
@@ -91,12 +85,20 @@ function Table() {
                                     orderBy='desc'
                                     rowsHeader={columns}
                                 />
-                                <RenderRows
-                                    headerData={columns}
-                                    rowsData={tableData}
-                                />
+                                {!loading && (
+                                    <RenderRows
+                                        headerData={columns}
+                                        rowsData={tableData}
+                                        loading={loading}
+                                    />
+                                )}
                             </>
                         </TableComponent>
+                        {(loading) ? (
+                            <CenteredContent className="p-4">
+                                <CircularLoader />
+                            </CenteredContent>
+                        ) : null}
                     </div>
                     <Pagination
                         loading={loading}

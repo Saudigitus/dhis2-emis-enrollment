@@ -48,6 +48,7 @@ interface RenderHeaderProps {
     // TODO resolve this bug.👇
     createSortHandler?: (property: string) => any
     rowsData?: any[]
+    loading?: boolean, 
     headerData?: CustomAttributeProps[]
     searchActions?: boolean
     onSelectTei?: (arg: any) => void
