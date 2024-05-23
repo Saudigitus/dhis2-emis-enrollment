@@ -66,7 +66,7 @@ function ModalContentUpdate(props: ModalContentUpdateProps): React.ReactElement 
 
   if (enrollmentsData?.length < 1 || loadingInitialValues || !Object.keys(formInitialValues).length) {
     return (
-      <CenteredContent>
+      <CenteredContent className="p-5">
         <CircularLoader />
       </CenteredContent>
     )
@@ -118,10 +118,11 @@ function ModalContentUpdate(props: ModalContentUpdateProps): React.ReactElement 
                 {modalActions.map((action, i) => (
                   <Button
                     key={i}
+                    loading={(loading && action.id === clickedButton)}
                     {...action}
                     disabled={(action.id == "save" && pristine) || loadingInitialValues || loading}
                   >
-                    {(loading && action.id === clickedButton) ? <CircularLoader small /> : action.label}
+                    {action.label}
                   </Button>
                 ))}
               </ButtonStrip>

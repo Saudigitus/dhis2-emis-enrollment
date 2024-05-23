@@ -95,7 +95,7 @@ function Table() {
                             </>
                         </TableComponent>
                         {(loading) ? (
-                            <CenteredContent className="p-4">
+                            <CenteredContent className="p-5">
                                 <CircularLoader />
                             </CenteredContent>
                         ) : null}

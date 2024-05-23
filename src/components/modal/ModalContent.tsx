@@ -16,6 +16,7 @@ import { CustomDhis2RulesEngine } from "../../hooks/programRules/rules-engine/Ru
 import { formatKeyValueType } from "../../utils/programRules/formatKeyValueType";
 import useBulkUpdate from "../../hooks/bulkStudent/bulkUpdateStudents";
 import { SearchInitialValues } from "../../schema/searchInitialValues";
+import { removeFalseKeys } from "../../utils/commons/removeFalseKeys";
 
 function ModalContentComponent(props: ModalContentProps): React.ReactElement {
   const { setOpen, enrollmentsData, sectionName, bulkUpdate = false } = props;
@@ -59,9 +60,11 @@ function ModalContentComponent(props: ModalContentProps): React.ReactElement {
     if (data && data["status" as unknown as keyof typeof data] === "OK") {
       if (clickedButton === "saveandcontinue") {
         setOpen(false)
+        setSearchInitialValues({})
       }
       setClicked(false)
-      formRef.current.restart()
+        setSearchInitialValues({})
+        formRef.current.restart()
     }
   }, [data])
 
@@ -82,14 +85,14 @@ function ModalContentComponent(props: ModalContentProps): React.ReactElement {
   }
 
   const modalActions = [
-    { id: "cancel", type: "button", label: "Cancel", disabled: loading, onClick: () => { setClickedButton("cancel"); setOpen(false) } },
+    { id: "cancel", type: "button", label: "Cancel", disabled: loading, onClick: () => { setClickedButton("cancel"); setOpen(false); setSearchInitialValues({}) } },
     { id: "saveandnew", type: "submit", label: "Save and add new", primary: true, disabled: loading, onClick: () => { setClickedButton("saveandnew"); setClicked(true) } },
     { id: "saveandcontinue", type: "submit", label: "Save and close", primary: true, disabled: loading, onClick: () => { setClickedButton("saveandcontinue"); setClicked(true) } }
   ];
 
   if (enrollmentsData?.length < 1 || loadingCodes) {
     return (
-      <CenteredContent> 
+      <CenteredContent className="p-5"> 
         <CircularLoader />
       </CenteredContent>
     )
@@ -97,16 +100,22 @@ function ModalContentComponent(props: ModalContentProps): React.ReactElement {
 
   function onChange(e: any): void {
     const sections = enrollmentsData;
-    for (const [key, value] of Object.entries(e)) {
-      for (let i = 0; i < sections?.length; i++) {
-        if (sections[i].find((element: any) => element.id === key) !== null && sections[i].find((element: any) => element.id === key) !== undefined) {
-          // Sending onChanging form value to variables object
-          sections[i].find((element: any) => element.id === key).assignedValue = value
-        }
+    for (let i = 0; i < sections?.length; i++) {
+      const section = sections[i]
+
+      for (let j = 0; j < section?.length; j++) {
+        if (section[j].valueType === "TRUE_ONLY" && !section[j].assignedValue)
+          section[j].assignedValue = ''
+
+        if (section[j].valueType === "BOOLEAN")
+          section[j].value = e[section[j].id]
+
+        section[j].assignedValue = e[section[j].id]
       }
     }
+
     setFieldsWitValues(sections)
-    setValues(e)
+    setValues(removeFalseKeys(e))
   }
 
   return (
