@@ -68,7 +68,7 @@ export default function RowActions(props: RowActionsProps) {
             Object.keys(initialValues).length ?
               <ModalContentUpdate setOpen={setOpenEditionModal} sectionName={sectionName} loadingInitialValues={loading} enrollmentsData={enrollmentsData} enrollmentValues={enrollmentValues} formInitialValues={initialValues} />
               :
-              <CenteredContent>
+              <CenteredContent className="p-5">
                 <CircularLoader />
               </CenteredContent>
           }
