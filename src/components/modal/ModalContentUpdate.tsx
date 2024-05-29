@@ -27,6 +27,8 @@ function ModalContentUpdate(props: ModalContentUpdateProps): React.ReactElement 
     registerschoolstaticform: orgUnitName,
     ...formInitialValues
   })
+
+  console.log("formInitialValues", formInitialValues)
   const { updateSelectedEnrollment, data, loading, error } = useUpdateSelectedEnrollment()
   const { runRulesEngine, updatedVariables } = CustomDhis2RulesEngine({ variables: formFields(enrollmentsData, sectionName), values, type: "programStageSection", formatKeyValueType: formatKeyValueType(enrollmentsData) })
 

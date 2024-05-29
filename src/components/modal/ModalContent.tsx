@@ -17,6 +17,7 @@ import { formatKeyValueType } from "../../utils/programRules/formatKeyValueType"
 import useBulkUpdate from "../../hooks/bulkStudent/bulkUpdateStudents";
 import { SearchInitialValues } from "../../schema/searchInitialValues";
 import { removeFalseKeys } from "../../utils/commons/removeFalseKeys";
+import { formatDateToIsoString } from "../../utils/commons/formatDateToIsoString";
 
 function ModalContentComponent(props: ModalContentProps): React.ReactElement {
   const { setOpen, enrollmentsData, sectionName, bulkUpdate = false } = props;
@@ -77,7 +78,7 @@ function ModalContentComponent(props: ModalContentProps): React.ReactElement {
         void postTei({
           data: teiPostBody(fieldsWitValue,
             (getProgram != null) ? getProgram.id : "", orgUnit ?? "",
-            values?.eventdatestaticform ?? "",
+            formatDateToIsoString(values?.eventdatestaticform) ?? "",
             performanceProgramStages, trackedEntityType, initialValues['trackedEntity' as unknown as keyof typeof initialValues])
         })
       }
