@@ -12,9 +12,9 @@ export const eventUpdateBody = (enrollmentsData: any[], events: any[], eventDate
                 if (event && Object.keys(event).length > 4)
                     newEvents.push({
                         ...event,
-                        occurredAt: eventDate,
-                        scheduledAt: eventDate,
-                        createdAt: eventDate,
+                        occurredAt: format(new Date(eventDate), "yyyy-MM-dd'T'HH:mm:ss.SSS"),
+                        scheduledAt: format(new Date(eventDate), "yyyy-MM-dd'T'HH:mm:ss.SSS"),
+                        createdAt: format(new Date(eventDate), "yyyy-MM-dd'T'HH:mm:ss.SSS"),
                         dataValues: returnEventDataValues(enrollmentData, formValues)
                     })
                 else
