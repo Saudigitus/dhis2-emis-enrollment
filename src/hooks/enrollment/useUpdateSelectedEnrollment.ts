@@ -1,6 +1,7 @@
 import { useParams, useUpdateTei } from "../../hooks"
 import { teiUpdateBody } from "../../utils/tei/formatUpdateBody"
 import { getDataStoreKeys } from "../../utils/commons/dataStore/getDataStoreKeys"
+import { formatDateToIsoString } from "../../utils/commons/formatDateToIsoString";
 
 export function useUpdateSelectedEnrollment() {
     const { urlParamiters } = useParams();
@@ -20,7 +21,7 @@ export function useUpdateSelectedEnrollment() {
                     trackedEntityType,
                     trackedEntity,
                     values,
-                    values['eventdatestaticform'],
+                    formatDateToIsoString(values['eventdatestaticform']),
                     program,
                     enrollment,
                     events)
