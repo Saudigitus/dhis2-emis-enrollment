@@ -1,4 +1,3 @@
-import { format } from "date-fns";
 import { eventUpdateBody } from "../events/formatPostBody";
 
 export const teiUpdateBody = (enrollmentData: any[], orgUnit: string, trackedEntityType: string, trackedEntity: string, formValues: any, enrollmentDate: string, program: string, enrollment: string, events: any): any => {
@@ -32,9 +31,9 @@ export const teiUpdateBody = (enrollmentData: any[], orgUnit: string, trackedEnt
                     status: "COMPLETED",
                     enrollment: enrollment,
                     attributes: buildAttributesBody(enrollmentData),
-                    createdAt: format(new Date(enrollmentDate), "yyyy-MM-dd'T'HH:mm:ss.SSS"),
-                    occurredAt: format(new Date(enrollmentDate), "yyyy-MM-dd'T'HH:mm:ss.SSS"),
-                    enrolledAt: format(new Date(enrollmentDate), "yyyy-MM-dd'T'HH:mm:ss.SSS"),
+                    createdAt: enrollmentDate,
+                    occurredAt: enrollmentDate,
+                    enrolledAt: enrollmentDate,
                     events: eventUpdateBody(enrollmentData, events, enrollmentDate, formValues, orgUnit, program, trackedEntity)
                 }
             ]
