@@ -144,7 +144,7 @@ export const CustomDhis2RulesEngine = (props: RulesEngineProps) => {
                                     if (foundOrgUnitGroup[0]?.organisationUnits.findIndex(x => x.value === values["orgUnit"]) > -1) {
                                         const options = getOptionGroups?.filter((op) => op.id === programRule.optionGroup)?.[0]?.options?.slice()?.sort(compareStringByLabel) || []
 
-                                        variable.options = { optionSet: { options: variable?.initialOptions?.optionSet?.options?.filter(obj1 => !options.some(obj2 => obj2.value === obj1.value)) } }
+                                        variable.options = { optionSet: { options: variable?.initialOptions?.optionSet?.options?.filter((obj1: { value: string }) => !options.some(obj2 => obj2.value === obj1.value)) } }
                                     }
                                 }
                             }
@@ -170,6 +170,7 @@ export function removeSpecialCharacters(text: string | undefined) {
     if (typeof text === "string") {
         return text
             .replaceAll("d2:hasValue", "")
+            .replaceAll("d2:length", "")
             .replaceAll("d2:yearsBetween", "")
             .replaceAll("d2:concatenate", "")
             .replaceAll("d2:inOrgUnitGroup", "")
@@ -177,6 +178,7 @@ export function removeSpecialCharacters(text: string | undefined) {
             .replaceAll("A{", "")
             .replaceAll("V{", "")
             .replaceAll("}", "")
+            .replaceAll("&&", "&")
             .replaceAll("current_date", `'${format(new Date(), "yyyy-MM-dd")}'`);
     }
 }
@@ -211,7 +213,7 @@ export function replaceEspecifValue(values: Record<string, any>, variables: Reco
 }
 
 // execute function
-function executeFunctionName(functionName: string | undefined, condition: string | undefined) {
+function executeFunctionName(functionName: string | undefined, condition: string | undefined, value?: string | undefined) {
     switch (functionName) {
         case "hasValue":
             return eval(condition ?? "");
@@ -219,11 +221,27 @@ function executeFunctionName(functionName: string | undefined, condition: string
             return eval(d2YearsBetween(condition, condition?.split(")")) ?? "");
 
         case "inOrgUnitGroup":
-            console.log(condition);
             return true
+
+        case "length":
+            return eval(compareLength(condition ?? "")) ? true : false;
+
         default:
             return eval(condition ?? "");
     }
+}
+
+//compare values in string
+function compareLength(assignedValue: string) {
+    let value : any
+    const pattern = /\('([^']*)'\)/g;
+    const matches = [...assignedValue.matchAll(pattern)].map(match => match[1]);
+
+    for (let index = 0; index < matches.length; index++) {
+        value = assignedValue.replaceAll(`('${matches[index]}')`, `${matches[index].length}`)
+    }
+
+    return value
 }
 
 // get years between dates

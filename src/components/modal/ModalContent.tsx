@@ -119,6 +119,8 @@ function ModalContentComponent(props: ModalContentProps): React.ReactElement {
     setValues(removeFalseKeys(e))
   }
 
+  console.log(updatedVariables)
+
   return (
     <WithPadding>
       <Form initialValues={{ ...generatedVariables, ...initialValues, orgUnit }} onSubmit={onSubmit}>
