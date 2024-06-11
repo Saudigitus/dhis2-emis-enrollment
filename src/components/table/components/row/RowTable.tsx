@@ -17,8 +17,7 @@ function RowTable(props: RowProps): React.ReactElement {
             [defaultClasses.tableRowFooter]: table?.footer
         },
         className,
-        inactive && defaultClasses.disabledRow,
-        !isOwnershipOu && defaultClasses.disabledRowOwnershipOu
+        inactive && defaultClasses.disabledRow
     );
 
     return (
