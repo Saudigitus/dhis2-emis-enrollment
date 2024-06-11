@@ -6,7 +6,7 @@ import { RowProps } from '../../../../types/table/TableContentProps';
 import useGetSectionTypeLabel from "../../../../hooks/commons/useGetSectionTypeLabel";
 
 function RowTable(props: RowProps): React.ReactElement {
-    const { children, className, table, inactive = false, ...passOnProps } = props;
+    const { children, className, table, inactive = false, isOwnershipOu = true, ...passOnProps } = props;
     const { sectionName } = useGetSectionTypeLabel()
 
     const classes = classNames(
@@ -17,12 +17,13 @@ function RowTable(props: RowProps): React.ReactElement {
             [defaultClasses.tableRowFooter]: table?.footer
         },
         className,
-        inactive && defaultClasses.disabledRow
+        inactive && defaultClasses.disabledRow,
+        !isOwnershipOu && defaultClasses.disabledRowOwnershipOu
     );
 
     return (
-        <Tooltip arrow={true} disableHoverListener={!inactive} disableFocusListener
-            title={inactive && 'This ' + sectionName + ' enrollment is inactive'}>
+        <Tooltip arrow={true} /* disableHoverListener={!inactive || !isOwnershipOu} */ disableFocusListener
+            title={!isOwnershipOu ? 'This ' + sectionName + ' was transferred to another school' : inactive ? 'This ' + sectionName + ' enrollment is inactive' : ""}>
             <tr
                 className={classes}
                 {...passOnProps}

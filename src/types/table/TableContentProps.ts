@@ -25,6 +25,7 @@ interface RowProps {
     passOnProps?: object
     table?: TableProps
     inactive?: boolean
+    isOwnershipOu?: boolean
 }
 
 interface RowActionsType {
