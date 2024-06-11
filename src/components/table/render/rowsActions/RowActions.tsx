@@ -43,9 +43,9 @@ export default function RowActions(props: RowActionsProps) {
     },
     {
       icon: <IconDelete24 />,
-      color: checkOwnershipOu(ownershipOu, school as unknown as string) ? '#d64d4d' : 'rgba(214, 77, 77, .35)',
+      color: '#d64d4d',
       label: `Delete ${sectionName}`,
-      disabled: checkOwnershipOu(ownershipOu, school as unknown as string) ? false : true,
+      disabled: false,
       onClick: () => { buildDeleteFormData(trackedEntity, enrollmentId); setOpenDeletionModal(!openDeletionModal) },
     }
   ];
