@@ -13,7 +13,7 @@ import { Attribute } from '../../../types/generated/models';
 import { GetImageUrl } from '../../../utils/table/rows/getImageUrl';
 import { IconButton } from '@material-ui/core';
 import { ProgramConfigState } from '../../../schema/programSchema';
-import { checkCanceled } from '../../../utils/table/rows/checkCanceled';
+import { checkCanceled, checkOwnershipOu } from '../../../utils/table/rows/checkCanceled';
 import SearchRowActions from './rowsActions/SearchRowActions';
 import EnrollmentDetailsCards from './enrollmentDetailsComponent/EnrollmentDetailsComponent';
 import { checkEnrolledAcademicYear } from '../../../utils/table/rows/checkEnrolledAcademicYear';
@@ -55,7 +55,7 @@ function RenderRows(props: RenderHeaderProps): React.ReactElement {
     const classes = useStyles()
     const { imageUrl } = GetImageUrl()
     const { urlParamiters } = useParams()
-    const { academicYear } = urlParamiters()
+    const { academicYear, school } = urlParamiters()
 
     const { registration } = getDataStoreKeys()
     const programConfigState = useRecoilValue(ProgramConfigState);
@@ -85,6 +85,7 @@ function RenderRows(props: RenderHeaderProps): React.ReactElement {
                         <RowTable
                             key={index}
                             inactive={checkCanceled(row.status)}
+                            isOwnershipOu={checkOwnershipOu(row.ownershipOu, school as unknown as string)}
                             className={classNames(classes.row, classes.dataRow, (searchActions && row.trackedEntity ===  showEnrollments) ? classes.dataRowCollapsed : null)}
                         >
                             {

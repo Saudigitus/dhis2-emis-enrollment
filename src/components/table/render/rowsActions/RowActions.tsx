@@ -1,18 +1,21 @@
 import { useState, useEffect } from 'react';
 import style from './rowActions.module.css'
 import { IconButton, Tooltip } from '@material-ui/core';
-import { useGetEnrollmentDeleteFormData, useGetEnrollmentForm } from '../../../../hooks';
+import { useGetEnrollmentDeleteFormData, useGetEnrollmentForm, useParams } from '../../../../hooks';
 import { ModalComponent, ModalContentUpdate, ModalDeleteContent } from '../../../modal';
 import useGetSectionTypeLabel from '../../../../hooks/commons/useGetSectionTypeLabel';
 import { RowActionsProps, RowActionsType } from '../../../../types/table/TableContentProps';
 import useGetEnrollmentUpdateFormData from '../../../../hooks/form/useGetEnrollmentUpdateFormData';
 import { IconEdit24, IconDelete24, CircularLoader, CenteredContent } from "@dhis2/ui";
 import { EnrollmentStatus } from '../../../../types/api/WithRegistrationProps';
+import { checkOwnershipOu } from '../../../../utils/table/rows/checkCanceled';
 
 
 export default function RowActions(props: RowActionsProps) {
   const { row } = props;
-  const { trackedEntity, enrollmentId, status } = row;
+  const { trackedEntity, enrollmentId, status, ownershipOu } = row;
+  const { urlParamiters } = useParams()
+  const { school } = urlParamiters();
   const { sectionName } = useGetSectionTypeLabel();
   const { enrollmentsData } = useGetEnrollmentForm()
   const [openEditionModal, setOpenEditionModal] = useState<boolean>(false);
@@ -33,9 +36,9 @@ export default function RowActions(props: RowActionsProps) {
   const rowsActions: RowActionsType[] = [
     {
       icon: <IconEdit24 />,
-      color:  status === EnrollmentStatus.CANCELLED? 'rgba(39, 115, 20, .35)' :'#277314',
+      color:  (status === EnrollmentStatus.CANCELLED || !checkOwnershipOu(ownershipOu, school as unknown as string)) ? 'rgba(39, 115, 20, .35)' :'#277314',
       label: `${sectionName} Edition`,
-      disabled: status === EnrollmentStatus.CANCELLED,
+      disabled: status === EnrollmentStatus.CANCELLED || !checkOwnershipOu(ownershipOu, school as unknown as string),
       onClick: () => { buildFormData(trackedEntity, enrollmentId); setOpenEditionModal(!openEditionModal) },
     },
     {

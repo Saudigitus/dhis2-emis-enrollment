@@ -18,6 +18,9 @@ interface FormatResponseRowsProps {
             status: string
         }[]
         createdAt: string
+        programOwners: {
+            orgUnit: string
+        }[]
     }[]
 }
 
