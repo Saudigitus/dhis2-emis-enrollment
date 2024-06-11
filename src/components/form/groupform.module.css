@@ -13,5 +13,6 @@
 
 .content {
     color: var(--error-message-color);
-    margin-top: 20
+    font-size: 12px !important;
+    line-height: 14px;
 }
