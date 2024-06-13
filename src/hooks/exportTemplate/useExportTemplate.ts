@@ -17,7 +17,7 @@ const oneProgramQuery : any = {
       id: ({ programId }: { programId: string }) => programId,
       params: {
         fields: [
-          "id,displayName,programTrackedEntityAttributes[trackedEntityAttribute[id,displayName,valueType,unique,generated,optionSetValue,optionSet[id,displayName,options[id,displayName,code]]]],programStages[id,displayName,programStageDataElements[dataElement[id,displayName,valueType,optionSetValue,optionSet[id,displayName,options[id,displayName,code]]]]",
+          "id,displayName,programTrackedEntityAttributes[mandatory,trackedEntityAttribute[id,displayName,valueType,unique,generated,optionSetValue,optionSet[id,displayName,options[id,displayName,code]]]],programStages[id,displayName,programStageDataElements[compulsory,dataElement[id,displayName,valueType,optionSetValue,optionSet[id,displayName,options[id,displayName,code]]]]",
         ],
       },
     },
@@ -70,7 +70,7 @@ export default function useExportTemplate ( ) {
         throw Error(`Couldn't find socio-economics config in datastore`)
 
         const currentAttributes =  correspondingProgram?.program?.programTrackedEntityAttributes?.map(
-            (p: { trackedEntityAttribute: any}) => p.trackedEntityAttribute
+            (p: { mandatory: boolean, trackedEntityAttribute: any}) => { return { mandatory: p.mandatory, ...p.trackedEntityAttribute } }
           ) || [];
 
         let newHeaders : any = [];
@@ -87,6 +87,7 @@ export default function useExportTemplate ( ) {
             optionSetValue: attribute.optionSetValue || false,
             options: attribute.optionSet?.options || [],
             optionSetId: attribute.optionSet?.id || null,
+            required: attribute.mandatory || false,
           }));
         }
         
@@ -114,6 +115,7 @@ export default function useExportTemplate ( ) {
                     optionSetValue: dxCurr.dataElement?.optionSetValue || false,
                     options: dxCurr.dataElement?.optionSet?.options || [],
                     optionSetId: dxCurr.dataElement?.optionSet?.id || null,
+                    required: dxCurr?.compulsory || false,
                   });
                   return dxPrev;
                 }, []) || [];
@@ -138,6 +140,7 @@ export default function useExportTemplate ( ) {
                     optionSetValue: dxCurr.dataElement?.optionSetValue || false,
                     options: dxCurr.dataElement?.optionSet?.options || [],
                     optionSetId: dxCurr.dataElement?.optionSet?.id || null,
+                    required: dxCurr?.compulsory || false,
                   });
                   return dxPrev;
                 }, []) || [];
@@ -150,10 +153,10 @@ export default function useExportTemplate ( ) {
           }, []) || [];
 
         const newBeginHeaders = [
-         {key: `ref`,id: `ref`,label:'Ref',  valueType: 'TEXT', optionSetValue: false, options: [], optionSetId: null },
-         {key: `orgUnitName`,id: `orgUnitName`,label:'School Name',  valueType: 'TEXT', optionSetValue: false, options: [], optionSetId: null },
-         {key: `orgUnit`,id: `orgUnit`,label:'School UID', valueType: 'TEXT', optionSetValue: false, options: [], optionSetId: null },
-         {key: `enrollmentDate`,id: `enrollmentDate`,label:'Enrollment date', valueType: 'DATE', optionSetValue: false, options: [], optionSetId: null },
+         {key: `ref`,id: `ref`,label:'Ref',  valueType: 'TEXT', optionSetValue: false, options: [], optionSetId: null, required: false},
+         {key: `orgUnitName`,id: `orgUnitName`,label:'School Name',  valueType: 'TEXT', optionSetValue: false, options: [], optionSetId: null, required: true },
+         {key: `orgUnit`,id: `orgUnit`,label:'School UID', valueType: 'TEXT', optionSetValue: false, options: [], optionSetId: null, required: true },
+         {key: `enrollmentDate`,id: `enrollmentDate`,label:'Enrollment date', valueType: 'DATE', optionSetValue: false, options: [], optionSetId: null, required: true},
         ]
     
         newHeaders = [...newBeginHeaders , ...registrationProgramStageDataElements, ...newHeaders , ...socioEconomicProgramStageDataElements];
@@ -267,7 +270,7 @@ export default function useExportTemplate ( ) {
 
             // Ajout des headers de la data
             dataSheet.columns = headers.map((header: any,index: number) => ({
-                header: `${header.label}`,
+                header: `${header.label} ${header.required ? "*" : ""}`,
                 key: `${header.id}`,
                 width: index === 0 ? 20 : 30,
                 style: {
