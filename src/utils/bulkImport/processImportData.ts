@@ -54,6 +54,7 @@ const parseWithOptionality = (
 const convertValue = (value: string, valueType: string) => {
     switch (valueType) {
         case AttributeTypes.valueType.BOOLEAN:
+            return value.toLowerCase(); 
         case AttributeTypes.valueType.TRUE_ONLY:
             return value.toLowerCase() === 'true'; 
         case AttributeTypes.valueType.NUMBER:
@@ -157,7 +158,7 @@ const checkTEI = async (engine: any, programId: string, ouID: string, filterPara
                 orgUnit: ouID,
                 filter: filterParams
             },
-            fields: ['trackedEntity', 'attributes']
+            fields: ['trackedEntity', 'attributes', 'enrollments']
         }
     });
     if (queryResult?.trackedEntities?.instances.length > 0) {
