@@ -342,7 +342,7 @@ export default function useExportTemplate ( ) {
                 const blob = new Blob([buffer], {
                     type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
                 });
-                window.saveAs(blob, `${capitalizeString(searchParams.get("sectionType") ?? )} Data Import - Template.xlsx`);
+                window.saveAs(blob, `${capitalizeString(searchParams.get("sectionType") ?? "" )} Data Import - Template.xlsx`);
             });
 
             show({
