@@ -3,6 +3,7 @@ import {SafeParseError, SafeParseSuccess, ZodString, ZodTypeAny} from 'zod';
 import {FieldMapping, TemplateData, TemplateFieldMapping, ValueType} from "../../types/bulkImport/Interfaces";
 import {ProgramConfig} from "../../types/programConfig/ProgramConfig";
 import {Attribute, DataValue, Enrollment, ProgramEvent, TrackedEntity} from "../../schema/trackerSchema";
+import { Attribute as AttributeTypes } from "../../types/generated/models";
 
 /**
  * Generate an array of Record<string, any> objects using supplied headers as the keys for each field
@@ -50,14 +51,55 @@ const parseWithOptionality = (
     return schema.safeParse(value);
 }
 
+const convertValue = (value: string, valueType: string) => {
+    switch (valueType) {
+        case AttributeTypes.valueType.BOOLEAN:
+        case AttributeTypes.valueType.TRUE_ONLY:
+            return value.toLowerCase() === 'true'; 
+        case AttributeTypes.valueType.NUMBER:
+        case AttributeTypes.valueType.UNIT_INTERVAL:
+        case AttributeTypes.valueType.PERCENTAGE:
+        case AttributeTypes.valueType.INTEGER:
+        case AttributeTypes.valueType.INTEGER_POSITIVE:
+        case AttributeTypes.valueType.INTEGER_NEGATIVE:
+        case AttributeTypes.valueType.INTEGER_ZERO_OR_POSITIVE:
+            return typeof Number(value) === 'number' ? Number(value) : value;
+        default:
+            // For the types: TEXT, LONG_TEXT, LETTER, PHONE_NUMBER, EMAIL, TRACKER_ASSOCIATE, USERNAME, COORDINATE, ORGANISATION_UNIT, REFERENCE, AGE, URL, FILE_RESOURCE, IMAGE, GEOJSON
+            return value; 
+        }
+};
+
+export const validateRecordValues = (
+    records: TemplateData,
+    fieldsMapping: TemplateFieldMapping,
+): TemplateData => {
+
+    records.forEach((record) => {
+        Object.entries(record).forEach(([key, value]) => {
+            if(value.length){
+                if (fieldsMapping[key]) {
+                    const valueType = fieldsMapping[key].valueType;
+                    record[key] = convertValue(value, valueType);
+                }       
+            } else {
+                delete record[key];
+            }
+            
+        });
+    });
+    
+
+    return records
+}
+
 /**
  * Checks if a record in the Excel template meets the validation as per program configuration
  * @param record - a record in the Excel template
  * @param fieldsMap - a dictionary with mappings for each field
  * @return an object indicating whether the record is valid and errors if any
  */
-const validateRecord = (
-    record: Record<string, any>, fieldsMap: TemplateFieldMapping): {
+const validateRecord = (record: Record<string, any>, fieldsMap: TemplateFieldMapping): {
     isValid: boolean,
     errors: Record<string, string[]>
 } => {

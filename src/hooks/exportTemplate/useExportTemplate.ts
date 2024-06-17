@@ -5,6 +5,8 @@ import { useSearchParams } from "react-router-dom";
 import { format } from "date-fns";
 import { validationSheetConstructor } from "./validationSheetConstructor";
 import { convertNumberToLetter } from "../../utils/commons/convertNumberToLetter";
+import { Attribute } from "../../types/generated/models";
+import { capitalizeString } from "../../utils/commons/formatCamelCaseToWords";
 
 
 const DATA_STORE_NAME : string = "semis"
@@ -324,6 +326,14 @@ export default function useExportTemplate ( ) {
                                 formulae: ['"true,false"'],
                             };
                         }
+
+                        if (currentCell && headers[j]?.valueType === Attribute.valueType.TRUE_ONLY) {
+                          currentCell.dataValidation = {
+                              type: "list",
+                              allowBlank: true,
+                              formulae: ['"true"'],
+                          };
+                      }
                     }
                 }
             }
@@ -332,7 +342,7 @@ export default function useExportTemplate ( ) {
                 const blob = new Blob([buffer], {
                     type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
                 });
-                window.saveAs(blob, `${searchParams.get("sectionType")}Template.xlsx`);
+                window.saveAs(blob, `${capitalizeString(searchParams.get("sectionType") ?? )} Data Import - Template.xlsx`);
             });
 
             show({

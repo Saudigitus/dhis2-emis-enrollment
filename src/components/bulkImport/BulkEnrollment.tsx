@@ -14,7 +14,8 @@ import {
     createTrackedEntityPayload,
     generateData,
     getMandatoryFields,
-    processData
+    processData,
+    validateRecordValues
 } from "../../utils/bulkImport/processImportData";
 import {useDataEngine} from "@dhis2/app-runtime";
 import {Center, Modal, ModalContent, ModalTitle} from "@dhis2/ui";
@@ -117,16 +118,18 @@ export const BulkEnrollment = ({setOpen, isOpen}: BulkEnrollmentProps): React.Re
             const headers: string[] = rawData[1] as string[] // hidden header in template
             const templateHeadings = fromPairs(headers.map((val, idx) => {return [val, headings[idx] ?? ""]}))
             setExcelTemplateHeaders(templateHeadings)
-            console.log("templateHeadings", templateHeadings)
+            //console.log("templateHeadings", templateHeadings)
+
             const dataWithHeaders: Array<Record<string, any>> = generateData(headers, rawData.slice(2))
             const fieldMapping = fieldsMap(programConfig, enrollmentStages)
-            // console.log("<<<<<<", fieldMapping)
+            const dataWithHeadersValidated = validateRecordValues(dataWithHeaders, fieldMapping); // validate and format data type and ignore unfilled fields
+
             const [invalidRecords, validRecords, newRecords, recordsToUpdate] = await processData(
-                dataWithHeaders, fieldMapping, programConfig, engine)
-            console.log("INVALID RECORDS:", invalidRecords)
-            console.log("VALID RECORDS:", validRecords)
-            console.log("NEW RECORDS", newRecords)
-            console.log("TO UPDATE", recordsToUpdate)
+                dataWithHeadersValidated, fieldMapping, programConfig, engine)
+            //console.log("INVALID RECORDS:", invalidRecords)
+            //console.log("VALID RECORDS:", validRecords)
+            //console.log("NEW RECORDS", newRecords)
+            //console.log("TO UPDATE", recordsToUpdate)
 
             setUploadStats(stats => ({
                 ...stats,
