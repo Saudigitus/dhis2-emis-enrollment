@@ -104,8 +104,10 @@ export const CustomDhis2RulesEngine = (props: RulesEngineProps) => {
                             if (variable.name === programRule.variable) {
                                 if (executeFunctionName(programRule.functionName, existValue(programRule.condition, values, formatKeyValueType))) {
                                     variable.content = programRule.content
+                                    variable.warning = true 
                                 } else {
                                     variable.content = ""
+                                    variable.warning = false
                                 }
                             }
                             break;
@@ -226,14 +228,27 @@ function executeFunctionName(functionName: string | undefined, condition: string
         case "length":
             return eval(compareLength(condition ?? "")) ? true : false;
 
+        case "substring":
+            const function_paramter = returnSubstring(condition?.split("d2:substring(").pop() ?? "")
+            const formated_function = condition?.replaceAll(condition?.split("d2:substring(").pop() as string,`${function_paramter}`).replaceAll("d2:substring", '').replaceAll("(",'')
+            return eval(formated_function as string)
+
         default:
             return eval(condition ?? "");
     }
 }
 
+function returnSubstring(value: string) {
+    const date = value.split(",")[0]
+    const start = value.split(",")[1] as unknown as number
+    const end = value.split(",")[2]?.split(")")[0] as unknown as number
+
+    return date.substring(start, end)
+}
+
 //compare values in string
 function compareLength(assignedValue: string) {
-    let value : any
+    let value: any
     const pattern = /\('([^']*)'\)/g;
     const matches = [...assignedValue.matchAll(pattern)].map(match => match[1]);
 

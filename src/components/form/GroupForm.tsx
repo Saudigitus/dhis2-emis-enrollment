@@ -7,6 +7,7 @@ import Subtitle from "../text/subtitle";
 import styles from './groupform.module.css'
 import { GroupFormProps } from "../../types/form/GroupFormProps";
 import { getSelectedKey } from "../../utils/commons/dataStore/getSelectedKey";
+import classNames from "classnames";
 
 function GroupForm(props: GroupFormProps) {
     const { getDataStoreData } = getSelectedKey();
@@ -34,8 +35,8 @@ function GroupForm(props: GroupFormProps) {
                 <WithPadding p={"5px 10px"}>
                     {fields?.filter(x => x.visible)?.map((x, i) => {
                         return (
-                            <div className="row d-flex align-items-center" key={i}
-                                style={{ display: "flex", padding: (x.error ?? false) ? "8px 8px 8px 12px" : "8px 0px 8px 0px", backgroundColor: (x.error === true) ? "#FBEAE5" : i % 2 === 0 ? "#FFFF" : "#FFFF", height: (x.error ?? false) ? 102 : "auto" }}>
+                            <div className={classNames("row d-flex align-items-center", x.error ? styles.fieldError : x.warning ? styles.fieldWarning : styles.fieldNormal)} key={i}
+                                style={{ display: "flex"}}>
                                 <div className="col-12 col-md-6 d-flex">
                                     <Label className={styles.label}>
                                         {x.labelName} {x.required ? " *" : ""}

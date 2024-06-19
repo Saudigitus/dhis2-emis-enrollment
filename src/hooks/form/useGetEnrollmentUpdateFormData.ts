@@ -42,7 +42,7 @@ export default function useGetEnrollmentUpdateFormData() {
                                         enrollment: enrollment,
                                         enrollmentDate: registration?.results?.instances?.find((x: any) => x.enrollment === enrollment)?.occurredAt,
                                         program: trackedEntityInstance?.results?.instances[0]?.enrollments?.[0]?.program,
-                                        eventdatestaticform: registration?.results?.instances?.find((x: any) => x.enrollment === enrollment)?.occurredAt ? format(new Date(registration?.results?.instances?.find((x: any) => x.enrollment === enrollment)?.occurredAt), "yyyy-MM-dd") : undefined,
+                                        enrollment_date: registration?.results?.instances?.find((x: any) => x.enrollment === enrollment)?.occurredAt ? format(new Date(registration?.results?.instances?.find((x: any) => x.enrollment === enrollment)?.occurredAt), "yyyy-MM-dd") : undefined,
                                     })
                                     setEnrollmentValues({
                                         events: [

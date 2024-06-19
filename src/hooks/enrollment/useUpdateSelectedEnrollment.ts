@@ -21,7 +21,7 @@ export function useUpdateSelectedEnrollment() {
                     trackedEntityType,
                     trackedEntity,
                     values,
-                    formatDateToIsoString(values['eventdatestaticform']),
+                    formatDateToIsoString(values['enrollment_date']),
                     program,
                     enrollment,
                     events)

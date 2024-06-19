@@ -53,7 +53,7 @@ function ModalContentUpdate(props: ModalContentUpdateProps): React.ReactElement 
     const events = enrollmentValues['events']
 
     if (allFields.filter((element: any) => (element?.assignedValue === undefined && element.required))?.length === 0) {
-      // if ((allFields.some((field: any) => field.assignedValue != initialValues[field.id as keyof typeof initialValues] && initialValues[field.id as keyof typeof initialValues])) || (initialValues['eventdatestaticform' as keyof typeof initialValues] != values['eventdatestaticform'])) {
+      // if ((allFields.some((field: any) => field.assignedValue != initialValues[field.id as keyof typeof initialValues] && initialValues[field.id as keyof typeof initialValues])) || (initialValues['enrollment_date' as keyof typeof initialValues] != values['enrollment_date'])) {
         updateSelectedEnrollment(fieldsWithValue, events, initialValues, values, getProgram.id)
     }
 

@@ -12,7 +12,7 @@ export function formatProgramRules(programRules: ProgramRuleConfig []) {
                 programRuleActionType: pRulesAction.programRuleActionType,
                 variable: pRulesAction?.dataElement?.id || pRulesAction?.trackedEntityAttribute?.id || pRulesAction?.programStageSection?.id,
                 type: pRulesAction?.dataElement?.id && PRTypes.DATA_ELEMENT || pRulesAction?.trackedEntityAttribute?.id && PRTypes.ATTRIBUTE || pRulesAction?.programStageSection?.id && PRTypes.SECTION,
-                content: prules.content,
+                content: prules.content ?? pRulesAction?.content,
                 programStage: prules?.programStage?.id,
                 data: pRulesAction.data,
                 optionGroup: pRulesAction?.optionGroup?.id,

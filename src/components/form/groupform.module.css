@@ -16,3 +16,25 @@
     font-size: 12px !important;
     line-height: 14px;
 }
+
+.fieldNormal {
+    padding: 8px 0px 8px 0px;
+    background-color: #fff;
+    height: auto;
+}
+
+.fieldError {
+    padding: 8px 8px 8px 12px;
+    background-color: #FBEAE5;
+    height: 100px;
+}
+
+.fieldWarning {
+    padding: 8px 8px 8px 12px;
+    background-color: rgb(255, 248, 225);
+    height: 100px;
+}
+
+.fieldWarning .content{
+    color: #ff9900;
+}
