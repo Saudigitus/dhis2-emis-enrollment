@@ -37,7 +37,7 @@ function ModalContentComponent(props: ModalContentProps): React.ReactElement {
 
   const [initialValues] = useState<object>({
     registerschoolstaticform: orgUnitName,
-    eventdatestaticform: format(new Date(), "yyyy-MM-dd"),
+    enrollment_date: format(new Date(), "yyyy-MM-dd"),
     ...searchInitialValues
   })
   const { updateClass, loading: loadingBulkUpdate } = useBulkUpdate()
@@ -78,7 +78,7 @@ function ModalContentComponent(props: ModalContentProps): React.ReactElement {
         void postTei({
           data: teiPostBody(fieldsWitValue,
             (getProgram != null) ? getProgram.id : "", orgUnit ?? "",
-            formatDateToIsoString(values?.eventdatestaticform) ?? "",
+            formatDateToIsoString(values?.enrollment_date) ?? "",
             performanceProgramStages, trackedEntityType, initialValues['trackedEntity' as unknown as keyof typeof initialValues])
         })
       }
@@ -119,7 +119,7 @@ function ModalContentComponent(props: ModalContentProps): React.ReactElement {
     setValues(removeFalseKeys(e))
   }
 
-  console.log(updatedVariables)
+
 
   return (
     <WithPadding>

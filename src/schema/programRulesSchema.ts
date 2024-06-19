@@ -26,6 +26,7 @@ export interface ProgramRuleConfig {
         }
         data?: string
         displayName?: string
+        content?: string
     } []
     content?: string
     programStage?: {

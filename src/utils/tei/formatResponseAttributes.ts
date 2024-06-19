@@ -11,15 +11,16 @@ export function formatResponseTEI(attributes: ProgramConfig): CustomAttributePro
             name: trackedEntityAttribute?.trackedEntityAttribute?.id,
             labelName: trackedEntityAttribute?.trackedEntityAttribute?.displayName,
             valueType: trackedEntityAttribute?.trackedEntityAttribute?.optionSet
-                ? Attribute.valueType.LIST as unknown as  CustomAttributeProps["valueType"]
-                : trackedEntityAttribute?.trackedEntityAttribute?.valueType as unknown as  CustomAttributeProps["valueType"],
+                ? Attribute.valueType.LIST as unknown as CustomAttributeProps["valueType"]
+                : trackedEntityAttribute?.trackedEntityAttribute?.valueType as unknown as CustomAttributeProps["valueType"],
             options: { optionSet: trackedEntityAttribute?.trackedEntityAttribute?.optionSet },
-            initialOptions: { optionSet:  trackedEntityAttribute?.trackedEntityAttribute?.optionSet },
+            initialOptions: { optionSet: trackedEntityAttribute?.trackedEntityAttribute?.optionSet },
             visible: true,
             disabled: trackedEntityAttribute?.trackedEntityAttribute?.generated,
             pattern: trackedEntityAttribute?.trackedEntityAttribute?.pattern,
             searchable: trackedEntityAttribute?.searchable,
             error: false,
+            warning: false,
             content: "",
             id: trackedEntityAttribute?.trackedEntityAttribute?.id,
             displayName: trackedEntityAttribute?.trackedEntityAttribute?.displayName,

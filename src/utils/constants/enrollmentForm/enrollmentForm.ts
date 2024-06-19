@@ -26,7 +26,7 @@ const staticForm = () => {
     },
     enrollmentDate: {
       required: true,
-      name: "eventdatestaticform",
+      name: "enrollment_date",
       labelName: "Enrollment date",
       valueType: "DATE",
       options: undefined,
@@ -38,7 +38,7 @@ const staticForm = () => {
       error: false,
       programStage: "",
       content: "",
-      id: "eventdatestaticform",
+      id: "enrollment_date",
       displayName: "Enrollment date",
       header: "Enrollment date",
       type: VariablesTypes.DataElement,
