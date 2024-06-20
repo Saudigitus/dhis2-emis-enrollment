@@ -104,7 +104,7 @@ export const CustomDhis2RulesEngine = (props: RulesEngineProps) => {
                             if (variable.name === programRule.variable) {
                                 if (executeFunctionName(programRule.functionName, existValue(programRule.condition, values, formatKeyValueType))) {
                                     variable.content = programRule.content
-                                    variable.warning = true 
+                                    variable.warning = true
                                 } else {
                                     variable.content = ""
                                     variable.warning = false
@@ -188,9 +188,15 @@ export function removeSpecialCharacters(text: string | undefined) {
 // replace condition with specific variable
 export function replaceConditionVariables(condition: string | undefined, variables: Record<string, string | undefined>) {
     let newcondition = condition;
-    for (const value of Object.keys(variables)) {
-        if (newcondition?.includes(value)) {
-            newcondition = newcondition.replaceAll(value, `'${variables[value]}'` || "''")
+
+    if (condition) {
+        const dataArray = condition.split(/[^a-zA-Z0-9_ ]+/)
+            .map(item => item.trim().replace(/^'(.*)'$/, '$1'))
+
+        for (const value of Object.keys(variables)) {
+            if (dataArray?.includes(value)) {
+                newcondition = newcondition?.replaceAll(value, `'${variables[value]}'` || "''")
+            }
         }
     }
     return newcondition;
@@ -230,7 +236,7 @@ function executeFunctionName(functionName: string | undefined, condition: string
 
         case "substring":
             const function_paramter = returnSubstring(condition?.split("d2:substring(").pop() ?? "")
-            const formated_function = condition?.replaceAll(condition?.split("d2:substring(").pop() as string,`${function_paramter}`).replaceAll("d2:substring", '').replaceAll("(",'')
+            const formated_function = condition?.replaceAll(condition?.split("d2:substring(").pop() as string, `${function_paramter}`).replaceAll("d2:substring", '').replaceAll("(", '')
             return eval(formated_function as string)
 
         default:
@@ -279,15 +285,19 @@ function d2YearsBetween(origin: string | undefined, condition: string[] | undefi
 // replace varieble by value from condition
 export function existValue(condition: string | undefined, values: Record<string, any> = {}, formatKeyValueType: any) {
     let localCondition = `'false'`;
+    const dataArray = condition?.split(/[^a-zA-Z0-9_ ]+/)
+        .map(item => item.trim().replace(/^'(.*)'$/, '$1'))
+
     for (const value of Object.keys(values) || []) {
-        if (condition?.includes(value)) {
+        if (dataArray?.includes(value)) {
+
             if (localCondition.includes(`'false'`)) {
-                localCondition = condition
+                localCondition = condition as string
             }
 
             switch (formatKeyValueType[value]) {
                 case "BOOLEAN":
-                    localCondition = localCondition.replaceAll(value, `${values[value]}`.replace("false", "0").replace("true", "1"))
+                    localCondition = localCondition.replaceAll(value, `${values[value]}`.replaceAll("false", "0").replaceAll("true", "1"))
                     break;
 
                 case "NUMBER":
