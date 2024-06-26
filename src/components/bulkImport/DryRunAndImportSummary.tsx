@@ -46,6 +46,7 @@ export const ImportSummaryRow = (props: ImportSummaryRowProps): React.ReactEleme
 }
 
 export const ImportSummaryTable = (response: ApiResponse) => {
+    console.log("response: ", response)
     const {status, stats, validationReport, bundleReport} = response
     const hasConflicts = validationReport?.errorReports.length > 0
     const [expandedRows, setExpandedRows] = useState<string[]>([])
