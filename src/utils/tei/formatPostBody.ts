@@ -8,13 +8,13 @@ export const teiPostBody = (enrollmentsData: any[], programId: string, orgUnit: 
     }
 
     for (const enrollmentData of enrollmentsData) {
-        if (enrollmentData[0].type === "attribute") {
+        if (enrollmentData?.[0]?.type === "attribute") {
             enrollmentData.forEach((attribute: any) => {
                 if (attribute.assignedValue !== undefined && attribute.assignedValue !== false) {
                     form.attributes.push({ attribute: attribute.id, value: attribute.assignedValue })
                 }
             });
-        } else if (enrollmentData[0].type === "dataElement") {
+        } else if (enrollmentData?.[0]?.type === "dataElement") {
             for (const [key, value] of Object.entries(reducer(enrollmentData))) {
                 form.events.push({
                     occurredAt: enrollmentDate,
