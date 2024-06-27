@@ -13,11 +13,11 @@ export default function useGetEnrollmentForm() {
 
     const buildForm = () => {
         if (Object.keys(getDataStoreData)?.length && getProgram !== undefined) {
-            const { registration, 'socio-economics': { programStage } } = getDataStoreData
+            const { registration, 'socio-economics': socioEconomics } = getDataStoreData
             const { programStages } = getProgram
             
             const enrollmentDetailProgramStage = programStages.find((element: ProgramStageConfig) => element.id === registration.programStage) as unknown as ProgramStageConfig
-            const socioEconomicProgramStage = programStages.find((element: ProgramStageConfig) => element.id === programStage) as unknown as ProgramStageConfig
+            const socioEconomicProgramStage = programStages.find((element: ProgramStageConfig) => element.id === socioEconomics?.programStage) as unknown as ProgramStageConfig
 
             setEnrollmentsData([formatResponseEvents(enrollmentDetailProgramStage), formatResponseTEI(getProgram), formatResponseEvents(socioEconomicProgramStage)])
         }

@@ -71,7 +71,7 @@ function formFields(enrollmentsData: any[], sectionName: string): FormSectionPro
     {
       section: "Socio-economic details",
       description: `Details about the ${sectionName} socio-economic status`,
-      visible: true,
+      visible: socioEconomicDetails,
       fields: [
         ...socioEconomicDetails
       ]
