@@ -50,9 +50,9 @@ export default function useGetEnrollmentDeleteFormData() {
                         registration: formatFormSection(dataElements),
                         initialValues: getinitialValuesDisplayName(registrationValues?.dataValues, resp?.results?.attributes, programConfig),
                         attributes: formatFormSection(
-                            columns.filter((column) => (column?.searchable || column?.unique || column?.required) && column?.type == VariablesTypes.Attribute).length > 3 ?
+                            columns.filter((column) => (column?.searchable || column?.unique || column?.required) && column?.type == VariablesTypes.Attribute).length > 4 ?
                                 columns.filter((column) => (column?.searchable || column?.unique || column?.required) && column?.type == VariablesTypes.Attribute) :
-                                columns
+                                columns.filter((column) => column?.type == VariablesTypes.Attribute && column.visible)?.slice(0, 4)
                         ),
                     })
 
