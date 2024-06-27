@@ -7,6 +7,7 @@ import { validationSheetConstructor } from "./validationSheetConstructor";
 import { convertNumberToLetter } from "../../utils/commons/convertNumberToLetter";
 import { Attribute } from "../../types/generated/models";
 import { capitalizeString } from "../../utils/commons/formatCamelCaseToWords";
+import { getSelectedKey } from "../../utils/commons/dataStore/getSelectedKey";
 
 
 const DATA_STORE_NAME : string = "semis"
@@ -43,9 +44,9 @@ export default function useExportTemplate ( ) {
     const [searchParams , _] = useSearchParams()
     const { hide , show} = useShowAlerts()
     const { refetch: loadOneProgram} = useDataQuery(oneProgramQuery, { lazy: true });
-    const { refetch: loadDataStoreValues} = useDataQuery(dataStoreValuesQuery , {lazy: true })
+    //const { refetch: loadDataStoreValues} = useDataQuery(dataStoreValuesQuery , {lazy: true })
     const { refetch: loadReserveValues} = useDataQuery(reserveValuesQuery , {lazy: true })
-
+    const { getDataStoreData: programConfigDataStore } = getSelectedKey();
 
    async function generateInformations (inputValues: useExportTemplateProps){
       const sectionType : string | null = searchParams.get('sectionType')
@@ -53,8 +54,8 @@ export default function useExportTemplate ( ) {
       if(!sectionType)
         throw new Error("Couldn't find section type in url params")
 
-      const dataStoreValues: any = await loadDataStoreValues()
-      const programConfigDataStore: any = dataStoreValues?.values?.find((d: any) => d.key === sectionType) 
+      //const dataStoreValues: any = await loadDataStoreValues()
+      //const programConfigDataStore: any = dataStoreValues?.values?.find((d: any) => d.key === sectionType) 
       
       if(!programConfigDataStore?.program)
         throw Error("Couldn't get program uid from datastore << values >>")
@@ -161,7 +162,7 @@ export default function useExportTemplate ( ) {
          {key: `enrollmentDate`,id: `enrollmentDate`,label:'Enrollment date', valueType: 'DATE', optionSetValue: false, options: [], optionSetId: null, required: true},
         ]
     
-        newHeaders = [...newBeginHeaders , ...registrationProgramStageDataElements, ...newHeaders , ...socioEconomicProgramStageDataElements];
+        newHeaders = [...newBeginHeaders, ...registrationProgramStageDataElements, ...newHeaders , ...socioEconomicProgramStageDataElements];
     
         if (+inputValues.studentsNumber > 0) {
           for (let i = 0; i < +inputValues.studentsNumber; i++) {

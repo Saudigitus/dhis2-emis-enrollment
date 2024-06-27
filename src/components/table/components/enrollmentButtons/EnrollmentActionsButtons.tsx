@@ -23,7 +23,7 @@ function EnrollmentActionsButtons() {
   const { enrollmentsData } = useGetEnrollmentForm();
 
   const enrollmentOptions: FlyoutOptionsProps[] = [
-    { label: "Enroll new students", divider: true, onClick: () => { setOpenImport(true); } },
+    { label: `Enroll new ${sectionName}(s)`, divider: true, onClick: () => { setOpenImport(true); } },
     { label: "Download template", divider: false, onClick: () => { setOpenExportEmptyTemplate(true) } }
   ];
 
