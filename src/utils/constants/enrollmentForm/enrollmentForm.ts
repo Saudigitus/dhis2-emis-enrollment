@@ -49,6 +49,7 @@ const staticForm = () => {
 
 function formFields(enrollmentsData: any[], sectionName: string): FormSectionProps[] {
   const [enrollmentDetails = [], studentsProfile = [], socioEconomicDetails = []] = enrollmentsData;
+
   return [
     {
       section: "Enrollment Details",
@@ -71,7 +72,7 @@ function formFields(enrollmentsData: any[], sectionName: string): FormSectionPro
     {
       section: "Socio-economic details",
       description: `Details about the ${sectionName} socio-economic status`,
-      visible: socioEconomicDetails,
+      visible: socioEconomicDetails.length,
       fields: [
         ...socioEconomicDetails
       ]
