@@ -64,7 +64,7 @@ const convertValue = (value: string, valueType: string) => {
         case AttributeTypes.valueType.INTEGER_POSITIVE:
         case AttributeTypes.valueType.INTEGER_NEGATIVE:
         case AttributeTypes.valueType.INTEGER_ZERO_OR_POSITIVE:
-            return typeof Number(value) === 'number' ? Number(value) : value;
+            return typeof Number(value) === 'number' && !Number.isNaN(Number(value)) ? Number(value) : value;
         default:
             // For the types: TEXT, LONG_TEXT, LETTER, PHONE_NUMBER, EMAIL, TRACKER_ASSOCIATE, USERNAME, COORDINATE, ORGANISATION_UNIT, REFERENCE, AGE, URL, FILE_RESOURCE, IMAGE, GEOJSON
             return value; 
