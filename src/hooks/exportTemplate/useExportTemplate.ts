@@ -8,6 +8,8 @@ import { convertNumberToLetter } from "../../utils/commons/convertNumberToLetter
 import { Attribute } from "../../types/generated/models";
 import { capitalizeString } from "../../utils/commons/formatCamelCaseToWords";
 import { getSelectedKey } from "../../utils/commons/dataStore/getSelectedKey";
+import { VariablesTypes } from "../../types/variables/AttributeColumns";
+import { getHeaderBgColor } from "./getHeaderBgColor";
 
 
 const DATA_STORE_NAME : string = "semis"
@@ -91,6 +93,7 @@ export default function useExportTemplate ( ) {
             options: attribute.optionSet?.options || [],
             optionSetId: attribute.optionSet?.id || null,
             required: attribute.mandatory || false,
+            metadataType: VariablesTypes.Attribute
           }));
         }
         
@@ -119,6 +122,7 @@ export default function useExportTemplate ( ) {
                     options: dxCurr.dataElement?.optionSet?.options || [],
                     optionSetId: dxCurr.dataElement?.optionSet?.id || null,
                     required: dxCurr?.compulsory || false,
+                    metadataType: VariablesTypes.DataElement
                   });
                   return dxPrev;
                 }, []) || [];
@@ -144,6 +148,7 @@ export default function useExportTemplate ( ) {
                     options: dxCurr.dataElement?.optionSet?.options || [],
                     optionSetId: dxCurr.dataElement?.optionSet?.id || null,
                     required: dxCurr?.compulsory || false,
+                    metadataType: VariablesTypes.DataElement
                   });
                   return dxPrev;
                 }, []) || [];
@@ -156,10 +161,10 @@ export default function useExportTemplate ( ) {
           }, []) || [];
 
         const newBeginHeaders = [
-         {key: `ref`,id: `ref`,label:'Ref',  valueType: 'TEXT', optionSetValue: false, options: [], optionSetId: null, required: false},
-         {key: `orgUnitName`,id: `orgUnitName`,label:'School Name',  valueType: 'TEXT', optionSetValue: false, options: [], optionSetId: null, required: true },
-         {key: `orgUnit`,id: `orgUnit`,label:'School UID', valueType: 'TEXT', optionSetValue: false, options: [], optionSetId: null, required: true },
-         {key: `enrollmentDate`,id: `enrollmentDate`,label:'Enrollment date', valueType: 'DATE', optionSetValue: false, options: [], optionSetId: null, required: true},
+         {key: `ref`,id: `ref`,label:'Ref',  valueType: 'TEXT', optionSetValue: false, options: [], optionSetId: null, required: false, metadataType: VariablesTypes.Default },
+         {key: `orgUnitName`,id: `orgUnitName`,label:'School Name',  valueType: 'TEXT', optionSetValue: false, options: [], optionSetId: null, required: true, metadataType: VariablesTypes.Default  },
+         {key: `orgUnit`,id: `orgUnit`,label:'School UID', valueType: 'TEXT', optionSetValue: false, options: [], optionSetId: null, required: true, metadataType: VariablesTypes.Default  },
+         {key: `enrollmentDate`,id: `enrollmentDate`,label:'Enrollment date', valueType: 'DATE', optionSetValue: false, options: [], optionSetId: null, required: true, metadataType: VariablesTypes.Default },
         ]
     
         newHeaders = [...newBeginHeaders, ...registrationProgramStageDataElements, ...newHeaders , ...socioEconomicProgramStageDataElements];
@@ -281,13 +286,48 @@ export default function useExportTemplate ( ) {
                 },
             }));
 
+            // Add background in the first dataSheet row
+            const firstRow = dataSheet.getRow(1);
+            headers.forEach((header: any, index: any) => {
+              const cell = firstRow.getCell(index+1);
+              console.log("MetadataType", header.metadataType)
+              cell.fill = {
+                  type: 'pattern',
+                  pattern: 'solid',
+                  fgColor: { argb: getHeaderBgColor(header.metadataType) },
+              };
+              cell.border = {
+                top: { style: 'thin', color: { argb: 'D4D4D4' } },
+                left: { style: 'thin', color: { argb: 'D4D4D4' } },
+                bottom: { style: 'thin', color: { argb: 'D4D4D4' } },
+                right: { style: 'thin', color: { argb: 'D4D4D4' } },
+            };
+              cell.font = { bold: true };
+          });
+            
+
             // Ajout du deuxieme headers
-            dataSheet.addRow(
-                headers.reduce((prev: any, curr: any) => {
-                    prev[curr.id] = curr.id;
-                    return prev;
-                }, {})
-            );
+            const headerRow = dataSheet.addRow(headers.reduce((prev: any, curr: any) => {
+              prev[curr.id] = curr.id;
+              return prev;
+            }, {}));
+  
+            // Add background in the header row
+          headers.forEach((header: any, index: any) => {
+            const cell = headerRow.getCell(index+1);
+            cell.fill = {
+              type: 'pattern',
+              pattern: 'solid',
+              fgColor: { argb: getHeaderBgColor(header.metadataType) },
+            };
+            cell.border = {
+              top: { style: 'thin', color: { argb: 'D4D4D4' } },
+              left: { style: 'thin', color: { argb: 'D4D4D4' } },
+              bottom: { style: 'thin', color: { argb: 'D4D4D4' } },
+              right: { style: 'thin', color: { argb: 'D4D4D4' } },
+            };
+            cell.font = { bold: true };
+          });
 
             // Ajout des rows maintenants
             for (let data of datas) {
@@ -334,7 +374,7 @@ export default function useExportTemplate ( ) {
                               allowBlank: true,
                               formulae: ['"true"'],
                           };
-                      }
+                        }
                     }
                 }
             }

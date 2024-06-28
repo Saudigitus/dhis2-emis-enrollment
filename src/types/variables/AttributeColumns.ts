@@ -3,7 +3,8 @@ import { type Attribute } from '../generated/models';
 export enum VariablesTypes {
     DataElement = "dataElement",
     Attribute = "attribute",
-    Custom = "custom"
+    Custom = "custom",
+    Default = "default",
 }
 
 export interface CustomAttributeProps {
