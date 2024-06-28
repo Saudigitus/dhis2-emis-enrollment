@@ -379,6 +379,11 @@ export default function useExportTemplate ( ) {
                 }
             }
 
+            // fix the headers row
+            dataSheet.views = [
+              { state: 'frozen', ySplit: 1 }
+            ];
+            
             workbook.xlsx.writeBuffer().then((buffer: any) => {
                 const blob = new Blob([buffer], {
                     type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
