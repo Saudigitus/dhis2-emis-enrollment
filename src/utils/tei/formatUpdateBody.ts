@@ -5,8 +5,7 @@ export const teiUpdateBody = (enrollmentData: any[], orgUnit: string, trackedEnt
     const buildAttributesBody = (enrollmentData: any[]) => {
         const attributes: any[] = []
         for (const data of enrollmentData) {
-
-            if (data[0].type === "attribute") {
+            if (data.length && data[0].type === "attribute") {
                 data.forEach((attribute: any) => {
                     if (attribute.assignedValue !== undefined && attribute.assignedValue !== false && formValues.hasOwnProperty(attribute.id))
                         attributes.push({ attribute: attribute.id, value: attribute.assignedValue })

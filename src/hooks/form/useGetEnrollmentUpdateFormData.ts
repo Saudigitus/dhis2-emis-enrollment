@@ -5,6 +5,7 @@ import { useGetTei, useGetEvent, useParams, useShowAlerts } from '../../hooks';
 import { getSelectedKey } from '../../utils/commons/dataStore/getSelectedKey';
 import { attributes, dataValues } from '../../utils/table/rows/formatResponseRows';
 import { HeaderFieldsState } from '../../schema/headersSchema';
+import { getDataStoreKeys } from '../../utils/commons/dataStore/getDataStoreKeys';
 
 export default function useGetEnrollmentUpdateFormData() {
     const { getTei } = useGetTei()
@@ -18,51 +19,57 @@ export default function useGetEnrollmentUpdateFormData() {
     const [error, setError] = useState<boolean>(false)
     const [initialValues, setInitialValues] = useState<any>({})
     const headerFieldsState = useRecoilValue(HeaderFieldsState)
+    const { registration, socioEconomics, program } = getDataStoreKeys()
 
     const buildFormData = (trackedEntity: string, enrollment: string) => {
 
         setLoading(true)
+
         if (Object.keys(getDataStoreData)?.length) {
-            const { registration, 'socio-economics': { programStage }, program } = getDataStoreData
 
-            getTei(program, orgUnit as unknown as string, trackedEntity)
-                .then(async (trackedEntityInstance: any) => {
+            try {
+                getTei(program, orgUnit as string, trackedEntity)
+                    .then(async (trackedEntityInstance: any) => {
+                        let socioEconomicData: any = {}
 
-                    await getEvent(program, registration.programStage as unknown as string, headerFieldsState.dataElements, trackedEntity, "*", orgUnit as unknown as string)
-                        .then(async (registration: any) => {
+                        const registrationData: any = await getEvent(program, registration.programStage as string, headerFieldsState.dataElements, trackedEntity, "*", orgUnit as string)
+                        if (socioEconomics){
+                            socioEconomicData = await getEvent(program, socioEconomics?.programStage as string, [], trackedEntity, "*", orgUnit as string)
+                        }
 
-                            await getEvent(program, programStage as unknown as string, [], trackedEntity, "*", orgUnit as unknown as string)
-                                .then((socioEconomic: any) => {
-                                    setInitialValues({
-                                        trackedEntity: trackedEntity,
-                                        ...dataValues(registration?.results?.instances?.find((x: any) => x.enrollment === enrollment)?.dataValues ?? []),
-                                        ...dataValues(socioEconomic?.results?.instances.find((x: any) => x.enrollment === enrollment)?.dataValues ?? []),
-                                        ...attributes(trackedEntityInstance?.results?.instances[0]?.attributes ?? []),
-                                        orgUnit: registration?.results?.instances?.find((x: any) => x.enrollment === enrollment)?.orgUnit,
-                                        enrollment: enrollment,
-                                        enrollmentDate: registration?.results?.instances?.find((x: any) => x.enrollment === enrollment)?.occurredAt,
-                                        program: trackedEntityInstance?.results?.instances[0]?.enrollments?.[0]?.program,
-                                        enrollment_date: registration?.results?.instances?.find((x: any) => x.enrollment === enrollment)?.occurredAt ? format(new Date(registration?.results?.instances?.find((x: any) => x.enrollment === enrollment)?.occurredAt), "yyyy-MM-dd") : undefined,
-                                    })
-                                    setEnrollmentValues({
-                                        events: [
-                                            registration?.results?.instances?.find((x: any) => x.enrollment === enrollment) ?? { enrollment: enrollment, programStage : registration },
-                                            socioEconomic?.results?.instances.find((x: any) => x.enrollment === enrollment) ?? { enrollment: enrollment, programStage : programStage },
-                                        ]
-                                    })
-
-                                    setLoading(false)
-                                })
+                        setInitialValues({
+                            enrollment: enrollment,
+                            trackedEntity: trackedEntity,
+                            ...attributes(trackedEntityInstance?.results?.instances[0]?.attributes ?? []),
+                            program: trackedEntityInstance?.results?.instances[0]?.enrollments?.[0]?.program,
+                            orgUnit: registrationData?.results?.instances?.find((x: any) => x.enrollment === enrollment)?.orgUnit,
+                            enrollmentDate: registrationData?.results?.instances?.find((x: any) => x.enrollment === enrollment)?.occurredAt,
+                            ...dataValues(registrationData?.results?.instances?.find((x: any) => x.enrollment === enrollment)?.dataValues ?? []),
+                            ...dataValues(socioEconomicData?.results?.instances.find((x: any) => x.enrollment === enrollment)?.dataValues ?? []),
+                            enrollment_date: registrationData?.results?.instances?.find((x: any) => x.enrollment === enrollment)?.occurredAt ? format(new Date(registrationData?.results?.instances?.find((x: any) => x.enrollment === enrollment)?.occurredAt), "yyyy-MM-dd") : undefined,
                         })
-                })
-                .catch((error) => {
-                    setLoading(false)
-                    setError(true)
-                    show({
-                        message: `${("Could not get selected enrollment details")}: ${error.message}`,
-                        type: { critical: true }
-                    });
-                })
+
+                        setEnrollmentValues({
+                            events: [
+                                registrationData?.results?.instances?.find((x: any) => x.enrollment === enrollment) ?? { enrollment: enrollment, programStage: registrationData },
+                                socioEconomicData?.results?.instances.find((x: any) => x.enrollment === enrollment) ?? { enrollment: enrollment, programStage: socioEconomics },
+                            ]
+                        })
+
+                    })
+            }
+
+            catch (error: any) {
+                setError(true)
+                show({
+                    message: `${("Could not get selected enrollment details")}: ${error.message}`,
+                    type: { critical: true }
+                });
+            }
+
+            finally {
+                setLoading(false)
+            }
         }
     }
 
