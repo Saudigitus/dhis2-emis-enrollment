@@ -221,7 +221,7 @@ export function replaceEspecifValue(values: Record<string, any>, variables: Reco
 }
 
 // execute function
-function executeFunctionName(functionName: string | undefined, condition: string | undefined, value?: string | undefined) {
+function executeFunctionName(functionName: string | undefined, condition: string | undefined) {
     switch (functionName) {
         case "hasValue":
             return eval(condition ?? "");
@@ -235,8 +235,11 @@ function executeFunctionName(functionName: string | undefined, condition: string
             return eval(compareLength(condition ?? "")) ? true : false;
 
         case "substring":
-            const function_paramter = returnSubstring(condition?.split("d2:substring(").pop() ?? "")
-            const formated_function = condition?.replaceAll(condition?.split("d2:substring(").pop() as string, `${function_paramter}`).replaceAll("d2:substring", '').replaceAll("(", '')
+            let function_paramter = returnSubstring(condition?.split("d2:substring(").pop() ?? "")
+            function_paramter = isNaN(parseInt(function_paramter, 10)) ? function_paramter : parseInt(function_paramter, 10) as unknown as string
+
+            console.log(function_paramter)
+            const formated_function = condition?.replaceAll(condition?.split("d2:substring(").pop() as string, function_paramter).replaceAll("d2:substring", '').replaceAll("(", '')
             return eval(formated_function as string)
 
         default:
