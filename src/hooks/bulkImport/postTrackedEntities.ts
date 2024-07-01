@@ -2,7 +2,7 @@ import { useDataMutation } from "@dhis2/app-runtime"
 import useShowAlerts from '../commons/useShowAlert';
 import { useRecoilState } from "recoil";
 import { ApiResponse } from "../../types/bulkImport/Interfaces";
-import { teiRefetch } from "../../schema/bulkImportSchema";
+import { TeiRefetch } from "../../schema/refecthTeiSchema";
 
 const POST_TEI: any = {
     resource: "tracker",
@@ -13,7 +13,7 @@ const POST_TEI: any = {
 
 export const usePostTrackedEntities = () => {
     const { hide, show } = useShowAlerts()
-    const [refetch, setRefetch] = useRecoilState<boolean>(teiRefetch)
+    const [refetch, setRefetch] = useRecoilState<boolean>(TeiRefetch)
 
     const [create, { loading, data, error }] = useDataMutation(POST_TEI, {
         onComplete: () => {
