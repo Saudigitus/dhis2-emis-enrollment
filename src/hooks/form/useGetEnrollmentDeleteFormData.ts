@@ -49,7 +49,11 @@ export default function useGetEnrollmentDeleteFormData() {
                         trackedEntity: trackedEntity,
                         registration: formatFormSection(dataElements),
                         initialValues: getinitialValuesDisplayName(registrationValues?.dataValues, resp?.results?.attributes, programConfig),
-                        attributes: formatFormSection(columns.filter((column) => (column?.searchable || column?.unique || column?.required) && column?.type == VariablesTypes.Attribute)),
+                        attributes: formatFormSection(
+                            columns.filter((column) => (column?.searchable || column?.unique || column?.required) && column?.type == VariablesTypes.Attribute).length > 4 ?
+                                columns.filter((column) => (column?.searchable || column?.unique || column?.required) && column?.type == VariablesTypes.Attribute) :
+                                columns.filter((column) => column?.type == VariablesTypes.Attribute && column.visible)?.slice(0, 4)
+                        ),
                     })
                 })
 
