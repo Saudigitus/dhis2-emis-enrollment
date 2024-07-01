@@ -5,7 +5,7 @@ export const eventUpdateBody = (enrollmentsData: any[], events: any[], eventDate
     const newEvents: any = []
 
     for (const enrollmentData of enrollmentsData) {
-        if (enrollmentData[0].type === "dataElement") {
+        if (enrollmentData.length && enrollmentData[0].type === "dataElement") {
             for (const [key, value] of Object.entries(reducer(enrollmentData))) {
 
                 const event = events?.find((event: any) => event.programStage === key)
@@ -25,7 +25,7 @@ export const eventUpdateBody = (enrollmentsData: any[], events: any[], eventDate
                         programStage: key,
                         program: program,
                         trackedEntity: trackedEntity,
-                        enrollment: event.enrollment,
+                        enrollment: event?.enrollment,
                         occurredAt: format(new Date(eventDate), "yyyy-MM-dd'T'HH:mm:ss.SSS"),
                         scheduledAt: format(new Date(eventDate), "yyyy-MM-dd'T'HH:mm:ss.SSS"),
                         createdAt: format(new Date(eventDate), "yyyy-MM-dd'T'HH:mm:ss.SSS"),

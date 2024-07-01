@@ -48,10 +48,10 @@ function EnrollmentDetailsComponent(props: EnrollmentDetailsComponentProps): Rea
       </div> */}
         {enrollmentsData.length ?
           enrollmentsData?.map((enrollment: any) => (
-            <div className="col-12 col-sm-6 col-md-3 p-0">
+            <div className="">
               <div className={styles.detailsCard}>
                 {dataElements?.map((dataElement: any, key: number) => (
-                  <div className="d-flex align-items-center" key={key}>
+                  <div className="d-flex align-items-center px-2" key={key}>
                     <Label className={styles.detailsCardVariable}>{dataElement?.displayName}:</Label>
                     <Label className={styles.detailsCardLabel}> {enrollment[dataElement?.id]} </Label>
                   </div>
