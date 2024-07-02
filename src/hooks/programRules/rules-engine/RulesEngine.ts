@@ -212,7 +212,6 @@ export function replaceEspecifValue(values: Record<string, any>, variables: Reco
     // eslint-disable-next-line no-prototype-builtins
     if (values.hasOwnProperty(variables[variable])) {
         if (values[variables[variable]] != false) {
-
             return `'${values[variables[variable]]}'`;
         }
     }
@@ -236,9 +235,6 @@ function executeFunctionName(functionName: string | undefined, condition: string
 
         case "substring":
             let function_paramter = returnSubstring(condition?.split("d2:substring(").pop() ?? "")
-            function_paramter = isNaN(parseInt(function_paramter, 10)) ? function_paramter : parseInt(function_paramter, 10) as unknown as string
-
-            console.log(function_paramter)
             const formated_function = condition?.replaceAll(condition?.split("d2:substring(").pop() as string, function_paramter).replaceAll("d2:substring", '').replaceAll("(", '')
             return eval(formated_function as string)
 
@@ -248,11 +244,16 @@ function executeFunctionName(functionName: string | undefined, condition: string
 }
 
 function returnSubstring(value: string) {
-    const date = value.split(",")[0]
-    const start = value.split(",")[1] as unknown as number
-    const end = value.split(",")[2]?.split(")")[0] as unknown as number
+    const [stringToRepair, startStr, endStr] = value.replaceAll(")", "").split(",");
+    const start = Number(startStr);
+    const end = Number(endStr);
 
-    return date.substring(start, end)
+    const repairedString = stringToRepair.substring(start, end)
+
+    if (!isNaN(Number.parseInt(repairedString)))
+        return Number.parseInt(repairedString) as unknown as string
+    else
+        return `'${repairedString}'`
 }
 
 //compare values in string
@@ -287,14 +288,14 @@ function d2YearsBetween(origin: string | undefined, condition: string[] | undefi
 
 // replace varieble by value from condition
 export function existValue(condition: string | undefined, values: Record<string, any> = {}, formatKeyValueType: any) {
-    let localCondition = `'false'`;
+    let localCondition = `false`;
     const dataArray = condition?.split(/[^a-zA-Z0-9_ ]+/)
         .map(item => item.trim().replace(/^'(.*)'$/, '$1'))
 
     for (const value of Object.keys(values) || []) {
         if (dataArray?.includes(value)) {
 
-            if (localCondition.includes(`'false'`)) {
+            if (localCondition.includes(`false`)) {
                 localCondition = condition as string
             }
 
