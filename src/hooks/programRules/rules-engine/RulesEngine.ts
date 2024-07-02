@@ -238,9 +238,13 @@ function executeFunctionName(functionName: string | undefined, condition: string
             let function_paramter = returnSubstring(condition?.split("d2:substring(").pop() ?? "")
             function_paramter = isNaN(parseInt(function_paramter, 10)) ? function_paramter : parseInt(function_paramter, 10) as unknown as string
 
-            console.log(function_paramter)
-            const formated_function = condition?.replaceAll(condition?.split("d2:substring(").pop() as string, function_paramter).replaceAll("d2:substring", '').replaceAll("(", '')
-            return eval(formated_function as string)
+            const constainsNumber = /\d/;
+            if (constainsNumber.test(function_paramter)) {
+                const formated_function = condition?.replaceAll(condition?.split("d2:substring(").pop() as string, function_paramter).replaceAll("d2:substring", '').replaceAll("(", '')
+                return eval(formated_function as string)
+            } else {
+                return ""
+            }
 
         default:
             return eval(condition ?? "");
