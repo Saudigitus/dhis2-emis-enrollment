@@ -18,8 +18,7 @@ import {
     validateRecordValues
 } from "../../utils/bulkImport/processImportData";
 import {useDataEngine} from "@dhis2/app-runtime";
-import {Center, Modal, ModalContent, ModalTitle} from "@dhis2/ui";
-import {CircularProgress} from "@material-ui/core";
+import {CenteredContent, CircularLoader, Modal, ModalContent, ModalTitle} from "@dhis2/ui";
 import ModalSummaryContent from "./ModalSummaryContent";
 import SummaryDetails from "./SummaryDetails";
 import {
@@ -29,6 +28,7 @@ import {
     ProcessingRecords,
     ProcessingRecordsState, ProcessingStage, TemplateHeadingsState
 } from "../../schema/bulkImportSchema";
+import styles from "./modal.module.css";
 
 interface BulkEnrollmentProps {
     setOpen: React.Dispatch<React.SetStateAction<boolean>>
@@ -205,11 +205,11 @@ export const BulkEnrollment = ({setOpen, isOpen}: BulkEnrollmentProps): React.Re
                 </MuiThemeProvider>
             }
             { (summaryOpen && isValidTemplate) &&
-                <Modal fluid>
+                <Modal fluid position={"middle"} className={styles.modalContainer}>
                     <ModalTitle>{isProcessing ? "Processing Bulk Enrolment" : "Bulk Enrolment Summary"}</ModalTitle>
                     <ModalContent>
                         {isProcessing
-                            ? <Center><CircularProgress/></Center>
+                            ? <CenteredContent className="p-5"><CircularLoader /></CenteredContent>
                             : <ModalSummaryContent
                                 setOpen={setSummaryOpen}
                                 summaryData={
