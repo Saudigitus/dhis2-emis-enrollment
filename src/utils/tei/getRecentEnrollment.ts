@@ -8,4 +8,14 @@ const getRecentEnrollment = (enrollments: any[]) => {
     return enrollment
 }
 
-export { getRecentEnrollment }
+const getRecentEvent = (events: any[]) => {
+    let event = events[0];
+    for (let i = 0; i < events.length; i++) {
+        if (new Date(event.occurredAt) < new Date(events[i].occurredAt)) {
+            event = events[i]
+        }
+    }
+    return event
+}
+
+export { getRecentEnrollment, getRecentEvent }

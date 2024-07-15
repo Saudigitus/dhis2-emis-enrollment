@@ -58,6 +58,7 @@ interface RenderHeaderProps {
 interface EnrollmentDetailsComponentProps {
     enrollmentsData: any
     existingAcademicYear: boolean
+    isOwnershipOu: boolean
     onSelectTei?: (arg: any) => void
 }
 

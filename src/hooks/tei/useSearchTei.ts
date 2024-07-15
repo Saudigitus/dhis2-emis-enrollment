@@ -5,7 +5,7 @@ import { TeiSearchQueryProps } from "../../types/api/WithRegistrationProps";
     results: {
         resource: "tracker/trackedEntities",
         params: {
-            fields: "trackedEntity,createdAt,orgUnit,attributes[attribute,value],enrollments[enrollment,enrolledAt]",
+            fields: "trackedEntity,createdAt,orgUnit,attributes[attribute,value],enrollments[enrollment,enrolledAt],programOwners[orgUnit]",
             ouMode,
             totalPages: true,
             program,

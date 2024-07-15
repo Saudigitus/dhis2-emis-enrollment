@@ -15,7 +15,7 @@ import { IconButton } from '@material-ui/core';
 import { ProgramConfigState } from '../../../schema/programSchema';
 import { checkCanceled, checkOwnershipOu } from '../../../utils/table/rows/checkCanceled';
 import SearchRowActions from './rowsActions/SearchRowActions';
-import EnrollmentDetailsCards from './enrollmentDetailsComponent/EnrollmentDetailsComponent';
+import EnrollmentDetailsComponent from './enrollmentDetailsComponent/EnrollmentDetailsComponent';
 import { checkEnrolledAcademicYear } from '../../../utils/table/rows/checkEnrolledAcademicYear';
 import { useParams } from '../../../hooks';
 import { getDataStoreKeys } from '../../../utils/commons/dataStore/getDataStoreKeys';
@@ -120,7 +120,7 @@ function RenderRows(props: RenderHeaderProps): React.ReactElement {
                                         className={classNames(classes.cell, classes.bodyCell)} 
                                         colspan={headerData?.filter(x => x.visible)?.length as unknown as number + 1}
                                     >
-                                        <EnrollmentDetailsCards existingAcademicYear={checkEnrolledAcademicYear(row?.registrationEvents, academicYear as unknown as string, registration.academicYear)} onSelectTei={onSelectTei ? () => onSelectTei(row) : undefined} enrollmentsData={row.registrationEvents} />
+                                        <EnrollmentDetailsComponent existingAcademicYear={checkEnrolledAcademicYear(row?.registrationEvents, academicYear as unknown as string, registration.academicYear)} onSelectTei={onSelectTei ? () => onSelectTei(row) : undefined} enrollmentsData={row.registrationEvents} isOwnershipOu={checkOwnershipOu(row.ownershipOu, school as unknown as string)} />
                                     </RowCell>
                                 </RowTable>
                             : null
