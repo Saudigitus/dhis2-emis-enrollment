@@ -10,6 +10,7 @@ import { capitalizeString } from "../../utils/commons/formatCamelCaseToWords";
 import { getSelectedKey } from "../../utils/commons/dataStore/getSelectedKey";
 import { VariablesTypes } from "../../types/variables/AttributeColumns";
 import { getHeaderBgColor } from "./getHeaderBgColor";
+import { cellBorders, cellFillBg } from "../../utils/constants/exportTemplate/templateStyles";
 
 
 const DATA_STORE_NAME : string = "semis"
@@ -291,18 +292,11 @@ export default function useExportTemplate ( ) {
             headers.forEach((header: any, index: any) => {
               const cell = firstRow.getCell(index+1);
               console.log("MetadataType", header.metadataType)
-              cell.fill = {
-                  type: 'pattern',
-                  pattern: 'solid',
-                  fgColor: { argb: getHeaderBgColor(header.metadataType) },
-              };
-              cell.border = {
-                top: { style: 'thin', color: { argb: 'D4D4D4' } },
-                left: { style: 'thin', color: { argb: 'D4D4D4' } },
-                bottom: { style: 'thin', color: { argb: 'D4D4D4' } },
-                right: { style: 'thin', color: { argb: 'D4D4D4' } },
-            };
+              cell.fill = cellFillBg(header.metadataType);
+              cell.border = cellBorders;
               cell.font = { bold: true };
+
+              if(header.id === "orgUnit") dataSheet.getColumn(index+1).hidden = true;
           });
             
 
@@ -311,23 +305,8 @@ export default function useExportTemplate ( ) {
               prev[curr.id] = curr.id;
               return prev;
             }, {}));
-  
-            // Add background in the header row
-          headers.forEach((header: any, index: any) => {
-            const cell = headerRow.getCell(index+1);
-            cell.fill = {
-              type: 'pattern',
-              pattern: 'solid',
-              fgColor: { argb: getHeaderBgColor(header.metadataType) },
-            };
-            cell.border = {
-              top: { style: 'thin', color: { argb: 'D4D4D4' } },
-              left: { style: 'thin', color: { argb: 'D4D4D4' } },
-              bottom: { style: 'thin', color: { argb: 'D4D4D4' } },
-              right: { style: 'thin', color: { argb: 'D4D4D4' } },
-            };
-            cell.font = { bold: true };
-          });
+            
+            headerRow.hidden = true;
 
             // Ajout des rows maintenants
             for (let data of datas) {

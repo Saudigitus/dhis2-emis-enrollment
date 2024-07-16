@@ -6,7 +6,7 @@ import { ModalExportTemplateProps } from "../../types/modal/ModalProps";
 import { useParams } from "../../hooks";
 import { getDataStoreKeys } from "../../utils/commons/dataStore/getDataStoreKeys";
 import useGetExportTemplateForm from "../../hooks/form/useGetExportTemplateForm";
-import { formFields } from "../../utils/constants/exportTemplateForm/exportEmptyTemplateForm";
+import { formFields } from "../../utils/constants/exportTemplate/exportEmptyTemplateForm";
 import { removeFalseKeys } from "../../utils/commons/removeFalseKeys";
 import useExportTemplate from "../../hooks/exportTemplate/useExportTemplate";
 
