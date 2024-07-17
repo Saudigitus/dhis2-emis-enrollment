@@ -10,10 +10,10 @@ const cellFillBg = (metadataType: VariablesTypes) =>  {
 }
 
 const cellBorders = {
-    top: { style: 'thin', color: { argb: 'D4D4D4' } },
-    left: { style: 'thin', color: { argb: 'D4D4D4' } },
-    bottom: { style: 'thin', color: { argb: 'D4D4D4' } },
-    right: { style: 'thin', color: { argb: 'D4D4D4' } },
+    top: { style: 'thin', color: { argb: '9B9B9B' }, },
+    left: { style: 'thin', color: { argb: '9B9B9B' } },
+    bottom: { style: 'thin', color: { argb: '9B9B9B' } },
+    right: { style: 'thin', color: { argb: '9B9B9B' } },
 }
 
 export { cellBorders,  cellFillBg}
