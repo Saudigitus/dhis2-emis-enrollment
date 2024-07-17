@@ -352,6 +352,14 @@ export default function useExportTemplate ( ) {
               prev[curr.id] = curr.id;
               return prev;
             }, {}));
+
+            // Add background in the header row
+            headers.forEach((header: any, index: any) => {
+              const cell = headerRow.getCell(index+1);
+              cell.fill = cellFillBg(header.metadataType);
+              cell.border = cellBorders;
+              cell.font = { bold: true };
+            });
             
             // Hide the header IDs row
             headerRow.hidden = true;
