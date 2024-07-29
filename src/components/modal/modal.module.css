@@ -1,5 +1,5 @@
 .modalContainer {
-    min-width: 1000px !important;
+    /* min-width: 1000px !important; */
 }
 
 .detailsCard {
@@ -139,4 +139,58 @@
 
 .success {
     background-color: #388e3c !important;
+}
+
+
+.loaderContainer {
+    padding: 5em;
+}
+
+
+@media screen and (max-width: 620px) and (min-width: 352px) {
+    .modalContainer h1 {
+        font-size: 18px !important;
+    }
+}
+
+@media screen and (max-width: 620px) and (min-width: 436px) {
+    .modalActions {
+        font-size: 12px !important;
+        padding: 5px 8px !important;
+    }
+}
+
+@media screen and (max-width: 435px) {
+    .modalActionsStrip {
+        flex-direction: column;
+        display: flex !important;
+        justify-content: start !important;
+    }
+
+    .modalActionsStrip>div {
+        margin-left: 0 !important;
+        justify-content: start !important;
+    }
+
+    .modalActions {
+        margin: 5px;
+        width: 100% !important;
+        font-size: 12px !important;
+        height: 32px !important;
+        padding: 5px 8px !important;
+    }
+}
+
+@media screen and (max-width: 352px) {
+    .modalContainer {
+        min-width: 95vw !important;
+    }
+
+    .modalContainer div:nth-child(1) {
+        min-width: 100% !important;
+    }
+
+    .modalContainer h1 {
+        font-size: 16px !important;
+    }
 }

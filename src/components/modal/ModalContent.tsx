@@ -18,6 +18,8 @@ import useBulkUpdate from "../../hooks/bulkStudent/bulkUpdateStudents";
 import { SearchInitialValues } from "../../schema/searchInitialValues";
 import { removeFalseKeys } from "../../utils/commons/removeFalseKeys";
 import { formatDateToIsoString } from "../../utils/commons/formatDateToIsoString";
+import styles from "./modal.module.css";
+import classNames from "classnames";
 
 function ModalContentComponent(props: ModalContentProps): React.ReactElement {
   const { setOpen, enrollmentsData, sectionName, bulkUpdate = false } = props;
@@ -93,7 +95,7 @@ function ModalContentComponent(props: ModalContentProps): React.ReactElement {
 
   if (enrollmentsData?.length < 1 || loadingCodes) {
     return (
-      <CenteredContent className="p-5"> 
+      <CenteredContent className={styles.loaderContainer}> 
         <CircularLoader />
       </CenteredContent>
     )
@@ -149,7 +151,7 @@ function ModalContentComponent(props: ModalContentProps): React.ReactElement {
             }
             <br />
             <ModalActions>
-              <ButtonStrip end className="mr-3">
+              <ButtonStrip end className={classNames(styles.modalActionsStrip)}>
                 {modalActions.map((action, i) => {
                   return (
                     <>
@@ -157,8 +159,9 @@ function ModalContentComponent(props: ModalContentProps): React.ReactElement {
                         !(bulkUpdate && action.id === 'saveandnew') &&
                         <Button
                           key={i}
-                          loading={(!!(loading || loadingBulkUpdate) && action.id === clickedButton)}
                           {...action}
+                          className={styles.modalActions}
+                          loading={(!!(loading || loadingBulkUpdate) && action.id === clickedButton)}
                         >
                           {action.label}
                         </Button>
