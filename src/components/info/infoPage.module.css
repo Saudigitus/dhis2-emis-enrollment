@@ -36,3 +36,33 @@
     line-height: 18px;
     margin-bottom: var(--spacers-dp12);
 }
+
+@media screen and (max-width: 520px) {
+    .containerInit {
+        display: block;
+        height: auto;
+        width: 100% !important;
+    }
+
+    .paperInit {
+        width: 100%;
+        padding: 35px;
+        background-color: #E8EDF2;
+    }
+
+    .paperInit ul li {
+        padding: 6px;
+    }
+
+    .paperInit h2 {
+        font-size: 17px;
+    }
+
+    .paperInit span {
+        font-size: 15px;
+    }
+
+    .paperOtherText {
+        font-size: 14px;
+    }
+}
