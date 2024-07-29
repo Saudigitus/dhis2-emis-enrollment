@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { useMemo, useEffect, useState } from 'react'
 import { RowTable } from '../components'
 import classNames from 'classnames';
 import { makeStyles, createStyles, type Theme } from '@material-ui/core/styles';
@@ -7,6 +7,8 @@ import HeaderCell from '../components/head/HeaderCell';
 import { Checkbox } from "@dhis2/ui"
 import { RowSelectionState } from '../../../schema/tableSelectedRowsSchema';
 import { useRecoilState } from 'recoil';
+import useViewportWidth from '../../../hooks/rwd/useViewportWidth';
+import { CustomAttributeProps } from '../../../types/variables/AttributeColumns';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -17,15 +19,34 @@ const useStyles = makeStyles((theme: Theme) =>
             '&:last-child': {
                 paddingRight: 2 * 3
             },
-            borderBottomColor: "rgba(224, 224, 224, 1)"
+            borderBottomColor: "rgba(224, 224, 224, 1)",
+            [theme.breakpoints.down('md')]: {
+                padding: `${theme.spacing(1) * 1}px`,
+                '&:last-child': {
+                    paddingRight: `${theme.spacing(1) * 1}px`
+                },
+                // fontSize: '13px !important',
+            },
         },
         bodyCell: {
             fontSize: theme.typography.pxToRem(13),
-            color: theme.palette.text.primary
+            color: theme.palette.text.primary,
+            [theme.breakpoints.down('md')]: {
+                fontSize: theme.typography.pxToRem(12),
+            },
+            [theme.breakpoints.down('sm')]: {
+                fontSize: theme.typography.pxToRem(11),
+            }
         },
         headerCell: {
             fontSize: theme.typography.pxToRem(12),
             color: theme.palette.text.secondary,
+            [theme.breakpoints.down('md')]: {
+                fontSize: theme.typography.pxToRem(11),
+            },
+            [theme.breakpoints.down('sm')]: {
+                fontSize: theme.typography.pxToRem(10),
+            },
             fontWeight: 500
         },
         visuallyHidden: {
@@ -46,11 +67,22 @@ function RenderHeader(props: RenderHeaderProps): React.ReactElement {
     const { rowsHeader, order, orderBy, createSortHandler } = props
     const classes = useStyles()
     const [selected, setSelected] = useRecoilState(RowSelectionState);
+    // const { viewPortWidth } = useViewportWidth()
+    // const [localHeaders, setlocalHeaders] = useState<CustomAttributeProps[]>([])
 
     const onToggle = (event: { checked: boolean }) => {
         const copySelectedState = { ...selected, isAllRowsSelected: event.checked, selectedRows: event.checked ? selected.rows : [] };
         setSelected(copySelectedState);
     }
+
+    // useEffect(() => {
+    //     const copyHeader = [...rowsHeader?.filter(x => x.visible) as any]
+    //     const sliceTo = viewPortWidth < 500 ? 2 : rowsHeader?.filter(x => x.visible).length
+
+    //     console.log(sliceTo, copyHeader.slice(0, sliceTo))
+    //     console.log(sliceTo, copyHeader.slice(0, sliceTo))
+    //     setlocalHeaders(copyHeader)
+    // }, [rowsHeader, viewPortWidth])
 
     const headerCells = useMemo(() => {
         return rowsHeader?.filter(x => x.visible)?.map((column) => (

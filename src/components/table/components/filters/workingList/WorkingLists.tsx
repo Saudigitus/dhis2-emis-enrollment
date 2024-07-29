@@ -6,15 +6,10 @@ import styles from './workingLists.module.css'
 
 function WorkingLists() {
   return (
-    <WithPadding>
-      <div className='d-flex justify-content-between'>
-        <div />
-        <div className={styles.container} >
-          <BuklUpdateStudents />
-          <EnrollmentActionsButtons />
-        </div>
-      </div>
-    </WithPadding >
+    <div className={styles.workingListsContainer}>
+      <BuklUpdateStudents />
+      <EnrollmentActionsButtons />
+    </div >
   )
 }
 

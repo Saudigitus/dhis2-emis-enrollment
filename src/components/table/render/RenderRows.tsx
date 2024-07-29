@@ -39,14 +39,38 @@ const useStyles = makeStyles((theme: Theme) =>
             '&:last-child': {
                 paddingRight: theme.spacing(1) * 3
             },
-            borderBottomColor: "rgba(224, 224, 224, 1)"
+            borderBottomColor: "rgba(224, 224, 224, 1)",
+            [theme.breakpoints.down('md')]: {
+                padding: `{theme.spacing(1) * 1}px`,
+                '&:last-child': {
+                    paddingRight: `${theme.spacing(1) * 1}px`
+                },
+            },
+            [theme.breakpoints.down('sm')]: {
+                padding: `${theme.spacing(1) * 1}px`,
+                '&:last-child': {
+                    paddingRight: `${theme.spacing(1) * 1}px`
+                },
+            },
         },
         bodyCell: {
             fontSize: theme.typography.pxToRem(13),
-            color: theme.palette.text.primary
+            color: theme.palette.text.primary,
+            [theme.breakpoints.down('md')]: {
+                fontSize: theme.typography.pxToRem(12),
+            },
+            [theme.breakpoints.down('sm')]: {
+                fontSize: theme.typography.pxToRem(11),
+            }
         },
         actionsCell: {
             padding: `${theme.spacing(1) / 2}px ${theme.spacing(1) * 7}px ${theme.spacing(1) / 2}px ${theme.spacing(1 + 0.25)}px`,
+            [theme.breakpoints.down('md')]: {
+                padding: `${theme.spacing(1)}px`,
+            },
+            [theme.breakpoints.down('sm')]: {
+                padding: `${theme.spacing(1)}px`,
+            }
         }
     })
 );
@@ -86,7 +110,7 @@ function RenderRows(props: RenderHeaderProps): React.ReactElement {
                             key={index}
                             inactive={checkCanceled(row.status)}
                             isOwnershipOu={checkOwnershipOu(row.ownershipOu, school as unknown as string)}
-                            className={classNames(classes.row, classes.dataRow, (searchActions && row.trackedEntity ===  showEnrollments) ? classes.dataRowCollapsed : null)}
+                            className={classNames(classes.row, classes.dataRow, (searchActions && row.trackedEntity === showEnrollments) ? classes.dataRowCollapsed : null)}
                         >
                             {
 
@@ -104,29 +128,29 @@ function RenderRows(props: RenderHeaderProps): React.ReactElement {
                                             }
                                             {
                                                 (column.displayName == "Actions") ?
-                                                searchActions ? <SearchRowActions row={row} onSelectTei={onSelectTei ? () => onSelectTei(row) : undefined} onShowHistory={() => setShowEnrollments(showEnrollments === row.trackedEntity ? "" : row.trackedEntity)} /> :
-                                                    <RowActions row={row} />
+                                                    searchActions ? <SearchRowActions row={row} onSelectTei={onSelectTei ? () => onSelectTei(row) : undefined} onShowHistory={() => setShowEnrollments(showEnrollments === row.trackedEntity ? "" : row.trackedEntity)} /> :
+                                                        <RowActions row={row} />
                                                     : null
                                             }
                                         </div>
                                     </RowCell>
                                 ))
                             }
-                            
+
                         </RowTable>
                         {searchActions && showEnrollments === row.trackedEntity ?
-                                <RowTable className={classNames(classes.row, classes.historyRow)}>
-                                    <RowCell 
-                                        className={classNames(classes.cell, classes.bodyCell)} 
-                                        colspan={headerData?.filter(x => x.visible)?.length as unknown as number + 1}
-                                    >
-                                        <EnrollmentDetailsCards existingAcademicYear={checkEnrolledAcademicYear(row?.registrationEvents, academicYear as unknown as string, registration.academicYear)} onSelectTei={onSelectTei ? () => onSelectTei(row) : undefined} enrollmentsData={row.registrationEvents} />
-                                    </RowCell>
-                                </RowTable>
+                            <RowTable className={classNames(classes.row, classes.historyRow)}>
+                                <RowCell
+                                    className={classNames(classes.cell, classes.bodyCell)}
+                                    colspan={headerData?.filter(x => x.visible)?.length as unknown as number + 1}
+                                >
+                                    <EnrollmentDetailsCards existingAcademicYear={checkEnrolledAcademicYear(row?.registrationEvents, academicYear as unknown as string, registration.academicYear)} onSelectTei={onSelectTei ? () => onSelectTei(row) : undefined} enrollmentsData={row.registrationEvents} />
+                                </RowCell>
+                            </RowTable>
                             : null
                         }
                     </>
-                    
+
                 ))
             }
         </React.Fragment>

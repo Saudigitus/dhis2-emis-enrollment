@@ -13,7 +13,7 @@ import { TeiRefetch } from '../../../schema/refecthTeiSchema';
 import { useHeader, useTableData, useParams } from '../../../hooks';
 import { TableDataLoadingState } from '../../../schema/tableDataLoadingSchema';
 
-const usetStyles = makeStyles({
+const usetStyles = makeStyles((theme) => ({
     tableContainer: {
         overflowX: 'auto'
     },
@@ -27,8 +27,14 @@ const usetStyles = makeStyles({
         margin: '0px',
         fontSize: '22px',
         fontWeigth: '500',
+        [theme.breakpoints.down('md')]: {
+            fontSize: '20px',
+        },
+        [theme.breakpoints.down('sm')]: {
+            fontSize: '16px',
+        }
     }
-});
+}));
 
 function Table() {
     const classes = usetStyles()
@@ -63,6 +69,8 @@ function Table() {
         setpageSize(parseInt(event.value, 10))
         setpage(1)
     }
+
+    
 
     return (
         <Paper>
