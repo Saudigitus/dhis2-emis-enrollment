@@ -225,3 +225,104 @@
     top: 22px;
     transform: rotate(180deg);
 }
+
+@media screen and (max-width: 885px) and (min-width: 521px) {
+    .SideBarContainer {
+        height: 100%;
+        width: 170px !important;
+        position: relative;
+        background-color: var(--secondary-colort-white);
+        transition: width 0.3s ease !important;
+    }
+
+    .SideBarItemContainer {
+        width: 100%;
+        height: auto;
+        margin-bottom: 0px;
+    }
+
+    .SideBarSubItemContainer,
+    .SideBarSubItemContainerActive {
+        height: 36px !important;
+    }
+
+    .SideBarContainerCollapsed .SideBarSubItemContainer img {
+        margin-right: 0px;
+        min-width: 18px !important;
+    }
+
+    .SideBarSubItemContainer img {
+        margin-right: 16px;
+        min-width: 18px !important;
+    }
+
+    .SideBarSubItemContainerActive img {
+        margin-right: 16px;
+        min-width: 18px !important;
+    }
+
+    .SideBarContainer {
+        flex: 0 0 36%;
+    }
+
+    .SideBarContainerCollapsed .SideBarSubItemContainer {
+        justify-content: center;
+        min-width: 40px;
+        height: 36px !important;
+    }
+}
+
+@media screen and (max-width: 520px) {
+    .SideBarItemContainer {
+        height: auto;
+        margin-bottom: 0px;
+        width: 100% !important;
+    }
+
+    .SideBarSubItemContainer,
+    .SideBarSubItemContainerActive {
+        height: 36px !important;
+    }
+
+    .SideBarContainerCollapsed .SideBarSubItemContainer img {
+        margin-right: 0px;
+        min-width: 18px !important;
+    }
+
+    .SideBarSubItemContainer img {
+        margin-right: 16px;
+        min-width: 18px !important;
+    }
+
+    .SideBarSubItemContainerActive img {
+        margin-right: 16px;
+        min-width: 18px !important;
+    }
+
+    .SideBarContainer {
+        flex: 0 0 12% !important;
+    }
+
+    .SideBarContainerCollapsed .SideBarSubItemContainer {
+        justify-content: center;
+        min-width: 40px;
+        height: 36px !important;
+    }
+
+    .SideBarContainerCollapsed .SideBarMenu {
+        max-width: 0px !important;
+        margin: 0 !important;
+        border: 0;
+        padding: 0;
+    }
+
+    .SideBarMenu {
+        width: 70px;
+        padding: 20px 10px;
+    }
+
+    .SideBarMenu .SideBarItemTitle,
+    .SideBarMenu .SideBarSubItemLabel {
+        display: none !important;
+    }
+}
