@@ -9,8 +9,8 @@ export default function InfoPage() {
                 <h2>SEMIS-Enrollment</h2>
                 <span>Follow the instructions to proceed:</span>
                 <ul>
-                    <li className={styles.paperOtherText}>Select the  Organization unit you want to view data</li>
-                    <li className={styles.paperOtherText}>Use global filters(Class, Grade and Academic Year)</li>
+                    <li className={styles.paperOtherText}>Select the  Organization unit you want to view data.</li>
+                    <li className={styles.paperOtherText}>Use global filters(Class, Grade and Academic Year).</li>
                 </ul>
             </Paper>
         </div>

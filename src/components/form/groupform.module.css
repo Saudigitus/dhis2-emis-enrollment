@@ -35,6 +35,12 @@
     height: 100px;
 }
 
-.fieldWarning .content{
+.fieldWarning .content {
     color: #ff9900;
+}
+
+@media screen and (max-width: 352px) {
+    .label {
+        font-size: 13px !important;
+    }
 }

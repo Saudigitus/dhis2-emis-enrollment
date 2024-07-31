@@ -16,7 +16,7 @@ export default function useGetEnrollmentDeleteFormData() {
     const programConfig = useRecoilValue(ProgramConfigState)
     const [initialValues, setInitialValues] = useState<any>({})
     const { socioEconomics, registration } = getDataStoreKeys()
-    const { dataElements } = useGetDataElements({ programStageId: getDataStoreData.registration.programStage })
+    const { dataElements } = useGetDataElements({ programStageId: getDataStoreData?.registration?.programStage })
     const { programStages } = programConfig
 
 
@@ -27,7 +27,7 @@ export default function useGetEnrollmentDeleteFormData() {
 
             getEnrollment(enrollment)
                 .then((resp: any) => {
-                    const registrationValues = resp?.results?.events?.find((x: any) => x.programStage == registration.programStage)
+                    const registrationValues = resp?.results?.events?.find((x: any) => x.programStage == registration?.programStage)
 
                     const enrollmentEvents = programStages?.filter((programStage: { id: string }) => programStage.id !== socioEconomics?.programStage && programStage.id !== registration?.programStage)?.map((value) => {
 
