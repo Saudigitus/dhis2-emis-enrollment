@@ -20,3 +20,27 @@
     order: 0;
     flex-grow: 0;
 }
+
+@media screen and (max-width: 650px) and (min-width: 500px) {
+    .subTitle {
+        font-size: 15.5px !important;
+        line-height: 20px;
+    }
+
+    .title {
+        font-size: 18px !important;
+        line-height: 100%;
+    }
+}
+
+@media screen and (max-width: 500px) {
+    .subTitle {
+        font-size: 14.5px !important;
+        line-height: 20px;
+    }
+
+    .title {
+        font-size: 17px !important;
+        line-height: 100%;
+    }
+}
