@@ -52,8 +52,8 @@ function ModalContentComponent(props: ModalContentProps): React.ReactElement {
   }, [values])
 
   useEffect(() => {
-    if(!initialValues['trackedEntity' as unknown as keyof typeof initialValues])
-    void returnPattern(attributes)
+    if (!initialValues['trackedEntity' as unknown as keyof typeof initialValues])
+      void returnPattern(attributes)
   }, [data])
 
   useEffect(() => { setClicked(false) }, [])
@@ -66,8 +66,8 @@ function ModalContentComponent(props: ModalContentProps): React.ReactElement {
         setSearchInitialValues({})
       }
       setClicked(false)
-        setSearchInitialValues({})
-        formRef.current.restart()
+      setSearchInitialValues({})
+      formRef.current.restart()
     }
   }, [data])
 
@@ -95,7 +95,7 @@ function ModalContentComponent(props: ModalContentProps): React.ReactElement {
 
   if (enrollmentsData?.length < 1 || loadingCodes) {
     return (
-      <CenteredContent className={styles.loaderContainer}> 
+      <CenteredContent className="p-5">
         <CircularLoader />
       </CenteredContent>
     )
@@ -151,7 +151,7 @@ function ModalContentComponent(props: ModalContentProps): React.ReactElement {
             }
             <br />
             <ModalActions>
-              <ButtonStrip end className={classNames(styles.modalActionsStrip)}>
+              <ButtonStrip end className={classNames(styles.modalButtonsStrip)}>
                 {modalActions.map((action, i) => {
                   return (
                     <>
@@ -160,7 +160,7 @@ function ModalContentComponent(props: ModalContentProps): React.ReactElement {
                         <Button
                           key={i}
                           {...action}
-                          className={styles.modalActions}
+                          className={styles.modalButtons}
                           loading={(!!(loading || loadingBulkUpdate) && action.id === clickedButton)}
                         >
                           {action.label}

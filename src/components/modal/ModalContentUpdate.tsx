@@ -116,19 +116,17 @@ function ModalContentUpdate(props: ModalContentUpdateProps): React.ReactElement 
             }
             <br />
             <ModalActions>
-              <ButtonStrip end className={classNames(styles.modalActionsStrip)}>
+              <ButtonStrip end className={classNames(styles.modalButtonsStrip)}>
                 {modalActions.map((action, i) => (
-                  <>
                     <Button
                       key={i}
                       {...action}
-                      className={styles.modalActions}
+                      className={styles.modalButtons}
                       loading={(loading && action.id === clickedButton)}
                       disabled={(action.id == "save" && pristine) || loadingInitialValues || loading}
                     >
                       {action.label}
                     </Button>
-                  </>
                 ))}
               </ButtonStrip>
             </ModalActions>
