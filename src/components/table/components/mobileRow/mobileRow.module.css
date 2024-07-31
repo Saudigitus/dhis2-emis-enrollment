@@ -1,0 +1,64 @@
+.cardContainer {
+    margin: 10px 1.5%;
+    display: flex;
+    justify-content: center;
+    background: #FFFFFF;
+    width: 97% !important;
+    border-radius: 4px !important;
+    box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.24) !important;
+}
+
+.cardContainer>div :nth-child(1) {
+    width: 95;
+}
+
+.cardBody {
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    background-color: #FFF;
+    border-radius: 4px !important;
+}
+
+.cardMessage {
+    font-style: italic;
+    font-size: 10px !important;
+    color: rgba(0, 0, 0, 0.67);
+}
+
+.cardActions {
+    display: flex;
+    padding: 2px 18px 0 18px;
+    align-items: center;
+    height: 35px !important;
+    justify-content: space-between;
+    /* background-color: rgba(224, 224, 224, 1) !important; */
+}
+
+.row {
+    display: flex;
+    width: 100% !important;
+    height: 45px !important;
+    padding: 0px 10px !important;
+    border-bottom: 1px solid rgba(224, 224, 224, 1) !important;
+}
+
+.row:last-child {
+    margin: 0 !important;
+    height: 44px !important;
+    border-bottom: none !important;
+}
+
+.cell {
+    margin: 0 !important;
+    font-size: 12px !important;
+    width: 100% !important;
+    padding: 8px !important;
+    color: rgba(0, 0, 0, 0.87);
+}
+
+.headerCell {
+    margin: 0 !important;
+    font-weight: 500;
+}

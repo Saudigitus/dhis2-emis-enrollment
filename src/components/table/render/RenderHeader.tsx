@@ -67,7 +67,7 @@ function RenderHeader(props: RenderHeaderProps): React.ReactElement {
     const { rowsHeader, order, orderBy, createSortHandler } = props
     const classes = useStyles()
     const [selected, setSelected] = useRecoilState(RowSelectionState);
-    // const { viewPortWidth } = useViewportWidth()
+    const { viewPortWidth } = useViewportWidth()
     // const [localHeaders, setlocalHeaders] = useState<CustomAttributeProps[]>([])
 
     const onToggle = (event: { checked: boolean }) => {

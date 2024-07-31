@@ -28,7 +28,7 @@ function ContentFilter(props: ContentFilterProps) {
 
     useEffect(() => {
         const copyHeader = [...headers]
-        const sliceTo = viewPortWidth < 779 ? 2 : 4
+        const sliceTo = viewPortWidth < 779 ? 1 : 4
         setlocalFilters(copyHeader.slice(0, sliceTo))
     }, [headers, viewPortWidth])
 

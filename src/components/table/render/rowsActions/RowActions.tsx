@@ -86,7 +86,7 @@ export default function RowActions(props: RowActionsProps) {
             Object.keys(deleteFormInitialValues).length ?
               <ModalDeleteContent setOpen={setOpenDeletionModal} sectionName={sectionName} loading={eventsLoading} initialValues={deleteFormInitialValues} />
               :
-              <CenteredContent>
+              <CenteredContent className="p-5">
                 <CircularLoader />
               </CenteredContent>
           }

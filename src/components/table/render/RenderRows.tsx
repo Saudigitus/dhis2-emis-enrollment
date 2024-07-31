@@ -19,6 +19,8 @@ import EnrollmentDetailsCards from './enrollmentDetailsComponent/EnrollmentDetai
 import { checkEnrolledAcademicYear } from '../../../utils/table/rows/checkEnrolledAcademicYear';
 import { useParams } from '../../../hooks';
 import { getDataStoreKeys } from '../../../utils/commons/dataStore/getDataStoreKeys';
+import useViewportWidth from '../../../hooks/rwd/useViewportWidth';
+import MobileRow from '../components/mobileRow/MobileRow';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -80,6 +82,7 @@ function RenderRows(props: RenderHeaderProps): React.ReactElement {
     const { imageUrl } = GetImageUrl()
     const { urlParamiters } = useParams()
     const { academicYear, school } = urlParamiters()
+    const { viewPortWidth } = useViewportWidth()
 
     const { registration } = getDataStoreKeys()
     const programConfigState = useRecoilValue(ProgramConfigState);
@@ -106,38 +109,51 @@ function RenderRows(props: RenderHeaderProps): React.ReactElement {
             {
                 rowsData?.map((row, index) => (
                     <>
-                        <RowTable
-                            key={index}
-                            inactive={checkCanceled(row.status)}
-                            isOwnershipOu={checkOwnershipOu(row.ownershipOu, school as unknown as string)}
-                            className={classNames(classes.row, classes.dataRow, (searchActions && row.trackedEntity === showEnrollments) ? classes.dataRowCollapsed : null)}
-                        >
-                            {
+                        {viewPortWidth > 520 ?
+                            <RowTable
+                                key={index}
+                                inactive={checkCanceled(row.status)}
+                                isOwnershipOu={checkOwnershipOu(row.ownershipOu, school as unknown as string)}
+                                className={classNames(classes.row, classes.dataRow, (searchActions && row.trackedEntity === showEnrollments) ? classes.dataRowCollapsed : null)}
+                            >
+                                {
+                                    headerData?.filter(x => x.visible)?.map(column => (
+                                        <RowCell
+                                            key={column.id}
+                                            className={classNames(classes.cell, classes.bodyCell, (column.displayName == "Actions") ? classes.actionsCell : null)}
+                                        >
+                                            <div>
+                                                {
+                                                    formatKeyValueTypeHeader(headerData)[column.id] === Attribute.valueType.IMAGE ?
+                                                        <a href={imageUrl({ attribute: column.id, trackedEntity: row.trackedEntity })} target='_blank'>{row[column.id] && <IconButton> <CropOriginal /></IconButton>}</a>
+                                                        :
+                                                        getDisplayName({ metaData: column.id, value: row[column.id], program: programConfigState })
+                                                }
+                                                {
+                                                    (column.displayName == "Actions") ?
+                                                        searchActions ? <SearchRowActions row={row} onSelectTei={onSelectTei ? () => onSelectTei(row) : undefined} onShowHistory={() => setShowEnrollments(showEnrollments === row.trackedEntity ? "" : row.trackedEntity)} /> :
+                                                            <RowActions row={row} />
+                                                        : null
+                                                }
+                                            </div>
+                                        </RowCell>
+                                    ))
+                                }
+                            </RowTable>
+                            :
+                            <MobileRow
+                                row={row}
+                                header={headerData}
+                                inactive={checkCanceled(row.status)}
+                                isOwnershipOu={checkOwnershipOu(row.ownershipOu, school as unknown as string)}
+                                actions={
+                                    searchActions ?
+                                        <SearchRowActions row={row} onSelectTei={onSelectTei ? () => onSelectTei(row) : undefined} onShowHistory={() => setShowEnrollments(showEnrollments === row.trackedEntity ? "" : row.trackedEntity)} /> :
+                                        <RowActions row={row} />
+                                }
+                            />
+                        }
 
-                                headerData?.filter(x => x.visible)?.map(column => (
-                                    <RowCell
-                                        key={column.id}
-                                        className={classNames(classes.cell, classes.bodyCell, (column.displayName == "Actions") ? classes.actionsCell : null)}
-                                    >
-                                        <div>
-                                            {
-                                                formatKeyValueTypeHeader(headerData)[column.id] === Attribute.valueType.IMAGE ?
-                                                    <a href={imageUrl({ attribute: column.id, trackedEntity: row.trackedEntity })} target='_blank'>{row[column.id] && <IconButton> <CropOriginal /></IconButton>}</a>
-                                                    :
-                                                    getDisplayName({ metaData: column.id, value: row[column.id], program: programConfigState })
-                                            }
-                                            {
-                                                (column.displayName == "Actions") ?
-                                                    searchActions ? <SearchRowActions row={row} onSelectTei={onSelectTei ? () => onSelectTei(row) : undefined} onShowHistory={() => setShowEnrollments(showEnrollments === row.trackedEntity ? "" : row.trackedEntity)} /> :
-                                                        <RowActions row={row} />
-                                                    : null
-                                            }
-                                        </div>
-                                    </RowCell>
-                                ))
-                            }
-
-                        </RowTable>
                         {searchActions && showEnrollments === row.trackedEntity ?
                             <RowTable className={classNames(classes.row, classes.historyRow)}>
                                 <RowCell
