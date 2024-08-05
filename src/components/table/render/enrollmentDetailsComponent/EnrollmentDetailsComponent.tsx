@@ -1,6 +1,6 @@
 import React from "react";
 import { Label, Button, IconAddCircle16 } from "@dhis2/ui";
-import styles from "../../components/table.module.css";
+import styles from "./enrollmentDetails.module.css";
 import { useEnrollmentsHeader } from "../../../../hooks/tableHeader/useEnrollmentsHeader";
 import { EnrollmentDetailsComponentProps } from "../../../../types/table/TableContentProps";
 import Subtitle from "../../../text/subtitle";
@@ -15,12 +15,12 @@ function EnrollmentDetailsComponent(props: EnrollmentDetailsComponentProps): Rea
   const { sectionName } = useGetSectionTypeLabel();
 
   return (
-    <React.Fragment>
-      <div className="row pb-2 px-1 d-flex justify-content-end align-items-center">
-        <div className="col-12 col-md-8 px-1 pt-2">
-          <h6 className="mb-0" style={{ fontSize: 13 }}>Enrollment History</h6>
+    <div className={styles.details_container}>
+      <div className={styles.details_header}>
+        <div className={styles.details_header_title}>
+          <h6 style={{ fontSize: 13 }}>Enrollment History</h6>
         </div>
-        <div className="col-12 col-md-4 px-1 pt-2 d-flex justify-content-end">
+        <div className={styles.details_header_button}>
           {existingAcademicYear ?
             <i className={styles.enrolledAlertLabel}>This {sectionName} is already enrolled for this year.</i>
             :
@@ -29,39 +29,22 @@ function EnrollmentDetailsComponent(props: EnrollmentDetailsComponentProps): Rea
           }
         </div>
       </div>
-      <div className="row w-100 pb-2">
+      <div className={styles.details_body}>
 
-        {/*         <div className="col-12 col-sm-6 col-md-3 p-0" onClick={onSelectTei}>
-          <div className={classNames(styles.detailsCard, styles.detailsButtonCard)}>
-            {existingAcademicYear ? 
-            <div className="text-center">
-              <AddCircleOutlineOutlined className={styles.detailsButtonCardIcon} /> <br />
-              <small className={classNames(styles.detailsCardLabel, styles.detailsButtonCardLabel)}> Request transfer </small>
-            </div>
-            :
-            <div className="text-center">
-              <AddCircleOutlineOutlined className={styles.detailsButtonCardIcon} /> <br />
-              <small className={classNames(styles.detailsCardLabel, styles.detailsButtonCardLabel)}> New enrollment </small>
-            </div>
-          }
-          </div>
-      </div> */}
         {enrollmentsData.length ?
           enrollmentsData?.map((enrollment: any) => (
-            <div className="">
-              <div className={styles.detailsCard}>
-                {dataElements?.map((dataElement: any, key: number) => (
-                  <div className="d-flex align-items-center px-2" key={key}>
-                    <Label className={styles.detailsCardVariable}>{dataElement?.displayName}:</Label>
-                    <Label className={styles.detailsCardLabel}> {enrollment[dataElement?.id]} </Label>
-                  </div>
-                ))}
-              </div>
+            <div className={styles.detailsCard}>
+              {dataElements?.map((dataElement: any, key: number) => (
+                <div className={styles.details_body_list} key={key}>
+                  <Label className={styles.detailsCardVariable}>{dataElement?.displayName}:</Label>
+                  <Label className={styles.detailsCardLabel}> {enrollment[dataElement?.id]} </Label>
+                </div>
+              ))}
             </div>
           )) : <span className="ml-1">No enrollments found.</span>
         }
       </div>
-    </React.Fragment>
+    </div>
 
   )
 }

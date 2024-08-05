@@ -1,5 +1,6 @@
 .modalContainer {
-    min-width: 1000px !important;
+    padding: 0 !important;
+    /* min-width: 1000px !important; */
 }
 
 .detailsCard {
@@ -54,6 +55,14 @@
     text-transform: capitalize;
 }
 
+@media screen and (max-width: 650px) {
+    .listItem {
+        padding: 3px 16px !important;
+        border-bottom: 0.5px solid rgba(0, 0, 0, 0.10);
+    }
+    
+}
+
 .noValuesColor,
 .noValuesColor svg {
     color: #6C7787 !important;
@@ -78,6 +87,37 @@
 .noticeBoxTitle {
     padding: 0 !important;
     margin: 0 !important;
+}
+
+@media screen and (max-width: 650px) {
+    .noticeBox {
+        padding: 5px !important;
+    }
+
+    .noticeBox,
+    .noticeBox h6,
+    .noticeBox p,
+    .noticeBox div {
+        font-size: 13px !important;
+        line-height: 15px !important;
+    }
+
+    .listItem {
+        width: 100% !important;
+        overflow: hidden;
+    }
+
+    .listItem span{
+        width: 80px !important;
+        /* background-color: red; */
+    }
+}
+
+@media screen and (max-width: 435px) {
+    .noticeBox {
+       display: grid !important;
+       grid-template-columns: auto auto;
+    }
 }
 
 .leftCell {
@@ -139,4 +179,82 @@
 
 .success {
     background-color: #388e3c !important;
+}
+
+
+@media screen and (max-width: 620px) and (min-width: 352px) {
+    .modalContainer h1 {
+        font-size: 18px !important;
+    }
+}
+
+@media screen and (max-width: 620px) and (min-width: 436px) {
+    .modalButtons {
+        font-size: 12px !important;
+        padding: 5px 8px !important;
+    }
+}
+
+@media screen and (max-width: 435px) {
+    .modalButtonsStrip {
+        flex-direction: column !important;
+        display: flex !important;
+        justify-content: start !important;
+        align-self:flex-start !important;
+    }
+
+    .modalButtonsStrip>div {
+        margin-left: 0 !important;
+        justify-content: start !important;
+    }
+
+    .modalButtons {
+        margin: 5px !important;
+        width: 200px !important;
+        font-size: 12px !important;
+        height: 32px !important;
+        padding: 5px 8px !important;
+    }
+
+    .modalContainer {
+        min-width: 95vw !important;
+    }
+    .modalContainer > div:first-child:nth-child(1) > div:first-child {
+        min-width: 100% !important;
+        padding: 4vw !important;
+    }
+}
+
+
+@media screen and (max-width: 352px) {
+    .modalContainer h1 {
+        font-size: 16px !important;
+    }
+
+    .modalLabel {
+        font-size: 12px !important;
+    }
+}
+
+.modalSearchActions {
+    width: 100% !important;
+    display: flex !important;
+    /* align-items: center !important; */
+    justify-content: space-between !important;
+}
+
+@media screen and (max-width: 550px) {
+    .modalSearchActions {
+        row-gap: 8px;
+        flex-direction: column;
+    }
+
+    .modalSearchActions small {
+        font-size: 11px;
+    }
+}
+
+.jsx-3079864901, .jsx-1613565548 .jsx-2887186510 {
+    padding: 0px !important;
+    background-color: red !important;
 }

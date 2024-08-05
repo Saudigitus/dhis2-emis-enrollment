@@ -205,7 +205,7 @@ export const BulkEnrollment = ({setOpen, isOpen}: BulkEnrollmentProps): React.Re
                 </MuiThemeProvider>
             }
             { (summaryOpen && isValidTemplate) &&
-                <Modal fluid position={"middle"} className={styles.modalContainer}>
+                <Modal large position={"middle"} className={styles.modalContainer}>
                     <ModalTitle>{isProcessing ? "Processing Bulk Enrolment" : "Bulk Enrolment Summary"}</ModalTitle>
                     <ModalContent>
                         {isProcessing

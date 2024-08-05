@@ -9,7 +9,7 @@ export function formatResponseEvents(programStageObject: ProgramStageConfig): Cu
         {
             required: programStageDataElement.compulsory,
             name: programStageDataElement.dataElement.id,
-            labelName: programStageDataElement.dataElement.displayName,
+            labelName: programStageDataElement.dataElement.formName ?? programStageDataElement.dataElement.displayName,
             valueType: programStageDataElement.dataElement?.optionSet
                 ? Attribute.valueType.LIST as unknown as CustomAttributeProps["valueType"]
                 : programStageDataElement.dataElement?.valueType as unknown as  CustomAttributeProps["valueType"],
@@ -18,14 +18,14 @@ export function formatResponseEvents(programStageObject: ProgramStageConfig): Cu
             disabled: false,
             pattern: "",
             visible: true,
-            description: programStageDataElement.dataElement.displayName,
+            description: programStageDataElement.dataElement.formName ?? programStageDataElement.dataElement.displayName,
             searchable: programStageDataElement.dataElement.displayInReports,
             error: false,
             programStage: programStageObject.id,
             content: "",
             id: programStageDataElement.dataElement?.id,
-            displayName: programStageDataElement.dataElement?.displayName,
-            header: programStageDataElement.dataElement?.displayName,
+            displayName:  programStageDataElement.dataElement.formName ?? programStageDataElement.dataElement?.displayName,
+            header:  programStageDataElement.dataElement.formName ?? programStageDataElement.dataElement?.displayName,
             type: VariablesTypes.DataElement,
             assignedValue: undefined
         }

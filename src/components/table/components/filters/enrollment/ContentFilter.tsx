@@ -9,6 +9,7 @@ import { convertArrayToObject } from '../../../../../utils/table/filter/formatAr
 import styles from './ContentFilter.module.css'
 import { ContentFilterProps } from '../../../../../types/table/ContentFiltersProps';
 import { CustomAttributeProps, VariablesTypes } from '../../../../../types/variables/AttributeColumns';
+import useViewportWidth from '../../../../../hooks/rwd/useViewportWidth';
 
 
 type FiltersValuesProps = Record<string, any | { endDate: string } | { startDate: string }>;
@@ -23,11 +24,13 @@ function ContentFilter(props: ContentFilterProps) {
     const [headerFieldsStateValues, setHeaderFieldsState] = useRecoilState(HeaderFieldsState)
     const attributesQuerybuilder: any[][] = [];
     const dataElementsQuerybuilder: any[][] = [];
+    const { viewPortWidth } = useViewportWidth()
 
     useEffect(() => {
         const copyHeader = [...headers]
-        setlocalFilters(copyHeader.slice(0, 4))
-    }, [headers])
+        const sliceTo = viewPortWidth < 779 ? 1 : 4
+        setlocalFilters(copyHeader.slice(0, sliceTo))
+    }, [headers, viewPortWidth])
 
     const handleClick = (event: any) => {
         setAnchorEl(event.currentTarget);

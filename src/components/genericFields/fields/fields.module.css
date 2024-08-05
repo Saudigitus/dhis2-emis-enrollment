@@ -38,7 +38,7 @@
     text-decoration: none !important;
     cursor: pointer !important;
     user-select: none !important;
-    color: rgb(33, 41, 52) ;
+    color: rgb(33, 41, 52);
     height: 36px !important;
     padding: 0px 12px !important;
     font-size: 14px !important;
@@ -46,4 +46,28 @@
     border: 1px solid rgb(160, 173, 186) !important;
     background-color: rgb(249, 250, 251) !important;
     text-transform: none !important;
+}
+
+.image_field_box {
+    display: flex;
+    justify-content: space-between;
+}
+
+.image_field_photo {
+    max-width: 200px;
+}
+
+@media screen and (max-width: 500px) {
+    .image_field_photo {
+        max-width: 45px;
+    }
+
+    .customDhis2Button {
+        font-size: 12px !important;
+        line-height: 14px !important;
+        height: 30px !important;
+    }
+    .customDhis2Button svg {
+        width: 18px;
+    }
 }

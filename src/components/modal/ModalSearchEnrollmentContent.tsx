@@ -24,6 +24,7 @@ import { ExpandLess, ExpandMore } from "@material-ui/icons";
 import { CustomAttributeProps } from "../../types/variables/AttributeColumns";
 import classNames from "classnames";
 import ButtonComponent from "../buttons/Button";
+import useViewportWidth from "../../hooks/rwd/useViewportWidth";
 
 const usetStyles = makeStyles({
   tableContainer: {
@@ -44,7 +45,7 @@ function ModalSearchEnrollmentContent(props: ModalSearchTemplateProps): React.Re
 
   const { urlParamiters } = useParams();
   const { school: orgUnit, schoolName: orgUnitName, academicYear } = urlParamiters();
-
+  const { viewPortWidth } = useViewportWidth()
   const formRef: React.MutableRefObject<FormApi<IForm, Partial<IForm>>> = useRef(null);
 
   const [initialValues] = useState<object>({
@@ -155,7 +156,7 @@ function ModalSearchEnrollmentContent(props: ModalSearchTemplateProps): React.Re
 
   return (
     <div>
-      <Label>Fill in at least 1 attribute to search.</Label>
+      <Label className={styles.modalLabel}>Fill in at least 1 attribute to search.</Label>
       <br />
 
       {searchEnrollmentFields?.map((group, index) => (
@@ -222,12 +223,16 @@ function ModalSearchEnrollmentContent(props: ModalSearchTemplateProps): React.Re
                   className={classes.tableContainer}
                 >
                   <TableComponent>
-                    <RenderHeader
-                      createSortHandler={() => { }}
-                      order="asc"
-                      orderBy="desc"
-                      rowsHeader={searchableAttributes}
-                    />
+                    {
+                      viewPortWidth > 520 &&
+                      <RenderHeader
+                        createSortHandler={() => { }}
+                        order="asc"
+                        orderBy="desc"
+                        rowsHeader={searchableAttributes}
+                      />
+
+                    }
                     <RenderRows
                       headerData={searchableAttributes}
                       rowsData={enrollmentValues}
@@ -237,18 +242,22 @@ function ModalSearchEnrollmentContent(props: ModalSearchTemplateProps): React.Re
                   </TableComponent></div>
               </WithBorder>
             </div> :
-            <NoticeBox title={`No ${sectionName} found`}>
+            <NoticeBox className={styles.noticeBox} title={`No ${sectionName} found`}>
               Continue serching or click <strong>'Register new'</strong> if you want to register as a new <strong>{sectionName}</strong>.
             </NoticeBox>}
         </>
       </Collapse>
       {showResults ? <ModalActions>
-        <div className="d-flex justify-content-between align-items-center w-100">
+        <div className={styles.modalSearchActions}>
           {enrollmentValues.length ? <small>If none of the matches above is the {sectionName} you are searching for, click 'Register new'.</small> : <small></small>}
-          <ButtonStrip end>
+          <ButtonStrip end className={classNames(styles.modalButtonsStrip)}>
             {modalActions.map((action, i) => {
               return (
-                <Button key={i} {...action}>
+                <Button
+                  key={i}
+                  {...action}
+                  className={styles.modalButtons}
+                >
                   {action.label}
                 </Button>
               )

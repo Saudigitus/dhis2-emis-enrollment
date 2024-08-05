@@ -12,6 +12,8 @@ import { useParams, useUpdateSelectedEnrollment } from "../../hooks";
 import { CustomDhis2RulesEngine } from "../../hooks/programRules/rules-engine/RulesEngine";
 import { formatKeyValueType } from "../../utils/programRules/formatKeyValueType";
 import { removeFalseKeys } from "../../utils/commons/removeFalseKeys";
+import styles from "./modal.module.css";
+import classNames from "classnames";
 
 function ModalContentUpdate(props: ModalContentUpdateProps): React.ReactElement {
   const { setOpen, sectionName, enrollmentsData, formInitialValues, loadingInitialValues, enrollmentValues } = props;
@@ -54,7 +56,7 @@ function ModalContentUpdate(props: ModalContentUpdateProps): React.ReactElement 
 
     if (allFields.filter((element: any) => (element?.assignedValue === undefined && element.required))?.length === 0) {
       // if ((allFields.some((field: any) => field.assignedValue != initialValues[field.id as keyof typeof initialValues] && initialValues[field.id as keyof typeof initialValues])) || (initialValues['enrollment_date' as keyof typeof initialValues] != values['enrollment_date'])) {
-        updateSelectedEnrollment(fieldsWithValue, events, initialValues, values, getProgram.id)
+      updateSelectedEnrollment(fieldsWithValue, events, initialValues, values, getProgram.id)
     }
 
   }
@@ -66,7 +68,7 @@ function ModalContentUpdate(props: ModalContentUpdateProps): React.ReactElement 
 
   if (enrollmentsData?.length < 1 || loadingInitialValues || !Object.keys(formInitialValues).length) {
     return (
-      <CenteredContent className="p-5">
+      <CenteredContent className={styles.loaderContainer}>
         <CircularLoader />
       </CenteredContent>
     )
@@ -114,16 +116,17 @@ function ModalContentUpdate(props: ModalContentUpdateProps): React.ReactElement 
             }
             <br />
             <ModalActions>
-              <ButtonStrip end className="mr-4">
+              <ButtonStrip end className={classNames(styles.modalButtonsStrip)}>
                 {modalActions.map((action, i) => (
-                  <Button
-                    key={i}
-                    loading={(loading && action.id === clickedButton)}
-                    {...action}
-                    disabled={(action.id == "save" && pristine) || loadingInitialValues || loading}
-                  >
-                    {action.label}
-                  </Button>
+                    <Button
+                      key={i}
+                      {...action}
+                      className={styles.modalButtons}
+                      loading={(loading && action.id === clickedButton)}
+                      disabled={(action.id == "save" && pristine) || loadingInitialValues || loading}
+                    >
+                      {action.label}
+                    </Button>
                 ))}
               </ButtonStrip>
             </ModalActions>
