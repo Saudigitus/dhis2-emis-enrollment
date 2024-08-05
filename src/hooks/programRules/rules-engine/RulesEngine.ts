@@ -172,7 +172,6 @@ export function removeSpecialCharacters(text: string | undefined) {
     if (typeof text === "string") {
         return text
             .replaceAll("d2:hasValue", "")
-            .replaceAll("d2:length", "")
             .replaceAll("d2:yearsBetween", "")
             .replaceAll("d2:concatenate", "")
             .replaceAll("d2:inOrgUnitGroup", "")
@@ -180,7 +179,6 @@ export function removeSpecialCharacters(text: string | undefined) {
             .replaceAll("A{", "")
             .replaceAll("V{", "")
             .replaceAll("}", "")
-            .replaceAll("&&", "&")
             .replaceAll("current_date", `'${format(new Date(), "yyyy-MM-dd")}'`);
     }
 }
@@ -231,7 +229,7 @@ function executeFunctionName(functionName: string | undefined, condition: string
             return true
 
         case "length":
-            return eval(compareLength(condition ?? "")) ? true : false;
+            return eval(compareLength(condition ?? ""))
 
         case "substring":
             let function_paramter = returnSubstring(condition?.split("d2:substring(").pop() ?? "")
@@ -239,6 +237,7 @@ function executeFunctionName(functionName: string | undefined, condition: string
             return eval(formated_function as string)
 
         default:
+            console.log(condition, functionName)
             return eval(condition ?? "");
     }
 }
@@ -257,16 +256,19 @@ function returnSubstring(value: string) {
 }
 
 //compare values in string
-function compareLength(assignedValue: string) {
-    let value: any
-    const pattern = /\('([^']*)'\)/g;
-    const matches = [...assignedValue.matchAll(pattern)].map(match => match[1]);
+function compareLength(condition: string) {
+    const results = [];
+    let newcondition = 'false'
+    for (const match of condition?.matchAll(/d2:length\('(.*?)'\)/g)) {
+        results.push(match[1]);
 
-    for (let index = 0; index < matches.length; index++) {
-        value = assignedValue.replaceAll(`('${matches[index]}')`, `${matches[index].length}`)
     }
 
-    return value
+    for (const result of results) {
+        newcondition = condition?.replace(`d2:length('${result}')`, `${result.length}`)
+    }
+
+    return newcondition
 }
 
 // get years between dates
