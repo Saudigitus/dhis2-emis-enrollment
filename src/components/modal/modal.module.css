@@ -1,4 +1,5 @@
 .modalContainer {
+    padding: 0 !important;
     /* min-width: 1000px !important; */
 }
 
@@ -251,4 +252,9 @@
     .modalSearchActions small {
         font-size: 11px;
     }
+}
+
+.jsx-3079864901, .jsx-1613565548 .jsx-2887186510 {
+    padding: 0px !important;
+    background-color: red !important;
 }
