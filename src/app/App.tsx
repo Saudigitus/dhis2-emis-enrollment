@@ -1,4 +1,5 @@
 import React from 'react'
+import "./App.css"
 import "./App.module.css"
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "react-select/dist/react-select.css";

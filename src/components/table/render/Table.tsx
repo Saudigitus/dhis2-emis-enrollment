@@ -12,8 +12,9 @@ import { HeaderFieldsState } from '../../../schema/headersSchema';
 import { TeiRefetch } from '../../../schema/refecthTeiSchema';
 import { useHeader, useTableData, useParams } from '../../../hooks';
 import { TableDataLoadingState } from '../../../schema/tableDataLoadingSchema';
+import useViewportWidth from '../../../hooks/rwd/useViewportWidth';
 
-const usetStyles = makeStyles({
+const usetStyles = makeStyles((theme) => ({
     tableContainer: {
         overflowX: 'auto'
     },
@@ -27,8 +28,14 @@ const usetStyles = makeStyles({
         margin: '0px',
         fontSize: '22px',
         fontWeigth: '500',
+        [theme.breakpoints.down('md')]: {
+            fontSize: '20px',
+        },
+        [theme.breakpoints.down('sm')]: {
+            fontSize: '16px',
+        }
     }
-});
+}));
 
 function Table() {
     const classes = usetStyles()
@@ -41,6 +48,7 @@ function Table() {
     const { urlParamiters } = useParams()
     const { academicYear } = urlParamiters()
     const setLoading = useSetRecoilState(TableDataLoadingState)
+    const { viewPortWidth } = useViewportWidth()
 
     useEffect(() => {
         if (academicYear)
@@ -64,6 +72,8 @@ function Table() {
         setpage(1)
     }
 
+
+
     return (
         <Paper>
             <div className={classes.workingListsContainer}>
@@ -79,12 +89,15 @@ function Table() {
                     >
                         <TableComponent>
                             <>
-                                <RenderHeader
-                                    createSortHandler={() => { }}
-                                    order='asc'
-                                    orderBy='desc'
-                                    rowsHeader={columns}
-                                />
+                                {
+                                    viewPortWidth > 520 &&
+                                    <RenderHeader
+                                        createSortHandler={() => { }}
+                                        order='asc'
+                                        orderBy='desc'
+                                        rowsHeader={columns}
+                                    />
+                                }
                                 {!loading && (
                                     <RenderRows
                                         headerData={columns}
@@ -92,6 +105,7 @@ function Table() {
                                         loading={loading}
                                     />
                                 )}
+
                             </>
                         </TableComponent>
                         {(loading) ? (

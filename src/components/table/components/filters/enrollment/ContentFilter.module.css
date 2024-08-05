@@ -17,3 +17,35 @@
 .moreFiltersContainer{
     margin-top: 0px !important;
 }
+
+@media screen and (max-width: 885px) and (min-width: 715px) {
+
+    .container {
+        width: 100% !important;
+        /* display: flex; */
+        /* flex-wrap: nowrap !important; */
+        overflow: auto;
+        margin: 5px !important;
+    }
+
+    .container button {
+        font-size: 12px !important;
+        padding: 5px 8px !important;
+    }
+}
+
+
+@media screen and (max-width: 715px) and (min-width: 618px) {
+    .container button {
+        font-size: 12px !important;
+        padding: 5px 8px !important;
+    }
+}
+
+@media screen and (max-width: 617px) {
+    .container button {   
+        font-size: 11px !important;
+        padding: 5px 7px !important;
+    }
+}
+

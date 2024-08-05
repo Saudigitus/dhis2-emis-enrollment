@@ -22,7 +22,7 @@ function GroupForm(props: GroupFormProps) {
                         {description ?
                             <>
                                 <WithPadding />
-                                <Label>{description}</Label>
+                                <Label  className={styles.label}>{description}</Label>
                                 <WithPadding p="0.2rem" />
                             </>
                             : null

@@ -51,7 +51,7 @@ function ModalDeleteContent(props: ModalDeleteContentProps): React.ReactElement 
 
     if (loadingInitialValues) {
         return (
-            <CenteredContent>
+            <CenteredContent className={styles.loaderContainer}>
                 <CircularLoader />
             </CenteredContent>
         )
@@ -84,6 +84,7 @@ function ModalDeleteContent(props: ModalDeleteContentProps): React.ReactElement 
                                     fields={initialValues?.registration}
                                 />
                             </Collapse>
+
                         </div>
                         <WithPadding p={'0 0.4em'}>
                             <Subtitle label="Enrollment summary" />
@@ -94,20 +95,21 @@ function ModalDeleteContent(props: ModalDeleteContentProps): React.ReactElement 
                                 {initialValues?.events?.map((event: any) =>
                                     <ListItem className={classNames(styles.listItem)}>
                                         <ListItemText primary={event.name} />
-                                        <div className={classNames(styles.valuesFlex)}>
+                                        <span className={classNames(styles.valuesFlex)}>
                                             <span className={classNames(styles[event.class])}>
                                                 {event.repeatable ? event.value : event.value ? <IconCheckmark24 /> : <IconCross24 />}
                                             </span>
                                             <span className={classNames(styles[event.class], styles.iconLabel)}>
                                                 {event.label}
                                             </span>
-                                        </div>
+                                        </span>
                                     </ListItem>
                                 )}
                             </WithBorder>
 
                             <br />
                             < NoticeBox
+                                className={styles.noticeBox}
                                 warning
                                 title={<p className={styles.noticeBoxTitle}>Are you sure you want
                                     to <span className={classNames(styles.redText)}>delete</span> the
@@ -118,11 +120,12 @@ function ModalDeleteContent(props: ModalDeleteContentProps): React.ReactElement 
                             </NoticeBox>
 
                             <ModalActions>
-                                <ButtonStrip end>
+                                <ButtonStrip end className={classNames(styles.modalButtonsStrip)}>
                                     {modalActions.map((action, i) => (
                                         <Button
                                             key={i}
                                             {...action}
+                                            className={styles.modalButtons}
                                         >
                                             {action.label}
                                         </Button>

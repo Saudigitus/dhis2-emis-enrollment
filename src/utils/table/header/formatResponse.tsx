@@ -5,7 +5,7 @@ import { dataStoreRecord } from "../../../types/dataStore/DataStoreConfig";
 import { CustomAttributeProps, VariablesTypes } from "../../../types/variables/AttributeColumns";
 import { any } from "zod";
 
-export function formatResponse(data: ProgramConfig, dataStoreData: dataStoreRecord, tableColumns: CustomAttributeProps[] = []): CustomAttributeProps[] {
+export function formatResponse(data: ProgramConfig, dataStoreData: dataStoreRecord, tableColumns: CustomAttributeProps[] = [], viewPortWidth: number): CustomAttributeProps[] {
     let columns = ['Actions']
 
     const headerResponse = useMemo(() => {
@@ -46,7 +46,7 @@ export function formatResponse(data: ProgramConfig, dataStoreData: dataStoreReco
                         valueType: programStageDataElement.dataElement.optionSet?.options?.length > 0 ? Attribute.valueType.LIST as unknown as CustomAttributeProps["valueType"] : programStageDataElement.dataElement.valueType as unknown as CustomAttributeProps["valueType"],
                         options: { optionSet: programStageDataElement.dataElement.optionSet },
                         initialOptions: { optionSet: programStageDataElement.dataElement.optionSet },
-                        visible: programStageDataElement.displayInReports,
+                        visible: viewPortWidth < 719 ? false : programStageDataElement.displayInReports,
                         disabled: false,
                         pattern: '',
                         searchable: false,
@@ -82,7 +82,7 @@ export function formatResponse(data: ProgramConfig, dataStoreData: dataStoreReco
                 }
             }) as []
         ) || []
-    }, [data, tableColumns]);
+    }, [data, tableColumns, viewPortWidth]);
 
     return headerResponse;
 }

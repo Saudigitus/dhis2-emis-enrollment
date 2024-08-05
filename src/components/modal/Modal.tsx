@@ -10,6 +10,7 @@ function ModalComponent(props: ModalProps): React.ReactElement {
 
   return (
     <Modal
+      large
       open={open}
       position={"middle"}
       className={styles.modalContainer}

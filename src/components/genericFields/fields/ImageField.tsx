@@ -59,12 +59,12 @@ function ImageField(props: FormFieldsProps) {
     }
 
     return (
-        <Box style={{ display: "flex", justifyContent: "space-between" }}>
+        <Box className = {style.image_field_box}>
             {
                 uploadedImage ? (
                     <span>
                         {!(loadingQuery) &&
-                            <img src={uploadedImage} alt="Uploaded" style={{ maxWidth: '200px' }} />
+                            <img src={uploadedImage} alt="Uploaded" className={style.image_field_photo}/>
                         }
                     </span>
                 ) :

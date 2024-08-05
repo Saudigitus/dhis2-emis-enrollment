@@ -10,6 +10,7 @@ import { BulkEnrollment } from "../../../bulkImport/BulkEnrollment";
 import DropdownButtonComponent from "../../../buttons/DropdownButton";
 import { ModalExportTemplateContent, ModalSearchEnrollmentContent } from '../../../modal';
 import { getDataStoreKeys } from '../../../../utils/commons/dataStore/getDataStoreKeys';
+import styles from './enrollmentActionsButtons.module.css'
 
 function EnrollmentActionsButtons() {
   const [open, setOpen] = useState<boolean>(false);
@@ -23,17 +24,19 @@ function EnrollmentActionsButtons() {
   const { enrollmentsData } = useGetEnrollmentForm();
 
   const enrollmentOptions: FlyoutOptionsProps[] = [
-    { label: "Enroll new students", divider: true, onClick: () => { setOpenImport(true); } },
+    { label: `Enroll new ${sectionName}(s)`, divider: true, onClick: () => { setOpenImport(true); } },
     { label: "Download template", divider: false, onClick: () => { setOpenExportEmptyTemplate(true) } }
   ];
 
   return (
-    <div>
-      <ButtonStrip>
-        { allowSearching ?
+    <div className={styles.container}>
+      <ButtonStrip className={styles.work_buttons}>
+        {allowSearching ?
           <Tooltip title={orgUnit === null ? "Please select an organisation unit before" : ""}>
             <span>
-              <Button disabled={orgUnit == null} onClick={() => { setOpenSearchEnrollment(true); }} icon={<IconSearch24 />}>Search {sectionName.toLowerCase()}</Button>
+              <Button disabled={orgUnit == null} onClick={() => { setOpenSearchEnrollment(true); }} icon={<IconSearch24 />}>
+                <span className={styles.work_buttons_text}>Search {sectionName.toLowerCase()}</span>
+              </Button>
             </span>
           </Tooltip> : null
         }
@@ -41,11 +44,13 @@ function EnrollmentActionsButtons() {
 
         <Tooltip title={orgUnit === null ? "Please select an organisation unit before" : ""}>
           <span>
-            <Button disabled={orgUnit == null} onClick={() => { setOpen(true); }} icon={<IconAddCircle24 />}>Enroll {sectionName.toLocaleLowerCase()}</Button>
+            <Button disabled={orgUnit == null} onClick={() => { setOpen(true); }} icon={<IconAddCircle24 />}>
+              <span className={styles.work_buttons_text}>Enroll {sectionName.toLocaleLowerCase()}</span>
+            </Button>
           </span>
         </Tooltip>
         <DropdownButtonComponent
-          name="Bulk enrollment"
+          name={<span className={styles.work_buttons_text}>Bulk enrollment</span> as unknown as string}
           disabled={false}
           icon={<IconUserGroup16 />}
           options={enrollmentOptions}
@@ -68,7 +73,7 @@ function EnrollmentActionsButtons() {
         />
       </ModalComponent>}
 
-      {openSearchEnrollment && <ModalComponent  title={`Search for enrolled ${sectionName.toLowerCase()}`} open={openSearchEnrollment} setOpen={setOpenSearchEnrollment}>
+      {openSearchEnrollment && <ModalComponent title={`Search for enrolled ${sectionName.toLowerCase()}`} open={openSearchEnrollment} setOpen={setOpenSearchEnrollment}>
         <ModalSearchEnrollmentContent
           sectionName={sectionName}
           setOpen={setOpenSearchEnrollment}

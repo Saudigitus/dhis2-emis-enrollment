@@ -19,3 +19,20 @@
 .rowSearchActionsIcon.icon1 {
   color: #0F9D58 !important
 }
+
+@media screen and (max-width: 600px) {
+  .rowActionsIcon svg,
+  .rowSearchActionsIcon svg {
+    width: 17px !important;
+    height: 17px !important;
+  }
+}
+
+
+@media screen and (max-width: 950px) and (min-width: 600px) {
+  .rowActionsIcon svg,
+  .rowSearchActionsIcon svg {
+    width: 18px !important;
+    height: 18px !important;
+  }
+}

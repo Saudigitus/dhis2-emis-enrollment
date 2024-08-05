@@ -17,6 +17,7 @@ import {useRecoilState, useRecoilValue, useResetRecoilState} from "recoil";
 import {usePostTrackedEntities} from "../../hooks/bulkImport/postTrackedEntities";
 import {TrackedEntity} from "../../schema/trackerSchema";
 import {ApiResponse, Stats} from "../../types/bulkImport/Interfaces";
+import { LinearProgress } from "@material-ui/core";
 
 interface ModalContentProps {
     setOpen: (value: boolean) => void
@@ -37,6 +38,7 @@ const ModalSummaryContent = (props: ModalContentProps): React.ReactElement => {
     const [bulkImportResponseStatsState, setBulkImportResponseStatsState] = useRecoilState<BulkImportResponseStats>(BulkImportResponseStatsState)
     const resetBulkImportResponseStatsState = useResetRecoilState(BulkImportResponseStatsState)
     const {
+        loading,
         postTrackedEntities,
         data,
         error
@@ -114,7 +116,7 @@ const ModalSummaryContent = (props: ModalContentProps): React.ReactElement => {
             console.error("Error importing Tracked Entities: ", error)
         }
     }
-    const newImportDisabled = (processedRecords.newTrackedEntities?.length === 0 || processingStage === 'completed')
+    const newImportDisabled = (processedRecords.newTrackedEntities?.length === 0 || processingStage === 'completed' || loading)
 
     const modalActions: ButtonActionProps[] = [
         {
@@ -136,7 +138,7 @@ const ModalSummaryContent = (props: ModalContentProps): React.ReactElement => {
         },
         {
             label: "Close",
-            disabled: false,
+            disabled: loading,
             loading: false,
             onClick: () => {
                 setOpen(false)
@@ -169,6 +171,7 @@ const ModalSummaryContent = (props: ModalContentProps): React.ReactElement => {
                 </div>
             </Collapse>
 
+            {loading && <LinearProgress />}
             <Divider/>
             <ModalActions>
                 <ButtonStrip end>
