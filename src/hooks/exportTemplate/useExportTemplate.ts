@@ -10,10 +10,17 @@ import { capitalizeString } from "../../utils/commons/formatCamelCaseToWords";
 import { getSelectedKey } from "../../utils/commons/dataStore/getSelectedKey";
 import { VariablesTypes } from "../../types/variables/AttributeColumns";
 import { getHeaderBgColor } from "./getHeaderBgColor";
+import { cellBorders, cellFillBg } from "../../utils/constants/exportTemplate/templateStyles";
 
 
 const DATA_STORE_NAME : string = "semis"
 const DATA_STORE_VALUE_KEY: string = "values"
+
+export enum SectionVariablesTypes {
+  EnrollmentDetails = "Enrollment Details",
+  Profile = "Student Profile",
+  SocioEconomics = "Socio Economics",
+}
 
 
 const oneProgramQuery : any = {
@@ -93,7 +100,8 @@ export default function useExportTemplate ( ) {
             options: attribute.optionSet?.options || [],
             optionSetId: attribute.optionSet?.id || null,
             required: attribute.mandatory || false,
-            metadataType: VariablesTypes.Attribute
+            metadataType: VariablesTypes.Attribute,
+            sectionDataType: SectionVariablesTypes.Profile
           }));
         }
         
@@ -122,7 +130,8 @@ export default function useExportTemplate ( ) {
                     options: dxCurr.dataElement?.optionSet?.options || [],
                     optionSetId: dxCurr.dataElement?.optionSet?.id || null,
                     required: dxCurr?.compulsory || false,
-                    metadataType: VariablesTypes.DataElement
+                    metadataType: VariablesTypes.DataElement,
+                    sectionDataType: SectionVariablesTypes.EnrollmentDetails
                   });
                   return dxPrev;
                 }, []) || [];
@@ -148,7 +157,8 @@ export default function useExportTemplate ( ) {
                     options: dxCurr.dataElement?.optionSet?.options || [],
                     optionSetId: dxCurr.dataElement?.optionSet?.id || null,
                     required: dxCurr?.compulsory || false,
-                    metadataType: VariablesTypes.DataElement
+                    metadataType: VariablesTypes.DataElement,
+                    sectionDataType: SectionVariablesTypes.SocioEconomics
                   });
                   return dxPrev;
                 }, []) || [];
@@ -161,13 +171,15 @@ export default function useExportTemplate ( ) {
           }, []) || [];
 
         const newBeginHeaders = [
-         {key: `ref`,id: `ref`,label:'Ref',  valueType: 'TEXT', optionSetValue: false, options: [], optionSetId: null, required: false, metadataType: VariablesTypes.Default },
-         {key: `orgUnitName`,id: `orgUnitName`,label:'School Name',  valueType: 'TEXT', optionSetValue: false, options: [], optionSetId: null, required: true, metadataType: VariablesTypes.Default  },
-         {key: `orgUnit`,id: `orgUnit`,label:'School UID', valueType: 'TEXT', optionSetValue: false, options: [], optionSetId: null, required: true, metadataType: VariablesTypes.Default  },
-         {key: `enrollmentDate`,id: `enrollmentDate`,label:'Enrollment date', valueType: 'DATE', optionSetValue: false, options: [], optionSetId: null, required: true, metadataType: VariablesTypes.Default },
+         {key: `ref`,id: `ref`,label:'Ref',  valueType: 'TEXT', optionSetValue: false, options: [], optionSetId: null, required: false },
+         {key: `orgUnitName`,id: `orgUnitName`,label:'School Name',  valueType: 'TEXT', optionSetValue: false, options: [], optionSetId: null, required: true  },
+         {key: `orgUnit`,id: `orgUnit`,label:'School UID', valueType: 'TEXT', optionSetValue: false, options: [], optionSetId: null, required: true  },
+         {key: `enrollmentDate`,id: `enrollmentDate`,label:'Enrollment date', valueType: 'DATE', optionSetValue: false, options: [], optionSetId: null, required: true },
         ]
+
+       const newBeginHeadersFormatted = newBeginHeaders.map((header) => { return { ...header, metadataType: VariablesTypes.Default, sectionDataType: SectionVariablesTypes.EnrollmentDetails}})
     
-        newHeaders = [...newBeginHeaders, ...registrationProgramStageDataElements, ...newHeaders , ...socioEconomicProgramStageDataElements];
+        newHeaders = [...newBeginHeadersFormatted, ...registrationProgramStageDataElements, ...newHeaders , ...socioEconomicProgramStageDataElements];
     
         if (+inputValues.studentsNumber > 0) {
           for (let i = 0; i < +inputValues.studentsNumber; i++) {
@@ -178,7 +190,8 @@ export default function useExportTemplate ( ) {
               if(incrementHeader === 0)  value = `${i+1}`
               if(incrementHeader === 1) value =`${inputValues.orgUnitName}`
               if(incrementHeader === 2) value =`${inputValues.orgUnit}`
-              if(incrementHeader === 3) value =`${format(new Date(), "yyyy-MM-dd")}`
+              if(incrementHeader === 3) value =`${format(new Date(), `${inputValues.academicYearId}-MM-dd`)}`
+              if(incrementHeader === 4) value =`${inputValues.academicYearId}`
 
               if(incrementHeader >3){
                 const found_reserv = reserveValuePayload[newHeader.id]
@@ -285,49 +298,71 @@ export default function useExportTemplate ( ) {
                     font: { bold: true },
                 },
             }));
+            dataSheet.addRow(headers.reduce((prev: any, curr: any) => {
+              prev[curr.id] = `${curr.label} ${curr.required ? "*" : ""}`;
+              return prev;
+            }, {}));
 
-            // Add background in the first dataSheet row
+            // Create Sections for colSpan
+            const sections: any = {
+              [SectionVariablesTypes.EnrollmentDetails]: [],
+              [SectionVariablesTypes.Profile]: [],
+              [SectionVariablesTypes.SocioEconomics]: [],
+            };
+
+            headers.forEach((header: any) => {
+              sections[header.sectionDataType].push(header.id);
+            });
+
+            // Add the sections row above the headers row
+            let colIndex = 1;
+            for (const section in sections) {
+              if (sections[section].length > 0) {
+                  dataSheet.mergeCells(1, colIndex, 1, colIndex + sections[section].length - 1);
+                  dataSheet.getCell(1, colIndex).alignment = { horizontal: 'center', vertical: 'middle' };
+                  dataSheet.getCell(1, colIndex).value = section;
+                  colIndex += sections[section].length;
+              }
+            }
+            
+            // Add background in the sections row
             const firstRow = dataSheet.getRow(1);
             headers.forEach((header: any, index: any) => {
               const cell = firstRow.getCell(index+1);
-              console.log("MetadataType", header.metadataType)
-              cell.fill = {
-                  type: 'pattern',
-                  pattern: 'solid',
-                  fgColor: { argb: getHeaderBgColor(header.metadataType) },
-              };
-              cell.border = {
-                top: { style: 'thin', color: { argb: 'D4D4D4' } },
-                left: { style: 'thin', color: { argb: 'D4D4D4' } },
-                bottom: { style: 'thin', color: { argb: 'D4D4D4' } },
-                right: { style: 'thin', color: { argb: 'D4D4D4' } },
-            };
+              cell.fill = cellFillBg(header.sectionDataType);
+              cell.border = cellBorders;
               cell.font = { bold: true };
+            });
+
+            // Add background in the headers row
+            const secondRow = dataSheet.getRow(2);
+            headers.forEach((header: any, index: any) => {
+              const cell = secondRow.getCell(index+1);
+              cell.fill = cellFillBg(header.metadataType);
+              cell.border = cellBorders;
+              cell.font = { bold: true };
+
+              // Hide the orgUnit ID column
+              if(header.id === "orgUnit") dataSheet.getColumn(index+1).hidden = true;
           });
-            
+
 
             // Ajout du deuxieme headers
             const headerRow = dataSheet.addRow(headers.reduce((prev: any, curr: any) => {
               prev[curr.id] = curr.id;
               return prev;
             }, {}));
-  
+
             // Add background in the header row
-          headers.forEach((header: any, index: any) => {
-            const cell = headerRow.getCell(index+1);
-            cell.fill = {
-              type: 'pattern',
-              pattern: 'solid',
-              fgColor: { argb: getHeaderBgColor(header.metadataType) },
-            };
-            cell.border = {
-              top: { style: 'thin', color: { argb: 'D4D4D4' } },
-              left: { style: 'thin', color: { argb: 'D4D4D4' } },
-              bottom: { style: 'thin', color: { argb: 'D4D4D4' } },
-              right: { style: 'thin', color: { argb: 'D4D4D4' } },
-            };
-            cell.font = { bold: true };
-          });
+            headers.forEach((header: any, index: any) => {
+              const cell = headerRow.getCell(index+1);
+              cell.fill = cellFillBg(header.metadataType);
+              cell.border = cellBorders;
+              cell.font = { bold: true };
+            });
+            
+            // Hide the header IDs row
+            headerRow.hidden = true;
 
             // Ajout des rows maintenants
             for (let data of datas) {
@@ -340,8 +375,9 @@ export default function useExportTemplate ( ) {
                 );
             }
 
+            // Data Validation
             for (let i = 0; i < datas.length; i++) {
-                const currentRow = dataSheet.getRow(i + 3);
+                const currentRow = dataSheet.getRow(i + 4);
                 if (currentRow) {
                     for (let j = 0; j < headers.length; j++) {
                         const currentCell = currentRow.getCell(j + 1);
@@ -379,9 +415,10 @@ export default function useExportTemplate ( ) {
                 }
             }
 
-            // fix the headers row
+            // fix the section and headers row
             dataSheet.views = [
-              { state: 'frozen', ySplit: 1 }
+              { state: 'frozen', ySplit: 1 },
+              { state: 'frozen', ySplit: 2 },
             ];
             
             workbook.xlsx.writeBuffer().then((buffer: any) => {

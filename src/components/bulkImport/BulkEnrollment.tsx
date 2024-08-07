@@ -37,7 +37,6 @@ interface BulkEnrollmentProps {
 
 export const BulkEnrollment = ({setOpen, isOpen}: BulkEnrollmentProps): React.ReactElement => {
     const programConfig: ProgramConfig = useRecoilValue<ProgramConfig>(ProgramConfigState)
-    console.log(programConfig)
     const engine = useDataEngine()
     const [isProcessing, setIsProcessing] = useState(false);
     const [summaryOpen, setSummaryOpen] = useState(false);
@@ -101,7 +100,6 @@ export const BulkEnrollment = ({setOpen, isOpen}: BulkEnrollmentProps): React.Re
             const configWorksheet = workbook.Sheets[configSheet];
             const configData = utils.sheet_to_json(configWorksheet);
 
-            console.log(rawData.slice(0, 3))
             const validationMessage: string = validateTemplate(
                 rawData, configData, programConfig, enrollmentStages)
             if (validationMessage.length > 1) {
@@ -114,13 +112,13 @@ export const BulkEnrollment = ({setOpen, isOpen}: BulkEnrollmentProps): React.Re
                 return
             }
             setIsValidTemplate(true)
-            const headings: string[] = rawData[0] as string[] // headings seen by user
-            const headers: string[] = rawData[1] as string[] // hidden header in template
+            const headings: string[] = rawData[1] as string[] // headings seen by user
+            const headers: string[] = rawData[2] as string[] // hidden header in template
             const templateHeadings = fromPairs(headers.map((val, idx) => {return [val, headings[idx] ?? ""]}))
             setExcelTemplateHeaders(templateHeadings)
             //console.log("templateHeadings", templateHeadings)
 
-            const dataWithHeaders: Array<Record<string, any>> = generateData(headers, rawData.slice(2))
+            const dataWithHeaders: Array<Record<string, any>> = generateData(headers, rawData.slice(3))
             const fieldMapping = fieldsMap(programConfig, enrollmentStages)
             const dataWithHeadersValidated = validateRecordValues(dataWithHeaders, fieldMapping); // validate and format data type and ignore unfilled fields
 
