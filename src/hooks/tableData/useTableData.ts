@@ -12,6 +12,7 @@ import { TableDataProps } from "../../types/table/TableContentProps";
 import { getDataStoreKeys } from "../../utils/commons/dataStore/getDataStoreKeys";
 import { EventsState } from "../../schema/eventsSchema";
 import { FormatResponseRowsProps } from "../../types/utils/FormatRowsDataProps";
+import { getSelectedKey } from "../../utils/commons/dataStore/getSelectedKey";
 
 const EVENT_QUERY = (queryProps: EventQueryProps) => ({
     results: {
@@ -43,6 +44,7 @@ export function useTableData() {
     const [loading, setLoading] = useState<boolean>(false)
     const [tableData, setTableData] = useState<TableDataProps[]>([])
     const { hide, show } = useShowAlerts()
+    const { getDataStoreData } = getSelectedKey()
     const school = urlParamiters().school as unknown as string
 
     async function getData(page: number, pageSize: number) {
@@ -54,7 +56,7 @@ export function useTableData() {
                 page,
                 pageSize,
                 program: program as unknown as string,
-                order: "occurredAt:desc",
+                order: getDataStoreData.defaults.defaultOrder || "occurredAt:desc",
                 programStage: registration?.programStage as unknown as string,
                 filter: headerFieldsState?.dataElements,
                 filterAttributes: headerFieldsState?.attributes,
