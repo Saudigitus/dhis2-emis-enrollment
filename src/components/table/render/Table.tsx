@@ -1,17 +1,17 @@
-import React, { useEffect, useState } from 'react'
-import { CenteredContent, CircularLoader } from "@dhis2/ui";
-import { HeaderFilters, Pagination, TableComponent, WorkingLists } from '../components'
+import React, {useEffect, useState} from 'react'
+import {CenteredContent, CircularLoader} from "@dhis2/ui";
+import {HeaderFilters, Pagination, TableComponent, WorkingLists} from '../components'
 import RenderHeader from './RenderHeader'
 import RenderRows from './RenderRows'
-import { makeStyles } from '@material-ui/core/styles';
-import { Paper } from '@material-ui/core';
+import {makeStyles} from '@material-ui/core/styles';
+import {Paper} from '@material-ui/core';
 import WithBorder from '../../template/WithBorder';
 import WithPadding from '../../template/WithPadding';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { HeaderFieldsState } from '../../../schema/headersSchema';
-import { TeiRefetch } from '../../../schema/refecthTeiSchema';
-import { useHeader, useTableData, useParams } from '../../../hooks';
-import { TableDataLoadingState } from '../../../schema/tableDataLoadingSchema';
+import {useRecoilValue, useSetRecoilState} from 'recoil';
+import {HeaderFieldsState} from '../../../schema/headersSchema';
+import {TeiRefetch} from '../../../schema/refecthTeiSchema';
+import {useHeader, useTableData, useParams} from '../../../hooks';
+import {TableDataLoadingState} from '../../../schema/tableDataLoadingSchema';
 import useViewportWidth from '../../../hooks/rwd/useViewportWidth';
 
 const usetStyles = makeStyles((theme) => ({
@@ -39,20 +39,25 @@ const usetStyles = makeStyles((theme) => ({
 
 function Table() {
     const classes = usetStyles()
-    const { columns } = useHeader()
-    const { getData, tableData, loading } = useTableData()
+    const {columns} = useHeader()
+    const {
+        getData,
+        tableData,
+        loading
+    } = useTableData()
     const headerFieldsState = useRecoilValue(HeaderFieldsState)
     const [page, setpage] = useState(1)
     const [pageSize, setpageSize] = useState(10)
     const refetch = useRecoilValue(TeiRefetch)
-    const { urlParamiters } = useParams()
-    const { academicYear } = urlParamiters()
+    const {urlParamiters} = useParams()
+    const {academicYear} = urlParamiters()
     const setLoading = useSetRecoilState(TableDataLoadingState)
-    const { viewPortWidth } = useViewportWidth()
+    const {viewPortWidth} = useViewportWidth()
 
     useEffect(() => {
-        if (academicYear)
+        if (academicYear) {
             void getData(page, pageSize)
+        }
     }, [headerFieldsState, page, pageSize, refetch])
 
     useEffect(() => {
@@ -72,18 +77,17 @@ function Table() {
         setpage(1)
     }
 
-
-
+    console.log(tableData)
     return (
         <Paper>
             <div className={classes.workingListsContainer}>
                 <h4 className={classes.h4}>Enrollments</h4>
-                <WorkingLists />
+                <WorkingLists/>
             </div>
-            <WithBorder type='bottom' />
-            <WithPadding >
-                <WithBorder type='all' >
-                    <HeaderFilters />
+            <WithBorder type='bottom'/>
+            <WithPadding>
+                <WithBorder type='all'>
+                    <HeaderFilters/>
                     <div
                         className={classes.tableContainer}
                     >
@@ -92,7 +96,8 @@ function Table() {
                                 {
                                     viewPortWidth > 520 &&
                                     <RenderHeader
-                                        createSortHandler={() => { }}
+                                        createSortHandler={() => {
+                                        }}
                                         order='asc'
                                         orderBy='desc'
                                         rowsHeader={columns}
@@ -110,7 +115,7 @@ function Table() {
                         </TableComponent>
                         {(loading) ? (
                             <CenteredContent className="p-5">
-                                <CircularLoader />
+                                <CircularLoader/>
                             </CenteredContent>
                         ) : null}
                     </div>

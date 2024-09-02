@@ -116,7 +116,7 @@ export const BulkEnrollment = ({setOpen, isOpen}: BulkEnrollmentProps): React.Re
             const headers: string[] = rawData[2] as string[] // hidden header in template
             const templateHeadings = fromPairs(headers.map((val, idx) => {return [val, headings[idx] ?? ""]}))
             setExcelTemplateHeaders(templateHeadings)
-            //console.log("templateHeadings", templateHeadings)
+            // console.log("templateHeadings", templateHeadings)
 
             const dataWithHeaders: Array<Record<string, any>> = generateData(headers, rawData.slice(3))
             const fieldMapping = fieldsMap(programConfig, enrollmentStages)
@@ -124,10 +124,10 @@ export const BulkEnrollment = ({setOpen, isOpen}: BulkEnrollmentProps): React.Re
 
             const [invalidRecords, validRecords, newRecords, recordsToUpdate] = await processData(
                 dataWithHeadersValidated, fieldMapping, programConfig, engine)
-            //console.log("INVALID RECORDS:", invalidRecords)
-            //console.log("VALID RECORDS:", validRecords)
-            //console.log("NEW RECORDS", newRecords)
-            //console.log("TO UPDATE", recordsToUpdate)
+            // console.log("INVALID RECORDS:", invalidRecords)
+            // console.log("VALID RECORDS:", validRecords)
+            // console.log("NEW RECORDS", newRecords)
+            // console.log("TO UPDATE", recordsToUpdate)
 
             setUploadStats(stats => ({
                 ...stats,
