@@ -7,6 +7,9 @@ interface FormatResponseRowsProps {
         trackedEntity: string
         dataValues: dataValuesProps[]
         enrollment: string
+        event?: string
+        occurredAt?: string
+        isRegistrationEvent?: boolean
     }[]
     teiInstances: {
         trackedEntity: string
@@ -21,6 +24,14 @@ interface FormatResponseRowsProps {
         programOwners: {
             orgUnit: string
         }[]
+    }[]
+    socioEconInstances?: {
+        trackedEntity: string
+        dataValues: dataValuesProps[]
+        enrollment: string
+        event?: string
+        occurredAt?: string
+        isRegistrationEvent?: boolean
     }[]
 }
 
