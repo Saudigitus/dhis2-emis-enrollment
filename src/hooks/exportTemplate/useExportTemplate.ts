@@ -485,6 +485,20 @@ export default function useExportTemplate() {
             const dataSheet = workbook.addWorksheet("Data");
             const metaDataSheet = workbook.addWorksheet("Metadata", {state: 'hidden'});
             const validationSheet = workbook.addWorksheet("Validation", {state: 'veryHidden'});
+            dataSheet.protect('', {
+                selectLockedCells: true,
+                selectUnlockedCells: true,
+                formatCells: true,
+                formatColumns: false,
+                formatRows: false,
+                insertColumns: false,
+                insertRows: false,
+                deleteColumns: false,
+                deleteRows: false,
+                sort: false,
+                autoFilter: false,
+                pivotTables: false
+            });
 
             const {
                 headers,
@@ -605,6 +619,9 @@ export default function useExportTemplate() {
 
             // Add background in the headers row
             const secondRow = dataSheet.getRow(2);
+            const headersToHide: string[] = [
+                'orgUnit', 'trackedEntity', 'enrollment', 'registrationEvent', 'socioEconEvent',
+                'registrationEventOccurredAt', 'socioEconEventOccurredAt'];
             headers.forEach((header: any, index: number) => {
                 const cell = secondRow.getCell(index + 1);
                 cell.fill = cellFillBg(header.metadataType);
@@ -612,18 +629,10 @@ export default function useExportTemplate() {
                 cell.font = {bold: true};
 
                 // Hide the orgUnit ID column and other ID columns
-                const headersToHide: string[] = [
-                    'orgUnit', 'trackedEntity', 'enrollment', 'registrationEvent', 'socioEconEvent',
-                    'registrationEventOccurredAt', 'socioEconEventOccurredAt'];
-                headersToHide.forEach((headerToHide: string) => {
-                    if (header.id === headerToHide) {
-                        const col = dataSheet.getColumn(index + 1)
-                        col.hidden = true;
-                        col.eachCell({ includeEmpty: true }, (cell: any) => {
-                            cell.protection = {locked: true};
-                        });
-                    }
-                });
+                if (headersToHide.includes(header.id)) {
+                    const col = dataSheet.getColumn(index + 1)
+                    col.hidden = true;
+                }
             });
 
             // Ajout du deuxieme headers
@@ -646,13 +655,20 @@ export default function useExportTemplate() {
             // Ajout des rows maintenants
             if (isNew) {
                 for (const data of datas) {
-                    dataSheet.addRow(
+                    const row = dataSheet.addRow(
                         headers.reduce((prev: any, curr: any) => {
                             prev[curr.id] = data[curr.id]?.value;
                             // prev[curr.id] = "";
                             return prev;
                         }, {})
-                    );
+                    )
+
+                    headers.forEach((vals: any, index: number) => {
+                        if (!headersToHide.includes(vals.key) && vals.label !== "System ID") {
+                            const cell = row.getCell(index + 1)
+                            cell.protection = { locked: false };
+                        }
+                    })
                 }
             } else {
                 let index = 0
@@ -671,9 +687,12 @@ export default function useExportTemplate() {
                         })
                     )
                     index++
-                    row.eachCell({ includeEmpty: true }, (cell: any) => {
-                        cell.protection = { locked: false };
-                    });
+                    headers.forEach((vals: any, index: number) => {
+                        if (!headersToHide.includes(vals.key) && vals.label !== "System ID") {
+                            const cell = row.getCell(index + 1)
+                            cell.protection = { locked: false };
+                        }
+                    })
                 }
             }
 
@@ -724,23 +743,7 @@ export default function useExportTemplate() {
                     ySplit: 2
                 }
             ];
-            dataSheet.protect('', {
-                selectLockedCells: true,
-                selectUnlockedCells: true,
-                formatCells: true,
-                formatColumns: false,
-                formatRows: false,
-                insertColumns: false,
-                insertRows: false,
-                insertHyperlinks: false,
-                deleteColumns: false,
-                deleteRows: false,
-                sort: false,
-                autoFilter: false,
-                pivotTables: false,
-                objects: false,
-                scenarios: false
-            });
+
             metaDataSheet.protect('', {
                 selectLockedCells: true,
                 selectUnlockedCells: true,
