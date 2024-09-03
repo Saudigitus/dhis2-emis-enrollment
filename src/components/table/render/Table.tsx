@@ -13,6 +13,7 @@ import {TeiRefetch} from '../../../schema/refecthTeiSchema';
 import {useHeader, useTableData, useParams} from '../../../hooks';
 import {TableDataLoadingState} from '../../../schema/tableDataLoadingSchema';
 import useViewportWidth from '../../../hooks/rwd/useViewportWidth';
+import {TableDataLengthState} from "../../../schema/tableDataLengthSchema";
 
 const usetStyles = makeStyles((theme) => ({
     tableContainer: {
@@ -52,6 +53,7 @@ function Table() {
     const {urlParamiters} = useParams()
     const {academicYear} = urlParamiters()
     const setLoading = useSetRecoilState(TableDataLoadingState)
+    const setTableDataLengthState = useSetRecoilState(TableDataLengthState)
     const {viewPortWidth} = useViewportWidth()
 
     useEffect(() => {
@@ -67,6 +69,9 @@ function Table() {
     useEffect(() => {
         setLoading(loading)
     }, [loading])
+    useEffect(() => {
+        setTableDataLengthState(tableData.length)
+    }, [tableData.length])
 
     const onPageChange = (newPage: number) => {
         setpage(newPage)

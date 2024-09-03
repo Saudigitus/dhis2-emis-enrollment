@@ -199,7 +199,7 @@ export default function useExportTemplate() {
         let reserveValuePayload: any = {}
 
         for (let attr of newHeaders) {
-            if (attr.unique && attr.generated) {
+            if (attr.unique && attr.generated && +inputValues.studentsNumber > 0) {
                 const reserveValueResponse: any = await loadReserveValues({
                     numberOfReserve: +inputValues.studentsNumber,
                     attributeID: attr.id
@@ -446,6 +446,7 @@ export default function useExportTemplate() {
                 } = await engine.query(
                     TEI_QUERY({
                         program: program as unknown as string,
+                        orgUnit: school,
                         trackedEntity: allTeis.join(";")
                     })
                 )

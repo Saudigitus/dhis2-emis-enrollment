@@ -11,7 +11,7 @@ import {
 import ModalComponent from '../../../modal/Modal';
 import ModalContentComponent from '../../../modal/ModalContent';
 import Tooltip from '@material-ui/core/Tooltip';
-import {useGetEnrollmentForm, useParams} from '../../../../hooks';
+import {useGetEnrollmentForm, useParams, useTableData} from '../../../../hooks';
 import useGetSectionTypeLabel from '../../../../hooks/commons/useGetSectionTypeLabel';
 import {FlyoutOptionsProps} from "../../../../types/buttons/FlyoutOptionsProps";
 import {BulkEnrollment} from "../../../bulkImport/BulkEnrollment";
@@ -21,6 +21,9 @@ import {getDataStoreKeys} from '../../../../utils/commons/dataStore/getDataStore
 import styles from './enrollmentActionsButtons.module.css'
 import useExportTemplate from "../../../../hooks/exportTemplate/useExportTemplate";
 import {useExportTemplateProps} from "../../../../types/modal/ModalProps";
+import {useRecoilValue} from "recoil";
+import {TableDataLengthState} from "../../../../schema/tableDataLengthSchema";
+import {TableDataLoadingState} from "../../../../schema/tableDataLoadingSchema";
 
 function EnrollmentActionsButtons() {
     const [open, setOpen] = useState<boolean>(false);
@@ -42,6 +45,8 @@ function EnrollmentActionsButtons() {
     const {enrollmentsData} = useGetEnrollmentForm();
     const {handleExportToWord} = useExportTemplate()
     const [loadingExport, setLoadingExport] = useState(false)
+    const tableDataLength = useRecoilValue(TableDataLengthState)
+    const tableDataLoading = useRecoilValue(TableDataLoadingState)
     const enrollmentOptions: FlyoutOptionsProps[] = [
         {
             label: `Enroll new ${sectionName}(s)`,
@@ -60,6 +65,7 @@ function EnrollmentActionsButtons() {
         {
             label: "Export existing students",
             divider: false,
+            disabled: tableDataLength === 0 || tableDataLoading,
             onClick: () => {
                 const vals: useExportTemplateProps = {
                     academicYearId: academicYear ?? new Date().getFullYear().toString(),
