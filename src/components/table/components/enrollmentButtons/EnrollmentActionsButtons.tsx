@@ -11,7 +11,7 @@ import {
 import ModalComponent from '../../../modal/Modal';
 import ModalContentComponent from '../../../modal/ModalContent';
 import Tooltip from '@material-ui/core/Tooltip';
-import {useGetEnrollmentForm, useParams, useTableData} from '../../../../hooks';
+import {useGetEnrollmentForm, useParams} from '../../../../hooks';
 import useGetSectionTypeLabel from '../../../../hooks/commons/useGetSectionTypeLabel';
 import {FlyoutOptionsProps} from "../../../../types/buttons/FlyoutOptionsProps";
 import {BulkEnrollment} from "../../../bulkImport/BulkEnrollment";
@@ -28,9 +28,9 @@ import {TableDataLoadingState} from "../../../../schema/tableDataLoadingSchema";
 function EnrollmentActionsButtons() {
     const [open, setOpen] = useState<boolean>(false);
     const [openExportEmptyTemplate, setOpenExportEmptyTemplate] = useState<boolean>(false);
-    // const [openExportExistingStudents, setOpenExportExistingStudents] = useState<boolean>(false);
     const [openSearchEnrollment, setOpenSearchEnrollment] = useState<boolean>(false);
     const [openImport, setOpenImport] = useState<boolean>(false);
+    const [forUpdate, setForUpdate] = useState<boolean>(false);
     const {
         useQuery,
         urlParamiters
@@ -49,9 +49,18 @@ function EnrollmentActionsButtons() {
     const tableDataLoading = useRecoilValue(TableDataLoadingState)
     const enrollmentOptions: FlyoutOptionsProps[] = [
         {
-            label: `Enroll new ${sectionName}(s)`,
+            label: `Enroll new ${sectionName}s`,
             divider: true,
             onClick: () => {
+                setForUpdate(false);
+                setOpenImport(true);
+            }
+        },
+        {
+            label: `Update existing ${sectionName}s`,
+            divider: true,
+            onClick: () => {
+                setForUpdate(true);
                 setOpenImport(true);
             }
         },
@@ -119,7 +128,7 @@ function EnrollmentActionsButtons() {
                     setOpen={setOpen}
                 />
             </ModalComponent>}
-            {openImport && <BulkEnrollment setOpen={setOpenImport} isOpen={openImport}/>}
+            {openImport && <BulkEnrollment setOpen={setOpenImport} isOpen={openImport} forUpdate={forUpdate}/>}
 
             {openExportEmptyTemplate &&
                 <ModalComponent title={`Data Import Template Export`} open={openExportEmptyTemplate}

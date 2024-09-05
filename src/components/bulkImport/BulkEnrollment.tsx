@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 
 import {createStyles, createTheme, makeStyles, MuiThemeProvider} from "@material-ui/core/styles";
 import {DropzoneDialog} from "material-ui-dropzone";
@@ -11,7 +11,7 @@ import {useRecoilState, useRecoilValue, useResetRecoilState} from "recoil";
 import {useGetEnrollmentStages} from "../../hooks/bulkImport/useGetEnrollmentStages";
 import {fieldsMap, fromPairs, validateTemplate} from "../../utils/bulkImport/validateTemplate";
 import {
-    createTrackedEntityPayload,
+    createTrackedEntityPayload, createUpdateTEsPayload,
     generateData,
     getMandatoryFields,
     processData,
@@ -29,26 +29,31 @@ import {
     ProcessingRecordsState, ProcessingStage, TemplateHeadingsState
 } from "../../schema/bulkImportSchema";
 import styles from "./modal.module.css";
+import {getDataStoreKeys} from "../../utils/commons/dataStore/getDataStoreKeys";
 
 interface BulkEnrollmentProps {
     setOpen: React.Dispatch<React.SetStateAction<boolean>>
     isOpen: boolean
+    forUpdate: boolean
 }
 
-export const BulkEnrollment = ({setOpen, isOpen}: BulkEnrollmentProps): React.ReactElement => {
+export const BulkEnrollment = ({setOpen, isOpen, forUpdate}: BulkEnrollmentProps): React.ReactElement => {
     const programConfig: ProgramConfig = useRecoilValue<ProgramConfig>(ProgramConfigState)
     const engine = useDataEngine()
     const [isProcessing, setIsProcessing] = useState(false);
     const [summaryOpen, setSummaryOpen] = useState(false);
     const performanceStages = useGetUsedPProgramStages();
     const enrollmentStages = useGetEnrollmentStages();
+    const {
+        // registration,
+        socioEconomics
+    } = getDataStoreKeys()
     const {hide, show} = useShowAlerts()
     const [uploadStats, setUploadStats] = useRecoilState<BulkImportStats>(BulkImportStatsState);
     const [_excelTemplateHeaders, setExcelTemplateHeaders] = useRecoilState<Headings>(TemplateHeadingsState)
     const [_processedRecords, setProcessedRecords] = useRecoilState<ProcessingRecords>(ProcessingRecordsState);
     const resetProcessingStage = useResetRecoilState(ProcessingStage);
     const [isValidTemplate, setIsValidTemplate] = useState(false)
-
 
     const useStyles = makeStyles(() => createStyles({
         previewChip: {
@@ -57,11 +62,10 @@ export const BulkEnrollment = ({setOpen, isOpen}: BulkEnrollmentProps): React.Re
         }
     }));
     const theme = createTheme({
-        overrides: {},
+        overrides: {}
     });
 
     const resetUploadStats = () => {
-        console.log("resting stats")
         setUploadStats({
             teis: {
                 created: 0,
@@ -114,16 +118,15 @@ export const BulkEnrollment = ({setOpen, isOpen}: BulkEnrollmentProps): React.Re
             setIsValidTemplate(true)
             const headings: string[] = rawData[1] as string[] // headings seen by user
             const headers: string[] = rawData[2] as string[] // hidden header in template
-            const templateHeadings = fromPairs(headers.map((val, idx) => {return [val, headings[idx] ?? ""]}))
+            const templateHeadings = fromPairs(headers.map((val, idx) => { return [val, headings[idx] ?? ""] }))
             setExcelTemplateHeaders(templateHeadings)
             // console.log("templateHeadings", templateHeadings)
 
             const dataWithHeaders: Array<Record<string, any>> = generateData(headers, rawData.slice(3))
             const fieldMapping = fieldsMap(programConfig, enrollmentStages)
             const dataWithHeadersValidated = validateRecordValues(dataWithHeaders, fieldMapping); // validate and format data type and ignore unfilled fields
-
             const [invalidRecords, validRecords, newRecords, recordsToUpdate] = await processData(
-                dataWithHeadersValidated, fieldMapping, programConfig, engine)
+                dataWithHeadersValidated, fieldMapping, programConfig, engine, forUpdate ?? false)
             // console.log("INVALID RECORDS:", invalidRecords)
             // console.log("VALID RECORDS:", validRecords)
             // console.log("NEW RECORDS", newRecords)
@@ -143,13 +146,12 @@ export const BulkEnrollment = ({setOpen, isOpen}: BulkEnrollmentProps): React.Re
             // console.log("UPLOAD STATS ======>", uploadStats)
             // create new tracked entity payloads for non-existing records
             const newTrackedEntities = createTrackedEntityPayload(
-                newRecords, fieldMapping, programConfig, enrollmentStages, performanceStages)
+                newRecords, fieldMapping, programConfig, enrollmentStages, performanceStages, forUpdate)
             // create update tracked entity payloads for existing records
-            const updateTrackedEntities = createTrackedEntityPayload(
-                recordsToUpdate, fieldMapping, programConfig, enrollmentStages, performanceStages, true)
-            console.log("trackedEntities=>", newTrackedEntities.slice(0, 1))
-            const mandatoryFields = getMandatoryFields(fieldMapping)
+            const updateTrackedEntities = createUpdateTEsPayload(
+                recordsToUpdate, fieldMapping, programConfig, enrollmentStages, socioEconomics.programStage, forUpdate)
             // update ProcessedRecords state variable for reference in summaries and more actions
+            const mandatoryFields = getMandatoryFields(fieldMapping)
             setProcessedRecords((r) => ({
                 ...r,
                 validRecords,
@@ -158,8 +160,8 @@ export const BulkEnrollment = ({setOpen, isOpen}: BulkEnrollmentProps): React.Re
                 recordsToUpdate,
                 mandatoryFields,
                 newTrackedEntities,
-                updateTrackedEntities
-
+                updateTrackedEntities,
+                forUpdate
             }))
 
             setIsProcessing(false)

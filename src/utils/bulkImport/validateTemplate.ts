@@ -100,7 +100,7 @@ export const validateTemplate = (
     if (data.length < 2) {
         return `No enrollments in file!`
     }
-    const headers: string[] = data[1]
+    const headers: string[] = data[2]
 
     // look for any invalid tracked entity attributes in template
     const programTEIAttributes: string[] = programConfig
@@ -169,7 +169,6 @@ export const fieldsMap = (programConfig: ProgramConfig, enrollmentProgramStages:
         })
     // Let's add a mapping for the program Tracked entity attributes
     const _teiMap = programConfig.programTrackedEntityAttributes.map(te => {
-        console.log()
         const mapping: FieldMapping = {
             key: `${te.trackedEntityAttribute.id}`,
             id: `${te.trackedEntityAttribute.id}`,
@@ -220,6 +219,46 @@ export const fieldsMap = (programConfig: ProgramConfig, enrollmentProgramStages:
             name: "trackedEntity",
             required: false,
             valueType: "TEXT",
+            isTEAttribute: false
+        },
+        enrollment: {
+            key: "enrollment",
+            id: "enrollment",
+            name: "enrollment",
+            required: false,
+            valueType: "TEXT",
+            isTEAttribute: false
+        },
+        registrationEvent: {
+            key: "registrationEvent",
+            id: "registrationEvent",
+            name: "registrationEvent",
+            required: false,
+            valueType: "TEXT",
+            isTEAttribute: false
+        },
+        registrationEventOccurredAt: {
+            key: "registrationEventOccurredAt",
+            id: "registrationEventOccurredAt",
+            name: "registrationEventOccurredAt",
+            required: false,
+            valueType: "DATE",
+            isTEAttribute: false
+        },
+        socioEconEvent: {
+            key: "socioEconEvent",
+            id: "socioEconEvent",
+            name: "socioEconEvent",
+            required: false,
+            valueType: "TEXT",
+            isTEAttribute: false
+        },
+        socioEconEventOccurredAt: {
+            key: "socioEconEventOccurredAt",
+            id: "socioEconEventOccurredAt",
+            name: "socioEconEventOccurredAt",
+            required: false,
+            valueType: "DATE",
             isTEAttribute: false
         }
     }

@@ -43,6 +43,7 @@ const ModalSummaryContent = (props: ModalContentProps): React.ReactElement => {
         data,
         error
     } = usePostTrackedEntities()
+    const forUpdate = processedRecords?.forUpdate as boolean
 
     useEffect(() => {
         if (data !== undefined) {
@@ -73,7 +74,7 @@ const ModalSummaryContent = (props: ModalContentProps): React.ReactElement => {
     }, [data]);
 
     useEffect(() => {
-        if (error!== undefined) {
+        if (error !== undefined) {
             const importResponse: ApiResponse = error.details as unknown as ApiResponse
             setBulkImportResponseStatsState({
                 ...bulkImportResponseStatsState,
@@ -102,11 +103,14 @@ const ModalSummaryContent = (props: ModalContentProps): React.ReactElement => {
         console.log("IMPORT TEs: ", processedRecords?.newTrackedEntities, importMode, processingStage)
         const params = {
             async: false,
-            importMode
+            importMode,
+            importStrategy: "CREATE_AND_UPDATE"
         }
         try {
             const teisPayload: any = {
-                trackedEntities: processedRecords?.newTrackedEntities as TrackedEntity[]
+                trackedEntities: !forUpdate
+                    ? processedRecords?.newTrackedEntities as TrackedEntity[]
+                    : processedRecords?.updateTrackedEntities as TrackedEntity[]
             }
             void postTrackedEntities({
                 data: teisPayload,
@@ -117,21 +121,22 @@ const ModalSummaryContent = (props: ModalContentProps): React.ReactElement => {
         }
     }
     const newImportDisabled = (processedRecords.newTrackedEntities?.length === 0 || processingStage === 'completed' || loading)
+    const updatesDisabled = (processedRecords.updateTrackedEntities?.length === 0 || processingStage === 'completed' || loading)
 
     const modalActions: ButtonActionProps[] = [
         {
             label: "Dry Run",
             loading: false,
-            disabled: newImportDisabled,
+            disabled: forUpdate ? updatesDisabled : newImportDisabled,
             onClick: () => {
                 importStudents("VALIDATE")
             }
         },
         {
-            label: "Import new students",
+            label: forUpdate ? "Update students" : "Import new students",
             primary: true,
             loading: false,
-            disabled: newImportDisabled,
+            disabled: forUpdate ? updatesDisabled : newImportDisabled,
             onClick: () => {
                 importStudents("COMMIT")
             }
