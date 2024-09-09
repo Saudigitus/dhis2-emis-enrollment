@@ -5,7 +5,7 @@ import {
     DataTableBody,
     DataTableCell,
     DataTableColumnHeader,
-    DataTableRow,
+    DataTableRow
 } from '@dhis2/ui'
 import {FieldMapping} from "../../types/bulkImport/Interfaces";
 import {ErrorDetailsTable} from "./ErrorDetailsTable";

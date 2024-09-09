@@ -45,6 +45,7 @@ export interface ProcessingRecords {
     mandatoryFields: FieldMapping[] // Will help in displaying records for review
     newTrackedEntities?: TrackedEntity[]
     updateTrackedEntities?: TrackedEntity[]
+    forUpdate?: boolean
 }
 
 export const ProcessingRecordsState = atom<ProcessingRecords>({
@@ -53,8 +54,9 @@ export const ProcessingRecordsState = atom<ProcessingRecords>({
         validRecords: [],
         invalidRecords: [],
         newRecords: [],
-        recordsToUpdate:[],
-        mandatoryFields: []
+        recordsToUpdate: [],
+        mandatoryFields: [],
+        forUpdate: false
     }
 })
 

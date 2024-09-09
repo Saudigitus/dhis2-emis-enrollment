@@ -18,7 +18,7 @@ export function formatResponseRows({ eventsInstances, teiInstances, socioEconIns
             registrationEvent: event?.event,
             socioEconEvent: socioEconDetails?.event ?? "",
             registrationEventOccurredAt: event?.occurredAt ?? "",
-            socioEconEventOccurredAt: socioEconDetails?.occurredAt ?? "",
+            socioEconEventOccurredAt: socioEconDetails?.occurredAt ?? event?.occurredAt ?? "",
             orgUnitId: teiDetails?.enrollments?.[0]?.orgUnit,
             programId: teiDetails?.enrollments?.[0]?.program,
             status: teiDetails?.enrollments?.[0]?.status,

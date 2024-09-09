@@ -75,24 +75,27 @@ const SummaryDetails = (): React.ReactElement => {
             [activeTab]: {...prev[activeTab], pageSize: pageSize, page: 1}
         }));
     }
+    const forUpdate = processedRecords.forUpdate as boolean
     // Calculate the slice of data to display for the current page
     // const displayData = students.slice((page - 1) * pageSize, page * pageSize);
     return (<>
         { (processingStage === 'template-processing') &&
             <>
                 <TabBar>
-                    <Tab onClick={() => {
-                        tabClick("new")
-                    }} selected={activeTab === 'new'}>
-                        {processedRecords.newRecords.length}<br/>
-                        New Students
-                    </Tab>
+                    { !forUpdate &&
+                        <Tab onClick={() => {
+                            tabClick("new")
+                        }} selected={activeTab === 'new'}>
+                            {processedRecords.newRecords.length}<br/>
+                            New Students
+                        </Tab>
+                    }
                     <Tab onClick={() => {
                         tabClick("updates")
                     }} selected={activeTab === 'updates'}>
                         {processedRecords.recordsToUpdate.length}
                         <br/>
-                        Potential Duplicates
+                        {!forUpdate ? "Potential Duplicates" : "Updates"}
                     </Tab>
                     <Tab onClick={() => {
                         tabClick("invalids")
