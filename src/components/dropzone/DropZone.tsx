@@ -1,116 +1,81 @@
-import styles from "./dropzone.module.css"
+import "./dropzone.css"
+import { Form } from "react-final-form";
+import React, { useState, useRef, useEffect } from "react";
 import UploadCloud from "../../assets/images/bulkImport/upload"
+import Excel from "../../assets/images/bulkImport/excel.svg"
 import { ModalActions, Button, ButtonStrip } from "@dhis2/ui";
+import FileInput from "../genericFields/fields/FileInput";
 
-function DropZone() {
+function DropZone(props: any) {
+    const { onSave } = props;
+    const [uploadedFile, setUploadedFile] = useState<any>();
+    const formRef: React.MutableRefObject<FormApi<IForm, Partial<IForm>>> = useRef(null);
+    const dropzoneBox = document.getElementsByClassName("dropzone_box")[0];
+    const inputFiles = document.querySelectorAll(".dropzone_area input[type='file']");
+    const inputElement: any = inputFiles[0];
+    const dropZoneElement: any = inputElement?.closest(".dropzone_area");
 
-    //     const dropzoneBox = document.getElementsByClassName("dropzone-box")[0];
+    useEffect(() => {
+        if (uploadedFile === undefined) {
+            let dropzoneFileMessage = dropZoneElement?.querySelector(".file-info");
+            dropzoneFileMessage.innerHTML = `No files selected`; 
+        }
+    }, [uploadedFile]);
 
-    //     const inputFiles = document.querySelectorAll(
-    //         ".dropzone-area input[type='file']"
-    //     );
+    function onSubmit() {
+        onSave([uploadedFile])
+    }
 
-    // console.log(inputFiles, 'lena')
+    function onChange(): void {
+        if (inputElement?.files.length) {
+            let dropzoneFileMessage = dropZoneElement.querySelector(".file-info");
+            dropzoneFileMessage.innerHTML = `${inputElement?.files[0].name}`;
+        }
+    }
 
-    //     const inputElement: any = inputFiles[0];
-
-    //     const dropZoneElement: any = inputElement?.closest(".dropzone-area");
-
-    //     inputElement?.addEventListener("change", (e: any) => {
-    //         if (inputElement?.files.length) {
-    //             updateDropzoneFileList(dropZoneElement, inputElement?.files[0]);
-    //         }
-    //     });
-
-    //     dropZoneElement?.addEventListener("dragover", (e: any) => {
-    //         e.preventDefault();
-    //         dropZoneElement?.classList.add("dropzone--over");
-    //     });
-
-    //     ["dragleave", "dragend"].forEach((type) => {
-    //         dropZoneElement?.addEventListener(type, (e: any) => {
-    //             dropZoneElement?.classList.remove("dropzone--over");
-    //         });
-    //     });
-
-    //     dropZoneElement?.addEventListener("drop", (e: any) => {
-    //         e.preventDefault();
-
-    //         if (e?.dataTransfer?.files?.length) {
-    //             inputElement?.files = e.dataTransfer.files;
-
-    //             updateDropzoneFileList(dropZoneElement, e.dataTransfer.files[0]);
-    //         }
-
-    //         dropZoneElement?.classList.remove("dropzone--over");
-    //     });
-
-    //     const updateDropzoneFileList = (dropzoneElement: any, file: any) => {
-    //         let dropzoneFileMessage = dropzoneElement.querySelector(".file-info");
-
-    //         dropzoneFileMessage.innerHTML = `
-    //         ${file.name}, ${file.size} bytes
-    //     `;
-    //     };
-
-    //     dropzoneBox.addEventListener("reset", (e) => {
-    //         let dropzoneFileMessage = dropZoneElement?.querySelector(".file-info");
-
-    //         dropzoneFileMessage.innerHTML = `No Files Selected`;
-    //     });
-
-    //     dropzoneBox.addEventListener("submit", (e) => {
-    //         e.preventDefault();
-    //         const myFiled: any = document.getElementById("upload-file");
-    //         console.log(myFiled.files[0]);
-    //     });
+    function hanldeCancel() {
+        setUploadedFile(undefined); 
+    }
 
     const modalActions = [
-        { id: "cancel", type: "reset", label: "Cancel", disabled: false, onClick: () => { }, secondary: true },
-        { id: "continue", type: "submit", label: "Continue", success: "success", disabled: false, onClick: () => { }, primary: true }
+        { id: "cancel", type: "reset", label: "Cancel", disabled: false, onClick: () => hanldeCancel(), secondary: true },
+        { id: "continue", label: "Continue", success: "success", disabled: false, onClick: () => onSubmit(), primary: true }
     ];
 
     return (
-        <>
-            <form className={styles.dropzone_box}>
-                <div className={styles.dropzone_area}>
-                    <div className={styles.file_upload_icon}>
-                        <UploadCloud />
+        <Form onSubmit={onSubmit}>
+            {({ form }) => {
+                formRef.current = form;
+                return <form
+                    className="dropzone_box"
+                    onChange={onChange() as unknown as () => void}
+                >
+                    <div className="dropzone_area">
+                        <div className="file_upload_icon">
+                            {uploadedFile ? <img src={Excel} /> : <UploadCloud />}
+                        </div>
+                        <FileInput name="uploaded-file" setUploadedFile={setUploadedFile} />
+                        {/* <p className="file-info">No files selected</p> */}
+                        <h4 className="mb-3 file-info">Drag & drop files or browse</h4>
+                        <p className="mt-3">Please upload a Excel or CSV file exported from the SEMIS App</p>
                     </div>
-                    <input type="file" required id="upload-file" name="uploaded-file" />
-                    {/* <p className={styles.file_info}>No Files Selected</p> */}
-                    <h4 className="mb-3">Drag & drop files or browse</h4>
-                    <p className="mt-3">Please upload a Excel or CSV file exported from the SEMIS App</p>
-                </div>
-                {/* <div className="dropzone-actions">
-                    <button type="reset">
-                        Cancel
-                    </button>
-                    <button id="submit-button" type="submit">
-                        Save
-                    </button>
-                </div> */}
 
-                <ModalActions>
-                    <ButtonStrip end >
-                        {modalActions.map((action, i) => {
-                            return (
-
+                    <ModalActions>
+                        <ButtonStrip end >
+                            {modalActions.map((action, i) =>
                                 <Button
                                     key={i}
                                     {...action}
-                                    // className={}
                                     loading={false}
                                 >
                                     {action.label}
                                 </Button>
-
-                            )
-                        })}
-                    </ButtonStrip>
-                </ModalActions>
-            </form>
-        </>
+                            )}
+                        </ButtonStrip>
+                    </ModalActions>
+                </form>
+            }}
+        </Form>
     )
 }
 

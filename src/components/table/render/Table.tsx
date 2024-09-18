@@ -82,7 +82,6 @@ function Table() {
         setpage(1)
     }
 
-    console.log(tableData)
     return (
         <Paper>
             <div className={classes.workingListsContainer}>

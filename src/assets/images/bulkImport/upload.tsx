@@ -9,6 +9,3 @@ const UploadCloud = () => (
 );
 
 export default UploadCloud;
-
-
-
