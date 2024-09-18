@@ -27,7 +27,7 @@
     padding: 1rem;
     position: relative;
     margin-top: .0rem;
-    min-height: 17rem;
+    height: 17.5rem;
     display: flex;
     text-align: center;
     justify-content: center;
@@ -38,6 +38,11 @@
     cursor: pointer;
     transition: all 0.3s ease;
     background: #F8F8FF;
+}
+
+.dropzone_area_filled_bg {
+    background: #E5F2E4 !important;
+    border: 1px dashed #447144 !important;
 }
 
 /* .dropzone_area .file-info {

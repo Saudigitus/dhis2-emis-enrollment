@@ -32,6 +32,7 @@
     "bootstrap": "4.6.0",
     "classnames": "^2.3.1",
     "date-fns": "2.29.3",
+    "lottie-react": "^2.4.0",
     "material-ui-dropzone": "^3.5.0",
     "react-addons-update": "^15.6.3",
     "react-bootstrap": "^2.8.0",

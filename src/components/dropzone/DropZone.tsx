@@ -1,14 +1,17 @@
 import "./dropzone.css"
+import Lottie from "lottie-react";
 import { Form } from "react-final-form";
 import React, { useState, useRef, useEffect } from "react";
 import UploadCloud from "../../assets/images/bulkImport/upload"
+import  uploadcloud  from "../../assets/images/bulkImport/uploadcloud.json"
 import Excel from "../../assets/images/bulkImport/excel.svg"
 import { ModalActions, Button, ButtonStrip } from "@dhis2/ui";
 import FileInput from "../genericFields/fields/FileInput";
+import classNames from "classnames";
 
 function DropZone(props: any) {
     const { onSave } = props;
-    const [uploadedFile, setUploadedFile] = useState<any>();
+    const [uploadedFile, setUploadedFile] = useState<any>('');
     const formRef: React.MutableRefObject<FormApi<IForm, Partial<IForm>>> = useRef(null);
     const dropzoneBox = document.getElementsByClassName("dropzone_box")[0];
     const inputFiles = document.querySelectorAll(".dropzone_area input[type='file']");
@@ -18,7 +21,7 @@ function DropZone(props: any) {
     useEffect(() => {
         if (uploadedFile === undefined) {
             let dropzoneFileMessage = dropZoneElement?.querySelector(".file-info");
-            dropzoneFileMessage.innerHTML = `No files selected`; 
+            dropzoneFileMessage.innerHTML = `No files selected`;
         }
     }, [uploadedFile]);
 
@@ -34,12 +37,12 @@ function DropZone(props: any) {
     }
 
     function hanldeCancel() {
-        setUploadedFile(undefined); 
+        setUploadedFile(undefined);
     }
 
     const modalActions = [
         { id: "cancel", type: "reset", label: "Cancel", disabled: false, onClick: () => hanldeCancel(), secondary: true },
-        { id: "continue", label: "Continue", success: "success", disabled: false, onClick: () => onSubmit(), primary: true }
+        { id: "continue", label: "Continue", success: "success", disabled: !Boolean(uploadedFile), onClick: () => onSubmit(), primary: true }
     ];
 
     return (
@@ -50,9 +53,14 @@ function DropZone(props: any) {
                     className="dropzone_box"
                     onChange={onChange() as unknown as () => void}
                 >
-                    <div className="dropzone_area">
+                    <div className={classNames("dropzone_area", uploadedFile && "dropzone_area_filled_bg")}>
                         <div className="file_upload_icon">
-                            {uploadedFile ? <img src={Excel} /> : <UploadCloud />}
+                            {uploadedFile ? <img src={Excel} className="mb-5 mt-5"/> : <Lottie  animationData={uploadcloud} loop={true} />}
+
+                            {/* <>
+                        {uploadedFile ? <img src={Excel} /> : <UploadCloud />} 
+                        </>  */}
+
                         </div>
                         <FileInput name="uploaded-file" setUploadedFile={setUploadedFile} />
                         {/* <p className="file-info">No files selected</p> */}
