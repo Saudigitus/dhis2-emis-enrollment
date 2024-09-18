@@ -129,7 +129,7 @@ function EnrollmentActionsButtons() {
                 />
             </ModalComponent>}
 
-            {openImport && <ModalComponent title={`Bulk Enrollment`} open={openImport} setOpen={setOpenImport}>
+            {openImport && <ModalComponent title={Boolean(!forUpdate) ? `Bulk Enrollment` : `Bulk Enrollment Update`} open={openImport} setOpen={setOpenImport}>
                 <BulkEnrollment setOpen={setOpenImport} isOpen={openImport} forUpdate={forUpdate} />
             </ModalComponent>}
 
