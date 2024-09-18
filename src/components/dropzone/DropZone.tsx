@@ -2,7 +2,6 @@ import "./dropzone.css"
 import Lottie from "lottie-react";
 import { Form } from "react-final-form";
 import React, { useState, useRef, useEffect } from "react";
-import UploadCloud from "../../assets/images/bulkImport/upload"
 import  uploadcloud  from "../../assets/images/bulkImport/uploadcloud.json"
 import Excel from "../../assets/images/bulkImport/excel.svg"
 import { ModalActions, Button, ButtonStrip } from "@dhis2/ui";
@@ -13,7 +12,6 @@ function DropZone(props: any) {
     const { onSave } = props;
     const [uploadedFile, setUploadedFile] = useState<any>('');
     const formRef: React.MutableRefObject<FormApi<IForm, Partial<IForm>>> = useRef(null);
-    const dropzoneBox = document.getElementsByClassName("dropzone_box")[0];
     const inputFiles = document.querySelectorAll(".dropzone_area input[type='file']");
     const inputElement: any = inputFiles[0];
     const dropZoneElement: any = inputElement?.closest(".dropzone_area");
@@ -56,14 +54,8 @@ function DropZone(props: any) {
                     <div className={classNames("dropzone_area", uploadedFile && "dropzone_area_filled_bg")}>
                         <div className="file_upload_icon">
                             {uploadedFile ? <img src={Excel} className="mb-5 mt-5"/> : <Lottie  animationData={uploadcloud} loop={true} />}
-
-                            {/* <>
-                        {uploadedFile ? <img src={Excel} /> : <UploadCloud />} 
-                        </>  */}
-
                         </div>
                         <FileInput name="uploaded-file" setUploadedFile={setUploadedFile} />
-                        {/* <p className="file-info">No files selected</p> */}
                         <h4 className="mb-3 file-info">Drag & drop files or browse</h4>
                         <p className="mt-3">Please upload a Excel or CSV file exported from the SEMIS App</p>
                     </div>
