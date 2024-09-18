@@ -19,7 +19,7 @@ function FileInput(props: any) {
             required
             id="upload-file"
             name={name}
-            accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+            accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
             onChange={handleFileChange}
         />
     )
