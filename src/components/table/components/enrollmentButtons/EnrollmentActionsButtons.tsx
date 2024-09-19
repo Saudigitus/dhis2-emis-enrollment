@@ -135,7 +135,10 @@ function EnrollmentActionsButtons() {
                     setOpen={setOpen}
                 />
             </ModalComponent>}
-            {openImport && <BulkEnrollment setOpen={setOpenImport} isOpen={openImport} forUpdate={forUpdate} />}
+
+            {openImport && <ModalComponent title={Boolean(!forUpdate) ? `Bulk Enrollment` : `Bulk Enrollment Update`} open={openImport} setOpen={setOpenImport}>
+                <BulkEnrollment setOpen={setOpenImport} isOpen={openImport} forUpdate={forUpdate} />
+            </ModalComponent>}
 
             {openExportEmptyTemplate &&
                 <ModalComponent title={`Data Import Template Export`} open={openExportEmptyTemplate}
