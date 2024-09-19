@@ -1,0 +1,66 @@
+.dropzone_box {
+    border-radius: 1rem;
+    padding-top: .5rem;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.dropzone_box h4 {
+    font-size: 1.1rem;
+    margin-bottom: 0.6rem;
+    padding: 5px 0px 0px 0px;
+    color: #111315;
+    font-weight: 600;
+}
+
+
+.dropzone_box p {
+    font-size: 0.85em;
+    color: #676767;
+    font-weight: 300;
+    line-height: 18px;
+    text-align: center;
+}
+
+.dropzone_area {
+    padding: 1rem;
+    position: relative;
+    margin-top: .0rem;
+    height: 17.5rem;
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    border: 1px dashed #384EB74D;
+    border-radius: 0rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: #F8F8FF;
+}
+
+.dropzone_area_filled_bg {
+    background: #E5F2E4 !important;
+    border: 1px dashed #447144 !important;
+}
+
+/* .dropzone_area .file-info {
+    font-size: .5rem !important;
+} */
+
+.dropzone_area [type="file"] {
+    cursor: pointer;
+    position: absolute;
+    opacity: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
+
+.dropzone_area .file_upload_icon svg {
+    height: 100% !important;
+    width: 100% !important;
+    margin-bottom: 0.5rem;
+}
