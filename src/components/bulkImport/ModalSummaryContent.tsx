@@ -1,23 +1,24 @@
-import React, {useEffect, useState} from "react";
-import {Divider, IconCheckmarkCircle16, Tag, ModalActions, Button, ButtonStrip} from "@dhis2/ui";
+import React, { useEffect, useState } from "react";
+import { Divider, IconCheckmarkCircle16, Tag, ModalActions, Button, ButtonStrip } from "@dhis2/ui";
 import WithPadding from "../template/WithPadding";
 import styles from "./modal.module.css";
-import {type ButtonActionProps} from "../../types/buttons/ButtonActions";
+import { type ButtonActionProps } from "../../types/buttons/ButtonActions";
 import Title from "../text/Title";
 import SummaryCards from "./SummaryCards";
-import {Collapse} from "@material-ui/core";
-import {InfoOutlined} from "@material-ui/icons";
+import { Collapse } from "@material-ui/core";
+import { InfoOutlined } from "@material-ui/icons";
 import {
     BulkImportResponseStats, BulkImportResponseStatsState,
     ProcessingRecords,
     ProcessingRecordsState,
     ProcessingStage
 } from "../../schema/bulkImportSchema";
-import {useRecoilState, useRecoilValue, useResetRecoilState} from "recoil";
-import {usePostTrackedEntities} from "../../hooks/bulkImport/postTrackedEntities";
-import {TrackedEntity} from "../../schema/trackerSchema";
-import {ApiResponse, Stats} from "../../types/bulkImport/Interfaces";
+import { useRecoilState, useRecoilValue, useResetRecoilState, useSetRecoilState } from "recoil";
+import { usePostTrackedEntities } from "../../hooks/bulkImport/postTrackedEntities";
+import { TrackedEntity } from "../../schema/trackerSchema";
+import { ApiResponse, Stats } from "../../types/bulkImport/Interfaces";
 import { LinearProgress } from "@material-ui/core";
+import { ProgressState } from "../../schema/linearProgress";
 
 interface ModalContentProps {
     setOpen: (value: boolean) => void
@@ -44,11 +45,12 @@ const ModalSummaryContent = (props: ModalContentProps): React.ReactElement => {
         error
     } = usePostTrackedEntities()
     const forUpdate = processedRecords?.forUpdate as boolean
+    const updateProgress = useSetRecoilState(ProgressState)
 
     useEffect(() => {
         if (data !== undefined) {
-            console.log("Posting Data....", data)
-            const {validationReport} = data
+
+            const { validationReport } = data
             if (processingStage === "dry-run") {
                 setBulkImportResponseStatsState({
                     ...bulkImportResponseStatsState,
@@ -58,7 +60,7 @@ const ModalSummaryContent = (props: ModalContentProps): React.ReactElement => {
                     bundleReport: data.bundleReport
                 })
             } else if (processingStage === "import") {
-                const {bundleReport} = data
+                const { bundleReport } = data
                 // for actual import, let's count the enrollments created
                 const stats: Stats = bundleReport?.typeReportMap?.ENROLLMENT?.stats as Stats
                 setBulkImportResponseStatsState({
@@ -95,17 +97,19 @@ const ModalSummaryContent = (props: ModalContentProps): React.ReactElement => {
 
     const importStudents = (importMode: "VALIDATE" | "COMMIT") => {
         resetBulkImportResponseStatsState()
+        updateProgress({ progress: 10, buffer: 20 })
         if (importMode === "VALIDATE") {
             setProcessingStage("dry-run")
         } else {
             setProcessingStage("import")
         }
-        console.log("IMPORT TEs: ", processedRecords?.newTrackedEntities, importMode, processingStage)
+
         const params = {
             async: false,
             importMode,
             importStrategy: "CREATE_AND_UPDATE"
         }
+
         try {
             const teisPayload: any = {
                 trackedEntities: !forUpdate
@@ -153,23 +157,23 @@ const ModalSummaryContent = (props: ModalContentProps): React.ReactElement => {
 
     return (
         <div>
-            <Tag positive icon={<IconCheckmarkCircle16/>} className={styles.tagContainer}> Students import
+            <Tag positive icon={<IconCheckmarkCircle16 />} className={styles.tagContainer}> Students import
                 preview </Tag>
 
-            <WithPadding/>
-            <Title label={`${summaryTitle} Summary`}/>
-            <WithPadding/>
+            <WithPadding />
+            <Title label={`${summaryTitle} Summary`} />
+            <WithPadding />
 
             <SummaryCards {...summaryData} />
 
-            <WithPadding/>
-            <WithPadding/>
+            <WithPadding />
+            <WithPadding />
             <ButtonStrip>
-                <Button small icon={<InfoOutlined className={styles.infoIcon}/>} onClick={handleShowDetails}>More
+                <Button small icon={<InfoOutlined className={styles.infoIcon} />} onClick={handleShowDetails}>More
                     details</Button>
             </ButtonStrip>
 
-            <WithPadding/>
+            <WithPadding />
             <Collapse in={showDetails}>
                 <div className={styles.detailsContainer}>
                     {summaryDetails}
@@ -177,7 +181,7 @@ const ModalSummaryContent = (props: ModalContentProps): React.ReactElement => {
             </Collapse>
 
             {loading && <LinearProgress />}
-            <Divider/>
+            <Divider />
             <ModalActions>
                 <ButtonStrip end>
                     {modalActions.map((action, i) => (

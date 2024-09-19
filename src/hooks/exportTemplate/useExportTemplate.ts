@@ -1,26 +1,27 @@
-import {useDataQuery} from "@dhis2/app-runtime";
-import {useDataEngine} from "@dhis2/app-runtime";
-import {useExportTemplateProps} from "../../types/modal/ModalProps";
+import { useDataQuery } from "@dhis2/app-runtime";
+import { useDataEngine } from "@dhis2/app-runtime";
+import { useExportTemplateProps } from "../../types/modal/ModalProps";
 import useShowAlerts from "../commons/useShowAlert";
-import {useSearchParams} from "react-router-dom";
-import {format} from "date-fns";
-import {validationSheetConstructor} from "./validationSheetConstructor";
-import {convertNumberToLetter} from "../../utils/commons/convertNumberToLetter";
-import {Attribute} from "../../types/generated/models";
-import {capitalizeString} from "../../utils/commons/formatCamelCaseToWords";
-import {getSelectedKey} from "../../utils/commons/dataStore/getSelectedKey";
-import {VariablesTypes} from "../../types/variables/AttributeColumns";
+import { useSearchParams } from "react-router-dom";
+import { format } from "date-fns";
+import { validationSheetConstructor } from "./validationSheetConstructor";
+import { convertNumberToLetter } from "../../utils/commons/convertNumberToLetter";
+import { Attribute } from "../../types/generated/models";
+import { capitalizeString } from "../../utils/commons/formatCamelCaseToWords";
+import { getSelectedKey } from "../../utils/commons/dataStore/getSelectedKey";
+import { VariablesTypes } from "../../types/variables/AttributeColumns";
 // import {getHeaderBgColor} from "./getHeaderBgColor";
-import {cellBorders, cellFillBg} from "../../utils/constants/exportTemplate/templateStyles";
+import { cellBorders, cellFillBg } from "../../utils/constants/exportTemplate/templateStyles";
 // import {ta, tr} from "date-fns/locale";
-import {EventQueryProps} from "../../types/api/WithoutRegistrationProps";
-import {TeiQueryProps} from "../../types/api/WithRegistrationProps";
-import {getDataStoreKeys} from "../../utils/commons/dataStore/getDataStoreKeys";
+import { EventQueryProps } from "../../types/api/WithoutRegistrationProps";
+import { TeiQueryProps } from "../../types/api/WithRegistrationProps";
+import { getDataStoreKeys } from "../../utils/commons/dataStore/getDataStoreKeys";
 // import { useQueryParams } from "../commons/useQueryParams"
-import {useRecoilValue} from "recoil";
-import {HeaderFieldsState} from "../../schema/headersSchema";
-import {useParams} from "../commons/useQueryParams";
-import {formatResponseRows} from "../../utils/table/rows/formatResponseRows";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { HeaderFieldsState } from "../../schema/headersSchema";
+import { useParams } from "../commons/useQueryParams";
+import { formatResponseRows } from "../../utils/table/rows/formatResponseRows";
+import { ProgressState } from "../../schema/linearProgress";
 // import {ProgramConfigState} from "../../schema/programSchema";
 
 const DATA_STORE_NAME: string = "semis"
@@ -35,7 +36,7 @@ export enum SectionVariablesTypes {
 const oneProgramQuery: any = {
     program: {
         resource: "programs",
-        id: ({programId}: { programId: string }) => programId,
+        id: ({ programId }: { programId: string }) => programId,
         params: {
             fields: [
                 "id,displayName,programTrackedEntityAttributes[mandatory,trackedEntityAttribute[id,displayName,valueType,unique,generated,optionSetValue,optionSet[id,displayName,options[id,displayName,code]]]],programStages[id,displayName,programStageDataElements[compulsory,dataElement[id,displayName,valueType,optionSetValue,optionSet[id,displayName,options[id,displayName,code]]]]"
@@ -57,23 +58,23 @@ const EVENT_QUERY = (
         filterAttributes,
         trackedEntity
     }: EventQueryProps) => ({
-    results: {
-        resource: "tracker/events",
-        params: {
-            order,
-            page,
-            pageSize,
-            ouMode,
-            program,
-            programStage,
-            orgUnit,
-            filter,
-            trackedEntity,
-            filterAttributes,
-            fields: "*"
+        results: {
+            resource: "tracker/events",
+            params: {
+                order,
+                page,
+                pageSize,
+                ouMode,
+                program,
+                programStage,
+                orgUnit,
+                filter,
+                trackedEntity,
+                filterAttributes,
+                fields: "*"
+            }
         }
-    }
-})
+    })
 
 const TEI_QUERY = (
     {
@@ -84,20 +85,20 @@ const TEI_QUERY = (
         orgUnit,
         order
     }: TeiQueryProps) => ({
-    results: {
-        resource: "tracker/trackedEntities",
-        params: {
-            program,
-            order,
-            ouMode,
-            pageSize,
-            trackedEntity,
-            orgUnit,
-            fields:
-                "trackedEntity,trackedEntityType,createdAt,orgUnit,attributes[attribute,value],enrollments[enrollment,orgUnit,program,trackedEntity,status],programOwners"
+        results: {
+            resource: "tracker/trackedEntities",
+            params: {
+                program,
+                order,
+                ouMode,
+                pageSize,
+                trackedEntity,
+                orgUnit,
+                fields:
+                    "trackedEntity,trackedEntityType,createdAt,orgUnit,attributes[attribute,value],enrollments[enrollment,orgUnit,program,trackedEntity,status],programOwners"
+            }
         }
-    }
-})
+    })
 
 const dataStoreValuesQuery: any = {
     values: {
@@ -108,9 +109,9 @@ const reserveValuesQuery: any = {
     values: {
         resource: "trackedEntityAttributes",
         id: ({
-                 numberOfReserve,
-                 attributeID
-             }: {
+            numberOfReserve,
+            attributeID
+        }: {
             numberOfReserve: number,
             attributeID: string
         }) => `${attributeID}/generateAndReserve?numberToReserve=${numberOfReserve}`,
@@ -129,14 +130,16 @@ export default function useExportTemplate() {
         hide,
         show
     } = useShowAlerts()
+
     // const programConfig = useRecoilValue(ProgramConfigState)
     const headerFieldsState = useRecoilValue(HeaderFieldsState)
-    const {urlParamiters} = useParams()
+    const updateProgress = useSetRecoilState(ProgressState)
+    const { urlParamiters } = useParams()
     const school = urlParamiters().school as unknown as string
-    const {refetch: loadOneProgram} = useDataQuery(oneProgramQuery, {lazy: true});
+    const { refetch: loadOneProgram } = useDataQuery(oneProgramQuery, { lazy: true });
     // const { refetch: loadDataStoreValues} = useDataQuery(dataStoreValuesQuery , {lazy: true })
-    const {refetch: loadReserveValues} = useDataQuery(reserveValuesQuery, {lazy: true})
-    const {getDataStoreData: programConfigDataStore} = getSelectedKey();
+    const { refetch: loadReserveValues } = useDataQuery(reserveValuesQuery, { lazy: true })
+    const { getDataStoreData: programConfigDataStore } = getSelectedKey();
 
     async function generateInformations(inputValues: useExportTemplateProps, isNew: boolean = true) {
         const sectionType: string | null = searchParams.get('sectionType')
@@ -156,23 +159,28 @@ export default function useExportTemplate() {
             program: programId,
             registration
         }: any = programConfigDataStore
-        const correspondingProgram: any = await loadOneProgram({programId})
+        const correspondingProgram: any = await loadOneProgram({ programId })
+
+        if (isNew) updateProgress({ stage: 'export', progress: 20, buffer: 25 })
 
         if (correspondingProgram.program === undefined || correspondingProgram.program === null) {
+            updateProgress({ progress: null })
             throw Error(`Couldn't find program << ${programId as string} >> in DHIS2`)
         }
 
         if (registration === undefined || registration === null) {
+            updateProgress({ progress: null })
             throw Error(`Couldn't find registration config in datastore`)
         }
 
         if (programConfigDataStore["socio-economics"] === undefined) {
+            updateProgress({ progress: null })
             throw Error(`Couldn't find socio-economics config in datastore`)
         }
 
         const currentAttributes = correspondingProgram?.program?.programTrackedEntityAttributes?.map(
             (p: { mandatory: boolean, trackedEntityAttribute: any }) => {
-                return {mandatory: p.mandatory, ...p.trackedEntityAttribute}
+                return { mandatory: p.mandatory, ...p.trackedEntityAttribute }
             }
         ) || [];
 
@@ -208,6 +216,7 @@ export default function useExportTemplate() {
                     reserveValuePayload[`${attr.id}`] = reserveValueResponse.values
                 }
             }
+            if (isNew) updateProgress((progress: any) => ({ stage: 'export', progress: progress.progress + 50 / newHeaders.length, buffer: progress.buffer + 55 / newHeaders.length }))
         }
 
         const registrationProgramStageDataElements = correspondingProgram?.program?.programStages?.reduce((prev: any, curr: any) => {
@@ -410,6 +419,7 @@ export default function useExportTemplate() {
                 newDataList.push(payload);
             }
         }
+        if (isNew) updateProgress((progress: any) => ({ stage: 'export', progress: progress.progress + 20, buffer: progress.buffer + 20 }))
 
         return {
             headers: newHeaders || [],
@@ -421,11 +431,14 @@ export default function useExportTemplate() {
     async function handleExportToWord(values: useExportTemplateProps, isNew: boolean = true) {
         try {
             values.setLoadingExport && values.setLoadingExport(true)
+            updateProgress({ stage: 'export', progress: 0, buffer: 10 })
+
             let parameters = values;
             let localData: any[] = [];
             if (!isNew) {
+
                 const {
-                    results: {instances: eventsInstances}
+                    results: { instances: eventsInstances }
                 } = await engine.query(
                     EVENT_QUERY({
                         ouMode: "SELECTED",
@@ -438,11 +451,15 @@ export default function useExportTemplate() {
                         orgUnit: school
                     })
                 )
+
+                updateProgress({ stage: 'export', progress: 20, buffer: 25 })
+
                 const allTeis: [] = eventsInstances.map(
                     (x: { trackedEntity: string }) => x.trackedEntity
                 )
+
                 const {
-                    results: {instances: teiInstances}
+                    results: { instances: teiInstances }
                 } = await engine.query(
                     TEI_QUERY({
                         program: program as unknown as string,
@@ -450,12 +467,13 @@ export default function useExportTemplate() {
                         trackedEntity: allTeis.join(";")
                     })
                 )
+
+                updateProgress({ stage: 'export', progress: 40, buffer: 45 })
+
                 let socioEconomicInstances: any[] = []
 
                 for (const tei of allTeis) {
-                    const {
-                        results: {instances: socioEconData}
-                    } = await engine.query(
+                    const { results: { instances: socioEconData } } = await engine.query(
                         EVENT_QUERY({
                             ouMode: "SELECTED",
                             program: program as unknown as string,
@@ -465,6 +483,8 @@ export default function useExportTemplate() {
                             trackedEntity: tei
                         })
                     )
+
+                    updateProgress((progress: any) => ({ stage: 'export', progress: progress.progress + (50 / allTeis.length), buffer: progress.buffer + (55 / allTeis.length) }))
                     socioEconomicInstances = socioEconomicInstances.concat(socioEconData)
                 }
 
@@ -484,8 +504,8 @@ export default function useExportTemplate() {
 
             const workbook = new window.ExcelJS.Workbook();
             const dataSheet = workbook.addWorksheet("Data");
-            const metaDataSheet = workbook.addWorksheet("Metadata", {state: 'hidden'});
-            const validationSheet = workbook.addWorksheet("Validation", {state: 'veryHidden'});
+            const metaDataSheet = workbook.addWorksheet("Metadata", { state: 'hidden' });
+            const validationSheet = workbook.addWorksheet("Validation", { state: 'veryHidden' });
             dataSheet.protect('', {
                 selectLockedCells: true,
                 selectUnlockedCells: true,
@@ -576,7 +596,7 @@ export default function useExportTemplate() {
                 key: `${header.id}`,
                 width: index === 0 ? 20 : 30,
                 style: {
-                    font: {bold: true},
+                    font: { bold: true },
                 },
             }));
             dataSheet.addRow(headers.reduce((prev: any, curr: any) => {
@@ -615,7 +635,7 @@ export default function useExportTemplate() {
                 const cell = firstRow.getCell(index + 1);
                 cell.fill = cellFillBg(header.sectionDataType);
                 cell.border = cellBorders;
-                cell.font = {bold: true};
+                cell.font = { bold: true };
             });
 
             // Add background in the headers row
@@ -627,7 +647,7 @@ export default function useExportTemplate() {
                 const cell = secondRow.getCell(index + 1);
                 cell.fill = cellFillBg(header.metadataType);
                 cell.border = cellBorders;
-                cell.font = {bold: true};
+                cell.font = { bold: true };
 
                 // Hide the orgUnit ID column and other ID columns
                 if (headersToHide.includes(header.id)) {
@@ -647,7 +667,7 @@ export default function useExportTemplate() {
                 const cell = headerRow.getCell(index + 1);
                 cell.fill = cellFillBg(header.metadataType);
                 cell.border = cellBorders;
-                cell.font = {bold: true};
+                cell.font = { bold: true };
             });
 
             // Hide the header IDs row
@@ -675,7 +695,7 @@ export default function useExportTemplate() {
                 let index = 0
                 for (const data of datas) {
                     const rowData = localData[index]
-                    console.log(rowData)
+
                     const row = dataSheet.addRow(
                         headers.map((curr: any) => {
                             const allIds = String(curr.id).split(".")
@@ -772,16 +792,18 @@ export default function useExportTemplate() {
 
             show({
                 message: "File exported successfully",
-                type: {success: true},
+                type: { success: true },
             });
             setTimeout(hide, 5000);
+            updateProgress({ stage: 'export', progress: 100, buffer: 100 })
             values.setLoadingExport && values.setLoadingExport(false)
 
         } catch (err: any) {
+            updateProgress({ progress: null })
             console.log(err)
             show({
                 message: err.message,
-                type: {critical: true},
+                type: { critical: true },
             });
             setTimeout(hide, 5000);
             values.setLoadingExport && values.setLoadingExport(false)

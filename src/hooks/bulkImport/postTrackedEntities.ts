@@ -1,8 +1,9 @@
 import { useDataMutation } from "@dhis2/app-runtime"
 import useShowAlerts from '../commons/useShowAlert';
-import { useRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import { ApiResponse } from "../../types/bulkImport/Interfaces";
 import { TeiRefetch } from "../../schema/refecthTeiSchema";
+import { ProgressState } from "../../schema/linearProgress";
 
 const POST_TEI: any = {
     resource: "tracker",
@@ -14,13 +15,16 @@ const POST_TEI: any = {
 export const usePostTrackedEntities = () => {
     const { hide, show } = useShowAlerts()
     const [refetch, setRefetch] = useRecoilState<boolean>(TeiRefetch)
+    const updateProgress = useSetRecoilState(ProgressState)
 
     const [create, { loading, data, error }] = useDataMutation(POST_TEI, {
         onComplete: () => {
+            updateProgress({ progress: 100, buffer: 100 })
             show({ message: "Enrollments saved successfully", type: { success: true } })
             setRefetch(!refetch)
         },
         onError: (error) => {
+            updateProgress({ progress: null })
             show({
                 message: `${("Could not save the enrollments details")}: ${error.message}`,
                 type: { critical: true }

@@ -1,15 +1,15 @@
-import React, {useState} from 'react';
-
-import {createStyles, createTheme, makeStyles, MuiThemeProvider} from "@material-ui/core/styles";
-import {DropzoneDialog} from "material-ui-dropzone";
-import {CloudUpload} from "@material-ui/icons";
-import {read, utils} from "xlsx";
-import {useGetUsedPProgramStages, useShowAlerts} from "../../hooks";
-import {ProgramConfigState} from "../../schema/programSchema";
-import {ProgramConfig} from "../../types/programConfig/ProgramConfig";
-import {useRecoilState, useRecoilValue, useResetRecoilState} from "recoil";
-import {useGetEnrollmentStages} from "../../hooks/bulkImport/useGetEnrollmentStages";
-import {fieldsMap, fromPairs, validateTemplate} from "../../utils/bulkImport/validateTemplate";
+import React, { useState } from 'react';
+import { Divider, IconCheckmarkCircle16, Tag, ModalActions, Button, ButtonStrip } from "@dhis2/ui";
+import { createStyles, createTheme, makeStyles, MuiThemeProvider } from "@material-ui/core/styles";
+import { DropzoneDialog } from "material-ui-dropzone";
+import { CloudUpload } from "@material-ui/icons";
+import { read, utils } from "xlsx";
+import { useGetUsedPProgramStages, useShowAlerts } from "../../hooks";
+import { ProgramConfigState } from "../../schema/programSchema";
+import { ProgramConfig } from "../../types/programConfig/ProgramConfig";
+import { useRecoilState, useRecoilValue, useResetRecoilState } from "recoil";
+import { useGetEnrollmentStages } from "../../hooks/bulkImport/useGetEnrollmentStages";
+import { fieldsMap, fromPairs, validateTemplate } from "../../utils/bulkImport/validateTemplate";
 import {
     createTrackedEntityPayload, createUpdateTEsPayload,
     generateData,
@@ -17,8 +17,8 @@ import {
     processData,
     validateRecordValues
 } from "../../utils/bulkImport/processImportData";
-import {useDataEngine} from "@dhis2/app-runtime";
-import {CenteredContent, CircularLoader, Modal, ModalContent, ModalTitle} from "@dhis2/ui";
+import { useDataEngine } from "@dhis2/app-runtime";
+import { CenteredContent, CircularLoader, Modal, ModalContent, ModalTitle } from "@dhis2/ui";
 import ModalSummaryContent from "./ModalSummaryContent";
 import SummaryDetails from "./SummaryDetails";
 import {
@@ -29,7 +29,9 @@ import {
     ProcessingRecordsState, ProcessingStage, TemplateHeadingsState
 } from "../../schema/bulkImportSchema";
 import styles from "./modal.module.css";
-import {getDataStoreKeys} from "../../utils/commons/dataStore/getDataStoreKeys";
+import { getDataStoreKeys } from "../../utils/commons/dataStore/getDataStoreKeys";
+import IteractiveProgress from '../progress/interactiveProgress';
+import { ProgressState } from '../../schema/linearProgress';
 
 interface BulkEnrollmentProps {
     setOpen: React.Dispatch<React.SetStateAction<boolean>>
@@ -37,7 +39,7 @@ interface BulkEnrollmentProps {
     forUpdate: boolean
 }
 
-export const BulkEnrollment = ({setOpen, isOpen, forUpdate}: BulkEnrollmentProps): React.ReactElement => {
+export const BulkEnrollment = ({ setOpen, isOpen, forUpdate }: BulkEnrollmentProps): React.ReactElement => {
     const programConfig: ProgramConfig = useRecoilValue<ProgramConfig>(ProgramConfigState)
     const engine = useDataEngine()
     const [isProcessing, setIsProcessing] = useState(false);
@@ -48,12 +50,14 @@ export const BulkEnrollment = ({setOpen, isOpen, forUpdate}: BulkEnrollmentProps
         // registration,
         socioEconomics
     } = getDataStoreKeys()
-    const {hide, show} = useShowAlerts()
+    const { hide, show } = useShowAlerts()
     const [uploadStats, setUploadStats] = useRecoilState<BulkImportStats>(BulkImportStatsState);
     const [_excelTemplateHeaders, setExcelTemplateHeaders] = useRecoilState<Headings>(TemplateHeadingsState)
     const [_processedRecords, setProcessedRecords] = useRecoilState<ProcessingRecords>(ProcessingRecordsState);
     const resetProcessingStage = useResetRecoilState(ProcessingStage);
     const [isValidTemplate, setIsValidTemplate] = useState(false)
+    const progress = useRecoilValue(ProgressState)
+    const processingStage = useRecoilValue(ProcessingStage)
 
     const useStyles = makeStyles(() => createStyles({
         previewChip: {
@@ -99,7 +103,7 @@ export const BulkEnrollment = ({setOpen, isOpen, forUpdate}: BulkEnrollmentProps
             const sheetName = workbook.SheetNames[0];
             const worksheet = workbook.Sheets[sheetName];
             const rawData = utils.sheet_to_json(worksheet,
-                {header: 1, raw: false, dateNF: 'yyyy-mm-dd', defval: ""});
+                { header: 1, raw: false, dateNF: 'yyyy-mm-dd', defval: "" });
             const configSheet = workbook.SheetNames[1];
             const configWorksheet = workbook.Sheets[configSheet];
             const configData = utils.sheet_to_json(configWorksheet);
@@ -109,7 +113,7 @@ export const BulkEnrollment = ({setOpen, isOpen, forUpdate}: BulkEnrollmentProps
             if (validationMessage.length > 1) {
                 show({
                     message: validationMessage,
-                    type: {critical: true}
+                    type: { critical: true }
                 })
                 setOpen(false)
                 setTimeout(hide, 2000)
@@ -174,7 +178,7 @@ export const BulkEnrollment = ({setOpen, isOpen, forUpdate}: BulkEnrollmentProps
     }
     return (
         <>
-            { ((!isProcessing && !summaryOpen) || !isValidTemplate) &&
+            {((!isProcessing && !summaryOpen) || !isValidTemplate) &&
                 <MuiThemeProvider theme={theme}>
                     <DropzoneDialog
                         dialogTitle={"Bulk Enrollment"}
@@ -190,7 +194,7 @@ export const BulkEnrollment = ({setOpen, isOpen, forUpdate}: BulkEnrollmentProps
                                 direction: 'row'
                             }
                         }}
-                        previewChipProps={{classes: {root: classes.previewChip}}}
+                        previewChipProps={{ classes: { root: classes.previewChip } }}
                         previewText="Selected file:"
                         showFileNames={true}
                         showFileNamesInPreview={true}
@@ -204,30 +208,44 @@ export const BulkEnrollment = ({setOpen, isOpen, forUpdate}: BulkEnrollmentProps
                     />
                 </MuiThemeProvider>
             }
-            { (summaryOpen && isValidTemplate) &&
+
+            {(summaryOpen && isValidTemplate) &&
                 <Modal large position={"middle"} className={styles.modalContainer}>
                     <ModalTitle>{isProcessing ? "Processing Bulk Enrolment" : "Bulk Enrolment Summary"}</ModalTitle>
                     <ModalContent>
-                        {isProcessing
-                            ? <CenteredContent className="p-5"><CircularLoader /></CenteredContent>
-                            : <ModalSummaryContent
-                                setOpen={setSummaryOpen}
-                                summaryData={
-                                    {
-                                        updated: uploadStats.teis.updated,
-                                        created: uploadStats.teis.created,
-                                        conflicts: uploadStats.teis.conflicts,
-                                        duplicates: uploadStats.teis.updated,
-                                        invalid: uploadStats.teis.invalid
+                        {progress.progress != null && processingStage !== "template-processing" && processingStage !== 'dry-run' ?
+                            <>
+                                < IteractiveProgress />
+                                <ModalActions>
+                                    <ButtonStrip end>
+                                        <Button
+                                            onClick={() => setOpen(false)}
+                                        >
+                                            Hide
+                                        </Button>
+                                    </ButtonStrip>
+                                </ModalActions>
+                            </>
+                            :
+                            isProcessing ? <CenteredContent className="p-5"><CircularLoader /></CenteredContent> :
+                                <ModalSummaryContent
+                                    setOpen={setSummaryOpen}
+                                    summaryData={
+                                        {
+                                            updated: uploadStats.teis.updated,
+                                            created: uploadStats.teis.created,
+                                            conflicts: uploadStats.teis.conflicts,
+                                            duplicates: uploadStats.teis.updated,
+                                            invalid: uploadStats.teis.invalid
+                                        }
+                                        // {updated: 0, created: 0, conflicts:0, duplicates: 0, invalid: 0}
                                     }
-                                    // {updated: 0, created: 0, conflicts:0, duplicates: 0, invalid: 0}
-                                }
-                                summaryDetails={
-                                    <>
-                                        <SummaryDetails/>
-                                    </>
-                                }
-                            />
+                                    summaryDetails={
+                                        <>
+                                            <SummaryDetails />
+                                        </>
+                                    }
+                                />
                         }
                     </ModalContent>
 

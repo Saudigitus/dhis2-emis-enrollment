@@ -1,29 +1,30 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import {
     IconAddCircle24,
     Button,
     ButtonStrip,
     IconUserGroup16,
     IconSearch24,
-    CircularLoader,
-    CenteredContent
+    ModalActions
 } from "@dhis2/ui";
 import ModalComponent from '../../../modal/Modal';
 import ModalContentComponent from '../../../modal/ModalContent';
 import Tooltip from '@material-ui/core/Tooltip';
-import {useGetEnrollmentForm, useParams} from '../../../../hooks';
+import { useGetEnrollmentForm, useParams } from '../../../../hooks';
 import useGetSectionTypeLabel from '../../../../hooks/commons/useGetSectionTypeLabel';
-import {FlyoutOptionsProps} from "../../../../types/buttons/FlyoutOptionsProps";
-import {BulkEnrollment} from "../../../bulkImport/BulkEnrollment";
+import { FlyoutOptionsProps } from "../../../../types/buttons/FlyoutOptionsProps";
+import { BulkEnrollment } from "../../../bulkImport/BulkEnrollment";
 import DropdownButtonComponent from "../../../buttons/DropdownButton";
-import {ModalExportTemplateContent, ModalSearchEnrollmentContent} from '../../../modal';
-import {getDataStoreKeys} from '../../../../utils/commons/dataStore/getDataStoreKeys';
+import { ModalExportTemplateContent, ModalSearchEnrollmentContent } from '../../../modal';
+import { getDataStoreKeys } from '../../../../utils/commons/dataStore/getDataStoreKeys';
 import styles from './enrollmentActionsButtons.module.css'
 import useExportTemplate from "../../../../hooks/exportTemplate/useExportTemplate";
-import {useExportTemplateProps} from "../../../../types/modal/ModalProps";
-import {useRecoilValue} from "recoil";
-import {TableDataLengthState} from "../../../../schema/tableDataLengthSchema";
-import {TableDataLoadingState} from "../../../../schema/tableDataLoadingSchema";
+import { useExportTemplateProps } from "../../../../types/modal/ModalProps";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { TableDataLengthState } from "../../../../schema/tableDataLengthSchema";
+import { TableDataLoadingState } from "../../../../schema/tableDataLoadingSchema";
+import { ProgressState } from '../../../../schema/linearProgress';
+import IteractiveProgress from '../../../progress/interactiveProgress';
 
 function EnrollmentActionsButtons() {
     const [open, setOpen] = useState<boolean>(false);
@@ -35,18 +36,20 @@ function EnrollmentActionsButtons() {
         useQuery,
         urlParamiters
     } = useParams();
-    const {allowSearching} = getDataStoreKeys();
+    const { allowSearching } = getDataStoreKeys();
     const orgUnit = useQuery().get("school")
     const {
         schoolName: orgUnitName,
         academicYear
     } = urlParamiters();
-    const {sectionName} = useGetSectionTypeLabel();
-    const {enrollmentsData} = useGetEnrollmentForm();
-    const {handleExportToWord} = useExportTemplate()
+    const { sectionName } = useGetSectionTypeLabel();
+    const { enrollmentsData } = useGetEnrollmentForm();
+    const { handleExportToWord } = useExportTemplate()
     const [loadingExport, setLoadingExport] = useState(false)
     const tableDataLength = useRecoilValue(TableDataLengthState)
     const tableDataLoading = useRecoilValue(TableDataLoadingState)
+    const [progress, updateProgress] = useRecoilState(ProgressState)
+
     const enrollmentOptions: FlyoutOptionsProps[] = [
         {
             label: `Enroll new ${sectionName}s`,
@@ -54,6 +57,7 @@ function EnrollmentActionsButtons() {
             onClick: () => {
                 setForUpdate(false);
                 setOpenImport(true);
+                updateProgress({ progress: null })
             }
         },
         {
@@ -62,12 +66,14 @@ function EnrollmentActionsButtons() {
             onClick: () => {
                 setForUpdate(true);
                 setOpenImport(true);
+                updateProgress({ progress: null })
             }
         },
         {
             label: "Export empty template",
             divider: false,
             onClick: () => {
+                updateProgress({ progress: null })
                 setOpenExportEmptyTemplate(true)
             }
         },
@@ -76,6 +82,7 @@ function EnrollmentActionsButtons() {
             divider: false,
             disabled: tableDataLength === 0 || tableDataLoading,
             onClick: () => {
+                updateProgress({ progress: null })
                 const vals: useExportTemplateProps = {
                     academicYearId: academicYear ?? new Date().getFullYear().toString(),
                     orgUnit: orgUnit ?? "",
@@ -94,29 +101,29 @@ function EnrollmentActionsButtons() {
             <ButtonStrip className={styles.work_buttons}>
                 {allowSearching
                     ? <Tooltip title={orgUnit === null ? "Please select an organisation unit before" : ""}>
-            <span>
-              <Button disabled={orgUnit == null} onClick={() => {
-                  setOpenSearchEnrollment(true);
-              }} icon={<IconSearch24/>}>
-                <span className={styles.work_buttons_text}>Search {sectionName.toLowerCase()}</span>
-              </Button>
-            </span>
+                        <span>
+                            <Button disabled={orgUnit == null} onClick={() => {
+                                setOpenSearchEnrollment(true);
+                            }} icon={<IconSearch24 />}>
+                                <span className={styles.work_buttons_text}>Search {sectionName.toLowerCase()}</span>
+                            </Button>
+                        </span>
                     </Tooltip>
                     : null
                 }
                 <Tooltip title={orgUnit === null ? "Please select an organisation unit before" : ""}>
-          <span>
-            <Button disabled={orgUnit == null} onClick={() => {
-                setOpen(true);
-            }} icon={<IconAddCircle24/>}>
-              <span className={styles.work_buttons_text}>Enroll {sectionName.toLocaleLowerCase()}</span>
-            </Button>
-          </span>
+                    <span>
+                        <Button disabled={orgUnit == null} onClick={() => {
+                            setOpen(true);
+                        }} icon={<IconAddCircle24 />}>
+                            <span className={styles.work_buttons_text}>Enroll {sectionName.toLocaleLowerCase()}</span>
+                        </Button>
+                    </span>
                 </Tooltip>
                 <DropdownButtonComponent
                     name={<span className={styles.work_buttons_text}>Bulk enrollment</span> as unknown as string}
                     disabled={false}
-                    icon={<IconUserGroup16/>}
+                    icon={<IconUserGroup16 />}
                     options={enrollmentOptions}
                 />
             </ButtonStrip>
@@ -128,11 +135,11 @@ function EnrollmentActionsButtons() {
                     setOpen={setOpen}
                 />
             </ModalComponent>}
-            {openImport && <BulkEnrollment setOpen={setOpenImport} isOpen={openImport} forUpdate={forUpdate}/>}
+            {openImport && <BulkEnrollment setOpen={setOpenImport} isOpen={openImport} forUpdate={forUpdate} />}
 
             {openExportEmptyTemplate &&
                 <ModalComponent title={`Data Import Template Export`} open={openExportEmptyTemplate}
-                                setOpen={setOpenExportEmptyTemplate}>
+                    setOpen={setOpenExportEmptyTemplate}>
                     <ModalExportTemplateContent
                         sectionName={sectionName}
                         setOpen={setOpenExportEmptyTemplate}
@@ -141,7 +148,7 @@ function EnrollmentActionsButtons() {
 
             {openSearchEnrollment &&
                 <ModalComponent title={`Search for enrolled ${sectionName.toLowerCase()}`} open={openSearchEnrollment}
-                                setOpen={setOpenSearchEnrollment}>
+                    setOpen={setOpenSearchEnrollment}>
                     <ModalSearchEnrollmentContent
                         sectionName={sectionName}
                         setOpen={setOpenSearchEnrollment}
@@ -151,8 +158,19 @@ function EnrollmentActionsButtons() {
 
             {loadingExport &&
                 <ModalComponent title={`Exporting existing ${sectionName.toLowerCase()}s`} open={loadingExport}
-                                setOpen={setLoadingExport}>
-                    <CenteredContent className="p-5"><CircularLoader /></CenteredContent>
+                    setOpen={setLoadingExport}>
+                    {progress.progress != null &&
+                        <>
+                            <IteractiveProgress />
+                            <ModalActions>
+                                <ButtonStrip end>
+                                    <Button onClick={() => setLoadingExport(false)} >
+                                        Hide
+                                    </Button>
+                                </ButtonStrip>
+                            </ModalActions>
+                        </>
+                    }
                 </ModalComponent>}
         </div>
     )

@@ -3,10 +3,12 @@ import styles from "./modal.module.css";
 import { ModalProps } from "../../types/modal/ModalProps";
 import { Modal, ModalTitle, ModalContent } from "@dhis2/ui";
 import CloseModalButton from "./CloseModalButton";
+import { useRecoilValue } from "recoil";
+import { ProgressState } from "../../schema/linearProgress";
 
 function ModalComponent(props: ModalProps): React.ReactElement {
   const { open, setOpen, title, children } = props;
-
+  const progress = useRecoilValue(ProgressState)
 
   return (
     <Modal
@@ -16,7 +18,7 @@ function ModalComponent(props: ModalProps): React.ReactElement {
       className={styles.modalContainer}
     >
       <CloseModalButton onClick={() => setOpen(false)} />
-      <ModalTitle>{title}</ModalTitle>
+      {progress.progress == null && <ModalTitle>{title}</ModalTitle>}
       <ModalContent>{children}</ModalContent>
     </Modal>
   );
