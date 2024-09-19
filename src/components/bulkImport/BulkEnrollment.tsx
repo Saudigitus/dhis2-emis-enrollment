@@ -57,7 +57,6 @@ export const BulkEnrollment = ({ setOpen, isOpen, forUpdate }: BulkEnrollmentPro
     const resetProcessingStage = useResetRecoilState(ProcessingStage);
     const [isValidTemplate, setIsValidTemplate] = useState(false)
     const progress = useRecoilValue(ProgressState)
-    const processingStage = useRecoilValue(ProcessingStage)
 
     const useStyles = makeStyles(() => createStyles({
         previewChip: {
@@ -131,15 +130,10 @@ export const BulkEnrollment = ({ setOpen, isOpen, forUpdate }: BulkEnrollmentPro
             const dataWithHeadersValidated = validateRecordValues(dataWithHeaders, fieldMapping); // validate and format data type and ignore unfilled fields
             const [invalidRecords, validRecords, newRecords, recordsToUpdate] = await processData(
                 dataWithHeadersValidated, fieldMapping, programConfig, engine, forUpdate ?? false)
-            // console.log("INVALID RECORDS:", invalidRecords)
-            // console.log("VALID RECORDS:", validRecords)
-            // console.log("NEW RECORDS", newRecords)
-            // console.log("TO UPDATE", recordsToUpdate)
-
             setUploadStats(stats => ({
                 ...stats,
                 teis: {
-                    ...stats.teis,
+                    ...stats?.teis,
                     invalid: invalidRecords.length,
                     created: newRecords.length,
                     duplicates: recordsToUpdate.length,
@@ -211,41 +205,27 @@ export const BulkEnrollment = ({ setOpen, isOpen, forUpdate }: BulkEnrollmentPro
 
             {(summaryOpen && isValidTemplate) &&
                 <Modal large position={"middle"} className={styles.modalContainer}>
-                    <ModalTitle>{isProcessing ? "Processing Bulk Enrolment" : "Bulk Enrolment Summary"}</ModalTitle>
+                    {progress.progress == null && <ModalTitle>{isProcessing ? "Processing Bulk Enrolment" : "Bulk Enrolment Summary"}</ModalTitle>}
                     <ModalContent>
-                        {progress.progress != null && processingStage !== "template-processing" && processingStage !== 'dry-run' ?
-                            <>
-                                < IteractiveProgress />
-                                <ModalActions>
-                                    <ButtonStrip end>
-                                        <Button
-                                            onClick={() => setOpen(false)}
-                                        >
-                                            Hide
-                                        </Button>
-                                    </ButtonStrip>
-                                </ModalActions>
-                            </>
-                            :
-                            isProcessing ? <CenteredContent className="p-5"><CircularLoader /></CenteredContent> :
-                                <ModalSummaryContent
-                                    setOpen={setSummaryOpen}
-                                    summaryData={
-                                        {
-                                            updated: uploadStats.teis.updated,
-                                            created: uploadStats.teis.created,
-                                            conflicts: uploadStats.teis.conflicts,
-                                            duplicates: uploadStats.teis.updated,
-                                            invalid: uploadStats.teis.invalid
-                                        }
-                                        // {updated: 0, created: 0, conflicts:0, duplicates: 0, invalid: 0}
+                        {isProcessing ? <CenteredContent className="p-5"><CircularLoader /></CenteredContent> :
+                            <ModalSummaryContent
+                                setOpen={setSummaryOpen}
+                                summaryData={
+                                    {
+                                        updated: uploadStats.teis.updated,
+                                        created: uploadStats.teis.created,
+                                        conflicts: uploadStats.teis.conflicts,
+                                        duplicates: uploadStats.teis.updated,
+                                        invalid: uploadStats.teis.invalid
                                     }
-                                    summaryDetails={
-                                        <>
-                                            <SummaryDetails />
-                                        </>
-                                    }
-                                />
+                                    // {updated: 0, created: 0, conflicts:0, duplicates: 0, invalid: 0}
+                                }
+                                summaryDetails={
+                                    <>
+                                        <SummaryDetails />
+                                    </>
+                                }
+                            />
                         }
                     </ModalContent>
 
