@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 import { createStyles, createTheme, makeStyles, MuiThemeProvider } from "@material-ui/core/styles";
-import { DropzoneDialog } from "material-ui-dropzone";
-import { CloudUpload } from "@material-ui/icons";
 import { read, utils } from "xlsx";
 import { useGetUsedPProgramStages, useShowAlerts } from "../../hooks";
 import { ProgramConfigState } from "../../schema/programSchema";
@@ -17,6 +15,7 @@ import SummaryDetails from "./SummaryDetails";
 import { BulkImportStats, BulkImportStatsState, Headings, ProcessingRecords, ProcessingRecordsState, ProcessingStage, TemplateHeadingsState } from "../../schema/bulkImportSchema";
 import styles from "./modal.module.css";
 import { getDataStoreKeys } from "../../utils/commons/dataStore/getDataStoreKeys";
+import { ProgressState } from '../../schema/linearProgress';
 import DropZone from '../dropzone/DropZone';
 
 interface BulkEnrollmentProps {
@@ -39,6 +38,7 @@ export const BulkEnrollment = ({ setOpen, isOpen, forUpdate }: BulkEnrollmentPro
     const [_processedRecords, setProcessedRecords] = useRecoilState<ProcessingRecords>(ProcessingRecordsState);
     const resetProcessingStage = useResetRecoilState(ProcessingStage);
     const [isValidTemplate, setIsValidTemplate] = useState(false)
+    const progress = useRecoilValue(ProgressState)
 
     const useStyles = makeStyles(() => createStyles({
         previewChip: {
@@ -112,15 +112,10 @@ export const BulkEnrollment = ({ setOpen, isOpen, forUpdate }: BulkEnrollmentPro
             const dataWithHeadersValidated = validateRecordValues(dataWithHeaders, fieldMapping); // validate and format data type and ignore unfilled fields
             const [invalidRecords, validRecords, newRecords, recordsToUpdate] = await processData(
                 dataWithHeadersValidated, fieldMapping, programConfig, engine, forUpdate ?? false)
-            // console.log("INVALID RECORDS:", invalidRecords)
-            // console.log("VALID RECORDS:", validRecords)
-            // console.log("NEW RECORDS", newRecords)
-            // console.log("TO UPDATE", recordsToUpdate)
-
             setUploadStats(stats => ({
                 ...stats,
                 teis: {
-                    ...stats.teis,
+                    ...stats?.teis,
                     invalid: invalidRecords.length,
                     created: newRecords.length,
                     duplicates: recordsToUpdate.length,
@@ -193,15 +188,14 @@ export const BulkEnrollment = ({ setOpen, isOpen, forUpdate }: BulkEnrollmentPro
                 //     />
                 // </MuiThemeProvider>
 
-                <DropZone onSave={onSave}/>
+                <DropZone onSave={onSave} />
             }
             {(summaryOpen && isValidTemplate) &&
                 <Modal large position={"middle"} className={styles.modalContainer}>
-                    <ModalTitle>{isProcessing ? "Processing Bulk Enrolment" : "Bulk Enrolment Summary"}</ModalTitle>
+                    {progress.progress == null && <ModalTitle>{isProcessing ? "Processing Bulk Enrolment" : "Bulk Enrolment Summary"}</ModalTitle>}
                     <ModalContent>
-                        {isProcessing
-                            ? <CenteredContent className="p-5"><CircularLoader /></CenteredContent>
-                            : <ModalSummaryContent
+                        {isProcessing ? <CenteredContent className="p-5"><CircularLoader /></CenteredContent> :
+                            <ModalSummaryContent
                                 setOpen={setSummaryOpen}
                                 summaryData={
                                     {

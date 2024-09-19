@@ -5,8 +5,7 @@ import {
     ButtonStrip,
     IconUserGroup16,
     IconSearch24,
-    CircularLoader,
-    CenteredContent
+    ModalActions
 } from "@dhis2/ui";
 import ModalComponent from '../../../modal/Modal';
 import ModalContentComponent from '../../../modal/ModalContent';
@@ -21,9 +20,11 @@ import { getDataStoreKeys } from '../../../../utils/commons/dataStore/getDataSto
 import styles from './enrollmentActionsButtons.module.css'
 import useExportTemplate from "../../../../hooks/exportTemplate/useExportTemplate";
 import { useExportTemplateProps } from "../../../../types/modal/ModalProps";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { TableDataLengthState } from "../../../../schema/tableDataLengthSchema";
 import { TableDataLoadingState } from "../../../../schema/tableDataLoadingSchema";
+import { ProgressState } from '../../../../schema/linearProgress';
+import IteractiveProgress from '../../../progress/interactiveProgress';
 
 function EnrollmentActionsButtons() {
     const [open, setOpen] = useState<boolean>(false);
@@ -47,6 +48,8 @@ function EnrollmentActionsButtons() {
     const [loadingExport, setLoadingExport] = useState(false)
     const tableDataLength = useRecoilValue(TableDataLengthState)
     const tableDataLoading = useRecoilValue(TableDataLoadingState)
+    const [progress, updateProgress] = useRecoilState(ProgressState)
+
     const enrollmentOptions: FlyoutOptionsProps[] = [
         {
             label: `Enroll new ${sectionName}s`,
@@ -54,6 +57,7 @@ function EnrollmentActionsButtons() {
             onClick: () => {
                 setForUpdate(false);
                 setOpenImport(true);
+                updateProgress({ progress: null })
             }
         },
         {
@@ -62,12 +66,14 @@ function EnrollmentActionsButtons() {
             onClick: () => {
                 setForUpdate(true);
                 setOpenImport(true);
+                updateProgress({ progress: null })
             }
         },
         {
             label: "Export empty template",
             divider: false,
             onClick: () => {
+                updateProgress({ progress: null })
                 setOpenExportEmptyTemplate(true)
             }
         },
@@ -76,6 +82,7 @@ function EnrollmentActionsButtons() {
             divider: false,
             disabled: tableDataLength === 0 || tableDataLoading,
             onClick: () => {
+                updateProgress({ progress: null })
                 const vals: useExportTemplateProps = {
                     academicYearId: academicYear ?? new Date().getFullYear().toString(),
                     orgUnit: orgUnit ?? "",
@@ -155,7 +162,18 @@ function EnrollmentActionsButtons() {
             {loadingExport &&
                 <ModalComponent title={`Exporting existing ${sectionName.toLowerCase()}s`} open={loadingExport}
                     setOpen={setLoadingExport}>
-                    <CenteredContent className="p-5"><CircularLoader /></CenteredContent>
+                    {progress.progress != null &&
+                        <>
+                            <IteractiveProgress />
+                            <ModalActions>
+                                <ButtonStrip end>
+                                    <Button onClick={() => setLoadingExport(false)} >
+                                        Hide
+                                    </Button>
+                                </ButtonStrip>
+                            </ModalActions>
+                        </>
+                    }
                 </ModalComponent>}
         </div>
     )

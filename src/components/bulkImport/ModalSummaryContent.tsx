@@ -1,23 +1,25 @@
-import React, {useEffect, useState} from "react";
-import {Divider, IconCheckmarkCircle16, Tag, ModalActions, Button, ButtonStrip} from "@dhis2/ui";
+import React, { useEffect, useState } from "react";
+import { Divider, IconCheckmarkCircle16, Tag, ModalActions, Button, ButtonStrip } from "@dhis2/ui";
 import WithPadding from "../template/WithPadding";
 import styles from "./modal.module.css";
-import {type ButtonActionProps} from "../../types/buttons/ButtonActions";
+import { type ButtonActionProps } from "../../types/buttons/ButtonActions";
 import Title from "../text/Title";
 import SummaryCards from "./SummaryCards";
-import {Collapse} from "@material-ui/core";
-import {InfoOutlined} from "@material-ui/icons";
+import { Collapse } from "@material-ui/core";
+import { InfoOutlined } from "@material-ui/icons";
 import {
     BulkImportResponseStats, BulkImportResponseStatsState,
     ProcessingRecords,
     ProcessingRecordsState,
     ProcessingStage
 } from "../../schema/bulkImportSchema";
-import {useRecoilState, useRecoilValue, useResetRecoilState} from "recoil";
-import {usePostTrackedEntities} from "../../hooks/bulkImport/postTrackedEntities";
-import {TrackedEntity} from "../../schema/trackerSchema";
-import {ApiResponse, Stats} from "../../types/bulkImport/Interfaces";
+import { useRecoilState, useRecoilValue, useResetRecoilState, useSetRecoilState } from "recoil";
+import { usePostTrackedEntities } from "../../hooks/bulkImport/postTrackedEntities";
+import { TrackedEntity } from "../../schema/trackerSchema";
+import { ApiResponse, Stats } from "../../types/bulkImport/Interfaces";
 import { LinearProgress } from "@material-ui/core";
+import { ProgressState } from "../../schema/linearProgress";
+import IteractiveProgress from "../progress/interactiveProgress";
 
 interface ModalContentProps {
     setOpen: (value: boolean) => void
@@ -37,18 +39,13 @@ const ModalSummaryContent = (props: ModalContentProps): React.ReactElement => {
     const [processingStage, setProcessingStage] = useRecoilState<string>(ProcessingStage)
     const [bulkImportResponseStatsState, setBulkImportResponseStatsState] = useRecoilState<BulkImportResponseStats>(BulkImportResponseStatsState)
     const resetBulkImportResponseStatsState = useResetRecoilState(BulkImportResponseStatsState)
-    const {
-        loading,
-        postTrackedEntities,
-        data,
-        error
-    } = usePostTrackedEntities()
+    const { loading, postTrackedEntities, data } = usePostTrackedEntities()
     const forUpdate = processedRecords?.forUpdate as boolean
+    const [progress, updateProgress] = useRecoilState(ProgressState)
 
     useEffect(() => {
         if (data !== undefined) {
-            console.log("Posting Data....", data)
-            const {validationReport} = data
+            const { validationReport } = data
             if (processingStage === "dry-run") {
                 setBulkImportResponseStatsState({
                     ...bulkImportResponseStatsState,
@@ -58,7 +55,7 @@ const ModalSummaryContent = (props: ModalContentProps): React.ReactElement => {
                     bundleReport: data.bundleReport
                 })
             } else if (processingStage === "import") {
-                const {bundleReport} = data
+                const { bundleReport } = data
                 // for actual import, let's count the enrollments created
                 const stats: Stats = bundleReport?.typeReportMap?.ENROLLMENT?.stats as Stats
                 setBulkImportResponseStatsState({
@@ -73,17 +70,18 @@ const ModalSummaryContent = (props: ModalContentProps): React.ReactElement => {
         }
     }, [data]);
 
-    useEffect(() => {
-        if (error !== undefined) {
-            const importResponse: ApiResponse = error.details as unknown as ApiResponse
-            setBulkImportResponseStatsState({
-                ...bulkImportResponseStatsState,
-                validationReport: importResponse.validationReport,
-                stats: importResponse.stats,
-                status: importResponse.status
-            })
-        }
-    }, [error])
+    // useEffect(() => {
+    //     if (error !== undefined) {
+    //         const importResponse: ApiResponse = error.details as unknown as ApiResponse
+    //         setBulkImportResponseStatsState({
+    //             ...bulkImportResponseStatsState,
+    //             validationReport: importResponse.validationReport,
+    //             stats: importResponse.stats,
+    //             status: importResponse.status
+    //         })
+    //     }
+    // }, [error])
+
     const handleShowDetails = () => {
         setShowDetails(!showDetails);
     }
@@ -93,33 +91,32 @@ const ModalSummaryContent = (props: ModalContentProps): React.ReactElement => {
             ? "Dry Run"
             : "Import"
 
-    const importStudents = (importMode: "VALIDATE" | "COMMIT") => {
+    async function importStudents(importMode: "VALIDATE" | "COMMIT") {
         resetBulkImportResponseStatsState()
         if (importMode === "VALIDATE") {
             setProcessingStage("dry-run")
         } else {
             setProcessingStage("import")
         }
-        console.log("IMPORT TEs: ", processedRecords?.newTrackedEntities, importMode, processingStage)
+
         const params = {
             async: false,
             importMode,
             importStrategy: "CREATE_AND_UPDATE"
         }
+
         try {
             const teisPayload: any = {
                 trackedEntities: !forUpdate
                     ? processedRecords?.newTrackedEntities as TrackedEntity[]
                     : processedRecords?.updateTrackedEntities as TrackedEntity[]
             }
-            void postTrackedEntities({
-                data: teisPayload,
-                params
-            })
+            const reponse = await postTrackedEntities(teisPayload, params)
         } catch (error: any) {
-            console.error("Error importing Tracked Entities: ", error)
+            updateProgress({ progress: null })
         }
     }
+
     const newImportDisabled = (processedRecords.newTrackedEntities?.length === 0 || processingStage === 'completed' || loading)
     const updatesDisabled = (processedRecords.updateTrackedEntities?.length === 0 || processingStage === 'completed' || loading)
 
@@ -138,7 +135,8 @@ const ModalSummaryContent = (props: ModalContentProps): React.ReactElement => {
             loading: false,
             disabled: forUpdate ? updatesDisabled : newImportDisabled,
             onClick: () => {
-                importStudents("COMMIT")
+                updateProgress({ progress: 20, buffer: 46 })
+                void importStudents("COMMIT")
             }
         },
         {
@@ -153,43 +151,62 @@ const ModalSummaryContent = (props: ModalContentProps): React.ReactElement => {
 
     return (
         <div>
-            <Tag positive icon={<IconCheckmarkCircle16/>} className={styles.tagContainer}> Students import
-                preview </Tag>
+            {
+                progress.progress != null ?
+                    <>
+                        < IteractiveProgress />
+                        <ModalActions>
+                            <ButtonStrip end>
+                                <Button
+                                    onClick={() => setOpen(false)}
+                                >
+                                    Hide
+                                </Button>
+                            </ButtonStrip>
+                        </ModalActions>
+                    </>
+                    :
+                    <>
 
-            <WithPadding/>
-            <Title label={`${summaryTitle} Summary`}/>
-            <WithPadding/>
+                        <Tag positive icon={<IconCheckmarkCircle16 />} className={styles.tagContainer}> Students import
+                            preview </Tag>
 
-            <SummaryCards {...summaryData} />
+                        <WithPadding />
+                        <Title label={`${summaryTitle} Summary`} />
+                        <WithPadding />
 
-            <WithPadding/>
-            <WithPadding/>
-            <ButtonStrip>
-                <Button small icon={<InfoOutlined className={styles.infoIcon}/>} onClick={handleShowDetails}>More
-                    details</Button>
-            </ButtonStrip>
+                        <SummaryCards {...summaryData} />
 
-            <WithPadding/>
-            <Collapse in={showDetails}>
-                <div className={styles.detailsContainer}>
-                    {summaryDetails}
-                </div>
-            </Collapse>
+                        <WithPadding />
+                        <WithPadding />
+                        <ButtonStrip>
+                            <Button small icon={<InfoOutlined className={styles.infoIcon} />} onClick={handleShowDetails}>More
+                                details</Button>
+                        </ButtonStrip>
 
-            {loading && <LinearProgress />}
-            <Divider/>
-            <ModalActions>
-                <ButtonStrip end>
-                    {modalActions.map((action, i) => (
-                        <Button
-                            key={i}
-                            {...action}
-                        >
-                            {action.label}
-                        </Button>
-                    ))}
-                </ButtonStrip>
-            </ModalActions>
+                        <WithPadding />
+                        <Collapse in={showDetails}>
+                            <div className={styles.detailsContainer}>
+                                {summaryDetails}
+                            </div>
+                        </Collapse>
+
+                        {loading && <LinearProgress />}
+                        <Divider />
+                        <ModalActions>
+                            <ButtonStrip end>
+                                {modalActions.map((action, i) => (
+                                    <Button
+                                        key={i}
+                                        {...action}
+                                    >
+                                        {action.label}
+                                    </Button>
+                                ))}
+                            </ButtonStrip>
+                        </ModalActions>
+                    </>
+            }
         </div>
     );
 }

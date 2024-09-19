@@ -126,10 +126,10 @@ const SummaryDetails = (): React.ReactElement => {
             (["dry-run", "import", "completed"].includes(processingStage)) &&
             <>
                 <ImportSummaryTable
-                    status={bulkImportResponseStats.status}
-                    validationReport={bulkImportResponseStats.validationReport}
-                    stats={bulkImportResponseStats.stats}
-                    bundleReport={bulkImportResponseStats.bundleReport}
+                    status={bulkImportResponseStats?.status}
+                    validationReport={bulkImportResponseStats?.validationReport}
+                    stats={bulkImportResponseStats?.stats}
+                    bundleReport={bulkImportResponseStats?.bundleReport}
                 />
             </>
         }

@@ -24,6 +24,7 @@ function SummaryCards(values: SummaryCardsProps): React.ReactElement {
     const processedRecords: ProcessingRecords = useRecoilValue<ProcessingRecords>(ProcessingRecordsState)
     const bulkImportResponseStats: BulkImportResponseStats = useRecoilValue<BulkImportResponseStats>(BulkImportResponseStatsState)
     const forUpdate = processedRecords?.forUpdate as boolean
+   
     return processingStage === "template-processing"
         ? (
         <ButtonStrip>
@@ -35,10 +36,10 @@ function SummaryCards(values: SummaryCardsProps): React.ReactElement {
         </ButtonStrip>)
         : (
         <ButtonStrip>
-            <SummaryCard color="success" label="Imported" value={bulkImportResponseStats.stats.created.toString()} />
-            <SummaryCard color="secondary" label="Updated" value={bulkImportResponseStats.stats.updated.toString()} />
-            <SummaryCard color="error" label="Ignored" value={bulkImportResponseStats.stats.ignored.toString()} />
-            <SummaryCard color="secondary" label="Conflicts" value={bulkImportResponseStats.validationReport.errorReports.length.toString()} />
+            <SummaryCard color="success" label="Imported" value={bulkImportResponseStats?.stats?.created.toString()} />
+            <SummaryCard color="secondary" label="Updated" value={bulkImportResponseStats?.stats?.updated.toString()} />
+            <SummaryCard color="error" label="Ignored" value={bulkImportResponseStats?.stats?.ignored.toString()} />
+            <SummaryCard color="secondary" label="Conflicts" value={bulkImportResponseStats?.validationReport?.errorReports?.length.toString()} />
         </ButtonStrip>
         )
 }
