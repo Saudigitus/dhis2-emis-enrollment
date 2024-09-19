@@ -35,20 +35,23 @@ export const usePostTrackedEntities = () => {
             }
         })
             .then((response: any) => {
-                updateProgress({ progress: 100, buffer: 100 })
                 setLoading(false)
                 setData(response)
-                
-                show({
-                    message: "Enrollment data Updated Successfully",
-                    type: { success: true }
-                })
-                setTimeout(hide, 5000);
-                setRefetch(!refetch)
 
-                setTimeout(() => {
-                    updateProgress({ progress: null, buffer: null });
-                }, 200);
+                if (params.importMode !== 'VALIDATE') {
+                    updateProgress({ progress: 100, buffer: 100 })
+
+                    show({
+                        message: "Enrollment data Updated Successfully",
+                        type: { success: true }
+                    })
+                    setTimeout(hide, 5000);
+                    setRefetch(!refetch)
+
+                    setTimeout(() => {
+                        updateProgress({ progress: null, buffer: null });
+                    }, 200);
+                }
             })
             .catch(() => { })
     }
