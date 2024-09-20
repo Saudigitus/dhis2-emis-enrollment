@@ -4,6 +4,17 @@
   "description": "",
   "license": "BSD-3-Clause",
   "private": true,
+  "manifest.webapp": {
+    "name": "SEMIS-Enrollment",
+    "description": "",
+    "launch_path": "index.html",
+    "appType": "RESOURCE",
+    "activities": {
+      "dhis": {
+        "href": "*"
+      }
+    }
+  },
   "scripts": {
     "build": "d2-app-scripts build",
     "start": "d2-app-scripts start --proxy https://emis.dhis2.org/startracker",
