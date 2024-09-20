@@ -100,11 +100,6 @@ const TEI_QUERY = (
         }
     })
 
-const dataStoreValuesQuery: any = {
-    values: {
-        resource: `dataStore/${DATA_STORE_NAME}/${DATA_STORE_VALUE_KEY}`
-    }
-}
 const reserveValuesQuery: any = {
     values: {
         resource: "trackedEntityAttributes",
@@ -136,9 +131,6 @@ export default function useExportTemplate() {
     const updateProgress = useSetRecoilState(ProgressState)
     const { urlParamiters } = useParams()
     const school = urlParamiters().school as unknown as string
-    const { refetch: loadOneProgram } = useDataQuery(oneProgramQuery, { lazy: true });
-    // const { refetch: loadDataStoreValues} = useDataQuery(dataStoreValuesQuery , {lazy: true })
-    const { refetch: loadReserveValues } = useDataQuery(reserveValuesQuery, { lazy: true })
     const { getDataStoreData: programConfigDataStore } = getSelectedKey();
 
     async function generateInformations(inputValues: useExportTemplateProps, isNew: boolean = true) {
@@ -148,9 +140,6 @@ export default function useExportTemplate() {
             throw new Error("Couldn't find section type in url params")
         }
 
-        // const dataStoreValues: any = await loadDataStoreValues()
-        // const programConfigDataStore: any = dataStoreValues?.values?.find((d: any) => d.key === sectionType)
-
         if (programConfigDataStore.program === undefined) {
             throw Error("Couldn't get program uid from datastore << values >>")
         }
@@ -159,7 +148,8 @@ export default function useExportTemplate() {
             program: programId,
             registration
         }: any = programConfigDataStore
-        const correspondingProgram: any = await loadOneProgram({ programId })
+
+        const correspondingProgram: any = await engine.query(oneProgramQuery, { variables: { programId } })
 
         if (isNew) updateProgress({ stage: 'export', progress: 20, buffer: 25 })
 
@@ -208,10 +198,8 @@ export default function useExportTemplate() {
 
         for (let attr of newHeaders) {
             if (attr.unique && attr.generated && +inputValues.studentsNumber > 0) {
-                const reserveValueResponse: any = await loadReserveValues({
-                    numberOfReserve: +inputValues.studentsNumber,
-                    attributeID: attr.id
-                })
+                const reserveValueResponse: any = await engine.query(reserveValuesQuery, { variables: { numberOfReserve: +inputValues.studentsNumber, attributeID: attr.id } })
+
                 if (reserveValueResponse?.values?.length > 0) {
                     reserveValuePayload[`${attr.id}`] = reserveValueResponse.values
                 }
@@ -444,7 +432,7 @@ export default function useExportTemplate() {
                         ouMode: "SELECTED",
                         paging: false,
                         program: program as unknown as string,
-                        order: "createdAt:desc",
+                        order: programConfigDataStore.defaults.defaultOrder || "occurredAt:desc",
                         programStage: registration?.programStage as unknown as string,
                         filter: headerFieldsState?.dataElements,
                         filterAttributes: headerFieldsState?.attributes,
@@ -477,7 +465,7 @@ export default function useExportTemplate() {
                         EVENT_QUERY({
                             ouMode: "SELECTED",
                             program: program as unknown as string,
-                            order: "createdAt:desc",
+                            order: programConfigDataStore.defaults.defaultOrder || "occurredAt:desc",
                             programStage: socioEconomics.programStage,
                             orgUnit: school,
                             trackedEntity: tei
