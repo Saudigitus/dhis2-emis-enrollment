@@ -32,7 +32,7 @@ export default function useSearchEnrollments() {
 
                     const registrationEvents = formatResponseData("WITHOUT_REGISTRATION", registrationResponse?.results?.instances)
                     const socioEconomicsEvents = formatResponseData("WITHOUT_REGISTRATION", socioEconomicsResponse?.results?.instances)
-                    teisWithRegistrationEvents.push({ ...tei, enrollmentsNumber: registrationEvents?.length, registrationEvents, socioEconomicsEvents, mainAttributesFormatted: attributes(tei?.attributes), ...attributes(tei?.attributes) })
+                    teisWithRegistrationEvents.push({ ...tei, ownershipOu: tei?.programOwners?.[0]?.orgUnit, enrollmentsNumber: registrationEvents?.length, registrationEvents, socioEconomicsEvents, mainAttributesFormatted: attributes(tei?.attributes), ...attributes(tei?.attributes) })
                 }
 
                 setEnrollmentValues(teisWithRegistrationEvents)

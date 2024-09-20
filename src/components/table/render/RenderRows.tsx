@@ -81,7 +81,7 @@ function RenderRows(props: RenderHeaderProps): React.ReactElement {
     const classes = useStyles()
     const { imageUrl } = GetImageUrl()
     const { urlParamiters } = useParams()
-    const { academicYear, school } = urlParamiters()
+    const { academicYear, school, sectionType } = urlParamiters()
     const { viewPortWidth } = useViewportWidth()
 
     const { registration } = getDataStoreKeys()
@@ -160,7 +160,7 @@ function RenderRows(props: RenderHeaderProps): React.ReactElement {
                                     className={classNames(classes.cell, classes.bodyCell)}
                                     colspan={headerData?.filter(x => x.visible)?.length as unknown as number + 1}
                                 >
-                                    <EnrollmentDetailsCards existingAcademicYear={checkEnrolledAcademicYear(row?.registrationEvents, academicYear as unknown as string, registration.academicYear)} onSelectTei={onSelectTei ? () => onSelectTei(row) : undefined} enrollmentsData={row.registrationEvents} />
+                                    <EnrollmentDetailsCards existingAcademicYear={checkEnrolledAcademicYear(row?.registrationEvents, academicYear as unknown as string, registration.academicYear, school!, sectionType!)} onSelectTei={onSelectTei ? () => onSelectTei(row) : undefined} enrollmentsData={row.registrationEvents} />
                                 </RowCell>
                             </RowTable>
                             : null

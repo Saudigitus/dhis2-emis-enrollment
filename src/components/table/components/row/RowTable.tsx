@@ -22,7 +22,7 @@ function RowTable(props: RowProps): React.ReactElement {
 
     return (
         <Tooltip arrow={true} /* disableHoverListener={!inactive || !isOwnershipOu} */ disableFocusListener
-            title={!isOwnershipOu ? 'This ' + sectionName + ' was transferred to another school' : inactive ? 'This ' + sectionName + ' enrollment is inactive' : ""}>
+            title={!isOwnershipOu ? 'This ' + sectionName + ' was transferred or belongs to another school' : inactive ? 'This ' + sectionName + ' enrollment is inactive' : ""}>
             <tr
                 className={classes}
                 {...passOnProps}
