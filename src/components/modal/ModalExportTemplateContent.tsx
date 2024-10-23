@@ -13,6 +13,7 @@ import { useRecoilState } from "recoil";
 import { ProgressState } from "../../schema/linearProgress";
 import styles from '../modal/modal.module.css'
 import IteractiveProgress from "../progress/interactiveProgress";
+import { useGetSchoolCalendar } from "../../hooks/schoolCalendar/useGetAcademicYearDetails";
 
 const loading = false;
 
@@ -23,7 +24,7 @@ function ModalExportTemplateContent(props: ModalExportTemplateProps): React.Reac
     } = props;
     const { exportFormFields } = useGetExportTemplateForm();
     const { registration } = getDataStoreKeys()
-
+    const { getAcademicYearDetails } = useGetSchoolCalendar()
     const { urlParamiters } = useParams();
     const {
         school: orgUnit,
@@ -52,8 +53,11 @@ function ModalExportTemplateContent(props: ModalExportTemplateProps): React.Reac
     }, [progress?.progress])
 
     async function onSubmit() {
+        updateProgress({ stage: 'export', progress: 0, buffer: 10 })
+        const academicYearStartDate = await getAcademicYearDetails()
+
         await handleExportToWord({
-            academicYearId: values[registration.academicYear],
+            academicYearId: academicYearStartDate,
             orgUnit: values.orgUnit,
             orgUnitName: values.orgUnitName,
             studentsNumber: values.studentsNumber,

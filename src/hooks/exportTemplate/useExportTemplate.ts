@@ -385,7 +385,7 @@ export default function useExportTemplate() {
                     if (incrementHeader === 0) value = `${i + 1}`
                     if (incrementHeader === 1) value = `${inputValues.orgUnitName}`
                     if (incrementHeader === 2) value = `${inputValues.orgUnit}`
-                    if (incrementHeader === 3) value = `${format(new Date(), `${inputValues.academicYearId}-MM-dd`)}`
+                    if (incrementHeader === 3) value = `${inputValues.academicYearId}`
 
                     if (incrementHeader > 3) {
                         const foundReserve = reserveValuePayload[newHeader.id]
@@ -419,7 +419,7 @@ export default function useExportTemplate() {
     async function handleExportToWord(values: useExportTemplateProps, isNew: boolean = true) {
         try {
             values.setLoadingExport && values.setLoadingExport(true)
-            updateProgress({ stage: 'export', progress: 0, buffer: 10 })
+            updateProgress({ stage: 'export', progress: 10, buffer: 15 })
 
             let parameters = values;
             let localData: any[] = [];
