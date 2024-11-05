@@ -63,7 +63,7 @@ function ModalExportTemplateContent(props: ModalExportTemplateProps): React.Reac
             studentsNumber: values.studentsNumber,
             setLoadingExport
         })
-        // window.open(`${baseUrl}/api/documents/${documentId?.id}/data`, "_blank");
+
         setOpen(false)
     }
 

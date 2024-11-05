@@ -25,6 +25,7 @@ import { TableDataLengthState } from "../../../../schema/tableDataLengthSchema";
 import { TableDataLoadingState } from "../../../../schema/tableDataLoadingSchema";
 import { ProgressState } from '../../../../schema/linearProgress';
 import IteractiveProgress from '../../../progress/interactiveProgress';
+import { useGetSchoolCalendar } from '../../../../hooks/schoolCalendar/useGetAcademicYearDetails';
 
 function EnrollmentActionsButtons() {
     const [open, setOpen] = useState<boolean>(false);
@@ -49,6 +50,7 @@ function EnrollmentActionsButtons() {
     const tableDataLength = useRecoilValue(TableDataLengthState)
     const tableDataLoading = useRecoilValue(TableDataLoadingState)
     const [progress, updateProgress] = useRecoilState(ProgressState)
+    const { getAcademicYearDetails } = useGetSchoolCalendar()
 
     const enrollmentOptions: FlyoutOptionsProps[] = [
         {
@@ -81,17 +83,18 @@ function EnrollmentActionsButtons() {
             label: "Export existing students",
             divider: false,
             disabled: tableDataLength === 0 || tableDataLoading,
-            onClick: () => {
-                updateProgress({ progress: null })
+            onClick: async () => {
+                updateProgress({ stage: 'export', progress: 0, buffer: 10 })
+                const academicYearStartDate = await getAcademicYearDetails()
+
                 const vals: useExportTemplateProps = {
-                    academicYearId: academicYear ?? new Date().getFullYear().toString(),
+                    academicYearId: academicYearStartDate,
                     orgUnit: orgUnit ?? "",
                     orgUnitName: orgUnitName ?? "",
                     studentsNumber: "0" ?? "0",
                     setLoadingExport
                 }
-                handleExportToWord(vals, false).finally(() => {
-                });
+                handleExportToWord(vals, false).finally(() => { });
             }
         }
     ];
