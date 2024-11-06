@@ -28,7 +28,7 @@ const parseDateString = (date: Date): string => {
  */
 export const getMandatoryFields = (fieldsMap: TemplateFieldMapping): FieldMapping[] => {
     return Object.values(fieldsMap)
-        .filter((field) => field.required && field.isTEAttribute && field.name !== "System ID")
+        .filter((field) => field.required && field.isTEAttribute)
 }
 
 /**
