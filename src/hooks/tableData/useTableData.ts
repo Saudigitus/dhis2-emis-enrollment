@@ -1,18 +1,18 @@
-
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { useDataEngine } from "@dhis2/app-runtime";
 import { formatResponseRows } from "../../utils/table/rows/formatResponseRows";
 import { useParams } from "../commons/useQueryParams";
 import { HeaderFieldsState } from "../../schema/headersSchema";
 import useShowAlerts from "../commons/useShowAlert";
-import { EventQueryProps, EventQueryResults } from "../../types/api/WithoutRegistrationProps";
-import { TeiQueryProps, TeiQueryResults } from "../../types/api/WithRegistrationProps";
+import { EventQueryProps } from "../../types/api/WithoutRegistrationProps";
+import { TeiQueryProps } from "../../types/api/WithRegistrationProps";
 import { TableDataProps } from "../../types/table/TableContentProps";
 import { getDataStoreKeys } from "../../utils/commons/dataStore/getDataStoreKeys";
 import { EventsState } from "../../schema/eventsSchema";
 import { FormatResponseRowsProps } from "../../types/utils/FormatRowsDataProps";
 import { getSelectedKey } from "../../utils/commons/dataStore/getSelectedKey";
+import { makeCancellablePromise } from "../../utils/commons/requestBroker";
 
 const EVENT_QUERY = (queryProps: EventQueryProps) => ({
     results: {
@@ -34,7 +34,6 @@ const TEI_QUERY = (queryProps: TeiQueryProps) => ({
     }
 })
 
-
 export function useTableData() {
     const engine = useDataEngine();
     const { program, registration } = getDataStoreKeys()
@@ -46,54 +45,75 @@ export function useTableData() {
     const { hide, show } = useShowAlerts()
     const { getDataStoreData } = getSelectedKey()
     const school = urlParamiters().school as unknown as string
+    const promisesRef = useRef<any[]>([]);
+
+    function cancelAllOperations() {
+        promisesRef.current.forEach((promise) => promise.cancel && promise.cancel());
+        promisesRef.current = [];
+    }
 
     async function getData(page: number, pageSize: number) {
+
         if (school !== null) {
             setLoading(true)
+            cancelAllOperations();
+            try {
+                const eventsResults = makeCancellablePromise(
+                    engine.query(EVENT_QUERY({
+                        ouMode: school != null ? "SELECTED" : "ACCESSIBLE",
+                        page,
+                        pageSize,
+                        program: program as unknown as string,
+                        order: getDataStoreData.defaults.defaultOrder || "occurredAt:desc",
+                        programStage: registration?.programStage as unknown as string,
+                        filter: headerFieldsState?.dataElements,
+                        filterAttributes: headerFieldsState?.attributes,
+                        orgUnit: school
+                    })).catch((error) => {
+                        show({
+                            message: `${("Could not get events")}: ${error.message}`,
+                            type: { critical: true }
+                        });
+                        setTimeout(hide, 5000);
+                    })
+                ) as unknown as any
 
-            const eventsResults = await engine.query(EVENT_QUERY({
-                ouMode: school != null ? "SELECTED" : "ACCESSIBLE",
-                page,
-                pageSize,
-                program: program as unknown as string,
-                order: getDataStoreData.defaults.defaultOrder || "occurredAt:desc",
-                programStage: registration?.programStage as unknown as string,
-                filter: headerFieldsState?.dataElements,
-                filterAttributes: headerFieldsState?.attributes,
-                orgUnit: school
-            })).catch((error) => {
-                show({
-                    message: `${("Could not get events")}: ${error.message}`,
-                    type: { critical: true }
-                });
-                setTimeout(hide, 5000);
-            }) as unknown as EventQueryResults;
+                promisesRef.current.push(eventsResults);
 
-            const trackedEntityToFetch = eventsResults?.results?.instances.map((x: { trackedEntity: string }) => x.trackedEntity).toString().replaceAll(",", ";")
+                const eventsResultsResponse = await eventsResults
+                const trackedEntityToFetch = eventsResultsResponse?.results?.instances
+                    ?.map((x: { trackedEntity: string }) => x.trackedEntity)
+                    .join(';');
 
-            const teiResults = trackedEntityToFetch?.length > 0
-                ? await engine.query(TEI_QUERY({
-                    ouMode: school != null ? "SELECTED" : "ACCESSIBLE",
-                    pageSize,
-                    program: program as unknown as string,
-                    //orgUnit: school,
-                    trackedEntity: trackedEntityToFetch
-                })).catch((error) => {
-                    show({
-                        message: `${("Could not get traked entities")}: ${error.message}`,
-                        type: { critical: true }
-                    });
-                    setTimeout(hide, 5000);
-                }) as unknown as TeiQueryResults
-                : { results: { instances: [] } } as unknown as TeiQueryResults
+                const teiResults = trackedEntityToFetch?.length > 0 && makeCancellablePromise(
+                    engine.query(TEI_QUERY({
+                        ouMode: school != null ? "SELECTED" : "ACCESSIBLE",
+                        pageSize,
+                        program: program as unknown as string,
+                        trackedEntity: trackedEntityToFetch,
+                    })).catch((error) => {
+                        show({
+                            message: `${("Could not get traked entities")}: ${error.message}`,
+                            type: { critical: true }
+                        });
+                        setTimeout(hide, 5000);
+                    })
+                )
 
-            setEvents(eventsResults?.results?.instances)
-            setTableData(formatResponseRows({
-                eventsInstances: eventsResults?.results?.instances as unknown as FormatResponseRowsProps['eventsInstances'],
-                teiInstances: teiResults?.results?.instances as unknown as FormatResponseRowsProps['teiInstances']
-            }));
+                promisesRef.current.push(teiResults);
 
-            setLoading(false)
+                const teiResultsResponse = trackedEntityToFetch?.length > 0 ? await teiResults : [{ results: { instances: [] } }]
+
+                setEvents(eventsResultsResponse?.results?.instances)
+                setTableData(formatResponseRows({
+                    eventsInstances: eventsResultsResponse?.results?.instances as unknown as FormatResponseRowsProps['eventsInstances'],
+                    teiInstances: teiResultsResponse?.results?.instances as unknown as FormatResponseRowsProps['teiInstances']
+                }));
+
+                setLoading(false)
+            } catch (error) {
+                return;
+            }
         }
     }
 
