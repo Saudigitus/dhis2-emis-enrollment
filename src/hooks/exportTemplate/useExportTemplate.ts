@@ -200,6 +200,7 @@ export default function useExportTemplate() {
             if (attr.unique && attr.generated && +inputValues.studentsNumber > 0) {
                 const reserveValueResponse: any = await engine.query(reserveValuesQuery, { variables: { numberOfReserve: +inputValues.studentsNumber, attributeID: attr.id } })
 
+                console.log(reserveValueResponse, "lele")
                 if (reserveValueResponse?.values?.length > 0) {
                     reserveValuePayload[`${attr.id}`] = reserveValueResponse.values
                 }
@@ -673,7 +674,7 @@ export default function useExportTemplate() {
                     )
 
                     headers.forEach((vals: any, index: number) => {
-                        if (!headersToHide.includes(vals.key) && vals.label !== "System ID") {
+                        if (!headersToHide.includes(vals.key) && !vals.generated) {
                             const cell = row.getCell(index + 1)
                             cell.protection = { locked: false };
                         }
@@ -697,7 +698,7 @@ export default function useExportTemplate() {
                     )
                     index++
                     headers.forEach((vals: any, index: number) => {
-                        if (!headersToHide.includes(vals.key) && vals.label !== "System ID") {
+                        if (!headersToHide.includes(vals.key) && !vals.generated) {
                             const cell = row.getCell(index + 1)
                             cell.protection = { locked: false };
                         }
