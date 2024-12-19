@@ -56,7 +56,9 @@ const EVENT_QUERY = (
         filter,
         orgUnit,
         filterAttributes,
-        trackedEntity
+        trackedEntity,
+        paging,
+        skipPaging
     }: EventQueryProps) => ({
         results: {
             resource: "tracker/events",
@@ -71,6 +73,8 @@ const EVENT_QUERY = (
                 filter,
                 trackedEntity,
                 filterAttributes,
+                paging,
+                skipPaging,
                 fields: "*"
             }
         }
@@ -437,7 +441,8 @@ export default function useExportTemplate() {
                         programStage: registration?.programStage as unknown as string,
                         filter: headerFieldsState?.dataElements,
                         filterAttributes: headerFieldsState?.attributes,
-                        orgUnit: school
+                        orgUnit: school,
+                        skipPaging: true
                     })
                 )
 
