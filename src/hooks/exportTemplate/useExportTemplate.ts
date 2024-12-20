@@ -87,11 +87,13 @@ const TEI_QUERY = (
         program,
         trackedEntity,
         orgUnit,
-        order
+        order,
+        skipPaging
     }: TeiQueryProps) => ({
         results: {
             resource: "tracker/trackedEntities",
             params: {
+                skipPaging,
                 program,
                 order,
                 ouMode,
@@ -457,7 +459,8 @@ export default function useExportTemplate() {
                     TEI_QUERY({
                         program: program as unknown as string,
                         orgUnit: school,
-                        trackedEntity: allTeis.join(";")
+                        trackedEntity: allTeis.join(";"),
+                        skipPaging: true
                     })
                 )
 

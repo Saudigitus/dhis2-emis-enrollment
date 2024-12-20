@@ -5,6 +5,7 @@ interface TeiQueryProps {
     trackedEntity: string
     orgUnit?: string
     order?: string
+    skipPaging?: boolean
 }
 
 interface TeiSearchQueryProps {
