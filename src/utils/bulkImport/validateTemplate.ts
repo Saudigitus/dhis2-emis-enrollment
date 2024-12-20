@@ -185,8 +185,8 @@ export const fieldsMap = (programConfig: ProgramConfig, enrollmentProgramStages:
         })
 
     // Manually add ref, enrollmentDate & orgUnit, orgUnitName, system ID
-    const uid: string = getProgramTEAttributeID(programConfig, "System ID")
-    const systemIDTEAttributeID = uid.length > 0 ? uid : "G0B8B0AH5Ek"
+    const uid: any = getProgramTEAttributeID(programConfig)
+    const systemIDTEAttributeID = uid?.trackedEntityAttribute?.id
     const extraMap: Record<string, FieldMapping> = {
         ref: {key: "ref", id: "ref", name: "ref", required: false, valueType: "TEXT", isTEAttribute: false},
         orgUnitName: {
@@ -265,7 +265,7 @@ export const fieldsMap = (programConfig: ProgramConfig, enrollmentProgramStages:
     extraMap[systemIDTEAttributeID] = {
         key: systemIDTEAttributeID,
         id: systemIDTEAttributeID,
-        name: "System ID",
+        name: uid?.trackedEntityAttribute?.displayName,
         required: false,
         valueType: "TEXT",
         isTEAttribute: true

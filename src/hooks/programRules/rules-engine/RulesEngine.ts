@@ -72,6 +72,7 @@ export const CustomDhis2RulesEngine = (props: RulesEngineProps) => {
 
     // apply rules to variables
     function applyRulesToVariable(variable: any) {
+        // console.table(newProgramRules);
         for (const programRule of newProgramRules.filter(x => x.variable === variable.name) || []) {
             switch (programRule.type) {
                 case "attribute":
@@ -102,6 +103,7 @@ export const CustomDhis2RulesEngine = (props: RulesEngineProps) => {
                             break;
                         case "SHOWWARNING":
                             if (variable.name === programRule.variable) {
+                                // console.log(programRule)
                                 if (executeFunctionName(programRule.functionName, existValue(programRule.condition, values, formatKeyValueType))) {
                                     variable.content = programRule.content
                                     variable.warning = true
@@ -175,10 +177,11 @@ export function removeSpecialCharacters(text: string | undefined) {
             .replaceAll("d2:yearsBetween", "")
             .replaceAll("d2:concatenate", "")
             .replaceAll("d2:inOrgUnitGroup", "")
-            .replaceAll("#{", "")
-            .replaceAll("A{", "")
-            .replaceAll("V{", "")
-            .replaceAll("}", "")
+            .replaceAll("d2:validatePattern", "")
+            .replaceAll(/A\{([^}]+)\}/g, "$1")
+            .replaceAll(/#\{([^}]+)\}/g, "$1")
+            .replaceAll(/V\{([^}]+)\}/g, "$1")
+            // .replaceAll("}", "")
             .replaceAll("current_date", `'${format(new Date(), "yyyy-MM-dd")}'`);
     }
 }
@@ -219,6 +222,7 @@ export function replaceEspecifValue(values: Record<string, any>, variables: Reco
 
 // execute function
 function executeFunctionName(functionName: string | undefined, condition: string | undefined) {
+    // console.log(functionName)
     switch (functionName) {
         case "hasValue":
             return eval(condition ?? "");
@@ -236,8 +240,10 @@ function executeFunctionName(functionName: string | undefined, condition: string
             const formated_function = condition?.replaceAll(condition?.split("d2:substring(").pop() as string, function_paramter).replaceAll("d2:substring", '').replaceAll("(", '')
             return eval(formated_function as string)
 
+        case "validatePattern":
+            return validatePattern(condition ?? "")
+
         default:
-            console.log(condition, functionName)
             return eval(condition ?? "");
     }
 }
@@ -270,6 +276,52 @@ function compareLength(condition: string) {
 
     return newcondition
 }
+
+function validatePattern(condition: string): boolean {
+    const regexExtract = /'([^']+)'/g;
+    const matches = [...condition.matchAll(regexExtract)];
+
+    try {
+        if (matches.length >= 2) {
+            const value = matches[0][1];
+            const pattern = matches[1][1];
+
+            let matchesPattern = false;
+
+            try {
+                const regexLimit = /\[0-9\]{(\d+)}/;
+                const limitMatch = pattern.match(regexLimit);
+                let maxDigits = 0;
+                if (limitMatch) {
+                    maxDigits = parseInt(limitMatch[1], 10);
+                }
+
+                if (value.length > maxDigits) {
+                    return true;
+                }
+
+                const regex = new RegExp(pattern);
+
+                matchesPattern = regex.test(value);
+
+            } catch (error) {
+                return false;
+            }
+
+            const regex = /\([^)]*\)/g;
+            const output = condition.replace(regex, String(matchesPattern));
+
+            return eval(output);
+        }
+
+    } catch (error) {
+        return true;
+
+    }
+
+    return true;
+}
+
 
 // get years between dates
 function d2YearsBetween(origin: string | undefined, condition: string[] | undefined): string | undefined {

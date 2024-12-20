@@ -91,7 +91,7 @@ function EnrollmentActionsButtons() {
                     academicYearId: academicYearStartDate,
                     orgUnit: orgUnit ?? "",
                     orgUnitName: orgUnitName ?? "",
-                    studentsNumber: "0" ?? "0",
+                    studentsNumber: "0",
                     setLoadingExport
                 }
                 handleExportToWord(vals, false).finally(() => { });

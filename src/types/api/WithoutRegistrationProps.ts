@@ -16,7 +16,7 @@ interface EventQueryProps {
     filter?: string[]
     filterAttributes?: string[]
     trackedEntity?: string
-    fields?: string
+    fields?: boolean
     skipPaging?: boolean
 }
 
