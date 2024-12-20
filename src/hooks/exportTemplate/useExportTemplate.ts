@@ -56,7 +56,9 @@ const EVENT_QUERY = (
         filter,
         orgUnit,
         filterAttributes,
-        trackedEntity
+        trackedEntity,
+        paging,
+        skipPaging
     }: EventQueryProps) => ({
         results: {
             resource: "tracker/events",
@@ -71,6 +73,8 @@ const EVENT_QUERY = (
                 filter,
                 trackedEntity,
                 filterAttributes,
+                paging,
+                skipPaging,
                 fields: "*"
             }
         }
@@ -83,11 +87,13 @@ const TEI_QUERY = (
         program,
         trackedEntity,
         orgUnit,
-        order
+        order,
+        skipPaging
     }: TeiQueryProps) => ({
         results: {
             resource: "tracker/trackedEntities",
             params: {
+                skipPaging,
                 program,
                 order,
                 ouMode,
@@ -200,6 +206,7 @@ export default function useExportTemplate() {
             if (attr.unique && attr.generated && +inputValues.studentsNumber > 0) {
                 const reserveValueResponse: any = await engine.query(reserveValuesQuery, { variables: { numberOfReserve: +inputValues.studentsNumber, attributeID: attr.id } })
 
+                console.log(reserveValueResponse, "lele")
                 if (reserveValueResponse?.values?.length > 0) {
                     reserveValuePayload[`${attr.id}`] = reserveValueResponse.values
                 }
@@ -436,7 +443,8 @@ export default function useExportTemplate() {
                         programStage: registration?.programStage as unknown as string,
                         filter: headerFieldsState?.dataElements,
                         filterAttributes: headerFieldsState?.attributes,
-                        orgUnit: school
+                        orgUnit: school,
+                        skipPaging: true
                     })
                 )
 
@@ -452,7 +460,8 @@ export default function useExportTemplate() {
                     TEI_QUERY({
                         program: program as unknown as string,
                         orgUnit: school,
-                        trackedEntity: allTeis.join(";")
+                        trackedEntity: allTeis.join(";"),
+                        skipPaging: true
                     })
                 )
 
@@ -673,7 +682,7 @@ export default function useExportTemplate() {
                     )
 
                     headers.forEach((vals: any, index: number) => {
-                        if (!headersToHide.includes(vals.key) && vals.label !== "System ID") {
+                        if (!headersToHide.includes(vals.key) && !vals.generated) {
                             const cell = row.getCell(index + 1)
                             cell.protection = { locked: false };
                         }
@@ -697,7 +706,7 @@ export default function useExportTemplate() {
                     )
                     index++
                     headers.forEach((vals: any, index: number) => {
-                        if (!headersToHide.includes(vals.key) && vals.label !== "System ID") {
+                        if (!headersToHide.includes(vals.key) && !vals.generated) {
                             const cell = row.getCell(index + 1)
                             cell.protection = { locked: false };
                         }
