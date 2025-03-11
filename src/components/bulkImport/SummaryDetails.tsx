@@ -60,8 +60,7 @@ const SummaryDetails = (): React.ReactElement => {
     const tabPageSize = pagination[activeTab].pageSize;
     // const tabPageCount = Math.ceil(total / tabPageSize)
     const displayData = students.slice((currentPage - 1) * tabPageSize, currentPage * tabPageSize);
-    const [shoErrorsOrConflicts, setShowErrorsOrConflicts] = useState<boolean>(true)
-    const { sectionName } = useGetSectionTypeLabel()
+    const [showErrorsOrConflicts, setShowErrorsOrConflicts] = useState<boolean>(true)
 
     const tabClick = (tab: string) => {
         if (["invalids", "conflicts"].includes(tab)){
