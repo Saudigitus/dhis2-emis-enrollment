@@ -6,6 +6,7 @@ import { OrgUnitsGroupsConfigState } from "../../../schema/orgUnitsGroupSchema";
 import { compareStringByLabel } from "../../../utils/commons/sortStringsByLabel";
 import { ProgramRulesFormatedState } from "../../../schema/programRulesFormated";
 import { ProgramConfigState } from "../../../schema/programSchema";
+import { useFormatProgramRulesVariables } from "../useFormatProgramRulesVariables";
 
 interface RulesEngineProps {
     variables: any[]
@@ -14,12 +15,104 @@ interface RulesEngineProps {
     formatKeyValueType?: any
 }
 
+function createD2(context: any) {
+    const today = new Date().toISOString().split('T')[0]; // Current date in 'YYYY-MM-DD'
+
+    return {
+        hasValue: function (value: any) {
+            return value !== null && value !== undefined && value !== '';
+        },
+        yearsBetween: function (date1: any, date2: any) {
+            const d1 = new Date(date1);
+            const d2 = new Date(date2);
+            let years = d2.getFullYear() - d1.getFullYear();
+            // Adjust if the full year hasn't been completed
+            if (d2.getMonth() < d1.getMonth() ||
+                (d2.getMonth() === d1.getMonth() && d2.getDate() < d1.getDate())) {
+                years--;
+            }
+            return years;
+        },
+        daysBetween: function (date1: any, date2: any) {
+            const d1 = new Date(date1) as unknown as number;
+            const d2 = new Date(date2) as unknown as number;
+            const diffTime = Math.abs(d2 - d1);
+            return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        },
+        addDays: function (date: any, days: any) {
+            const d = new Date(date);
+            d.setDate(d.getDate() + parseInt(days));
+            return d.toISOString().split('T')[0];
+        },
+        substring: function (text: any, start: any, end: any) {
+            if (typeof text !== 'string') return '';
+            return text.substring(parseInt(start), parseInt(end));
+        },
+        today: function () {
+            return today;
+        },
+        length: function (value: any) {
+            return typeof value === 'string' ? value.length : 0;
+        },
+        inOrgUnitGroup: function (group: any) {
+            return context.orgUnitGroups && context.orgUnitGroups.includes(group);
+        },
+        validatePattern: function (value: any, pattern: any) {
+            try {
+                const regex = new RegExp(pattern);
+                return regex.test(value);
+            } catch (error) {
+                console.error('Invalid pattern:', pattern, error);
+                return false;
+            }
+        },
+        concatenate: function (...args: any) {
+            return args.join('');
+        }
+    };
+}
+
+function evaluateExpression(expression: any, context: any, values: any, programRulesVariables: any) {
+    const d2 = createD2(context);
+
+    expression = expression.replace(/today\(\)/g, `d2.today()`);
+    expression = expression.replace(/d2:(\w+)/g, "d2.$1");
+    expression = expression.replace(/V\{event_date\}/g, "V{enrollment_date}");
+
+    // Replace #{variable} with values['variable']
+    expression = expression.replace(/#\{([^}]+)\}/g, (match: any, key: any) => {
+        const value = values[programRulesVariables[key]];
+        return typeof value === 'string' ? `'${value}'` : value === undefined ? 'undefined' : value;
+    });
+
+    // Replace A{attribute} with values['attribute']
+    expression = expression.replace(/A\{([^}]+)\}/g, (match: any, key: any) => {
+        const value = values[programRulesVariables[key]];
+        return typeof value === 'string' ? `'${value}'` : value === undefined ? 'undefined' : value;
+    });
+
+    // Replace V{variable} with values['variable'] (consider revising for DHIS2 program variables)
+    expression = expression.replace(/V\{([^}]+)\}/g, (match: any, key: any) => {
+        const value = values[key];
+        return typeof value === 'string' ? `'${value}'` : value === undefined ? 'undefined' : value;
+    });
+
+    try {
+        const func = new Function('d2', 'context', `return ${expression};`);
+        return func(d2, context);
+    } catch (error) {
+        console.error('Error evaluating expression:', expression, error);
+        return null;
+    }
+}
+
 export const CustomDhis2RulesEngine = (props: RulesEngineProps) => {
     const { variables, values, type, formatKeyValueType } = props
     const getOptionGroups = useRecoilValue(OptionGroupsConfigState)
     const newProgramRules = useRecoilValue(ProgramRulesFormatedState)
     const [updatedVariables, setupdatedVariables] = useState([...variables])
     const orgUnitsGroups = useRecoilValue(OrgUnitsGroupsConfigState)
+    const { programRulesVariables } = useFormatProgramRulesVariables()
     const programConfig = useRecoilValue(ProgramConfigState)
 
     useEffect(() => {
@@ -72,90 +165,80 @@ export const CustomDhis2RulesEngine = (props: RulesEngineProps) => {
 
     // apply rules to variables
     function applyRulesToVariable(variable: any) {
-        // console.table(newProgramRules);
         for (const programRule of newProgramRules.filter(x => x.variable === variable.name) || []) {
-            switch (programRule.type) {
-                case "attribute":
-                case "dataElement":
-                    switch (programRule.programRuleActionType) {
-                        case "ASSIGN":
-                            if (variable.name === programRule.variable) {
-                                const firstCondition = existValue(programRule.condition, values, formatKeyValueType);
-                                const value = executeFunctionName(programRule.functionName, existValue(programRule.data, values, formatKeyValueType))
+            const firstCondition = evaluateExpression(programRule.condition, variable, values, programRulesVariables);
+            switch (programRule.programRuleActionType) {
+                case "ASSIGN":
+                    if (variable.name === programRule.variable) {
+                        const value = evaluateExpression(programRule.data, variable, values, programRulesVariables);
 
-                                if (eval(firstCondition)) {
-                                    if (!isNaN(value) && isFinite(value) && value !== undefined) {
-                                        values[variable.name] = value
-                                    } else {
-                                        values[variable.name] = ""
-                                    }
-                                }
-                                variable.disabled = true
+                        if (firstCondition) {
+                            if (!isNaN(value) && isFinite(value) && value !== undefined) {
+                                values[variable.name] = value
+                            } else {
+                                values[variable.name] = ""
                             }
-                            break;
-                        case "SHOWOPTIONGROUP":
-                            if (variable.name === programRule.variable) {
-                                if (executeFunctionName(programRule.functionName, existValue(programRule.condition, values, formatKeyValueType))) {
-                                    const options = getOptionGroups?.filter((op) => op.id === programRule.optionGroup)?.[0]?.options || []
-                                    variable.options = { optionSet: { options: options } }
-                                }
-                            }
-                            break;
-                        case "SHOWWARNING":
-                            if (variable.name === programRule.variable) {
-                                // console.log(programRule)
-                                if (executeFunctionName(programRule.functionName, existValue(programRule.condition, values, formatKeyValueType))) {
-                                    variable.content = programRule.content
-                                    variable.warning = true
-                                } else {
-                                    variable.content = ""
-                                    variable.warning = false
-                                }
-                            }
-                            break;
-                        case "SHOWERROR":
-                            if (variable.name === programRule.variable) {
-                                if (executeFunctionName(programRule.functionName, existValue(programRule.condition, values, formatKeyValueType))) {
-                                    variable.error = true;
-                                    variable.content = programRule.content
-                                    variable.required = true;
-                                } else {
-                                    variable.error = false;
-                                    variable.content = ""
-                                    variable.required = false;
-                                }
-                            }
-                            break;
-                        case "HIDEFIELD":
-                            if (variable.name === programRule.variable) {
-                                if (executeFunctionName(programRule.functionName, existValue(programRule.condition, values, formatKeyValueType))) {
-                                    variable.visible = false;
-                                } else {
-                                    variable.visible = true;
-                                }
-                            }
-                            break;
-                        case "HIDESECTION":
-                            break;
+                        }
+                        variable.disabled = true
+                    }
+                    break;
+                case "SHOWOPTIONGROUP":
+                    if (variable.name === programRule.variable) {
+                        if (firstCondition) {
+                            const options = getOptionGroups?.filter((op) => op.id === programRule.optionGroup)?.[0]?.options || []
+                            variable.options = { optionSet: { options: options } }
+                        }
+                    }
+                    break;
+                case "SHOWWARNING":
+                    if (variable.name === programRule.variable) {
+                        if (firstCondition) {
+                            variable.content = programRule.content
+                            variable.warning = true
+                        } else {
+                            variable.content = ""
+                            variable.warning = false
+                        }
+                    }
+                    break;
+                case "SHOWERROR":
+                    if (variable.name === programRule.variable) {
+                        if (firstCondition) {
+                            variable.error = true;
+                            variable.content = programRule.content
+                            variable.required = true;
+                        } else {
+                            variable.error = false;
+                            variable.content = ""
+                            variable.required = false;
+                        }
+                    }
+                    break;
+                case "HIDEFIELD":
+                    if (variable.name === programRule.variable) {
+                        if (firstCondition) {
+                            variable.visible = false;
+                        } else {
+                            variable.visible = true;
+                        }
+                    }
+                    break;
+                case "HIDESECTION":
+                    break;
 
-                        case "HIDEOPTIONGROUP":
-                            if (variable.name === programRule.variable) {
-                                const orgUnitGroup = programRule?.condition?.replace(/[^a-zA-Z]/g, '')
-                                const foundOrgUnitGroup = orgUnitsGroups?.filter(x => x.value === orgUnitGroup)
+                case "HIDEOPTIONGROUP":
+                    if (variable.name === programRule.variable) {
+                        const orgUnitGroup = programRule?.condition?.replace(/[^a-zA-Z]/g, '')
+                        const foundOrgUnitGroup = orgUnitsGroups?.filter(x => x.value === orgUnitGroup)
 
-                                if (foundOrgUnitGroup.length > 0) {
+                        if (foundOrgUnitGroup.length > 0) {
 
-                                    if (foundOrgUnitGroup[0]?.organisationUnits.findIndex(x => x.value === values["orgUnit"]) > -1) {
-                                        const options = getOptionGroups?.filter((op) => op.id === programRule.optionGroup)?.[0]?.options?.slice()?.sort(compareStringByLabel) || []
+                            if (foundOrgUnitGroup[0]?.organisationUnits.findIndex(x => x.value === values["orgUnit"]) > -1) {
+                                const options = getOptionGroups?.filter((op) => op.id === programRule.optionGroup)?.[0]?.options?.slice()?.sort(compareStringByLabel) || []
 
-                                        variable.options = { optionSet: { options: variable?.initialOptions?.optionSet?.options?.filter((obj1: { value: string }) => !options.some(obj2 => obj2.value === obj1.value)) } }
-                                    }
-                                }
+                                variable.options = { optionSet: { options: variable?.initialOptions?.optionSet?.options?.filter((obj1: { value: string }) => !options.some(obj2 => obj2.value === obj1.value)) } }
                             }
-                            break;
-
-                        default:
-                            break;
+                        }
                     }
                     break;
             }
@@ -169,220 +252,17 @@ export const CustomDhis2RulesEngine = (props: RulesEngineProps) => {
     }
 }
 
-// remove scpecial characters
-export function removeSpecialCharacters(text: string | undefined) {
-    if (typeof text === "string") {
-        return text
-            .replaceAll("d2:hasValue", "")
-            .replaceAll("d2:yearsBetween", "")
-            .replaceAll("d2:concatenate", "")
-            .replaceAll("d2:inOrgUnitGroup", "")
-            .replaceAll("d2:validatePattern", "")
-            .replaceAll(/A\{([^}]+)\}/g, "$1")
-            .replaceAll(/#\{([^}]+)\}/g, "$1")
-            .replaceAll(/V\{([^}]+)\}/g, "$1")
-            // .replaceAll("}", "")
-            .replaceAll("current_date", `'${format(new Date(), "yyyy-MM-dd")}'`);
-    }
-}
 
-// replace condition with specific variable
-export function replaceConditionVariables(condition: string | undefined, variables: Record<string, string | undefined>) {
-    let newcondition = condition;
-
-    if (condition) {
-        const dataArray = condition.split(/[^a-zA-Z0-9_ ]+/)
-            .map(item => item.trim().replace(/^'(.*)'$/, '$1'))
-
-        for (const value of Object.keys(variables)) {
-            if (dataArray?.includes(value)) {
-                newcondition = newcondition?.replaceAll(value, `'${variables[value]}'` || "''")
-            }
-        }
-    }
-    return newcondition;
-}
-
-// get function name
-export function getFunctionExpression(condition: string | undefined) {
-    return condition?.split("d2:")?.[1]?.split("(")[0];
-}
-
-// replace variables with specific value
-export function replaceEspecifValue(values: Record<string, any>, variables: Record<string, string>, variable: string) {
-    // eslint-disable-next-line no-prototype-builtins
-    if (values.hasOwnProperty(variables[variable])) {
-        if (values[variables[variable]] != false) {
-            return `'${values[variables[variable]]}'`;
-        }
-    }
-
-    return false;
-}
-
-// execute function
-function executeFunctionName(functionName: string | undefined, condition: string | undefined) {
-    // console.log(functionName)
-    switch (functionName) {
-        case "hasValue":
-            return eval(condition ?? "");
-        case "yearsBetween":
-            return eval(d2YearsBetween(condition, condition?.split(")")) ?? "");
-
-        case "inOrgUnitGroup":
-            return true
-
-        case "length":
-            return eval(compareLength(condition ?? ""))
-
-        case "substring":
-            let function_paramter = returnSubstring(condition?.split("d2:substring(").pop() ?? "")
-            const formated_function = condition?.replaceAll(condition?.split("d2:substring(").pop() as string, function_paramter).replaceAll("d2:substring", '').replaceAll("(", '')
-            return eval(formated_function as string)
-
-        case "validatePattern":
-            return validatePattern(condition ?? "")
-
-        default:
-            return eval(condition ?? "");
-    }
-}
-
-function returnSubstring(value: string) {
-    const [stringToRepair, startStr, endStr] = value.replaceAll(")", "").split(",");
-    const start = Number(startStr);
-    const end = Number(endStr);
-
-    const repairedString = stringToRepair.substring(start, end)
-
-    if (!isNaN(Number.parseInt(repairedString)))
-        return Number.parseInt(repairedString) as unknown as string
-    else
-        return `'${repairedString}'`
-}
-
-//compare values in string
-function compareLength(condition: string) {
-    const results = [];
-    let newcondition = 'false'
-    for (const match of condition?.matchAll(/d2:length\('(.*?)'\)/g)) {
-        results.push(match[1]);
-
-    }
-
-    for (const result of results) {
-        newcondition = condition?.replace(`d2:length('${result}')`, `${result.length}`)
-    }
-
-    return newcondition
-}
-
-function validatePattern(condition: string): boolean {
-    const regexExtract = /'([^']+)'/g;
-    const matches = [...condition.matchAll(regexExtract)];
-
-    try {
-        if (matches.length >= 2) {
-            const value = matches[0][1];
-            const pattern = matches[1][1];
-
-            let matchesPattern = false;
-
-            try {
-                const regexLimit = /\[0-9\]{(\d+)}/;
-                const limitMatch = pattern.match(regexLimit);
-                let maxDigits = 0;
-                if (limitMatch) {
-                    maxDigits = parseInt(limitMatch[1], 10);
-                }
-
-                if (value.length > maxDigits) {
-                    return true;
-                }
-
-                const regex = new RegExp(pattern);
-
-                matchesPattern = regex.test(value);
-
-            } catch (error) {
-                return false;
-            }
-
-            const regex = /\([^)]*\)/g;
-            const output = condition.replace(regex, String(matchesPattern));
-
-            return eval(output);
-        }
-
-    } catch (error) {
-        return true;
-
-    }
-
-    return true;
-}
-
-
-// get years between dates
-function d2YearsBetween(origin: string | undefined, condition: string[] | undefined): string | undefined {
-    if (!origin || !condition || condition.length !== 1) {
-        return undefined;
-    }
-    const [date1Str, date2Str] = condition[0].split(",").map(date => date.trim());
-    const date1 = new Date(date1Str.replaceAll("(", ""));
-    const date2 = new Date(date2Str);
-    if (isNaN(date1.getTime()) || isNaN(date2.getTime())) {
-        return undefined;
-    }
-    const diffYears = Math.abs(date2.getFullYear() - date1.getFullYear());
-    return origin.replace(condition[0], String(diffYears)).replace(")", "");
-}
-
-
-
-// replace varieble by value from condition
-export function existValue(condition: string | undefined, values: Record<string, any> = {}, formatKeyValueType: any) {
-    let localCondition = `false`;
-    const dataArray = condition?.split(/[^a-zA-Z0-9_ ]+/)
-        .map(item => item.trim().replace(/^'(.*)'$/, '$1'))
-
-    for (const value of Object.keys(values) || []) {
-        if (dataArray?.includes(value)) {
-
-            if (localCondition.includes(`false`)) {
-                localCondition = condition as string
-            }
-
-            switch (formatKeyValueType[value]) {
-                case "BOOLEAN":
-                    localCondition = localCondition.replaceAll(value, `${values[value]}`.replaceAll("false", "0").replaceAll("true", "1"))
-                    break;
-
-                case "NUMBER":
-                case "INTEGER_ZERO_OR_POSITIVE":
-                    localCondition = localCondition.replaceAll(`'${value}'`, String(Number(values[value] ?? 0)))
-                    break;
-
-                default:
-                    localCondition = localCondition.replaceAll(value, `${values[value]}`)
-                    break;
-            }
-        }
-    }
-
-    return localCondition;
-}
-
-export function getValueTypeVariable(variables: any, variable: any, type: string) {
-    if (type === "programStageSection") {
-        let variableType = ""
-        variables?.map((section: any) => {
-            section?.fields?.map((sectionVar: any) => {
-                if (sectionVar.name === variable.variable) {
-                    variableType = sectionVar.valueType
-                }
-            });
-        });
-        return variableType
-    }
-}
+// export function getValueTypeVariable(variables: any, variable: any, type: string) {
+//     if (type === "programStageSection") {
+//         let variableType = ""
+//         variables?.map((section: any) => {
+//             section?.fields?.map((sectionVar: any) => {
+//                 if (sectionVar.name === variable.variable) {
+//                     variableType = sectionVar.valueType
+//                 }
+//             });
+//         });
+//         return variableType
+//     }
+// }

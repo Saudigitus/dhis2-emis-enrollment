@@ -1,7 +1,6 @@
 import { useRecoilState } from "recoil"
 import { FormattedPRulesType } from "../../../types/programRules/FormattedPRules"
 import { useFormatProgramRules } from "../useFormatProgramRules"
-import { getFunctionExpression, getValueTypeVariable, removeSpecialCharacters, replaceConditionVariables } from "./RulesEngine"
 import { useFormatProgramRulesVariables } from "../useFormatProgramRulesVariables"
 import { ProgramRulesFormatedState } from "../../../schema/programRulesFormated"
 import useGetEnrollmentForm from "../../form/useGetEnrollmentForm"
@@ -15,19 +14,21 @@ export const initializeRulesEngine = () => {
     const { enrollmentsData } = useGetEnrollmentForm();
     const { sectionName } = useGetSectionTypeLabel();
 
+    console.log(programRules, programRulesVariables)
+
     function initialize() {
         if (programRules?.length > 0 && Object.keys(programRulesVariables)?.length > 0 && newProgramRules?.length === 0) {
-            const newProgramR: FormattedPRulesType[] = programRules
-                .map((programRule: FormattedPRulesType) => {
-                    return {
-                        ...programRule,
-                        functionName: getFunctionExpression(programRule.condition),
-                        condition: replaceConditionVariables(removeSpecialCharacters(programRule?.condition), programRulesVariables),
-                        data: replaceConditionVariables(removeSpecialCharacters(programRule?.data), programRulesVariables),
-                        valueType: getValueTypeVariable(formFields(enrollmentsData, sectionName), programRule, "programStageSection")
-                    }
-                })
-            setnewProgramRules(newProgramR)
+            // const newProgramR: FormattedPRulesType[] = programRules
+            //     .map((programRule: FormattedPRulesType) => {
+            //         return {
+            //             ...programRule,
+            //             functionName: getFunctionExpression(programRule.condition),
+            //             condition: replaceConditionVariables(removeSpecialCharacters(programRule?.condition), programRulesVariables),
+            //             data: replaceConditionVariables(removeSpecialCharacters(programRule?.data), programRulesVariables),
+            //             valueType: getValueTypeVariable(formFields(enrollmentsData, sectionName), programRule, "programStageSection")
+            //         }
+            //     })
+            setnewProgramRules(programRules)
         }
     }
 
