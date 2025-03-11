@@ -15,6 +15,7 @@ import {SummaryTable} from "./SummaryContent";
 import {PaginationState} from "../../types/bulkImport/Interfaces";
 import {ImportSummaryTable} from "./DryRunAndImportSummary";
 import Pagination from "../table/components/pagination/Pagination";
+import useGetSectionTypeLabel from "../../hooks/commons/useGetSectionTypeLabel";
 
 const SummaryDetails = (): React.ReactElement => {
     const processedRecords: ProcessingRecords = useRecoilValue<ProcessingRecords>(ProcessingRecordsState)
@@ -59,7 +60,8 @@ const SummaryDetails = (): React.ReactElement => {
     const tabPageSize = pagination[activeTab].pageSize;
     // const tabPageCount = Math.ceil(total / tabPageSize)
     const displayData = students.slice((currentPage - 1) * tabPageSize, currentPage * tabPageSize);
-    const [showErrorsOrConflicts, setShowErrorsOrConflicts] = useState<boolean>(true)
+    const [shoErrorsOrConflicts, setShowErrorsOrConflicts] = useState<boolean>(true)
+    const { sectionName } = useGetSectionTypeLabel()
 
     const tabClick = (tab: string) => {
         if (["invalids", "conflicts"].includes(tab)){
@@ -87,7 +89,7 @@ const SummaryDetails = (): React.ReactElement => {
                             tabClick("new")
                         }} selected={activeTab === 'new'}>
                             {processedRecords.newRecords.length}<br/>
-                            New Students
+                            New records
                         </Tab>
                     }
                     <Tab onClick={() => {

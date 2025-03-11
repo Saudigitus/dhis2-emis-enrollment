@@ -78,7 +78,7 @@ export const SummaryTable = (props: SummaryTableProps): React.ReactElement => {
         activeTab
     } = props
     const [expandedRows, setExpandedRows] = useState<string[]>([])
-    const recordsName = activeTab === "new" ? "new students" : activeTab
+    const recordsName = activeTab === "new" ? "new enrollments" : activeTab
     const expandedToggle = (rowId: string) => {
         if (expandedRows.includes(rowId)) {
             setExpandedRows(expandedRows.filter((row) => row !== rowId))

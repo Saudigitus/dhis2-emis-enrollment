@@ -20,6 +20,8 @@ import { ApiResponse, Stats } from "../../types/bulkImport/Interfaces";
 import { LinearProgress } from "@material-ui/core";
 import { ProgressState } from "../../schema/linearProgress";
 import IteractiveProgress from "../progress/interactiveProgress";
+import useGetSectionTypeLabel from "../../hooks/commons/useGetSectionTypeLabel";
+import { formatCamelToTitleCase } from "../../utils/commons/formatCamelCaseToWords";
 
 interface ModalContentProps {
     setOpen: (value: boolean) => void
@@ -42,6 +44,7 @@ const ModalSummaryContent = (props: ModalContentProps): React.ReactElement => {
     const { loading, postTrackedEntities, data } = usePostTrackedEntities()
     const forUpdate = processedRecords?.forUpdate as boolean
     const [progress, updateProgress] = useRecoilState(ProgressState)
+    const { sectionName } = useGetSectionTypeLabel()
 
     useEffect(() => {
         if (data !== undefined) {
@@ -130,7 +133,7 @@ const ModalSummaryContent = (props: ModalContentProps): React.ReactElement => {
             }
         },
         {
-            label: forUpdate ? "Update students" : "Import new students",
+            label: forUpdate ? `Update ${sectionName}s` : `Import new ${sectionName}s`,
             primary: true,
             loading: false,
             disabled: forUpdate ? updatesDisabled : newImportDisabled,
@@ -168,8 +171,7 @@ const ModalSummaryContent = (props: ModalContentProps): React.ReactElement => {
                     :
                     <>
 
-                        <Tag positive icon={<IconCheckmarkCircle16 />} className={styles.tagContainer}> Students import
-                            preview </Tag>
+                        <Tag positive icon={<IconCheckmarkCircle16 />} className={styles.tagContainer}> {sectionName} import  preview </Tag>
 
                         <WithPadding />
                         <Title label={`${summaryTitle} Summary`} />
