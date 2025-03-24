@@ -105,9 +105,11 @@ const validateRecord = (record: Record<string, any>, fieldsMap: TemplateFieldMap
     errors: Record<string, string[]>
 } => {
     const errors: Record<string, string[]> = {};
+
     Object.entries(record).forEach(([key, value]) => {
         // const parser = parsers[key as ParserKeys];
         const parser = ValueType[fieldsMap[key]?.valueType]
+
         if (parser !== undefined && key.length !== 0) {
             // const result = parser.safeParse(value);
             const result = parseWithOptionality(parser, value, fieldsMap[key].required);
@@ -226,9 +228,8 @@ export const processData = async (
     const trackedEntities = data
         .map(it => it.trackedEntity ?? null).filter(it => it != null)
     const existingTrackedEntities = await checkExistingTEs(engine, trackedEntities)
-    console.log("EXISTING TRACKED ENTITIES:", existingTrackedEntities)
-    console.log("We're updating:", forUpdate)
     for (const record of data) {
+
         const { isValid, errors } = validateRecord(record, fieldsMap)
         if (!isValid) {
             record.errors = errors
@@ -237,7 +238,6 @@ export const processData = async (
         } else {
             validRecords.push(record)
         }
-        console.log(`Record:`, record.ref, " is ", isValid, ` Errors:`, errors)
         if (!forUpdate) {
             const mandatoryAttributes = getMandatoryFields(fieldsMap)
             // console.log("Mandatory Fields", mandatoryAttributes)

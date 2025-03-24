@@ -131,7 +131,7 @@ export const validateTemplate = (
             }
         })
     })
-    console.log(systemProgramStageDEs)
+    // console.log(systemProgramStageDEs)
     if (invalidProgramStageDEs.length > 0) {
         const invalidDEs = invalidProgramStageDEs.join(", ")
         return `Unknown ProgramStage.DataElement pairs in Template [${invalidDEs}]`

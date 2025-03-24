@@ -109,9 +109,10 @@ export const BulkEnrollment = ({ setOpen, isOpen, forUpdate }: BulkEnrollmentPro
 
             const dataWithHeaders: Array<Record<string, any>> = generateData(headers, rawData.slice(3))
             const fieldMapping = fieldsMap(programConfig, enrollmentStages)
-            const dataWithHeadersValidated = validateRecordValues(dataWithHeaders, fieldMapping); // validate and format data type and ignore unfilled fields
+            console.log(dataWithHeaders,"dataWithHeaders")
+            // const dataWithHeadersValidated = validateRecordValues(dataWithHeaders, fieldMapping); // validate and format data type and ignore unfilled fields
             const [invalidRecords, validRecords, newRecords, recordsToUpdate] = await processData(
-                dataWithHeadersValidated, fieldMapping, programConfig, engine, forUpdate ?? false)
+                dataWithHeaders, fieldMapping, programConfig, engine, forUpdate ?? false)
             setUploadStats(stats => ({
                 ...stats,
                 teis: {
@@ -150,8 +151,8 @@ export const BulkEnrollment = ({ setOpen, isOpen, forUpdate }: BulkEnrollmentPro
     }
     const onSave = (files: File[]) => {
         // setOpen(false);
-        console.log(files)
-        console.log(files[0])
+        // console.log(files)
+        // console.log(files[0])
         handleFileChange(files[0])
     }
     return (
