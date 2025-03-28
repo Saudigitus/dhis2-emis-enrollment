@@ -4,3 +4,5 @@ node_modules
 src/locales
 build
 .idea
+
+.codegpt
