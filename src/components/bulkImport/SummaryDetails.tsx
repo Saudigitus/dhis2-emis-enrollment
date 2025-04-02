@@ -15,6 +15,7 @@ import {SummaryTable} from "./SummaryContent";
 import {PaginationState} from "../../types/bulkImport/Interfaces";
 import {ImportSummaryTable} from "./DryRunAndImportSummary";
 import Pagination from "../table/components/pagination/Pagination";
+import useGetSectionTypeLabel from "../../hooks/commons/useGetSectionTypeLabel";
 
 const SummaryDetails = (): React.ReactElement => {
     const processedRecords: ProcessingRecords = useRecoilValue<ProcessingRecords>(ProcessingRecordsState)
@@ -87,7 +88,7 @@ const SummaryDetails = (): React.ReactElement => {
                             tabClick("new")
                         }} selected={activeTab === 'new'}>
                             {processedRecords.newRecords.length}<br/>
-                            New Students
+                            New records
                         </Tab>
                     }
                     <Tab onClick={() => {

@@ -54,7 +54,7 @@ function EnrollmentActionsButtons() {
 
     const enrollmentOptions: FlyoutOptionsProps[] = [
         {
-            label: `Enroll new ${sectionName}s`,
+            label: `Enroll new ${sectionName.toLowerCase()}s`,
             divider: true,
             onClick: () => {
                 setForUpdate(false);
@@ -63,7 +63,7 @@ function EnrollmentActionsButtons() {
             }
         },
         {
-            label: `Update existing ${sectionName}s`,
+            label: `Update existing ${sectionName.toLowerCase()}s`,
             divider: true,
             onClick: () => {
                 setForUpdate(true);
@@ -80,7 +80,7 @@ function EnrollmentActionsButtons() {
             }
         },
         {
-            label: "Export existing students",
+            label: "Export existing enrollments",
             divider: false,
             disabled: tableDataLength === 0 || tableDataLoading,
             onClick: async () => {

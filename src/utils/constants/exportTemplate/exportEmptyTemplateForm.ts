@@ -2,7 +2,7 @@ import { format } from "date-fns";
 import { VariablesTypes } from "../../../types/variables/AttributeColumns";
 import { FormSectionProps } from "../../../types/form/FormSectionProps";
 
-const staticForm = () => {
+const staticForm = (sectionName: string) => {
   return {
     registeringSchool: {
       required: true,
@@ -27,23 +27,23 @@ const staticForm = () => {
     numberOfStudents: {
       required: true,
       name: "studentsNumber",
-      labelName: "Number of Students",
+      labelName: `Number of ${sectionName}s`,
       valueType: "NUMBER",
       options: undefined,
       disabled: false,
       pattern: "",
       visible: true,
-      description: "Number of Students",
+      description: `Number of ${sectionName}s`,
       searchable: false,
       error: false,
       programStage: "",
       content: "",
       id: "studentsNumber",
-      displayName: "Number of Students",
-      header: "Number of Students",
+      displayName: `Number of ${sectionName}s`,
+      header: `Number of ${sectionName}s`,
       type: VariablesTypes.DataElement,
       assignedValue: undefined,
-      placeholder: "Maximum number of students supported for each file: 1000"
+      placeholder: `Maximum number of ${sectionName.toLowerCase()}s supported for each file: 1000`
     }
   }
 }
@@ -53,12 +53,12 @@ function formFields(apiFormData: any[], sectionName: string): FormSectionProps[]
   return [
     {
       section: "Details",
-      description: `This file will allow the import of new ${sectionName} data into the system.`,
+      description: `This file will allow the import of new ${sectionName.toLowerCase()} data into the system.`,
       visible: true,
       fields: [
-        staticForm().registeringSchool,
+        staticForm(sectionName).registeringSchool,
         ...enrollmentDetails,
-        staticForm().numberOfStudents
+        staticForm(sectionName).numberOfStudents
       ]
     }
   ];

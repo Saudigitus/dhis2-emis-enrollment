@@ -29,7 +29,7 @@ function SummaryCards(values: SummaryCardsProps): React.ReactElement {
         ? (
         <ButtonStrip>
             { !forUpdate && (
-                <SummaryCard color="success" label="New students" value={created.toString()} />
+                <SummaryCard color="success" label="New records" value={created.toString()} />
             )}
                 <SummaryCard color="secondary" label={!forUpdate ? "Duplicates" : "Updates"} value={duplicates.toString()} />
                 <SummaryCard color="error" label="Invalid Records" value={invalid.toString()} />
