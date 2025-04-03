@@ -79,6 +79,7 @@ export const CustomDhis2RulesEngine = (props: RulesEngineProps) => {
     programRulesVariables: any
   ) {
     const d2 = createD2(context);
+    // console.log("d2 object:", d2);
 
     expression = expression.replace(/today\(\)/g, `d2.today()`);
     expression = expression.replace(/d2:(\w+)/g, "d2.$1");
@@ -180,9 +181,11 @@ export const CustomDhis2RulesEngine = (props: RulesEngineProps) => {
         return args.join("");
       },
       left: function (text: any, num: number) {
+        if (typeof text !== "string") return "";
         return text.substring(0, num);
       },
       floor: function (value: number) {
+        console.log("something for test:", value);
         return Math.floor(value);
       },
     };
@@ -190,7 +193,7 @@ export const CustomDhis2RulesEngine = (props: RulesEngineProps) => {
 
   // apply rules to variables
   function applyRulesToVariable(variable: any) {
-    console.log(newProgramRules);
+    // console.log(newProgramRules);
     for (const programRule of newProgramRules.filter(
       (x) => x.variable === variable.name
     ) || []) {
@@ -209,9 +212,8 @@ export const CustomDhis2RulesEngine = (props: RulesEngineProps) => {
               values,
               programRulesVariables
             );
-
             if (firstCondition) {
-              if (!isNaN(value) && isFinite(value) && value !== undefined) {
+              if (value !== undefined) {
                 values[variable.name] = value;
               } else {
                 values[variable.name] = "";
@@ -271,7 +273,6 @@ export const CustomDhis2RulesEngine = (props: RulesEngineProps) => {
           if (variable.name === programRule.variable) {
             // const orgUnitGroup = programRule?.condition?.replace(/[^a-zA-Z]/g, '')
             if (firstCondition) {
-              console.log(variable);
               if (
                 firstCondition[0]?.organisationUnits.findIndex(
                   (x: any) => x.value === values["orgUnit"]
