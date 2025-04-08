@@ -39,8 +39,7 @@ export const getMandatoryFields = (fieldsMap: TemplateFieldMapping): FieldMappin
  * @param isRequired - whether value is required
  * @return output from parsing value using zod schema
  */
-const parseWithOptionality = (
-    schema: ZodTypeAny, value: any, isRequired: boolean): SafeParseSuccess<any> | SafeParseError<any> => {
+const parseWithOptionality = (schema: ZodTypeAny, value: any, isRequired: boolean): SafeParseSuccess<any> | SafeParseError<any> => {
     // Check if the schema is a string schema and required
     if (schema instanceof ZodString && isRequired) {
         schema = schema.min(1, { message: "Field is required" });
@@ -94,6 +93,9 @@ export const validateRecordValues = (
     return records
 }
 
+const isNotEmpty = (val: any) => val !== null && val !== undefined && val !== '';
+
+
 /**
  * Checks if a record in the Excel template meets the validation as per program configuration
  * @param record - a record in the Excel template
@@ -111,20 +113,18 @@ const validateRecord = (record: Record<string, any>, fieldsMap: TemplateFieldMap
         const parser = ValueType[fieldsMap[key]?.valueType]
 
         if (parser !== undefined && key.length !== 0) {
-            // const result = parser.safeParse(value);
-            const result = parseWithOptionality(parser, value, fieldsMap[key].required);
-            if (!result.success) {
-                // Collect errors for each key
-                errors[key] = result.error.issues.map(issue => issue.message);
+            if (fieldsMap[key].required || (!fieldsMap[key].required && isNotEmpty(value))) {
+                const result = parseWithOptionality(parser, value, fieldsMap[key].required);
+                if (!result.success) {
+                    // Collect errors for each key
+                    errors[key] = result.error.issues.map(issue => issue.message);
+                }
             }
         } else {
             console.warn(`No parser defined for key: ${key}`);
         }
     });
-    return {
-        isValid: Object.keys(errors).length === 0,
-        errors
-    };
+    return { isValid: Object.keys(errors).length === 0, errors };
 }
 
 /**
